@@ -1,7 +1,7 @@
 {
   "name": "@neuron-ai-memory/cli",
   "version": "0.1.0",
-  "description": "CLI for Neuron AI Memory — init, analyze, search, doctor, MCP",
+  "description": "CLI for Neuron — local-first project memory for Cursor",
   "license": "Apache-2.0",
   "type": "module",
   "bin": {
@@ -9,7 +9,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "name": "neuron-ai-memory"
+    "name": "neuron"
   },
   "files": [
     "dist",
@@ -36,13 +36,9 @@
     "@neuron-ai-memory/mcp-server": "workspace:*",
     "@neuron-ai-memory/memory-engine": "workspace:*",
     "@neuron-ai-memory/observability": "workspace:*",
-    "@neuron-ai-memory/ops": "workspace:*",
     "@neuron-ai-memory/project-analyzer": "workspace:*",
     "@neuron-ai-memory/project-scanner": "workspace:*",
-    "@neuron-ai-memory/project-intelligence": "workspace:*",
-    "@neuron-ai-memory/project-constitution": "workspace:*",
     "@neuron-ai-memory/retrieval-engine": "workspace:*",
-    "@neuron-ai-memory/benchmark": "workspace:*",
     "@neuron-ai-memory/security": "workspace:*",
     "@neuron-ai-memory/storage": "workspace:*",
     "@neuron-ai-memory/types": "workspace:*",

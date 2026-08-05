@@ -1,0 +1,19 @@
+---
+description: Detected project patterns from Neuron scan (review before relying on them)
+globs:
+alwaysApply: false
+---
+
+# Project patterns (Neuron bootstrap)
+
+## Detected conventions
+
+- Naming / layout: prefer existing module boundaries
+- Architecture style: see .neuron/architecture.md
+- Preferred libraries: see package manifests
+
+## Suggested rules
+
+- Use dependency injection / service modules for business logic
+
+Ask Neuron (`neuron_prepare_task`, `neuron_project_map`) before inventing new patterns.

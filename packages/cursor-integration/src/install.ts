@@ -89,13 +89,6 @@ export async function installCursorIntegration(
     'neuron-review.md',
     'neuron-save.md',
     'neuron-explain.md',
-    'architect.md',
-    'review.md',
-    'debug.md',
-    'security.md',
-    'performance.md',
-    'docs.md',
-    'refactor.md',
   ];
   for (const file of commandFiles) {
     const dest = join(commandsDir, file);

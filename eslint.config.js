@@ -11,6 +11,8 @@ export default tseslint.config(
       '**/coverage/**',
       '**/.turbo/**',
       'examples/**/apps/web/**',
+      'future/**',
+      'docs/archive/**',
     ],
   },
   eslint.configs.recommended,

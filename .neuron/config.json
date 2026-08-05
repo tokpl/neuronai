@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "id": "31defa33-b647-4751-aa9a-bfb2afbe8d0e",
+    "name": "neuron-ai-memory",
+    "slug": "neuron-ai-memory",
+    "stack": [
+      "javascript",
+      "pm:pnpm"
+    ]
+  },
+  "memory": {
+    "autoSave": false,
+    "threshold": 0.45
+  },
+  "privacy": {
+    "mode": "suggest",
+    "localOnly": true,
+    "telemetry": false
+  },
+  "scan": {
+    "depth": "fast",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "dist",
+      "build",
+      ".next",
+      "coverage",
+      ".turbo",
+      ".neuron/runtime",
+      ".neuron/cache",
+      ".neuron/indexes",
+      ".neuron/logs"
+    ]
+  },
+  "providers": {
+    "local": {
+      "enabled": true
+    }
+  },
+  "integrations": {
+    "cursor": true,
+    "claudeCode": false,
+    "vscode": false
+  },
+  "server": {
+    "mode": "local"
+  }
+}

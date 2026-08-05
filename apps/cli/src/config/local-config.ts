@@ -8,7 +8,10 @@ const DEFAULT_IGNORE = [
   '.next',
   'coverage',
   '.turbo',
-  '.neuron/data',
+  '.neuron/runtime',
+  '.neuron/cache',
+  '.neuron/indexes',
+  '.neuron/logs',
 ] as const;
 
 /** Local project config stored at `.neuron/config.json`. */

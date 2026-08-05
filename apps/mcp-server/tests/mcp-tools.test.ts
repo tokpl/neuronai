@@ -5,16 +5,17 @@ import { createNeuronMcpServer } from '../src/server/create-server.js';
 import {
   handleAfterTask,
   handleGetContext,
+  handlePrepareTask,
   handleReviewMemory,
   handleSaveDecision,
   handleSearchMemory,
-  handleStartTask,
   handleStoreMemory,
   handleUpdateMemory,
   handleProjectSummary,
 } from '../src/handlers/index.js';
 import { LocalAuthProvider, ApiKeyAuthProvider } from '../src/middleware/auth.js';
 import { getHealth } from '../src/health.js';
+import { MVP_TOOL_NAMES } from '../src/tools/register-tools.js';
 
 describe('mcp health', () => {
   it('reports ok', () => {
@@ -34,11 +35,16 @@ describe('auth providers', () => {
   });
 });
 
+describe('mvp tool set', () => {
+  it('exposes exactly 12 tools', () => {
+    expect(MVP_TOOL_NAMES).toHaveLength(12);
+  });
+});
+
 describe('mcp tool handlers', () => {
   it('registers tools on the server', async () => {
     const runtime = await createNeuronRuntime(process.cwd());
     const server = createNeuronMcpServer(runtime);
-    // McpServer keeps private registries; constructing without throw is enough + handler tests below
     expect(server).toBeDefined();
   });
 
@@ -99,15 +105,10 @@ describe('mcp tool handlers', () => {
     expect(summary.isError).toBeFalsy();
   });
 
-  it('runs start/after task workflow suggestions', async () => {
+  it('runs after task workflow suggestions', async () => {
     const runtime = await createNeuronRuntime(process.cwd());
     expect(runtime.workflow).toBeDefined();
     expect(runtime.privacyMode).toBeTruthy();
-
-    const started = await handleStartTask(runtime, {
-      task: 'Replace Redis cache with local cache',
-    });
-    expect(started.isError).toBeFalsy();
 
     const after = await handleAfterTask(runtime, {
       task: 'Replace Redis cache with local cache',
@@ -125,8 +126,6 @@ describe('mcp tool handlers', () => {
 
   it('prepares tasks via agent intelligence', async () => {
     const runtime = await createNeuronRuntime(process.cwd());
-    const { handlePrepareTask, handleGeneratePlan, handleReviewArchitecture } =
-      await import('../src/handlers/intelligence.js');
 
     const prep = await handlePrepareTask(runtime, {
       task: 'Add vehicle trading system',
@@ -140,16 +139,6 @@ describe('mcp tool handlers', () => {
     };
     expect(prepBody.ok).toBe(true);
     expect(prepBody.briefing.length).toBeGreaterThan(0);
-
-    const plan = await handleGeneratePlan(runtime, {
-      featureRequest: 'Add marketplace',
-    });
-    expect(plan.isError).toBeFalsy();
-
-    const review = await handleReviewArchitecture(runtime, {
-      changeDescription: 'Add marketplace tables without changing auth middleware',
-    });
-    expect(review.isError).toBeFalsy();
   });
 
   it('returns structured errors for invalid update ids', async () => {

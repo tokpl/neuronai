@@ -99,18 +99,16 @@ export async function runDoctorChecks(cwd = process.cwd()): Promise<DoctorCheck[
   }
 
   const hasLocalStore = await pathExists(paths.store);
-  const databaseUrl = process.env['DATABASE_URL'];
+  const hasNeuronDir = await pathExists(paths.neuronDir);
   checks.push({
     name: 'Storage',
-    ok: Boolean(databaseUrl) || hasLocalStore || initialized,
-    detail: databaseUrl
-      ? 'DATABASE_URL present'
-      : hasLocalStore
-        ? 'Local store.json present'
-        : initialized
-          ? 'Local mode ready (store created on first write)'
-          : 'No DATABASE_URL and no local store',
-    fix: 'Optional: set DATABASE_URL — or use local .neuron/data',
+    ok: hasLocalStore || hasNeuronDir || initialized,
+    detail: hasLocalStore
+      ? 'Local FileStorageProvider (.neuron/runtime/store.json)'
+      : initialized
+        ? 'Local mode ready (store created on first write)'
+        : 'Not initialized — run neuron init',
+    fix: 'neuron init (local filesystem — no database required)',
   });
 
   const hasEnvExample = await pathExists(join(paths.root, '.env.example'));
@@ -175,14 +173,14 @@ export async function runDoctorChecks(cwd = process.cwd()): Promise<DoctorCheck[
           corrupt.length === 0
             ? `${memories.length} records (meta count ${meta.memoryCount})`
             : `${corrupt.length} corrupted records`,
-        fix: corrupt.length ? 'Inspect .neuron/data/store.json' : undefined,
+        fix: corrupt.length ? 'Inspect .neuron/runtime/store.json' : undefined,
       });
     } catch (error) {
       checks.push({
         name: 'Memories',
         ok: false,
         detail: String(error),
-        fix: 'Delete .neuron/data/store.json and run neuron analyze',
+        fix: 'Delete .neuron/runtime/store.json and run neuron scan',
       });
     }
   }

@@ -15,7 +15,7 @@ import {
   formatNeuronReport,
   type NeuronInitReport,
 } from '../templates/first-run.js';
-import { CLI_VERSION, pathExists } from '../services/neuron-fs.js';
+import { CLI_VERSION, ensureNeuronLayout, pathExists } from '../services/neuron-fs.js';
 import { setupCursorIntegration, syncProjectBrainFiles } from '../services/cursor-setup.js';
 import {
   ensureIntegrationStubs,
@@ -26,6 +26,7 @@ import {
 } from '../services/neuron-fs.js';
 import { analyzeAndSeedMemories, openProjectSession } from '../services/project-session.js';
 import { ui } from '../ui/output.js';
+import { createFileStorageProvider } from '@neuron-ai-memory/storage';
 
 function pickFramework(stack: string[], frameworks: string[]): string {
   const fromFw = frameworks[0];
@@ -176,6 +177,15 @@ export async function runInit(
   }
 
   await saveLocalConfig(localConfig, cwd);
+  await ensureNeuronLayout(cwd);
+  await createFileStorageProvider().writeBrain(cwd, {
+    version: 1,
+    projectId: project.projectId,
+    name: project.name,
+    stack: project.stack,
+    summary: `${framework} project initialized with Neuron local memory`,
+    updatedAt: new Date().toISOString(),
+  });
   await saveMetadata(
     {
       initializedAt: new Date().toISOString(),
@@ -256,7 +266,7 @@ export async function runInit(
   // 5. Brain creation
   progress.start('Brain creation…');
   await syncProjectBrainFiles(cwd);
-  progress.ok('Project brain files written (.neuron/*.md)');
+  progress.ok('Project brain files written (.neuron/*.json)');
 
   // 6. Cursor integration
   progress.start('Cursor integration…');
@@ -311,6 +321,7 @@ export async function runInit(
   ui.blank();
   ui.suggest('Open this folder in Cursor and enable MCP server "neuron"');
   ui.suggest('Verify: neuron doctor');
-  ui.suggest('Explain: neuron explain');
+  ui.suggest('Verify: neuron doctor');
+  ui.suggest('Summary: ask Cursor — neuron_project_summary');
   ui.suggest('First chat: Prepare adding a feature using Neuron');
 }

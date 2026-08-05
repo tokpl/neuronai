@@ -15,8 +15,7 @@ Always:
 
 1. Call `neuron_prepare_task` (preferred) or `neuron_get_context` for the user task
 2. Check architectural decisions that touch the same areas
-3. Note related modules / impact from Neuron
-4. Skim `.neuron/architecture.md`, `.neuron/decisions.md`, `.neuron/warnings.md` when present
+3. Skim `.neuron/brain.json`, `.neuron/decisions.json`, `.neuron/knowledge.json` when present
 
 If the task is tiny (typo / rename), a lightweight `neuron_search_memory` may be enough.
 

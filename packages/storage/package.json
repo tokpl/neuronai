@@ -1,7 +1,7 @@
 {
   "name": "@neuron-ai-memory/storage",
-  "version": "0.0.0",
-  "description": "PostgreSQL + pgvector storage adapter for Neuron AI Memory",
+  "version": "0.1.0",
+  "description": "Local-first FileStorageProvider for Neuron",
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
@@ -12,26 +12,18 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist",
-    "migrations"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
-    "migrate": "tsx src/migrate.ts",
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
     "@neuron-ai-memory/memory-engine": "workspace:*",
-    "@neuron-ai-memory/types": "workspace:*",
-    "drizzle-orm": "^0.45.2",
-    "postgres": "^3.4.9"
+    "@neuron-ai-memory/types": "workspace:*"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.31.10",
-    "tsx": "^4.19.3",
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
   }

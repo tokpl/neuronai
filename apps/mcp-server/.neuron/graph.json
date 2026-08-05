@@ -1,0 +1,2662 @@
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "n-project-de59cc54-mcp-server",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "PROJECT",
+      "name": "mcp-server",
+      "path": "C:\\projekty\\neuron-ai-memory\\apps\\mcp-server",
+      "metadata": {
+        "stack": [
+          "javascript",
+          "typescript",
+          "pm:npm"
+        ],
+        "languages": [
+          "javascript",
+          "typescript"
+        ],
+        "frameworks": [],
+        "databases": [],
+        "documentationCount": 1,
+        "schemaFiles": [],
+        "recentCommits": []
+      },
+      "createdAt": "2026-08-05T21:03:38.144Z",
+      "updatedAt": "2026-08-05T21:03:38.144Z"
+    },
+    {
+      "id": "n-dependency-7b07a302-modelcontextprotocol-sdk",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@modelcontextprotocol/sdk",
+      "metadata": {
+        "version": "^1.8.0",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.146Z",
+      "updatedAt": "2026-08-05T21:03:38.146Z"
+    },
+    {
+      "id": "n-dependency-61178f7c-neuron-ai-memory-ai-memo",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/ai-memory",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.148Z",
+      "updatedAt": "2026-08-05T21:03:38.148Z"
+    },
+    {
+      "id": "n-dependency-648e25ac-neuron-ai-memory-ai-prov",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/ai-provider",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.149Z",
+      "updatedAt": "2026-08-05T21:03:38.149Z"
+    },
+    {
+      "id": "n-dependency-03353c11-neuron-ai-memory-agent-i",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/agent-intelligence",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.151Z",
+      "updatedAt": "2026-08-05T21:03:38.151Z"
+    },
+    {
+      "id": "n-dependency-ce480e11-neuron-ai-memory-agent-w",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/agent-workflow",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.152Z",
+      "updatedAt": "2026-08-05T21:03:38.152Z"
+    },
+    {
+      "id": "n-dependency-51470dcc-neuron-ai-memory-config",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/config",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.154Z",
+      "updatedAt": "2026-08-05T21:03:38.154Z"
+    },
+    {
+      "id": "n-dependency-7ae65567-neuron-ai-memory-cursor-",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/cursor-integration",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.155Z",
+      "updatedAt": "2026-08-05T21:03:38.155Z"
+    },
+    {
+      "id": "n-dependency-bc47d986-neuron-ai-memory-embeddi",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/embeddings",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.157Z",
+      "updatedAt": "2026-08-05T21:03:38.157Z"
+    },
+    {
+      "id": "n-dependency-b01a17f5-neuron-ai-memory-knowled",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/knowledge-graph",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.158Z",
+      "updatedAt": "2026-08-05T21:03:38.158Z"
+    },
+    {
+      "id": "n-dependency-c0bb9ac4-neuron-ai-memory-memory-",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/memory-engine",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.160Z",
+      "updatedAt": "2026-08-05T21:03:38.160Z"
+    },
+    {
+      "id": "n-dependency-fae846d7-neuron-ai-memory-observa",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/observability",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.162Z",
+      "updatedAt": "2026-08-05T21:03:38.162Z"
+    },
+    {
+      "id": "n-dependency-17a356e4-neuron-ai-memory-project",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/project-analyzer",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.163Z",
+      "updatedAt": "2026-08-05T21:03:38.163Z"
+    },
+    {
+      "id": "n-dependency-95aaac00-neuron-ai-memory-project",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/project-scanner",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.165Z",
+      "updatedAt": "2026-08-05T21:03:38.165Z"
+    },
+    {
+      "id": "n-dependency-86384105-neuron-ai-memory-retriev",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/retrieval-engine",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.167Z",
+      "updatedAt": "2026-08-05T21:03:38.167Z"
+    },
+    {
+      "id": "n-dependency-2e9a0931-neuron-ai-memory-storage",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/storage",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.168Z",
+      "updatedAt": "2026-08-05T21:03:38.168Z"
+    },
+    {
+      "id": "n-dependency-039354af-neuron-ai-memory-types",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "@neuron-ai-memory/types",
+      "metadata": {
+        "version": "workspace:*",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.170Z",
+      "updatedAt": "2026-08-05T21:03:38.170Z"
+    },
+    {
+      "id": "n-dependency-7205d5a8-zod",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "zod",
+      "metadata": {
+        "version": "^3.24.2",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.171Z",
+      "updatedAt": "2026-08-05T21:03:38.171Z"
+    },
+    {
+      "id": "n-dependency-7205bfb2-tsx",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "tsx",
+      "metadata": {
+        "version": "^4.19.3",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.173Z",
+      "updatedAt": "2026-08-05T21:03:38.173Z"
+    },
+    {
+      "id": "n-dependency-4cb2f88c-typescript",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "typescript",
+      "metadata": {
+        "version": "^5.8.2",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.175Z",
+      "updatedAt": "2026-08-05T21:03:38.175Z"
+    },
+    {
+      "id": "n-dependency-eddb494c-vitest",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DEPENDENCY",
+      "name": "vitest",
+      "metadata": {
+        "version": "^3.0.8",
+        "manager": "npm",
+        "manifest": "package.json"
+      },
+      "createdAt": "2026-08-05T21:03:38.176Z",
+      "updatedAt": "2026-08-05T21:03:38.176Z"
+    },
+    {
+      "id": "n-module-06f95a88-src-config",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MODULE",
+      "name": "src/config",
+      "path": "src/config",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.182Z",
+      "updatedAt": "2026-08-05T21:03:38.182Z"
+    },
+    {
+      "id": "n-file-ff5b40de-runtime-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "runtime.ts",
+      "path": "src/config/runtime.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "createNeuronRuntime"
+        ],
+        "pendingImports": [
+          "src/middleware/auth.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.183Z",
+      "updatedAt": "2026-08-05T21:03:38.199Z"
+    },
+    {
+      "id": "n-module-d941dc28-src-handlers",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MODULE",
+      "name": "src/handlers",
+      "path": "src/handlers",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.200Z",
+      "updatedAt": "2026-08-05T21:03:38.200Z"
+    },
+    {
+      "id": "n-file-a999b885-get-context-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "get-context.ts",
+      "path": "src/handlers/get-context.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "resolveProjectId",
+          "handleGetContext"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/middleware/errors.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.202Z",
+      "updatedAt": "2026-08-05T21:03:38.206Z"
+    },
+    {
+      "id": "n-file-305bd205-index-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "index.ts",
+      "path": "src/handlers/index.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [],
+        "pendingImports": [
+          "src/handlers/get-context.js.ts",
+          "src/handlers/search-memory.js.ts",
+          "src/handlers/save-decision.js.ts",
+          "src/handlers/store-memory.js.ts",
+          "src/handlers/review-memory.js.ts",
+          "src/handlers/update-memory.js.ts",
+          "src/handlers/project-summary.js.ts",
+          "src/handlers/workflow.js.ts",
+          "src/handlers/intelligence.js.ts",
+          "src/handlers/scan.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.207Z",
+      "updatedAt": "2026-08-05T21:03:38.216Z"
+    },
+    {
+      "id": "n-file-2b64ff89-intelligence-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "intelligence.ts",
+      "path": "src/handlers/intelligence.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "handlePrepareTask",
+          "handleReviewArchitecture",
+          "handleAnalyzeImpact",
+          "handleGeneratePlan",
+          "handleProjectQuestion",
+          "handleCompleteTask"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/middleware/errors.js.ts",
+          "src/handlers/get-context.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.218Z",
+      "updatedAt": "2026-08-05T21:03:38.222Z"
+    },
+    {
+      "id": "n-file-0f715a45-project-summary-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "project-summary.ts",
+      "path": "src/handlers/project-summary.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "handleProjectSummary"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/middleware/errors.js.ts",
+          "src/handlers/get-context.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.223Z",
+      "updatedAt": "2026-08-05T21:03:38.227Z"
+    },
+    {
+      "id": "n-file-45e6ae85-review-memory-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "review-memory.ts",
+      "path": "src/handlers/review-memory.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "handleReviewMemory"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/middleware/errors.js.ts",
+          "src/handlers/get-context.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.228Z",
+      "updatedAt": "2026-08-05T21:03:38.234Z"
+    },
+    {
+      "id": "n-file-c82da7c5-save-decision-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "save-decision.ts",
+      "path": "src/handlers/save-decision.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "handleSaveDecision"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/middleware/errors.js.ts",
+          "src/handlers/get-context.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.236Z",
+      "updatedAt": "2026-08-05T21:03:38.241Z"
+    },
+    {
+      "id": "n-file-32b9f08d-scan-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "scan.ts",
+      "path": "src/handlers/scan.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "handleScanProject",
+          "handleProjectMap",
+          "handleRefreshBrain"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/middleware/errors.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.243Z",
+      "updatedAt": "2026-08-05T21:03:38.247Z"
+    },
+    {
+      "id": "n-file-980a9885-search-memory-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "search-memory.ts",
+      "path": "src/handlers/search-memory.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "handleSearchMemory"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/middleware/errors.js.ts",
+          "src/handlers/get-context.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.249Z",
+      "updatedAt": "2026-08-05T21:03:38.252Z"
+    },
+    {
+      "id": "n-file-b1498cad-store-memory-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "store-memory.ts",
+      "path": "src/handlers/store-memory.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "handleStoreMemory"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/middleware/errors.js.ts",
+          "src/handlers/get-context.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.254Z",
+      "updatedAt": "2026-08-05T21:03:38.261Z"
+    },
+    {
+      "id": "n-database_table-0140ce88-via",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DATABASE_TABLE",
+      "name": "via",
+      "metadata": {
+        "referencedFrom": "src/handlers/store-memory.ts"
+      },
+      "createdAt": "2026-08-05T21:03:38.256Z",
+      "updatedAt": "2026-08-05T21:03:38.256Z"
+    },
+    {
+      "id": "n-file-bf7ff6a5-update-memory-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "update-memory.ts",
+      "path": "src/handlers/update-memory.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "handleUpdateMemory"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/middleware/errors.js.ts",
+          "src/handlers/get-context.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.262Z",
+      "updatedAt": "2026-08-05T21:03:38.266Z"
+    },
+    {
+      "id": "n-file-517ddf89-workflow-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "workflow.ts",
+      "path": "src/handlers/workflow.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "handleStartTask",
+          "handleIngestEvent",
+          "handleAfterTask",
+          "handleSuggestFromChanges"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/middleware/errors.js.ts",
+          "src/handlers/get-context.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.267Z",
+      "updatedAt": "2026-08-05T21:03:38.276Z"
+    },
+    {
+      "id": "n-database_table-6c4baac4-developer",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DATABASE_TABLE",
+      "name": "developer",
+      "metadata": {
+        "referencedFrom": "src/handlers/workflow.ts"
+      },
+      "createdAt": "2026-08-05T21:03:38.269Z",
+      "updatedAt": "2026-08-05T21:03:38.269Z"
+    },
+    {
+      "id": "n-database_table-fd7fcd85-workflow",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DATABASE_TABLE",
+      "name": "workflow",
+      "metadata": {
+        "referencedFrom": "src/handlers/workflow.ts"
+      },
+      "createdAt": "2026-08-05T21:03:38.271Z",
+      "updatedAt": "2026-08-05T21:03:38.271Z"
+    },
+    {
+      "id": "n-module-4043067c-src-health-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MODULE",
+      "name": "src/health.ts",
+      "path": "src/health.ts",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.277Z",
+      "updatedAt": "2026-08-05T21:03:38.277Z"
+    },
+    {
+      "id": "n-file-4dc729f7-health-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "health.ts",
+      "path": "src/health.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "getHealth",
+          "VERSION",
+          "logger"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.279Z",
+      "updatedAt": "2026-08-05T21:03:38.279Z"
+    },
+    {
+      "id": "n-module-70e7cd68-src-index-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MODULE",
+      "name": "src/index.ts",
+      "path": "src/index.ts",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.283Z",
+      "updatedAt": "2026-08-05T21:03:38.283Z"
+    },
+    {
+      "id": "n-file-1b3efcad-index-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "index.ts",
+      "path": "src/index.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "startMcpServer"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/health.js.ts",
+          "src/server/create-server.js.ts",
+          "src/server/create-server.js.ts",
+          "src/config/runtime.js.ts",
+          "src/handlers/index.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.285Z",
+      "updatedAt": "2026-08-05T21:03:38.292Z"
+    },
+    {
+      "id": "n-module-f7935508-src-middleware",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MODULE",
+      "name": "src/middleware",
+      "path": "src/middleware",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.293Z",
+      "updatedAt": "2026-08-05T21:03:38.293Z"
+    },
+    {
+      "id": "n-file-7f86e2e0-auth-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "auth.ts",
+      "path": "src/middleware/auth.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "createAuthProvider",
+          "LocalAuthProvider",
+          "ApiKeyAuthProvider"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.294Z",
+      "updatedAt": "2026-08-05T21:03:38.294Z"
+    },
+    {
+      "id": "n-file-3b6a821a-errors-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "errors.ts",
+      "path": "src/middleware/errors.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "toMcpError",
+          "textResult",
+          "okResult",
+          "failResult"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.297Z",
+      "updatedAt": "2026-08-05T21:03:38.297Z"
+    },
+    {
+      "id": "n-module-5e8d54f8-src-prompts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MODULE",
+      "name": "src/prompts",
+      "path": "src/prompts",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.301Z",
+      "updatedAt": "2026-08-05T21:03:38.301Z"
+    },
+    {
+      "id": "n-file-41eb8ee5-register-prompts-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "register-prompts.ts",
+      "path": "src/prompts/register-prompts.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "registerPrompts"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.303Z",
+      "updatedAt": "2026-08-05T21:03:38.309Z"
+    },
+    {
+      "id": "n-database_table-c6cdf2b9-neuron",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DATABASE_TABLE",
+      "name": "Neuron",
+      "metadata": {
+        "referencedFrom": "src/prompts/register-prompts.ts"
+      },
+      "createdAt": "2026-08-05T21:03:38.305Z",
+      "updatedAt": "2026-08-05T21:03:38.305Z"
+    },
+    {
+      "id": "n-module-3ee46924-src-resources",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MODULE",
+      "name": "src/resources",
+      "path": "src/resources",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.310Z",
+      "updatedAt": "2026-08-05T21:03:38.310Z"
+    },
+    {
+      "id": "n-file-f02f2f8f-register-resources-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "register-resources.ts",
+      "path": "src/resources/register-resources.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "registerResources"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.312Z",
+      "updatedAt": "2026-08-05T21:03:38.315Z"
+    },
+    {
+      "id": "n-module-7c877fe8-src-server",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MODULE",
+      "name": "src/server",
+      "path": "src/server",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.316Z",
+      "updatedAt": "2026-08-05T21:03:38.316Z"
+    },
+    {
+      "id": "n-file-12fd84df-create-server-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "create-server.ts",
+      "path": "src/server/create-server.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "createNeuronMcpServer"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/health.js.ts",
+          "src/prompts/register-prompts.js.ts",
+          "src/resources/register-resources.js.ts",
+          "src/tools/register-tools.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.318Z",
+      "updatedAt": "2026-08-05T21:03:38.324Z"
+    },
+    {
+      "id": "n-module-9b651510-src-tools",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MODULE",
+      "name": "src/tools",
+      "path": "src/tools",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.326Z",
+      "updatedAt": "2026-08-05T21:03:38.326Z"
+    },
+    {
+      "id": "n-file-f4117759-register-tools-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "register-tools.ts",
+      "path": "src/tools/register-tools.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "registerTools",
+          "MVP_TOOL_NAMES"
+        ],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/handlers/index.js.ts",
+          "src/health.js.ts",
+          "src/validation/schemas.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.328Z",
+      "updatedAt": "2026-08-05T21:03:38.338Z"
+    },
+    {
+      "id": "n-database_table-7be94e73-an",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DATABASE_TABLE",
+      "name": "an",
+      "metadata": {
+        "referencedFrom": "src/tools/register-tools.ts"
+      },
+      "createdAt": "2026-08-05T21:03:38.330Z",
+      "updatedAt": "2026-08-05T21:03:38.330Z"
+    },
+    {
+      "id": "n-module-91e0ca28-src-validation",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MODULE",
+      "name": "src/validation",
+      "path": "src/validation",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.340Z",
+      "updatedAt": "2026-08-05T21:03:38.340Z"
+    },
+    {
+      "id": "n-file-8657cf95-schemas-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "schemas.ts",
+      "path": "src/validation/schemas.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [
+          "projectIdSchema",
+          "getContextSchema",
+          "searchMemorySchema",
+          "saveDecisionSchema",
+          "storeMemorySchema",
+          "reviewMemorySchema",
+          "updateMemorySchema",
+          "projectSummarySchema",
+          "startTaskSchema",
+          "ingestEventSchema",
+          "afterTaskSchema",
+          "suggestChangesSchema",
+          "prepareTaskSchema",
+          "reviewArchitectureSchema",
+          "analyzeImpactSchema",
+          "generatePlanSchema",
+          "projectQuestionSchema",
+          "completeTaskSchema",
+          "suggestRuleSchema",
+          "reviewEvolutionSchema",
+          "acceptConstitutionRuleSchema",
+          "deepSearchSchema",
+          "optimizeContextSchema",
+          "explainContextSchema",
+          "architectureContextSchema",
+          "teamContextSchema",
+          "onboardingSchema",
+          "decisionHistorySchema",
+          "teamDecisionsSchema",
+          "teamRulesSchema",
+          "contributorsSchema",
+          "reviewQueueSchema",
+          "cleanupSuggestionsSchema",
+          "memoryConflictsSchema",
+          "memoryReviewSchema",
+          "memoryCleanupSchema",
+          "scanProjectSchema",
+          "projectChangesSchema",
+          "pendingMemoriesSchema",
+          "architectSchema",
+          "createPlanSchema",
+          "reviewChangeSchema",
+          "compareArchitectureSchema",
+          "generateAdrSchema",
+          "debugContextSchema",
+          "searchIncidentsSchema",
+          "rootCauseSchema",
+          "createIncidentSchema",
+          "incidentHistorySchema",
+          "securityContextSchema",
+          "securityReviewSchema",
+          "threatModelSchema",
+          "securityHistorySchema",
+          "checkChangeSecuritySchema",
+          "generateDocsSchema",
+          "docsHealthSchema",
+          "explainProjectSchema",
+          "moduleDocsSchema",
+          "generateChangelogSchema",
+          "projectDocumentationSchema",
+          "performanceContextSchema",
+          "performanceReviewSchema",
+          "scalabilityCheckSchema",
+          "databaseReviewSchema",
+          "performanceHistorySchema",
+          "resumeSchema",
+          "sessionSummarySchema",
+          "currentFocusSchema",
+          "handoffSchema",
+          "taskContextSchema",
+          "graphQuerySchema",
+          "impactAnalysisSchema",
+          "relatedKnowledgeSchema",
+          "graphProjectMapSchema",
+          "reasonSchema",
+          "recommendSchema",
+          "decisionContextSchema",
+          "compareOptionsSchema",
+          "explainDecisionSchema",
+          "aiStatusSchema",
+          "selectModelSchema",
+          "privacyCheckSchema",
+          "modelHealthSchema",
+          "availableModelsSchema",
+          "bestModelForTaskSchema",
+          "qualityReportSchema",
+          "evaluateAnswerSchema",
+          "memoryQualitySchema",
+          "benchmarkRunSchema",
+          "traceLastSchema",
+          "explainReasoningSchema",
+          "traceContextSchema",
+          "performanceMetricsSchema",
+          "observabilityDebugSchema",
+          "securityScanCoreSchema",
+          "checkContextSchema",
+          "trustReportSchema",
+          "auditLogSchema",
+          "neuronSecurityCheckSchema",
+          "workspaceInfoSchema",
+          "projectSwitchSchema",
+          "accessCheckSchema",
+          "storageStatusSchema",
+          "architectureScanSchema",
+          "dependencyGraphSchema",
+          "refactorPlanSchema",
+          "architectureScoreSchema",
+          "architectureReviewToolSchema",
+          "availableModesSchema",
+          "modeContextSchema",
+          "runModeSchema",
+          "gitContextSchema",
+          "changeHistorySchema",
+          "architectureEvolutionSchema",
+          "regressionCheckSchema",
+          "historyContextSchema"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.342Z",
+      "updatedAt": "2026-08-05T21:03:38.342Z"
+    },
+    {
+      "id": "n-module-c040eab2-tests",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MODULE",
+      "name": "tests",
+      "path": "tests",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.346Z",
+      "updatedAt": "2026-08-05T21:03:38.346Z"
+    },
+    {
+      "id": "n-file-1ba594bc-mcp-tools-test-ts",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "FILE",
+      "name": "mcp-tools.test.ts",
+      "path": "tests/mcp-tools.test.ts",
+      "metadata": {
+        "language": "typescript",
+        "exports": [],
+        "pendingImports": [
+          "src/config/runtime.js.ts",
+          "src/server/create-server.js.ts",
+          "src/handlers/index.js.ts",
+          "src/middleware/auth.js.ts",
+          "src/health.js.ts",
+          "src/tools/register-tools.js.ts"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.348Z",
+      "updatedAt": "2026-08-05T21:03:38.358Z"
+    },
+    {
+      "id": "n-database_table-01409d32-ids",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "DATABASE_TABLE",
+      "name": "ids",
+      "metadata": {
+        "referencedFrom": "tests/mcp-tools.test.ts"
+      },
+      "createdAt": "2026-08-05T21:03:38.350Z",
+      "updatedAt": "2026-08-05T21:03:38.350Z"
+    },
+    {
+      "id": "n-memory-96c1b8d3-d161-4df3-974b-6abb6332e7a6",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "96c1b8d3-d161-4df3-974b-6abb6332e7a6",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.361Z",
+      "updatedAt": "2026-08-05T21:03:38.361Z"
+    },
+    {
+      "id": "n-memory-f8c7e7f3-1f4e-465c-84cd-701db7ef582a",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Do not bypass permission service Bypassing permission service caused…",
+      "metadata": {
+        "memoryId": "f8c7e7f3-1f4e-465c-84cd-701db7ef582a",
+        "memoryType": "mistake",
+        "importance": 1,
+        "tags": []
+      },
+      "createdAt": "2026-08-05T21:03:38.363Z",
+      "updatedAt": "2026-08-05T21:03:38.363Z"
+    },
+    {
+      "id": "n-memory-8395565a-535c-4ccd-b8dc-5372abbb2d3d",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "8395565a-535c-4ccd-b8dc-5372abbb2d3d",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.366Z",
+      "updatedAt": "2026-08-05T21:03:38.366Z"
+    },
+    {
+      "id": "n-memory-ce5c1b20-ada8-48ca-989a-392ff998282b",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Do not bypass permission service",
+      "metadata": {
+        "memoryId": "ce5c1b20-ada8-48ca-989a-392ff998282b",
+        "memoryType": "mistake",
+        "importance": 0.8916,
+        "tags": []
+      },
+      "createdAt": "2026-08-05T21:03:38.368Z",
+      "updatedAt": "2026-08-05T21:03:38.368Z"
+    },
+    {
+      "id": "n-memory-ca88a9cf-5ccf-4841-ab38-48276540048b",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "ca88a9cf-5ccf-4841-ab38-48276540048b",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.370Z",
+      "updatedAt": "2026-08-05T21:03:38.370Z"
+    },
+    {
+      "id": "n-memory-d119754b-c0de-40df-85ee-f58da7ddda98",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "d119754b-c0de-40df-85ee-f58da7ddda98",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.373Z",
+      "updatedAt": "2026-08-05T21:03:38.373Z"
+    },
+    {
+      "id": "n-memory-f30bbd05-ce50-45ef-880c-b4d0c694a81c",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "f30bbd05-ce50-45ef-880c-b4d0c694a81c",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.376Z",
+      "updatedAt": "2026-08-05T21:03:38.376Z"
+    },
+    {
+      "id": "n-memory-2c1af2a3-6cd5-472d-af9d-530a08a4662c",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "2c1af2a3-6cd5-472d-af9d-530a08a4662c",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.378Z",
+      "updatedAt": "2026-08-05T21:03:38.378Z"
+    },
+    {
+      "id": "n-memory-f4423458-65f7-43af-b0ab-7b0e5c48c8e6",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "f4423458-65f7-43af-b0ab-7b0e5c48c8e6",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.380Z",
+      "updatedAt": "2026-08-05T21:03:38.380Z"
+    },
+    {
+      "id": "n-memory-1a32fb84-ba6c-4be9-9aa5-6cb242c25c7d",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "1a32fb84-ba6c-4be9-9aa5-6cb242c25c7d",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.382Z",
+      "updatedAt": "2026-08-05T21:03:38.382Z"
+    },
+    {
+      "id": "n-memory-ef391eb1-1a35-4ccf-9d61-6a3d4ed886cf",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "ef391eb1-1a35-4ccf-9d61-6a3d4ed886cf",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.385Z",
+      "updatedAt": "2026-08-05T21:03:38.385Z"
+    },
+    {
+      "id": "n-memory-29b06c9e-0584-4026-9afc-6a2a89212ee5",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "29b06c9e-0584-4026-9afc-6a2a89212ee5",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.387Z",
+      "updatedAt": "2026-08-05T21:03:38.387Z"
+    },
+    {
+      "id": "n-memory-1f7d8295-ae1b-4c5e-b3e2-e978bf87fd84",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "1f7d8295-ae1b-4c5e-b3e2-e978bf87fd84",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.390Z",
+      "updatedAt": "2026-08-05T21:03:38.390Z"
+    },
+    {
+      "id": "n-memory-104a978e-4671-4dcd-8ad9-c1b5172c5aa9",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "104a978e-4671-4dcd-8ad9-c1b5172c5aa9",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.392Z",
+      "updatedAt": "2026-08-05T21:03:38.392Z"
+    },
+    {
+      "id": "n-memory-f3dd6817-a5f3-48a8-9599-3730a28e684b",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "f3dd6817-a5f3-48a8-9599-3730a28e684b",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.395Z",
+      "updatedAt": "2026-08-05T21:03:38.395Z"
+    },
+    {
+      "id": "n-memory-a3fdb46b-73e2-4125-bd3e-86010708f8ac",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "a3fdb46b-73e2-4125-bd3e-86010708f8ac",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.397Z",
+      "updatedAt": "2026-08-05T21:03:38.397Z"
+    },
+    {
+      "id": "n-memory-6137fce6-991c-4629-afc9-0c514993cb76",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "6137fce6-991c-4629-afc9-0c514993cb76",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.400Z",
+      "updatedAt": "2026-08-05T21:03:38.400Z"
+    },
+    {
+      "id": "n-memory-9a9a3473-d965-40d4-bb75-49db7caf4b5d",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "9a9a3473-d965-40d4-bb75-49db7caf4b5d",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.402Z",
+      "updatedAt": "2026-08-05T21:03:38.402Z"
+    },
+    {
+      "id": "n-memory-4ed23a78-5ed4-49e7-b484-99457bb34951",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "4ed23a78-5ed4-49e7-b484-99457bb34951",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.405Z",
+      "updatedAt": "2026-08-05T21:03:38.405Z"
+    },
+    {
+      "id": "n-memory-2bceb35a-fa29-4991-9662-ea1b9c30989c",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "2bceb35a-fa29-4991-9662-ea1b9c30989c",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.407Z",
+      "updatedAt": "2026-08-05T21:03:38.407Z"
+    },
+    {
+      "id": "n-memory-74247077-c2c1-4863-af56-d07d41d40a3e",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "74247077-c2c1-4863-af56-d07d41d40a3e",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.410Z",
+      "updatedAt": "2026-08-05T21:03:38.410Z"
+    },
+    {
+      "id": "n-memory-5e0b361f-cde0-43a8-b2eb-5d44e062d11f",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "5e0b361f-cde0-43a8-b2eb-5d44e062d11f",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.412Z",
+      "updatedAt": "2026-08-05T21:03:38.412Z"
+    },
+    {
+      "id": "n-memory-10fce38b-f89f-42c4-bff9-49efcaf399a7",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "10fce38b-f89f-42c4-bff9-49efcaf399a7",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.416Z",
+      "updatedAt": "2026-08-05T21:03:38.416Z"
+    },
+    {
+      "id": "n-memory-da06d7ac-8f07-4d9d-bc79-7db46d77eba0",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "MEMORY",
+      "name": "Use RBAC",
+      "metadata": {
+        "memoryId": "da06d7ac-8f07-4d9d-bc79-7db46d77eba0",
+        "memoryType": "architecture_decision",
+        "importance": 0.945,
+        "tags": [
+          "decision",
+          "has-alternatives"
+        ]
+      },
+      "createdAt": "2026-08-05T21:03:38.419Z",
+      "updatedAt": "2026-08-05T21:03:38.419Z"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-uses-ac48324c",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-7b07a302-modelcontextprotocol-sdk",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.147Z",
+      "updatedAt": "2026-08-05T21:03:38.147Z"
+    },
+    {
+      "id": "e-uses-8efd78ca",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-61178f7c-neuron-ai-memory-ai-memo",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.148Z",
+      "updatedAt": "2026-08-05T21:03:38.148Z"
+    },
+    {
+      "id": "e-uses-305f1264",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-648e25ac-neuron-ai-memory-ai-prov",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.150Z",
+      "updatedAt": "2026-08-05T21:03:38.150Z"
+    },
+    {
+      "id": "e-uses-7f18b472",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-03353c11-neuron-ai-memory-agent-i",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.151Z",
+      "updatedAt": "2026-08-05T21:03:38.151Z"
+    },
+    {
+      "id": "e-uses-a720ce9a",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-ce480e11-neuron-ai-memory-agent-w",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.153Z",
+      "updatedAt": "2026-08-05T21:03:38.153Z"
+    },
+    {
+      "id": "e-uses-b975f0af",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-51470dcc-neuron-ai-memory-config",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.154Z",
+      "updatedAt": "2026-08-05T21:03:38.154Z"
+    },
+    {
+      "id": "e-uses-37f59341",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-7ae65567-neuron-ai-memory-cursor-",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.156Z",
+      "updatedAt": "2026-08-05T21:03:38.156Z"
+    },
+    {
+      "id": "e-uses-90a68f6d",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-bc47d986-neuron-ai-memory-embeddi",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.158Z",
+      "updatedAt": "2026-08-05T21:03:38.158Z"
+    },
+    {
+      "id": "e-uses-baa87af3",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-b01a17f5-neuron-ai-memory-knowled",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.159Z",
+      "updatedAt": "2026-08-05T21:03:38.159Z"
+    },
+    {
+      "id": "e-uses-b30a2aec",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-c0bb9ac4-neuron-ai-memory-memory-",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.161Z",
+      "updatedAt": "2026-08-05T21:03:38.161Z"
+    },
+    {
+      "id": "e-uses-c2630dbb",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-fae846d7-neuron-ai-memory-observa",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.163Z",
+      "updatedAt": "2026-08-05T21:03:38.163Z"
+    },
+    {
+      "id": "e-uses-b2dea1b7",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-17a356e4-neuron-ai-memory-project",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.164Z",
+      "updatedAt": "2026-08-05T21:03:38.164Z"
+    },
+    {
+      "id": "e-uses-398ea601",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-95aaac00-neuron-ai-memory-project",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.166Z",
+      "updatedAt": "2026-08-05T21:03:38.166Z"
+    },
+    {
+      "id": "e-uses-77b3544a",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-86384105-neuron-ai-memory-retriev",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.167Z",
+      "updatedAt": "2026-08-05T21:03:38.167Z"
+    },
+    {
+      "id": "e-uses-f2abbc1f",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-2e9a0931-neuron-ai-memory-storage",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.169Z",
+      "updatedAt": "2026-08-05T21:03:38.169Z"
+    },
+    {
+      "id": "e-uses-09eda0fe",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-039354af-neuron-ai-memory-types",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.170Z",
+      "updatedAt": "2026-08-05T21:03:38.170Z"
+    },
+    {
+      "id": "e-uses-d58cde30",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-7205d5a8-zod",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.172Z",
+      "updatedAt": "2026-08-05T21:03:38.172Z"
+    },
+    {
+      "id": "e-uses-273c1186",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-7205bfb2-tsx",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.174Z",
+      "updatedAt": "2026-08-05T21:03:38.174Z"
+    },
+    {
+      "id": "e-uses-30e299f0",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-4cb2f88c-typescript",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.176Z",
+      "updatedAt": "2026-08-05T21:03:38.176Z"
+    },
+    {
+      "id": "e-uses-657a36fb",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-project-de59cc54-mcp-server",
+      "toNodeId": "n-dependency-eddb494c-vitest",
+      "relationType": "USES",
+      "metadata": {
+        "kind": "library"
+      },
+      "createdAt": "2026-08-05T21:03:38.177Z",
+      "updatedAt": "2026-08-05T21:03:38.177Z"
+    },
+    {
+      "id": "e-owned_by-7330ca8a",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-module-06f95a88-src-config",
+      "toNodeId": "n-project-de59cc54-mcp-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.183Z",
+      "updatedAt": "2026-08-05T21:03:38.183Z"
+    },
+    {
+      "id": "e-owned_by-2d01c9e7",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-module-06f95a88-src-config",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.184Z",
+      "updatedAt": "2026-08-05T21:03:38.184Z"
+    },
+    {
+      "id": "e-uses-93813cfd",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-dependency-648e25ac-neuron-ai-memory-ai-prov",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.185Z",
+      "updatedAt": "2026-08-05T21:03:38.185Z"
+    },
+    {
+      "id": "e-uses-e23adf0b",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-dependency-03353c11-neuron-ai-memory-agent-i",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.186Z",
+      "updatedAt": "2026-08-05T21:03:38.186Z"
+    },
+    {
+      "id": "e-uses-0a42f933",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-dependency-ce480e11-neuron-ai-memory-agent-w",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.188Z",
+      "updatedAt": "2026-08-05T21:03:38.188Z"
+    },
+    {
+      "id": "e-uses-f21fa363",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-dependency-61178f7c-neuron-ai-memory-ai-memo",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.188Z",
+      "updatedAt": "2026-08-05T21:03:38.188Z"
+    },
+    {
+      "id": "e-uses-38878ef6",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-dependency-51470dcc-neuron-ai-memory-config",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.191Z",
+      "updatedAt": "2026-08-05T21:03:38.192Z"
+    },
+    {
+      "id": "e-uses-f3c8ba06",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-dependency-bc47d986-neuron-ai-memory-embeddi",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.194Z",
+      "updatedAt": "2026-08-05T21:03:38.194Z"
+    },
+    {
+      "id": "e-uses-1dcaa58c",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-dependency-b01a17f5-neuron-ai-memory-knowled",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.194Z",
+      "updatedAt": "2026-08-05T21:03:38.194Z"
+    },
+    {
+      "id": "e-uses-162c5585",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-dependency-c0bb9ac4-neuron-ai-memory-memory-",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.195Z",
+      "updatedAt": "2026-08-05T21:03:38.195Z"
+    },
+    {
+      "id": "e-uses-1600cc50",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-dependency-17a356e4-neuron-ai-memory-project",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.196Z",
+      "updatedAt": "2026-08-05T21:03:38.196Z"
+    },
+    {
+      "id": "e-uses-55cde6b8",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-dependency-2e9a0931-neuron-ai-memory-storage",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.197Z",
+      "updatedAt": "2026-08-05T21:03:38.197Z"
+    },
+    {
+      "id": "e-uses-25853854",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-ff5b40de-runtime-ts",
+      "toNodeId": "n-dependency-fae846d7-neuron-ai-memory-observa",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.198Z",
+      "updatedAt": "2026-08-05T21:03:38.198Z"
+    },
+    {
+      "id": "e-owned_by-a7bf4b75",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-module-d941dc28-src-handlers",
+      "toNodeId": "n-project-de59cc54-mcp-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.201Z",
+      "updatedAt": "2026-08-05T21:03:38.201Z"
+    },
+    {
+      "id": "e-owned_by-e4cd863b",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-a999b885-get-context-ts",
+      "toNodeId": "n-module-d941dc28-src-handlers",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.203Z",
+      "updatedAt": "2026-08-05T21:03:38.203Z"
+    },
+    {
+      "id": "e-uses-6f01a939",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-a999b885-get-context-ts",
+      "toNodeId": "n-dependency-7ae65567-neuron-ai-memory-cursor-",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.204Z",
+      "updatedAt": "2026-08-05T21:03:38.204Z"
+    },
+    {
+      "id": "e-owned_by-26ef548f",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-305bd205-index-ts",
+      "toNodeId": "n-module-d941dc28-src-handlers",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.208Z",
+      "updatedAt": "2026-08-05T21:03:38.208Z"
+    },
+    {
+      "id": "e-owned_by-826c0778",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-2b64ff89-intelligence-ts",
+      "toNodeId": "n-module-d941dc28-src-handlers",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.219Z",
+      "updatedAt": "2026-08-05T21:03:38.219Z"
+    },
+    {
+      "id": "e-owned_by-e38a34cf",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-0f715a45-project-summary-ts",
+      "toNodeId": "n-module-d941dc28-src-handlers",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.224Z",
+      "updatedAt": "2026-08-05T21:03:38.224Z"
+    },
+    {
+      "id": "e-owned_by-82b39675",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-45e6ae85-review-memory-ts",
+      "toNodeId": "n-module-d941dc28-src-handlers",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.229Z",
+      "updatedAt": "2026-08-05T21:03:38.229Z"
+    },
+    {
+      "id": "e-uses-bc4beafc",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-45e6ae85-review-memory-ts",
+      "toNodeId": "n-dependency-61178f7c-neuron-ai-memory-ai-memo",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.230Z",
+      "updatedAt": "2026-08-05T21:03:38.230Z"
+    },
+    {
+      "id": "e-uses-5dad8496",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-45e6ae85-review-memory-ts",
+      "toNodeId": "n-dependency-648e25ac-neuron-ai-memory-ai-prov",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.231Z",
+      "updatedAt": "2026-08-05T21:03:38.231Z"
+    },
+    {
+      "id": "e-owned_by-ffa7e463",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-c82da7c5-save-decision-ts",
+      "toNodeId": "n-module-d941dc28-src-handlers",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.237Z",
+      "updatedAt": "2026-08-05T21:03:38.237Z"
+    },
+    {
+      "id": "e-owned_by-577e20f7",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-32b9f08d-scan-ts",
+      "toNodeId": "n-module-d941dc28-src-handlers",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.244Z",
+      "updatedAt": "2026-08-05T21:03:38.244Z"
+    },
+    {
+      "id": "e-uses-ef965eb5",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-32b9f08d-scan-ts",
+      "toNodeId": "n-dependency-95aaac00-neuron-ai-memory-project",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.245Z",
+      "updatedAt": "2026-08-05T21:03:38.245Z"
+    },
+    {
+      "id": "e-owned_by-741905cc",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-980a9885-search-memory-ts",
+      "toNodeId": "n-module-d941dc28-src-handlers",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.250Z",
+      "updatedAt": "2026-08-05T21:03:38.250Z"
+    },
+    {
+      "id": "e-owned_by-1d444d7d",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-b1498cad-store-memory-ts",
+      "toNodeId": "n-module-d941dc28-src-handlers",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.255Z",
+      "updatedAt": "2026-08-05T21:03:38.255Z"
+    },
+    {
+      "id": "e-uses-5fa5a88d",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-b1498cad-store-memory-ts",
+      "toNodeId": "n-database_table-0140ce88-via",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.257Z",
+      "updatedAt": "2026-08-05T21:03:38.257Z"
+    },
+    {
+      "id": "e-uses-2a96c0b8",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-b1498cad-store-memory-ts",
+      "toNodeId": "n-dependency-039354af-neuron-ai-memory-types",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.258Z",
+      "updatedAt": "2026-08-05T21:03:38.258Z"
+    },
+    {
+      "id": "e-owned_by-46ce45a2",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-bf7ff6a5-update-memory-ts",
+      "toNodeId": "n-module-d941dc28-src-handlers",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.263Z",
+      "updatedAt": "2026-08-05T21:03:38.263Z"
+    },
+    {
+      "id": "e-owned_by-bc5ba835",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-517ddf89-workflow-ts",
+      "toNodeId": "n-module-d941dc28-src-handlers",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.268Z",
+      "updatedAt": "2026-08-05T21:03:38.268Z"
+    },
+    {
+      "id": "e-uses-ef007d9e",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-517ddf89-workflow-ts",
+      "toNodeId": "n-database_table-6c4baac4-developer",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.270Z",
+      "updatedAt": "2026-08-05T21:03:38.270Z"
+    },
+    {
+      "id": "e-uses-0247828c",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-517ddf89-workflow-ts",
+      "toNodeId": "n-database_table-fd7fcd85-workflow",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.272Z",
+      "updatedAt": "2026-08-05T21:03:38.272Z"
+    },
+    {
+      "id": "e-uses-853bd28c",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-517ddf89-workflow-ts",
+      "toNodeId": "n-dependency-ce480e11-neuron-ai-memory-agent-w",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.273Z",
+      "updatedAt": "2026-08-05T21:03:38.273Z"
+    },
+    {
+      "id": "e-owned_by-ea4d9d92",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-module-4043067c-src-health-ts",
+      "toNodeId": "n-project-de59cc54-mcp-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.278Z",
+      "updatedAt": "2026-08-05T21:03:38.278Z"
+    },
+    {
+      "id": "e-owned_by-eabeaa47",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-4dc729f7-health-ts",
+      "toNodeId": "n-module-4043067c-src-health-ts",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.280Z",
+      "updatedAt": "2026-08-05T21:03:38.280Z"
+    },
+    {
+      "id": "e-uses-f915d500",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-4dc729f7-health-ts",
+      "toNodeId": "n-dependency-fae846d7-neuron-ai-memory-observa",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.281Z",
+      "updatedAt": "2026-08-05T21:03:38.281Z"
+    },
+    {
+      "id": "e-uses-1ec37583",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-4dc729f7-health-ts",
+      "toNodeId": "n-dependency-039354af-neuron-ai-memory-types",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.281Z",
+      "updatedAt": "2026-08-05T21:03:38.281Z"
+    },
+    {
+      "id": "e-owned_by-71d1aebb",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-module-70e7cd68-src-index-ts",
+      "toNodeId": "n-project-de59cc54-mcp-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.284Z",
+      "updatedAt": "2026-08-05T21:03:38.284Z"
+    },
+    {
+      "id": "e-owned_by-10dd2bc3",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-1b3efcad-index-ts",
+      "toNodeId": "n-module-70e7cd68-src-index-ts",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.286Z",
+      "updatedAt": "2026-08-05T21:03:38.286Z"
+    },
+    {
+      "id": "e-uses-82dfa452",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-1b3efcad-index-ts",
+      "toNodeId": "n-dependency-7b07a302-modelcontextprotocol-sdk",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.287Z",
+      "updatedAt": "2026-08-05T21:03:38.287Z"
+    },
+    {
+      "id": "e-owned_by-17da2468",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-module-f7935508-src-middleware",
+      "toNodeId": "n-project-de59cc54-mcp-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.293Z",
+      "updatedAt": "2026-08-05T21:03:38.293Z"
+    },
+    {
+      "id": "e-owned_by-89fe1712",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-7f86e2e0-auth-ts",
+      "toNodeId": "n-module-f7935508-src-middleware",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.295Z",
+      "updatedAt": "2026-08-05T21:03:38.295Z"
+    },
+    {
+      "id": "e-uses-6e6b76a0",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-7f86e2e0-auth-ts",
+      "toNodeId": "n-dependency-039354af-neuron-ai-memory-types",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.296Z",
+      "updatedAt": "2026-08-05T21:03:38.296Z"
+    },
+    {
+      "id": "e-owned_by-1b0c844e",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-3b6a821a-errors-ts",
+      "toNodeId": "n-module-f7935508-src-middleware",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.298Z",
+      "updatedAt": "2026-08-05T21:03:38.298Z"
+    },
+    {
+      "id": "e-uses-8af3e9dc",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-3b6a821a-errors-ts",
+      "toNodeId": "n-dependency-039354af-neuron-ai-memory-types",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.299Z",
+      "updatedAt": "2026-08-05T21:03:38.299Z"
+    },
+    {
+      "id": "e-owned_by-ddc9ac13",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-module-5e8d54f8-src-prompts",
+      "toNodeId": "n-project-de59cc54-mcp-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.302Z",
+      "updatedAt": "2026-08-05T21:03:38.302Z"
+    },
+    {
+      "id": "e-owned_by-76b7c154",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-41eb8ee5-register-prompts-ts",
+      "toNodeId": "n-module-5e8d54f8-src-prompts",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.304Z",
+      "updatedAt": "2026-08-05T21:03:38.304Z"
+    },
+    {
+      "id": "e-uses-47571159",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-41eb8ee5-register-prompts-ts",
+      "toNodeId": "n-database_table-c6cdf2b9-neuron",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.306Z",
+      "updatedAt": "2026-08-05T21:03:38.306Z"
+    },
+    {
+      "id": "e-uses-dc129163",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-41eb8ee5-register-prompts-ts",
+      "toNodeId": "n-dependency-7b07a302-modelcontextprotocol-sdk",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.307Z",
+      "updatedAt": "2026-08-05T21:03:38.307Z"
+    },
+    {
+      "id": "e-uses-02635eb9",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-41eb8ee5-register-prompts-ts",
+      "toNodeId": "n-dependency-7205d5a8-zod",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.308Z",
+      "updatedAt": "2026-08-05T21:03:38.308Z"
+    },
+    {
+      "id": "e-owned_by-8430f2c4",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-module-3ee46924-src-resources",
+      "toNodeId": "n-project-de59cc54-mcp-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.311Z",
+      "updatedAt": "2026-08-05T21:03:38.311Z"
+    },
+    {
+      "id": "e-owned_by-c076a5d0",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-f02f2f8f-register-resources-ts",
+      "toNodeId": "n-module-3ee46924-src-resources",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.313Z",
+      "updatedAt": "2026-08-05T21:03:38.313Z"
+    },
+    {
+      "id": "e-uses-b63561b6",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-f02f2f8f-register-resources-ts",
+      "toNodeId": "n-dependency-7b07a302-modelcontextprotocol-sdk",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.314Z",
+      "updatedAt": "2026-08-05T21:03:38.314Z"
+    },
+    {
+      "id": "e-owned_by-68608651",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-module-7c877fe8-src-server",
+      "toNodeId": "n-project-de59cc54-mcp-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.317Z",
+      "updatedAt": "2026-08-05T21:03:38.317Z"
+    },
+    {
+      "id": "e-owned_by-7692c171",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-12fd84df-create-server-ts",
+      "toNodeId": "n-module-7c877fe8-src-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.319Z",
+      "updatedAt": "2026-08-05T21:03:38.319Z"
+    },
+    {
+      "id": "e-uses-0c7c9916",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-12fd84df-create-server-ts",
+      "toNodeId": "n-dependency-7b07a302-modelcontextprotocol-sdk",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.319Z",
+      "updatedAt": "2026-08-05T21:03:38.319Z"
+    },
+    {
+      "id": "e-owned_by-d5f4d029",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-module-9b651510-src-tools",
+      "toNodeId": "n-project-de59cc54-mcp-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.327Z",
+      "updatedAt": "2026-08-05T21:03:38.327Z"
+    },
+    {
+      "id": "e-owned_by-7ed30fef",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-f4117759-register-tools-ts",
+      "toNodeId": "n-module-9b651510-src-tools",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.329Z",
+      "updatedAt": "2026-08-05T21:03:38.329Z"
+    },
+    {
+      "id": "e-uses-b13f630d",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-f4117759-register-tools-ts",
+      "toNodeId": "n-database_table-7be94e73-an",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.331Z",
+      "updatedAt": "2026-08-05T21:03:38.331Z"
+    },
+    {
+      "id": "e-uses-40eef4d2",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-f4117759-register-tools-ts",
+      "toNodeId": "n-dependency-7b07a302-modelcontextprotocol-sdk",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.331Z",
+      "updatedAt": "2026-08-05T21:03:38.331Z"
+    },
+    {
+      "id": "e-owned_by-11afb235",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-module-91e0ca28-src-validation",
+      "toNodeId": "n-project-de59cc54-mcp-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.341Z",
+      "updatedAt": "2026-08-05T21:03:38.341Z"
+    },
+    {
+      "id": "e-owned_by-0e129c0d",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-8657cf95-schemas-ts",
+      "toNodeId": "n-module-91e0ca28-src-validation",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.343Z",
+      "updatedAt": "2026-08-05T21:03:38.343Z"
+    },
+    {
+      "id": "e-uses-724767a6",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-8657cf95-schemas-ts",
+      "toNodeId": "n-dependency-7205d5a8-zod",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.345Z",
+      "updatedAt": "2026-08-05T21:03:38.345Z"
+    },
+    {
+      "id": "e-owned_by-97e44190",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-module-c040eab2-tests",
+      "toNodeId": "n-project-de59cc54-mcp-server",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.347Z",
+      "updatedAt": "2026-08-05T21:03:38.347Z"
+    },
+    {
+      "id": "e-owned_by-866c103f",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-1ba594bc-mcp-tools-test-ts",
+      "toNodeId": "n-module-c040eab2-tests",
+      "relationType": "OWNED_BY",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.349Z",
+      "updatedAt": "2026-08-05T21:03:38.349Z"
+    },
+    {
+      "id": "e-uses-8ec5a98a",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-1ba594bc-mcp-tools-test-ts",
+      "toNodeId": "n-database_table-01409d32-ids",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.351Z",
+      "updatedAt": "2026-08-05T21:03:38.351Z"
+    },
+    {
+      "id": "e-uses-4638830a",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-file-1ba594bc-mcp-tools-test-ts",
+      "toNodeId": "n-dependency-eddb494c-vitest",
+      "relationType": "USES",
+      "metadata": {},
+      "createdAt": "2026-08-05T21:03:38.352Z",
+      "updatedAt": "2026-08-05T21:03:38.352Z"
+    },
+    {
+      "id": "e-related_to-e86c3fd1",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-96c1b8d3-d161-4df3-974b-6abb6332e7a6",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "96c1b8d3-d161-4df3-974b-6abb6332e7a6"
+      },
+      "createdAt": "2026-08-05T21:03:38.362Z",
+      "updatedAt": "2026-08-05T21:03:38.362Z"
+    },
+    {
+      "id": "e-related_to-c2e77b4a",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-f8c7e7f3-1f4e-465c-84cd-701db7ef582a",
+      "toNodeId": "n-file-7f86e2e0-auth-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "f8c7e7f3-1f4e-465c-84cd-701db7ef582a"
+      },
+      "createdAt": "2026-08-05T21:03:38.364Z",
+      "updatedAt": "2026-08-05T21:03:38.364Z"
+    },
+    {
+      "id": "e-related_to-d2398f9a",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-8395565a-535c-4ccd-b8dc-5372abbb2d3d",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "8395565a-535c-4ccd-b8dc-5372abbb2d3d"
+      },
+      "createdAt": "2026-08-05T21:03:38.367Z",
+      "updatedAt": "2026-08-05T21:03:38.367Z"
+    },
+    {
+      "id": "e-related_to-234e254e",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-ce5c1b20-ada8-48ca-989a-392ff998282b",
+      "toNodeId": "n-file-7f86e2e0-auth-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "ce5c1b20-ada8-48ca-989a-392ff998282b"
+      },
+      "createdAt": "2026-08-05T21:03:38.369Z",
+      "updatedAt": "2026-08-05T21:03:38.369Z"
+    },
+    {
+      "id": "e-related_to-1e42e05f",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-ca88a9cf-5ccf-4841-ab38-48276540048b",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "ca88a9cf-5ccf-4841-ab38-48276540048b"
+      },
+      "createdAt": "2026-08-05T21:03:38.372Z",
+      "updatedAt": "2026-08-05T21:03:38.372Z"
+    },
+    {
+      "id": "e-related_to-0d8416eb",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-d119754b-c0de-40df-85ee-f58da7ddda98",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "d119754b-c0de-40df-85ee-f58da7ddda98"
+      },
+      "createdAt": "2026-08-05T21:03:38.374Z",
+      "updatedAt": "2026-08-05T21:03:38.374Z"
+    },
+    {
+      "id": "e-related_to-a63ce0f7",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-f30bbd05-ce50-45ef-880c-b4d0c694a81c",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "f30bbd05-ce50-45ef-880c-b4d0c694a81c"
+      },
+      "createdAt": "2026-08-05T21:03:38.377Z",
+      "updatedAt": "2026-08-05T21:03:38.377Z"
+    },
+    {
+      "id": "e-related_to-9886ce4b",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-2c1af2a3-6cd5-472d-af9d-530a08a4662c",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "2c1af2a3-6cd5-472d-af9d-530a08a4662c"
+      },
+      "createdAt": "2026-08-05T21:03:38.379Z",
+      "updatedAt": "2026-08-05T21:03:38.379Z"
+    },
+    {
+      "id": "e-related_to-56ef8257",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-f4423458-65f7-43af-b0ab-7b0e5c48c8e6",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "f4423458-65f7-43af-b0ab-7b0e5c48c8e6"
+      },
+      "createdAt": "2026-08-05T21:03:38.381Z",
+      "updatedAt": "2026-08-05T21:03:38.381Z"
+    },
+    {
+      "id": "e-related_to-d082f4b0",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-1a32fb84-ba6c-4be9-9aa5-6cb242c25c7d",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "1a32fb84-ba6c-4be9-9aa5-6cb242c25c7d"
+      },
+      "createdAt": "2026-08-05T21:03:38.384Z",
+      "updatedAt": "2026-08-05T21:03:38.384Z"
+    },
+    {
+      "id": "e-related_to-cbb2cff0",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-ef391eb1-1a35-4ccf-9d61-6a3d4ed886cf",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "ef391eb1-1a35-4ccf-9d61-6a3d4ed886cf"
+      },
+      "createdAt": "2026-08-05T21:03:38.386Z",
+      "updatedAt": "2026-08-05T21:03:38.386Z"
+    },
+    {
+      "id": "e-related_to-f24d7a0f",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-29b06c9e-0584-4026-9afc-6a2a89212ee5",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "29b06c9e-0584-4026-9afc-6a2a89212ee5"
+      },
+      "createdAt": "2026-08-05T21:03:38.389Z",
+      "updatedAt": "2026-08-05T21:03:38.389Z"
+    },
+    {
+      "id": "e-related_to-cb402380",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-1f7d8295-ae1b-4c5e-b3e2-e978bf87fd84",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "1f7d8295-ae1b-4c5e-b3e2-e978bf87fd84"
+      },
+      "createdAt": "2026-08-05T21:03:38.391Z",
+      "updatedAt": "2026-08-05T21:03:38.391Z"
+    },
+    {
+      "id": "e-related_to-2a687274",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-104a978e-4671-4dcd-8ad9-c1b5172c5aa9",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "104a978e-4671-4dcd-8ad9-c1b5172c5aa9"
+      },
+      "createdAt": "2026-08-05T21:03:38.393Z",
+      "updatedAt": "2026-08-05T21:03:38.393Z"
+    },
+    {
+      "id": "e-related_to-c418602c",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-f3dd6817-a5f3-48a8-9599-3730a28e684b",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "f3dd6817-a5f3-48a8-9599-3730a28e684b"
+      },
+      "createdAt": "2026-08-05T21:03:38.396Z",
+      "updatedAt": "2026-08-05T21:03:38.396Z"
+    },
+    {
+      "id": "e-related_to-9411303d",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-a3fdb46b-73e2-4125-bd3e-86010708f8ac",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "a3fdb46b-73e2-4125-bd3e-86010708f8ac"
+      },
+      "createdAt": "2026-08-05T21:03:38.398Z",
+      "updatedAt": "2026-08-05T21:03:38.398Z"
+    },
+    {
+      "id": "e-related_to-e4bd031f",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-6137fce6-991c-4629-afc9-0c514993cb76",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "6137fce6-991c-4629-afc9-0c514993cb76"
+      },
+      "createdAt": "2026-08-05T21:03:38.401Z",
+      "updatedAt": "2026-08-05T21:03:38.401Z"
+    },
+    {
+      "id": "e-related_to-9c512522",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-9a9a3473-d965-40d4-bb75-49db7caf4b5d",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "9a9a3473-d965-40d4-bb75-49db7caf4b5d"
+      },
+      "createdAt": "2026-08-05T21:03:38.404Z",
+      "updatedAt": "2026-08-05T21:03:38.404Z"
+    },
+    {
+      "id": "e-related_to-522fb55f",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-4ed23a78-5ed4-49e7-b484-99457bb34951",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "4ed23a78-5ed4-49e7-b484-99457bb34951"
+      },
+      "createdAt": "2026-08-05T21:03:38.406Z",
+      "updatedAt": "2026-08-05T21:03:38.406Z"
+    },
+    {
+      "id": "e-related_to-b597a8d8",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-2bceb35a-fa29-4991-9662-ea1b9c30989c",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "2bceb35a-fa29-4991-9662-ea1b9c30989c"
+      },
+      "createdAt": "2026-08-05T21:03:38.409Z",
+      "updatedAt": "2026-08-05T21:03:38.409Z"
+    },
+    {
+      "id": "e-related_to-b2000089",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-74247077-c2c1-4863-af56-d07d41d40a3e",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "74247077-c2c1-4863-af56-d07d41d40a3e"
+      },
+      "createdAt": "2026-08-05T21:03:38.411Z",
+      "updatedAt": "2026-08-05T21:03:38.411Z"
+    },
+    {
+      "id": "e-related_to-0b56fc39",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-5e0b361f-cde0-43a8-b2eb-5d44e062d11f",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "5e0b361f-cde0-43a8-b2eb-5d44e062d11f"
+      },
+      "createdAt": "2026-08-05T21:03:38.414Z",
+      "updatedAt": "2026-08-05T21:03:38.414Z"
+    },
+    {
+      "id": "e-related_to-bfd4ce5e",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-10fce38b-f89f-42c4-bff9-49efcaf399a7",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "10fce38b-f89f-42c4-bff9-49efcaf399a7"
+      },
+      "createdAt": "2026-08-05T21:03:38.417Z",
+      "updatedAt": "2026-08-05T21:03:38.417Z"
+    },
+    {
+      "id": "e-related_to-eac9085e",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "fromNodeId": "n-memory-da06d7ac-8f07-4d9d-bc79-7db46d77eba0",
+      "toNodeId": "n-file-c82da7c5-save-decision-ts",
+      "relationType": "RELATED_TO",
+      "metadata": {
+        "memoryId": "da06d7ac-8f07-4d9d-bc79-7db46d77eba0"
+      },
+      "createdAt": "2026-08-05T21:03:38.421Z",
+      "updatedAt": "2026-08-05T21:03:38.421Z"
+    }
+  ],
+  "changes": [
+    {
+      "id": "gc-19fd3bd2cc2-843702",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "kind": "snapshot",
+      "entityId": "n-project-de59cc54-mcp-server",
+      "summary": "Scanned 20 dependencies",
+      "timestamp": "2026-08-05T21:03:38.178Z"
+    },
+    {
+      "id": "gc-19fd3bd2d77-38367e",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "kind": "snapshot",
+      "entityId": "n-project-de59cc54-mcp-server",
+      "summary": "Code graph: 22 files, 11 modules",
+      "timestamp": "2026-08-05T21:03:38.359Z"
+    },
+    {
+      "id": "gc-19fd3bd2db6-6ea565",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "kind": "snapshot",
+      "entityId": "n-project-de59cc54-mcp-server",
+      "summary": "Project intelligence built for mcp-server",
+      "timestamp": "2026-08-05T21:03:38.422Z"
+    }
+  ]
+}

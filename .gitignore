@@ -6,12 +6,21 @@ coverage/
 .env
 .env.local
 neuron.config.json
-.neuron/
 .DS_Store
 *.log
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Neuron — version knowledge, ignore ephemeral state
+.neuron/cache/
+.neuron/runtime/
+.neuron/indexes/
+.neuron/logs/
+.neuron/export/
+.neuron/data/
+.neuron/backup/
+.neuron/integrations/
 
 # Local Graft tooling (keep out of the public tree)
 graft/

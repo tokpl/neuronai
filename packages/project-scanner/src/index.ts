@@ -44,3 +44,14 @@ export {
   ProjectBrainBootstrap,
   createProjectBrainBootstrap,
 } from './facade/bootstrap.js';
+
+/** MERGE: project-analyzer APIs re-exported from scanner for a single DX surface. */
+export {
+  createProjectResolver,
+  detectProjectStack,
+  collectProjectSignals,
+  type ResolvedProject,
+  type ProjectResolver,
+  type StackDetection,
+  type ProjectSignals,
+} from '@neuron-ai-memory/project-analyzer';

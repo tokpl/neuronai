@@ -6,12 +6,10 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { createCli } from '../src/index.js';
 import { runDoctor } from '../src/commands/doctor.js';
-import { runExplain } from '../src/commands/explain.js';
 import { runInit } from '../src/commands/init.js';
 import { runReset } from '../src/commands/reset.js';
 import { runSearch } from '../src/commands/search.js';
 import { runStatus } from '../src/commands/status.js';
-import { runUpdate } from '../src/commands/update.js';
 import { createConfigValidator } from '../src/config/config-validator.js';
 import { runDoctorChecks } from '../src/diagnostics/doctor-checks.js';
 import { isNeuronInitialized, neuronPaths } from '../src/services/neuron-fs.js';
@@ -71,7 +69,7 @@ async function writeFixture(
 }
 
 describe('cli commands', () => {
-  it('registers expected commands', () => {
+  it('registers MVP commands only', () => {
     const cli = createCli();
     const names = cli.commands.map((c) => c.name);
     expect(names).toEqual(
@@ -79,30 +77,17 @@ describe('cli commands', () => {
         'init',
         'init cursor',
         'status',
-        'explain',
-        'analyze',
         'scan',
-        'update',
         'reset',
-        'project-report',
-        'watch',
-        'optimize-context',
-        'benchmark',
-        'benchmark report',
-        'benchmark retrieval',
         'search',
-        'suggest',
-        'export',
         'doctor',
         'cursor setup',
         'cursor init',
         'cursor doctor',
-        'constitution suggest',
-        'constitution accept',
-        'constitution health',
         'mcp',
       ]),
     );
+    expect(names).not.toEqual(expect.arrayContaining(['benchmark', 'watch', 'constitution suggest']));
   });
 
   it('init nextjs fixture creates .neuron and memories', async () => {
@@ -121,7 +106,9 @@ describe('cli commands', () => {
     expect(config.integrations.cursor).toBe(true);
     expect(config.privacy?.telemetry).toBe(false);
     expect(config.privacy?.localOnly).toBe(true);
-    expect(config.scan?.ignore?.length).toBeGreaterThan(0);
+
+    const brain = JSON.parse(await readFile(paths.brain, 'utf8')) as { name: string };
+    expect(brain.name).toBe('demo-next');
 
     const store = JSON.parse(await readFile(paths.store, 'utf8')) as {
       memories: unknown[];
@@ -181,32 +168,20 @@ describe('cli commands', () => {
     );
     expect(cmd).toMatch(/neuron_prepare_task/);
 
-    const brain = await readFile(join(root, '.neuron', 'architecture.md'), 'utf8');
-    expect(brain).toMatch(/Architecture/);
-
     process.exitCode = 0;
     await runCursorDoctor(root);
     expect(process.exitCode === 0 || process.exitCode === undefined).toBe(true);
   });
 
-  it('explain and doctor checks after init', async () => {
+  it('doctor checks after init', async () => {
     const root = await makeTemp();
     await writeFixture(root, 'nextjs');
     await runInit(root);
 
-    await runExplain(root);
     const checks = await runDoctorChecks(root);
     expect(checks.some((c) => c.name === 'Node version' && c.ok)).toBe(true);
     expect(checks.some((c) => c.name === 'Privacy mode' && c.ok)).toBe(true);
     expect(checks.some((c) => c.name.includes('MCP') && c.ok)).toBe(true);
-  });
-
-  it('update migrates metadata without failing', async () => {
-    const root = await makeTemp();
-    await writeFixture(root, 'node');
-    await runInit(root, { skipAnalyze: true });
-    await runUpdate(root, { knowledge: false });
-    expect(await isNeuronInitialized(root)).toBe(true);
   });
 
   it('reset --force removes .neuron', async () => {

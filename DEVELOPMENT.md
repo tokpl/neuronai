@@ -1,51 +1,42 @@
 # Development
 
-Contributor setup for the Neuron monorepo.
-
-## Prerequisites
-
-- Node.js **22+**
-- pnpm **9.15+** (`corepack enable`)
-- Optional: Docker for Postgres + pgvector
+Neuron is a **pnpm + Turborepo** TypeScript monorepo.
 
 ## Setup
 
 ```bash
 pnpm install
-cp .env.example .env
 pnpm build
 pnpm test
-pnpm lint
 ```
 
-Optional database:
+Requirements: **Node.js 22+**, **pnpm 9**.
 
-```bash
-pnpm docker:up
-pnpm db:migrate
-```
+No Docker. No Postgres. No API keys for the default loop.
 
 ## Useful commands
 
 | Command | Purpose |
 |---------|---------|
-| `pnpm neuron <cmd>` | Run built CLI |
-| `pnpm neuron init cursor` | Full Cursor bootstrap |
-| `pnpm neuron cursor doctor` | Validate Cursor wiring |
-| `pnpm dev:mcp` | MCP watch mode |
-| `pnpm docker:prod` | Experimental prod compose |
+| `pnpm neuron …` | Run CLI from monorepo |
+| `pnpm dev:mcp` | MCP server (stdio) |
+| `pnpm lint` / `typecheck` / `test` / `build` | Quality gate |
 
-## Package map
+## Layout
 
-See [docs/architecture-guide.md](./docs/architecture-guide.md) and [docs/development-guide.md](./docs/development-guide.md).
+```text
+apps/cli            # `neuron` binary
+apps/mcp-server     # MCP transport + 12 tools
+packages/*          # MVP core
+future/packages/*   # Non-MVP (not in workspace build)
+examples/neuron-demo
+docs/               # Thin honest docs
+```
 
-## Quality bar
+## Product rule
 
-- Conventional commits (`feat`, `fix`, `docs`, …)
-- Tests for behavior changes
-- No secrets in commits or logs
-- MCP handlers stay thin
+Before adding a feature ask:
 
-## Public demo
+> Does this help Cursor understand the user's project?
 
-[`examples/neuron-demo`](./examples/neuron-demo) — use when recording [docs/demo/](./docs/demo/) scripts.
+If no — put it in `future/` or drop it.

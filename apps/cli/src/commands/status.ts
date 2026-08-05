@@ -32,11 +32,7 @@ export async function runStatus(cwd = process.cwd()): Promise<void> {
     // keep metadata count
   }
 
-  const databaseUrl = process.env['DATABASE_URL'];
-  let dbStatus = 'local file store (.neuron/data)';
-  if (databaseUrl) {
-    dbStatus = 'DATABASE_URL set (Postgres preferred when wired)';
-  }
+  const dbStatus = 'local FileStorageProvider (.neuron/) — no database required';
 
   const mcpConfigured = await pathExists(`${paths.root}/.cursor/mcp.json`);
   let mcpStatus = mcpConfigured ? 'Configured (.cursor/mcp.json)' : 'Not configured';

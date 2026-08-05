@@ -1,177 +1,168 @@
-# Neuron AI Memory
+# Neuron
 
-**Persistent project memory for Cursor AI agents.**
+**Local-first AI memory for Cursor.**
 
-Mem0 remembers people. Neuron remembers the *codebase’s decisions*.
+Neuron makes Cursor understand your project.
 
-Local-first · MCP · Apache-2.0 · **v0.1.0**
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)](https://nodejs.org)
+[![Local-first](https://img.shields.io/badge/storage-filesystem-informational.svg)](./docs/neuron-folder.md)
+[![MCP](https://img.shields.io/badge/MCP-12%20tools-purple.svg)](./docs/mcp.md)
+
+![Neuron banner](./docs/assets/banner.svg)
 
 ---
 
-## Problem
+## Why Neuron?
 
-AI coding agents in Cursor start almost every chat from zero.
+AI coding agents forget everything between chats.
 
-They forget:
+They forget why you chose Postgres. Which module owns payments. That you already banned DB access from controllers.
 
-- why you chose Postgres over Mongo
-- which module owns payments
-- that you already banned DB access from controllers
-- the footguns that burned last sprint
+Repo RAG finds *code*. Neuron remembers *engineering judgment*.
 
-Repo RAG finds *code*. It does not remember *engineering judgment*.
+![Before vs after](./docs/assets/before-vs-after.svg)
 
-## Solution
+| Without Neuron | With Neuron |
+|----------------|-------------|
+| Cursor guesses your architecture | Cursor loads decisions from `.neuron/` |
+| You re-explain the same rules every session | Team shares knowledge via `git pull` |
+| Generic answers | Project-aware answers |
 
-Neuron is a **local project brain** for Cursor:
+---
 
-1. Stores decisions, patterns, warnings, and structure
-2. Exposes them through MCP tools (`neuron_prepare_task`, `neuron_get_context`, …)
-3. Caps context with a **Context Budget Manager** (top facts for *this* task — not 10 000 memories)
+## Demo
 
-Your agent stops reinventing architecture every session.
+![Terminal demo](./docs/assets/demo.svg)
 
-## Features
+```bash
+npm install -g neuron
+cd my-app
+neuron init
+# Open in Cursor → ask anything about the project
+```
 
-**MVP (P0) — AI that understands your project:**
+![Cursor workflow](./docs/assets/cursor-workflow.svg)
 
-| Feature | What you get |
-|---------|----------------|
-| **Project scanner** | Bootstrap `.neuron/` brain from the codebase |
-| **Project memory** | Versioned decisions, patterns, warnings |
-| **Knowledge graph** | Modules + relations for context |
-| **Budgeted retrieval** | Top facts for *this* task — not 10 000 memories |
-| **Cursor MCP** | Rules, skills, commands, `neuron init cursor` |
-| **Basic reasoning** | Prepare / search / save decision |
-| **Local privacy** | Telemetry OFF; secrets redacted |
+---
 
-**Later / experimental** (not the MVP promise): architecture review, docs generation, git history, team brain, evaluation, workspace enterprise, assistant modes, etc.  
-See [docs/mvp.md](./docs/mvp.md) and [docs/product-architecture-review.md](./docs/product-architecture-review.md).
+## Quick Start
+
+**Requirements:** Node.js 22+, [Cursor](https://cursor.com)
+
+```bash
+npm install -g neuron
+cd your-project
+neuron init
+```
+
+That’s it.
+
+1. Creates `.neuron/` (local project brain)
+2. Wires Cursor MCP (`.cursor/mcp.json`)
+3. Scans the codebase for first memories
+
+No Docker. No Postgres. No OpenAI API key.
+
+Reload Cursor MCP, then ask:
+
+> Prepare adding a payments module using Neuron
+
+---
 
 ## How it works
 
+![Architecture](./docs/assets/architecture.svg)
+
 ```text
-Cursor
-  ↓
-Neuron MCP  (neuron/v1)
-  ↓
-Memory Engine
-  ↓
-Knowledge Graph
-  ↓
-Project Intelligence
+Cursor  →  Neuron MCP (12 tools)  →  FileStorageProvider  →  .neuron/
 ```
 
-Data stays on disk by default (`.neuron/data`). Optional Postgres + pgvector for larger installs.
+![Retrieval flow](./docs/assets/retrieval-flow.svg)
 
-## Quick Start (5 minutes)
+Neuron **delivers knowledge**. Cursor’s model **writes the answer**.
 
-**Requirements:** Node.js 22+, pnpm 9+, [Cursor](https://cursor.com)
+---
 
-```bash
-git clone https://github.com/YOUR_ORG/neuron-ai-memory.git
-cd neuron-ai-memory
-pnpm install && pnpm build
+## The `.neuron/` folder
 
-cd /path/to/your-app
-pnpm --dir /path/to/neuron-ai-memory neuron init cursor
-pnpm --dir /path/to/neuron-ai-memory neuron cursor doctor
+![Folder structure](./docs/assets/folder-structure.svg)
+
+```text
+.neuron/
+  config.json      # project settings (git)
+  brain.json       # project summary (git)
+  knowledge.json   # patterns, warnings, facts (git)
+  decisions.json   # architecture decisions (git)
+  rules.json       # project rules (git)
+  graph.json       # knowledge graph (git)
+  cache/           # ignored
+  runtime/         # ignored
+  indexes/         # ignored
+  logs/            # ignored
 ```
 
-1. Open the app in **Cursor** → enable MCP server **neuron**
-2. New chat: *“Prepare adding a payment system using Neuron”*
-3. Expect `neuron_prepare_task` / `neuron_get_context`
-4. After a real decision: *“Save this with Neuron”*
+Team Brain for MVP = **Git**. `git pull` brings the project brain.
 
-Walkthrough screenshots (scripted): [docs/demo/](./docs/demo/)
+![Scan flow](./docs/assets/scan-flow.svg)
+![Memory graph](./docs/assets/memory-graph.svg)
+![Knowledge graph](./docs/assets/knowledge-graph.svg)
 
-## Examples
+---
 
-| Scenario | Path |
-|----------|------|
-| **Full demo app** (FE + BE + DB + decisions) | [examples/neuron-demo](./examples/neuron-demo) |
-| Architecture decision | see demo `decisions.md` + README scenarios |
-| Refactor / debugging | [docs/cursor-workflow.md](./docs/cursor-workflow.md) |
-| Cursor wiring only | [examples/cursor-example](./examples/cursor-example) |
+## MCP tools (MVP)
 
-### Architecture decision (example)
+Only **12** tools — enough for daily use, not a catalog of 100+:
 
-> “We route payments through an event-driven outbox — never write to the ledger from HTTP handlers.”
+| Tool | Purpose |
+|------|---------|
+| `neuron_prepare_task` | Ranked context before coding |
+| `neuron_get_context` | Context on demand |
+| `neuron_search_memory` | Search knowledge |
+| `neuron_save_decision` | Save a decision |
+| `neuron_store_memory` | Store pattern / warning / fact |
+| `neuron_update_memory` | Versioned update |
+| `neuron_review_memory` | Suggest what to remember |
+| `neuron_after_task` | Save / Edit / Ignore prompt |
+| `neuron_scan_project` | Bootstrap brain from code |
+| `neuron_refresh_brain` | Refresh after changes |
+| `neuron_project_summary` | What is this project? |
+| `neuron_health` | Health check |
 
-Agent calls `neuron_save_decision` → appears in search and `.neuron/decisions.md`.
+Full reference: [docs/mcp.md](./docs/mcp.md)
 
-### Refactor (example)
+---
 
-> “Extract billing from `orders`.”
+## What Neuron is not
 
-`neuron_analyze_impact` + `neuron_prepare_task` surface module boundaries and prior warnings.
+- Not an AI agent / ChatGPT / Claude Code / Cursor replacement
+- Not an enterprise SaaS platform
+- Not a framework for everything
+- Does **not** require cloud sync, websockets, or CRDTs
 
-### Debugging (example)
+Neuron is the **best local memory for AI IDEs**.
 
-> “Duplicate charges in staging.”
+---
 
-`neuron_search_memory` finds “Do not access database directly from controllers” and the outbox pattern.
+## Documentation
 
-## What works in v0.1.0 (MVP)
+- [Getting started](./docs/getting-started.md)
+- [How it works](./docs/how-it-works.md)
+- [`.neuron/` folder](./docs/neuron-folder.md)
+- [MCP tools](./docs/mcp.md)
+- [FAQ](./docs/faq.md)
+- [Roadmap](./docs/roadmap.md)
+- [MVP scope](./docs/mvp.md)
 
-- Local Cursor MCP + CLI first-run (`init`, `scan`, `explain`, `doctor`, Cursor setup) — [docs/first-run.md](./docs/first-run.md)
-- Memory engine + hybrid search (local JSON store)
-- Project scanner → architecture / stack / brain files
-- Knowledge graph (project structure)
-- Agent intelligence basics (prepare / search / save decision)
-- Context Budget Manager
-- Privacy defaults (local-only, telemetry OFF)
-
-### Experimental (in repo, not MVP-stable)
-
-- Architecture review, assistant modes, git intelligence depth
-- Team Brain, evaluation engine, performance/debug advisors
-- Security-core / observability product traces
-- Workspace-core enterprise foundation
-- Core framework full module bus
-- AI runtime multi-provider
-- Postgres + pgvector path
-- Cloud `NEURON_MODE` / API-key stubs
-
-### Later (not in 0.1)
-
-- Cloud SaaS, billing, dashboards, marketplace
-- Enterprise IAM as GA
-- Autonomous multi-agent coding
-
-## Roadmap
-
-| Version | Focus |
-|---------|--------|
-| **v0.1** | Local Project Brain *(MVP)* |
-| **v0.2** | Daily depth (architecture, docs, git, resume) |
-| **v0.3** | Advanced local (team, governance, evaluation) |
-| **v1.0** | Production-ready engineering memory |
-
-Details: [docs/roadmap.md](./docs/roadmap.md) · [docs/mvp.md](./docs/mvp.md)
-
-## Community
-
-- **GitHub Discussions** — Q&A and ideas (enable on the repo)
-- **Discord** — placeholder invite in [SUPPORT.md](./SUPPORT.md) (add when community launches)
-- **FAQ** — [docs/faq.md](./docs/faq.md)
-
-### FAQ highlights
-
-- *Does Neuron send my code anywhere?* — **No by default.** Local-first.
-- *Different from ChatGPT memory?* — Project engineering memory, not chat persona.
-- *Offline?* — Yes for local store (no cloud required).
-- *Why MCP?* — Standard tool protocol for Cursor agents.
+---
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md), [DEVELOPMENT.md](./DEVELOPMENT.md), and [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
-
-Good first issues: [docs/good-first-issues.md](./docs/good-first-issues.md)
+See [CONTRIBUTING.md](./CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
 
 ## Security
 
-[SECURITY.md](./SECURITY.md) — report privately; never file public vulns.
+See [SECURITY.md](./SECURITY.md).
 
 ## License
 

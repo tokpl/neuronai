@@ -23,7 +23,6 @@ export {
 } from './install.js';
 export {
   projectBrainPaths,
-  renderProjectBrain,
   writeProjectBrainFiles,
   type ProjectBrainInput,
   type ProjectBrainPaths,

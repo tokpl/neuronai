@@ -16,7 +16,7 @@ import {
 import { createLocalFileMemoryStack } from '@neuron-ai-memory/storage';
 import type { MemoryRecord, MemoryType } from '@neuron-ai-memory/types';
 
-import { loadMetadata, neuronPaths, saveMetadata } from './neuron-fs.js';
+import { loadMetadata, saveMetadata } from './neuron-fs.js';
 
 export interface ProjectSession {
   cwd: string;
@@ -29,9 +29,8 @@ export interface ProjectSession {
 }
 
 export async function openProjectSession(cwd = process.cwd()): Promise<ProjectSession> {
-  const paths = neuronPaths(cwd);
   const project = await createProjectResolver().resolve(cwd);
-  const local = await createLocalFileMemoryStack(paths.dataDir);
+  const local = await createLocalFileMemoryStack(cwd);
 
   const embeddings = new MockEmbeddingProvider();
   const embeddingStore = new InMemoryEmbeddingStore();

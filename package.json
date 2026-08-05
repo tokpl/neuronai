@@ -21,12 +21,7 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "test:coverage": "turbo run test -- --coverage",
-    "clean": "turbo run clean",
-    "docker:up": "docker compose -f docker/docker-compose.yml up -d",
-    "docker:prod": "docker compose -f docker/docker-compose.prod.yml up -d --build",
-    "docker:down": "docker compose -f docker/docker-compose.yml down",
-    "docker:logs": "docker compose -f docker/docker-compose.yml logs -f",
-    "db:migrate": "pnpm --filter @neuron-ai-memory/storage migrate"
+    "clean": "turbo run clean"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

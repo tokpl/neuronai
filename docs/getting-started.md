@@ -1,76 +1,44 @@
-# Getting started (5 minutes)
+# Getting started
 
-Local-first Neuron: detect a project, seed engineering knowledge, connect Cursor.
+Neuron is **local-first project memory** for Cursor.
 
-**No cloud account. No mandatory login. Telemetry OFF by default.**
-
-## 1. Install
+## Install
 
 ```bash
-# Monorepo / contributors
-pnpm install && pnpm build
-
-# Or (when published)
-npm install -g neuron-ai-memory
+npm install -g neuron
 ```
 
-## 2. First run
+(From this monorepo during development: `pnpm build && pnpm neuron …`)
+
+## Init
 
 ```bash
-cd my-project
+cd your-project
 neuron init
 ```
 
-You should see a guided flow:
+This creates `.neuron/`, scans the codebase, and wires `.cursor/mcp.json`.
 
-1. Welcome + privacy banner (local-first)
-2. Environment check (Node 22+)
-3. Project + technology detection
-4. Initial scan + brain creation
-5. Cursor MCP / rules
-6. **Neuron Report** summary
-
-Then: *AI just learned your project.*
-
-Details: [first-run.md](./first-run.md)
-
-## 3. Verify
-
-```bash
-neuron status
-neuron doctor
-neuron explain
-```
-
-## 4. Use in Cursor
+## Use in Cursor
 
 1. Open the project in Cursor
-2. Enable the **neuron** MCP server
-3. Ask:
+2. Reload MCP / enable the `neuron` server
+3. Ask Cursor to prepare a task with Neuron
 
-> Analyze this project using Neuron
+Example:
 
-or
+> Prepare adding rate limiting using Neuron
 
-> Remember this architecture decision: we keep permissions in a dedicated service
+## Verify
 
 ```bash
-neuron cursor setup
+neuron doctor
 neuron cursor doctor
+neuron status
 ```
 
-## 5. Day-to-day
+## Requirements
 
-```bash
-neuron scan
-neuron update
-neuron search "authentication"
-neuron explain
-neuron export
-```
-
-## What gets stored
-
-Only engineering knowledge worth remembering (stack, architecture notes, decisions, patterns, mistakes) — not chat logs, and never uploaded by default.
-
-See [cli.md](./cli.md), [cursor-setup.md](./cursor-setup.md), and [mcp-tools-reference.md](./mcp-tools-reference.md).
+- Node.js 22+
+- Cursor
+- **No** Docker, Postgres, or API keys for the default loop

@@ -1,6 +1,8 @@
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
+import { createFileStorageProvider } from '@neuron-ai-memory/storage';
+
 import {
   neuronLocalConfigSchema,
   type NeuronLocalConfig,
@@ -13,16 +15,26 @@ export const CLI_VERSION = '0.1.0';
 
 export function neuronPaths(cwd = process.cwd()) {
   const root = resolve(cwd);
-  const neuronDir = join(root, NEURON_DIR);
+  const storage = createFileStorageProvider();
+  const p = storage.paths(root);
   return {
     root,
-    neuronDir,
-    config: join(neuronDir, 'config.json'),
-    metadata: join(neuronDir, 'metadata.json'),
-    dataDir: join(neuronDir, 'data'),
-    store: join(neuronDir, 'data', 'store.json'),
-    exportDir: join(neuronDir, 'export'),
-    integrationsDir: join(neuronDir, 'integrations'),
+    neuronDir: p.neuronDir,
+    config: p.config,
+    metadata: join(p.neuronDir, 'metadata.json'),
+    brain: p.brain,
+    knowledge: p.knowledge,
+    decisions: p.decisions,
+    rules: p.rules,
+    graph: p.graph,
+    dataDir: p.runtimeDir,
+    runtimeDir: p.runtimeDir,
+    store: p.store,
+    cacheDir: p.cacheDir,
+    indexesDir: p.indexesDir,
+    logsDir: p.logsDir,
+    exportDir: join(p.neuronDir, 'export'),
+    integrationsDir: join(p.neuronDir, 'integrations'),
   };
 }
 
@@ -40,6 +52,12 @@ export async function isNeuronInitialized(cwd = process.cwd()): Promise<boolean>
   return pathExists(paths.config);
 }
 
+export async function ensureNeuronLayout(cwd = process.cwd()): Promise<void> {
+  const storage = createFileStorageProvider();
+  await storage.migrateIfNeeded(cwd);
+  await storage.ensureLayout(cwd);
+}
+
 export async function loadLocalConfig(cwd = process.cwd()): Promise<NeuronLocalConfig> {
   const paths = neuronPaths(cwd);
   const raw = JSON.parse(await readFile(paths.config, 'utf8')) as unknown;
@@ -51,7 +69,7 @@ export async function saveLocalConfig(
   cwd = process.cwd(),
 ): Promise<void> {
   const paths = neuronPaths(cwd);
-  await mkdir(paths.neuronDir, { recursive: true });
+  await ensureNeuronLayout(cwd);
   const parsed = neuronLocalConfigSchema.parse(config);
   await writeFile(paths.config, `${JSON.stringify(parsed, null, 2)}\n`, 'utf8');
 }
@@ -82,7 +100,7 @@ export async function saveMetadata(
 
 export async function ensureIntegrationStubs(cwd = process.cwd()): Promise<void> {
   const paths = neuronPaths(cwd);
-  const hosts = ['cursor', 'claude-code', 'vscode'] as const;
+  const hosts = ['cursor'] as const;
   for (const host of hosts) {
     const dir = join(paths.integrationsDir, host);
     await mkdir(dir, { recursive: true });
@@ -91,11 +109,9 @@ export async function ensureIntegrationStubs(cwd = process.cwd()): Promise<void>
       await writeFile(
         readme,
         [
-          `# ${host} integration (extension point)`,
+          `# ${host} integration`,
           '',
-          'This folder is reserved for host-specific Neuron wiring.',
-          'Cursor is implemented via `.cursor/` at the project root.',
-          'Claude Code and VS Code adapters will land in a later milestone.',
+          'Cursor is wired via `.cursor/` at the project root (`neuron init`).',
           '',
         ].join('\n'),
         'utf8',

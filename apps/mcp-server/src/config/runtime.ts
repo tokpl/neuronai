@@ -68,8 +68,8 @@ export async function createNeuronRuntime(cwd = process.cwd()): Promise<NeuronRu
   const project = await createProjectResolver().resolve(cwd);
   const privacyMode = await loadPrivacyMode(cwd);
 
-  const dataDir = join(cwd, '.neuron', 'data');
-  const local = await createLocalFileMemoryStack(dataDir);
+  const local = await createLocalFileMemoryStack(cwd);
+  const dataDir = local.runtimeDir;
 
   const embeddings = new MockEmbeddingProvider();
   const embeddingStore = new InMemoryEmbeddingStore();
@@ -146,7 +146,8 @@ export async function createNeuronRuntime(cwd = process.cwd()): Promise<NeuronRu
     listExistingMemories: listActive,
   });
 
-  const graphRepo = createFileGraphRepository(dataDir);
+  // graph.json lives at `.neuron/graph.json` (versioned)
+  const graphRepo = createFileGraphRepository(join(cwd, '.neuron'));
   const projectIntelligence = createProjectIntelligenceEngine(graphRepo);
 
   // Best-effort: build/refresh graph if empty (local DX)

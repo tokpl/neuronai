@@ -99,13 +99,6 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
     'neuron-review.md',
     'neuron-save.md',
     'neuron-explain.md',
-    'architect.md',
-    'review.md',
-    'debug.md',
-    'security.md',
-    'performance.md',
-    'docs.md',
-    'refactor.md',
   ];
   let cmdOk = 0;
   for (const c of commands) {
@@ -119,11 +112,11 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
   });
 
   const brainFiles = [
-    'project.json',
-    'architecture.md',
-    'decisions.md',
-    'patterns.md',
-    'warnings.md',
+    'brain.json',
+    'knowledge.json',
+    'decisions.json',
+    'rules.json',
+    'graph.json',
   ];
   let brainOk = 0;
   for (const f of brainFiles) {
@@ -135,8 +128,8 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
     detail:
       brainOk === brainFiles.length
         ? `.neuron/{${brainFiles.join(',')}}`
-        : `${brainOk}/${brainFiles.length} brain files — run neuron init cursor`,
-    fix: 'neuron init cursor',
+        : `${brainOk}/${brainFiles.length} brain files — run neuron init`,
+    fix: 'neuron init',
   });
 
   // Soft check: can we resolve `neuron` somehow?

@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-05T21:03:50.649Z",
+  "memories": [
+    {
+      "title": "Project uses modular architecture",
+      "content": "Detected modules: cli, mcp-server, agent-intelligence, agent-workflow, ai-memory, ai-provider, config, cursor-integration, embeddings, knowledge-graph, memory-engine, observability. Prefer keeping boundaries between modules.",
+      "type": "architecture_decision",
+      "confidence": 0.95,
+      "source": "Code analysis",
+      "tags": [
+        "architecture",
+        "modules"
+      ]
+    },
+    {
+      "title": "Service-oriented code layout",
+      "content": "Detected 29 *Service modules. Prefer putting business logic in services.",
+      "type": "pattern",
+      "confidence": 0.88,
+      "source": "Code pattern detection",
+      "tags": [
+        "services",
+        "pattern"
+      ]
+    },
+    {
+      "title": "Authentication is handled by JWT / auth modules",
+      "content": "Auth-related modules/services detected. Prefer existing auth middleware over ad-hoc checks.",
+      "type": "pattern",
+      "confidence": 0.91,
+      "source": "Code pattern detection",
+      "tags": [
+        "auth"
+      ]
+    },
+    {
+      "title": "README project summary",
+      "content": "**Local-first AI memory for Cursor.** Neuron makes Cursor understand your project. [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)",
+      "type": "knowledge",
+      "confidence": 0.8,
+      "source": "Documentation ingestion",
+      "tags": [
+        "docs"
+      ]
+    },
+    {
+      "title": "Not an AI agent / ChatGPT / Claude Code / Cursor replacement",
+      "content": "Not an AI agent / ChatGPT / Claude Code / Cursor replacement",
+      "type": "knowledge",
+      "confidence": 0.75,
+      "source": "Documentation ingestion",
+      "tags": [
+        "docs"
+      ]
+    },
+    {
+      "title": "Not an enterprise SaaS platform",
+      "content": "Not an enterprise SaaS platform",
+      "type": "knowledge",
+      "confidence": 0.75,
+      "source": "Documentation ingestion",
+      "tags": [
+        "docs"
+      ]
+    },
+    {
+      "title": "Not a framework for everything",
+      "content": "Not a framework for everything",
+      "type": "knowledge",
+      "confidence": 0.75,
+      "source": "Documentation ingestion",
+      "tags": [
+        "docs"
+      ]
+    },
+    {
+      "title": "Does **not** require cloud sync, websockets, or CRDTs",
+      "content": "Does **not** require cloud sync, websockets, or CRDTs",
+      "type": "knowledge",
+      "confidence": 0.75,
+      "source": "Documentation ingestion",
+      "tags": [
+        "docs"
+      ]
+    },
+    {
+      "title": "[Getting started](./docs/getting-started.md)",
+      "content": "[Getting started](./docs/getting-started.md)",
+      "type": "knowledge",
+      "confidence": 0.75,
+      "source": "Documentation ingestion",
+      "tags": [
+        "docs"
+      ]
+    },
+    {
+      "title": "[How it works](./docs/how-it-works.md)",
+      "content": "[How it works](./docs/how-it-works.md)",
+      "type": "knowledge",
+      "confidence": 0.75,
+      "source": "Documentation ingestion",
+      "tags": [
+        "docs"
+      ]
+    }
+  ],
+  "suggestedRules": [
+    {
+      "rule": "Use dependency injection / service modules for business logic",
+      "reason": "Detected multiple *Service files — consistent DI/service pattern.",
+      "confidence": 0.84
+    }
+  ]
+}

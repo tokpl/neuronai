@@ -1,63 +1,47 @@
 # Release checklist (v0.1.0 MVP)
 
-Use before tagging `v0.1.0` / cutting the first public GitHub release.
-
-Scope: [mvp.md](./mvp.md) · Full review: [product-architecture-review.md](./product-architecture-review.md)
-
 ## Product honesty
 
-- [ ] README leads with **Local Project Brain** (P0), not the full experimental catalog
-- [ ] Experimental packages labeled (workspace, evaluation, team brain, …)
-- [ ] Positioning clear: understands *your project* — not “AI that does everything”
+- [x] README leads with local-first Cursor memory
+- [x] Experimental packages under `future/` — not advertised as ready
+- [x] Positioning: understands *your project* — not “AI that does everything”
+- [x] MCP surface = 12 tools
 
 ## Quality
 
-- [ ] `pnpm install && pnpm build && pnpm test && pnpm lint` pass on a clean checkout
-- [ ] CLI smoke: `neuron init`, `neuron scan`, `neuron status`, `neuron cursor doctor` on a temp project
+- [ ] `pnpm install && pnpm build && pnpm test && pnpm lint` on clean checkout
+- [ ] CLI smoke: `neuron init`, `neuron scan`, `neuron status`, `neuron cursor doctor`
 - [ ] MCP: Cursor loads server **neuron** and `neuron_health` succeeds
-- [ ] **Performance:** scan + retrieval on mid-size repo; note expected times in docs
-- [ ] Demo: open `examples/neuron-demo`, run prepare_task prompt from [docs/demo/03-first-task.md](./demo/03-first-task.md)
+- [ ] Demo: `examples/neuron-demo` first-task path
 
 ## Documentation
 
-- [ ] [getting-started.md](./getting-started.md) / first-run works as written (&lt;10 min)
-- [ ] Privacy model documented (local-only, telemetry OFF)
-- [ ] MCP tools: P0 tools called out; experimental tools listed separately
-- [ ] CHANGELOG lists works / experimental / later
-- [ ] [docs/demo/](./demo/) scripts reviewed (no stale commands)
-- [ ] FAQ answers privacy / offline / MCP / vs ChatGPT memory
-- [ ] SECURITY / CONTRIBUTING / CODE_OF_CONDUCT / DEVELOPMENT present
+- [x] Getting started &lt; 10 minutes, no Docker/Postgres/API keys
+- [x] Privacy: local-only, telemetry OFF
+- [x] MCP docs list only MVP tools
+- [x] CHANGELOG honest about scope
+- [x] FAQ covers privacy / offline / vs ChatGPT memory
+- [x] SECURITY / CONTRIBUTING / CODE_OF_CONDUCT present
 
-## Installation & examples
+## Installation
 
-- [ ] Clean-machine install verified (Windows + macOS if possible)
-- [ ] `examples/neuron-demo` runs the “first useful answer” path
-- [ ] `.env.example` has no secrets
+- [ ] Clean-machine: `npm install -g neuron` (or monorepo `pnpm neuron`) works
+- [x] `.env.example` has no required secrets
 
-## Security review
+## Security
 
-- [ ] Local-first defaults confirmed (telemetry off)
-- [ ] No secret persistence in traces / git ingest summaries
-- [ ] SECURITY.md reporting path valid
-- [ ] `pnpm audit` reviewed (high+ triaged)
-- [ ] No hardcoded API keys in repo
-
-## Packages & ops
-
-- [ ] Workspace packages build (`turbo run build`)
-- [ ] Docker: `pnpm docker:up` healthy (optional Postgres — experimental)
-- [ ] Backup basics documented
+- [x] Telemetry off by default
+- [ ] `pnpm audit` reviewed
+- [x] No hardcoded API keys
 
 ## GitHub
 
-- [ ] Issue forms (`bug.yml`, `feature.yml`) visible
-- [ ] Labels created (`bug`, `enhancement`, `good first issue`, `help wanted`)
-- [ ] Discussions enabled (optional but recommended)
-- [ ] Release notes from CHANGELOG + auto-generated commits
-- [ ] Tag `v0.1.0` (publish npm only when tokens ready)
+- [ ] Issue forms visible
+- [ ] Labels created
+- [ ] Tag `v0.1.0` when ready
+- [ ] Announce with honest MVP scope
 
 ## Sign-off
 
-- [ ] Maintainer: Cursor integration tested manually (init → scan → first answer)
-- [ ] Maintainer: security spot-check
-- [ ] Ready to announce (Discussions / Discord placeholder)
+- [ ] Maintainer: init → scan → first Cursor answer
+- [ ] Ready to show people (placeholders OK for final artwork)

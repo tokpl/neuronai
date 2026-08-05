@@ -29,7 +29,7 @@
     "test:coverage": "turbo run test -- --coverage",
     "clean": "turbo run clean",
     "prepare:npm": "node ./scripts/prepare-npm-packages.mjs",
-    "publish:npm": "pnpm build && pnpm -r --filter './packages/*' --filter './apps/*' publish --access public --no-git-checks"
+    "publish:npm": "pnpm build && pnpm -r --filter \"@neuronai/*\" --filter neuronai publish --access public --no-git-checks --report-summary"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

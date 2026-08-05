@@ -2,35 +2,36 @@
 
 Product name: **NeuronAI**  
 Slogan / title: **Neuron - AI Memory**  
-npm install name: `neuronai` (+ scoped `@neuronai/*`)
+npm org / scope: **`@neuronai`** (owned by `tokpl`)  
+Install name: `neuronai` (+ scoped `@neuronai/*`)
 
 ## What goes where
 
 | Surface | Contents |
 |---------|----------|
-| GitHub | Full monorepo (this repo) |
-| npm `neuronai` | CLI + `bin` (`neuron` / `neuronai`) from `apps/cli` |
-| npm `@neuronai/*` | Workspace libraries + `@neuronai/mcp-server` |
+| GitHub | Full monorepo |
+| npm `neuronai` | CLI (`apps/cli`) - bins `neuron` / `neuronai` |
+| npm `@neuronai/*` | Libraries + `@neuronai/mcp-server` under org **neuronai** |
 
-Root package `neuronai-monorepo` is **private** and is never published.
+Root `neuronai-monorepo` is private and is never published.
 
-## One-time
+## Prerequisites
 
-1. `npm login` (account that owns the `neuronai` / `@neuronai` scope)
-2. Ensure `@neuronai` org exists on npm (or publish unscoped only - we use scoped libs)
+```bash
+npm whoami          # tokpl
+npm org ls neuronai # tokpl - owner
+```
 
 ## Release
 
 ```bash
-pnpm install
-pnpm build
-pnpm test
 pnpm publish:npm
 ```
 
-`pnpm` rewrites `workspace:*` to real versions in the published tarball.
+Publishes all `@neuronai/*` + `neuronai` with `--access public`.  
+`pnpm` rewrites `workspace:*` to real versions in the tarball.
 
-Dry-run a single package:
+Dry-run one package:
 
 ```bash
 pnpm --filter neuronai publish --dry-run --no-git-checks
@@ -38,10 +39,13 @@ pnpm --filter neuronai publish --dry-run --no-git-checks
 
 ## After publish
 
-Users install:
-
 ```bash
 npm install -g neuronai
 # or
 npx neuronai init
 ```
+
+Packages appear under:
+- https://www.npmjs.com/org/neuronai
+- https://www.npmjs.com/package/neuronai
+- https://www.npmjs.com/settings/tokpl/packages

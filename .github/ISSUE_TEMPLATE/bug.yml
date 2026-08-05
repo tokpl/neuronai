@@ -1,0 +1,49 @@
+---
+name: Bug report
+description: Something is broken in Neuron
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Redact secrets from logs and `neuron doctor` output.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What went wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Neuron version
+      placeholder: "0.1.0 (neuron --version)"
+  - type: dropdown
+    id: host
+    attributes:
+      label: MCP host
+      options:
+        - Cursor
+        - Other / CLI only
+  - type: textarea
+    id: doctor
+    attributes:
+      label: neuron doctor / neuron cursor doctor
+      description: Paste redacted output

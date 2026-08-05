@@ -1,0 +1,30 @@
+{
+  "project": {
+    "name": "my-project",
+    "type": "application",
+    "stack": []
+  },
+  "memory": {
+    "autoSave": false,
+    "importanceThreshold": 0.45,
+    "contextMaxTokens": 3000
+  },
+  "providers": {
+    "llm": {
+      "provider": "openai",
+      "model": "gpt-4.1-mini"
+    },
+    "embeddings": {
+      "provider": "openai",
+      "model": "text-embedding-3-small"
+    }
+  },
+  "server": {
+    "mode": "local",
+    "bind": "stdio"
+  },
+  "security": {
+    "redaction": true,
+    "allowHardPurge": false
+  }
+}

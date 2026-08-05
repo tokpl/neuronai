@@ -1,0 +1,44 @@
+{
+  "name": "neuron-ai-memory",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Long-term engineering knowledge memory for AI coding agents (MCP)",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev:mcp": "pnpm --filter @neuron-ai-memory/mcp-server dev",
+    "dev:cli": "pnpm --filter @neuron-ai-memory/cli dev",
+    "neuron": "node apps/cli/dist/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:coverage": "turbo run test -- --coverage",
+    "clean": "turbo run clean",
+    "docker:up": "docker compose -f docker/docker-compose.yml up -d",
+    "docker:prod": "docker compose -f docker/docker-compose.prod.yml up -d --build",
+    "docker:down": "docker compose -f docker/docker-compose.yml down",
+    "docker:logs": "docker compose -f docker/docker-compose.yml logs -f",
+    "db:migrate": "pnpm --filter @neuron-ai-memory/storage migrate"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@types/node": "^22.13.10",
+    "@vitest/coverage-v8": "^3.0.8",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3",
+    "turbo": "^2.4.4",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.1",
+    "vitest": "^3.0.8"
+  }
+}

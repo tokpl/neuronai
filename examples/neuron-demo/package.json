@@ -1,0 +1,15 @@
+{
+  "name": "shoplite-neuron-demo",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "ShopLite demo for Neuron AI Memory + Cursor",
+  "scripts": {
+    "start:api": "node apps/api/server.js",
+    "start:web": "npx --yes serve apps/web -p 5173"
+  },
+  "dependencies": {
+    "express": "4.21.2",
+    "pg": "8.13.1"
+  }
+}

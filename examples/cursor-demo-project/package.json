@@ -1,0 +1,10 @@
+{
+  "name": "notify-hub-demo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Demo app for Neuron + Cursor (not a runnable product)",
+  "dependencies": {
+    "express": "4.21.0",
+    "ioredis": "5.4.0"
+  }
+}

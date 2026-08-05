@@ -1,0 +1,21 @@
+# Recommended repository labels for Neuron AI Memory
+# Apply via GitHub UI or: gh label create …
+
+- name: bug
+  color: d73a4a
+  description: Something isn't working
+- name: enhancement
+  color: a2eeef
+  description: New feature or request
+- name: good first issue
+  color: 7057ff
+  description: Good for newcomers
+- name: help wanted
+  color: 008672
+  description: Extra attention is needed
+- name: documentation
+  color: 0075ca
+  description: Docs only
+- name: cursor
+  color: 5319e7
+  description: Cursor / MCP DX

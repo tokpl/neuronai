@@ -1,0 +1,77 @@
+import { z } from 'zod';
+
+const DEFAULT_IGNORE = [
+  'node_modules',
+  '.git',
+  'dist',
+  'build',
+  '.next',
+  'coverage',
+  '.turbo',
+  '.neuron/data',
+] as const;
+
+/** Local project config stored at `.neuron/config.json`. */
+export const neuronLocalConfigSchema = z.object({
+  schemaVersion: z.number().int().positive().default(1),
+  project: z.object({
+    id: z.string().min(1),
+    name: z.string().min(1),
+    slug: z.string().min(1).optional(),
+    stack: z.array(z.string()).default([]),
+  }),
+  memory: z.object({
+    autoSave: z.boolean().default(false),
+    threshold: z.number().min(0).max(1).default(0.45),
+  }),
+  privacy: z
+    .object({
+      /** Memory write behaviour for agents */
+      mode: z.enum(['manual', 'suggest', 'automatic']).default('suggest'),
+      /** Never leave the machine */
+      localOnly: z.boolean().default(true),
+      /** Anonymous metrics — OFF by default; never collects source code */
+      telemetry: z.boolean().default(false),
+    })
+    .default({ mode: 'suggest', localOnly: true, telemetry: false }),
+  scan: z
+    .object({
+      depth: z.enum(['fast', 'deep', 'architecture']).default('fast'),
+      ignore: z.array(z.string()).default([...DEFAULT_IGNORE]),
+    })
+    .default({ depth: 'fast', ignore: [...DEFAULT_IGNORE] }),
+  providers: z
+    .record(
+      z.object({
+        enabled: z.boolean().default(false),
+        model: z.string().optional(),
+      }),
+    )
+    .default({ local: { enabled: true } }),
+  integrations: z.object({
+    cursor: z.boolean().default(true),
+    claudeCode: z.boolean().default(false),
+    vscode: z.boolean().default(false),
+  }),
+  server: z
+    .object({
+      mode: z.enum(['local', 'cloud']).default('local'),
+    })
+    .default({ mode: 'local' }),
+});
+
+export type NeuronLocalConfig = z.infer<typeof neuronLocalConfigSchema>;
+
+export function validateLocalConfig(input: unknown): NeuronLocalConfig {
+  return neuronLocalConfigSchema.parse(input);
+}
+
+export interface NeuronMetadata {
+  initializedAt: string;
+  lastSyncAt: string | null;
+  lastAnalyzeAt: string | null;
+  memoryCount: number;
+  version: string;
+}
+
+export { DEFAULT_IGNORE };

@@ -1,0 +1,20 @@
+node_modules/
+dist/
+coverage/
+.turbo/
+*.tsbuildinfo
+.env
+.env.local
+neuron.config.json
+.neuron/
+.DS_Store
+*.log
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Local Graft tooling (keep out of the public tree)
+graft/
+.ignore
+.cursor/rules/graft.mdc
+.cursor/mcp.json

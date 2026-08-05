@@ -1,0 +1,16 @@
+---
+description: Architecture Review mode — call Neuron before/after significant refactors
+globs:
+alwaysApply: false
+---
+
+# Neuron Architecture Review
+
+When the user asks to **review a refactor** or check architecture health:
+
+1. Call `neuron_architecture_review` with an optional `changeSummary`
+2. Optionally `neuron_architecture_scan` / `neuron_dependency_graph` / `neuron_architecture_score`
+3. Present **Issues**, **Risks**, and **Recommendations**
+4. Use `neuron_refactor_plan` for step-by-step manual plans
+
+Do **not** auto-rewrite large parts of the codebase or apply unsupervised mass edits.

@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../../packages/types" },
+    { "path": "../../packages/config" },
+    { "path": "../../packages/observability" },
+    { "path": "../../packages/memory-engine" },
+    { "path": "../../packages/ai-memory" },
+    { "path": "../../packages/ai-provider" },
+    { "path": "../../packages/embeddings" },
+    { "path": "../../packages/project-analyzer" }
+  ]
+}

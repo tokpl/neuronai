@@ -1,0 +1,13 @@
+---
+description: Conventions for developing Neuron AI Memory in this monorepo
+alwaysApply: true
+---
+
+# Neuron development
+
+- This is a **pnpm + Turborepo** TypeScript monorepo.
+- Do **not** implement full Memory Engine / embeddings logic unless the task explicitly asks for that milestone.
+- Prefer extending public interfaces in `packages/*/src/index.ts` over leaking internals.
+- Use `@neuron-ai-memory/types` errors (`NeuronError`, `NotImplementedError`, …).
+- Run `pnpm lint`, `pnpm typecheck`, and `pnpm test` before finishing foundation changes.
+- Never store raw chat transcripts as memories — knowledge only.

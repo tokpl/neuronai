@@ -1,0 +1,16 @@
+---
+description: On project open or "continue", resume Neuron technical work context
+globs:
+alwaysApply: false
+---
+
+# Neuron Work Context
+
+When the user opens a project, says **continue** / **resume**, or asks what they were working on:
+
+1. Call `neuron_resume` or `neuron_resume_context`
+2. Respect `neuron_current_focus` — do not dump the entire codebase
+3. For task detail, call `neuron_task_context`
+4. Before switching owners / ending a stretch of work, call `neuron_handoff` or `neuron_session_summary`
+
+Store **technical** state only. Never persist private chats, personal data, or people productivity scores.

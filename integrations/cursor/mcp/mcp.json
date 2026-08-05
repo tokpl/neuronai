@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "neuron": {
+      "command": "neuron",
+      "args": ["mcp"],
+      "env": {
+        "NEURON_CWD": "${workspaceFolder}"
+      }
+    }
+  }
+}

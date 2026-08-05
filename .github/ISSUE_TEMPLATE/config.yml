@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & ideas
+    url: https://github.com/YOUR_ORG/neuron-ai-memory/discussions
+    about: Use GitHub Discussions for Q&A (enable Discussions on the repo).
+  - name: Security report
+    url: https://github.com/YOUR_ORG/neuron-ai-memory/security/advisories/new
+    about: Do not file public issues for vulnerabilities — see SECURITY.md.

@@ -1,0 +1,18 @@
+---
+description: Select Neuron developer modes via MCP (architect, review, debug, …)
+globs:
+alwaysApply: false
+---
+
+# Neuron Assistant Modes
+
+When the user uses `/architect`, `/review`, `/debug`, `/security`, `/performance`, `/docs`, `/refactor`, or describes a specialized intent:
+
+1. Call `neuron_run_mode` with the query (ModeRouter picks the mode if `modeId` omitted)
+2. Call `neuron_mode_context` if context is incomplete
+3. Follow `suggestedTools` from the mode output
+4. Return Summary, Evidence, Findings, Recommendations, Confidence
+
+Optional: `neuron_available_modes` to list modes.
+
+Do **not** spawn autonomous multi-agent runs or auto-rewrite the repo.

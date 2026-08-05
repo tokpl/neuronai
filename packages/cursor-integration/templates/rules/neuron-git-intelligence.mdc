@@ -1,0 +1,16 @@
+---
+description: Explain historical reasons for code using Neuron git intelligence
+globs:
+alwaysApply: false
+---
+
+# Neuron Git / History
+
+When the user asks **why code is like this** or about past changes:
+
+1. Call `neuron_history_context` with their question
+2. Optionally `neuron_git_context` / `neuron_change_history` for a module
+3. Use `neuron_architecture_evolution` for system transitions
+4. Use `neuron_regression_check` before risky similar changes
+
+Do **not** blame people. Do **not** dump full diffs or secrets. Git is a history source, not a host Neuron replaces.

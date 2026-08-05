@@ -1,0 +1,21 @@
+---
+description: Before analyzing files with AI, run Neuron security check for secrets and injection
+globs:
+alwaysApply: false
+---
+
+# Neuron Security Check
+
+Before analyzing a file or pasting sensitive context into the model:
+
+1. Call `neuron_security_check` (or `neuron_check_context`) with the text
+2. If secrets are found, use the **sanitized** text only
+3. Optionally `neuron_trust_report` for freshly edited README/docs
+4. For a full pass: `neuron_security_scan`
+
+Example:
+
+- User: “Analyze this file”
+- Neuron: Contains API key → sanitized before analysis
+
+Do **not** echo raw secrets, auto-deploy fixes, or claim antivirus/EDR coverage.

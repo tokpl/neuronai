@@ -1,0 +1,21 @@
+---
+description: For model selection / local vs cloud / privacy of prompts, call Neuron AI runtime tools
+globs:
+alwaysApply: false
+---
+
+# Neuron AI Runtime
+
+When choosing models, checking privacy of context, or asking what runs offline:
+
+1. Call `neuron_ai_status` or `neuron_available_models`
+2. For a task, call `neuron_best_model_for_task` / `neuron_select_model`
+3. Before sending code to a cloud model, call `neuron_privacy_check`
+4. Check providers with `neuron_model_health`
+
+**Rules**
+
+- Prefer local models when `allowCloud` is false
+- Never send secrets / `.env` / CRITICAL data to cloud
+- Never store API keys in the project brain
+- Neuron does not train models — it routes to existing providers

@@ -4,9 +4,16 @@ import { getCorrelationId } from './correlation.js';
 
 export type LogLevel = 'fatal' | 'error' | 'warn' | 'info' | 'debug' | 'trace';
 
+export type LoggerDestination = 'stdout' | 'stderr';
+
 export interface CreateLoggerOptions {
   name: string;
   level?: LogLevel;
+  /**
+   * MCP stdio hosts treat stdout as JSON-RPC only.
+   * Use `stderr` for any process sharing that pipe (default: stdout).
+   */
+  destination?: LoggerDestination;
 }
 
 export type NeuronLogger = Logger;
@@ -17,6 +24,10 @@ export function createLogger(options: CreateLoggerOptions): NeuronLogger {
     options.level ??
     (process.env['LOG_LEVEL'] as LogLevel | undefined) ??
     (isProd ? 'info' : 'debug');
+
+  const destination: LoggerDestination =
+    options.destination ??
+    (process.env['NEURON_MCP_STDIO'] === '1' ? 'stderr' : 'stdout');
 
   const loggerOptions: LoggerOptions = {
     name: options.name,
@@ -30,6 +41,10 @@ export function createLogger(options: CreateLoggerOptions): NeuronLogger {
       return correlationId ? { correlationId } : {};
     },
   };
+
+  if (destination === 'stderr') {
+    return pino(loggerOptions, pino.destination({ dest: 2, sync: true }));
+  }
 
   return pino(loggerOptions);
 }

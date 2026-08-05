@@ -63,7 +63,8 @@ async function loadPrivacyMode(cwd: string): Promise<PrivacyMode> {
 }
 
 export async function createNeuronRuntime(cwd = process.cwd()): Promise<NeuronRuntime> {
-  const logger = createLogger({ name: 'mcp-server' });
+  // stdout is reserved for MCP JSON-RPC - never log there
+  const logger = createLogger({ name: 'mcp-server', destination: 'stderr' });
   const config = await loadConfig({ optional: true, cwd });
   const project = await createProjectResolver().resolve(cwd);
   const privacyMode = await loadPrivacyMode(cwd);

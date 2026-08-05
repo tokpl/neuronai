@@ -17,4 +17,4 @@ export function getHealth(mode: 'local' | 'cloud' = 'local'): HealthStatus & {
   };
 }
 
-export const logger = createLogger({ name: 'mcp-server' });
+export const logger = createLogger({ name: 'mcp-server', destination: 'stderr' });

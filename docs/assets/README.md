@@ -2,15 +2,17 @@
 
 | File | Used in README |
 |------|----------------|
-| `logo.png` / `logo.svg` | Hero |
-| `banner.png` / `banner.svg` | Hero |
-| `terminal-demo.svg` | Demo |
-| `before-after.svg` (+ `before-vs-after.png`) | Before vs After |
-| `architecture.png` / `architecture.svg` | Solution / How it works |
-| `knowledge-graph.png` / `knowledge-graph.svg` | How it works |
-| `scan-flow.png` / `scan-flow.svg` | Folder / scan |
-| `retrieval-flow.png` / `retrieval-flow.svg` | How it works |
-| `folder-structure.png` / `folder-structure.svg` | Folder structure |
-| `cursor-workflow.png` / `cursor-workflow.svg` | Demo |
+| `logo.png` | Hero |
+| `banner.png` | Hero |
+| `before-vs-after.png` | Before vs After (primary) |
+| `demo.png` | Demo terminal (primary) |
+| `architecture.png` | Solution |
+| `cursor-workflow.png` | Demo workflow |
+| `folder-structure.png` | Folder structure |
+| `scan-flow.png` | Scan |
+| `retrieval-flow.png` | How it works |
+| `knowledge-graph.png` | How it works |
 
-PNG = primary artwork. SVG = lightweight brand companions.
+PNG = primary artwork shown in README.
+
+SVG companions (`before-after.svg`, `terminal-demo.svg`, …) are lightweight diagrams for places that prefer vector; do not replace PNGs in README unless the SVG is as informative as the PNG.

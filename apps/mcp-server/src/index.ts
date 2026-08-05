@@ -18,6 +18,9 @@ export {
 } from './handlers/index.js';
 
 export async function startMcpServer(cwd = process.env['NEURON_CWD'] ?? process.cwd()): Promise<void> {
+  // Any accidental createLogger() without destination must not touch stdout
+  process.env['NEURON_MCP_STDIO'] = '1';
+
   const runtime = await createNeuronRuntime(cwd);
   const server = createNeuronMcpServer(runtime);
   const transport = new StdioServerTransport();

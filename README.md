@@ -66,13 +66,13 @@ No Docker. No Postgres. No API keys. No cloud account. Telemetry off by default.
 | Skips domain layer | Respects existing module boundaries |
 | Misses past mistakes | Surfaces known warnings first |
 
-![before vs after](./docs/assets/before-after.svg)
+![before vs after](./docs/assets/before-vs-after.png)
 
 ---
 
 ## Demo
 
-![terminal](./docs/assets/terminal-demo.svg)
+![terminal](./docs/assets/demo.png)
 
 ```bash
 npx neuronai init

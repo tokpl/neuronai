@@ -11,7 +11,7 @@ import {
 } from '../config/local-config.js';
 
 export const NEURON_DIR = '.neuron';
-export const CLI_VERSION = '0.1.0';
+export const CLI_VERSION = '0.1.1';
 
 export function neuronPaths(cwd = process.cwd()) {
   const root = resolve(cwd);

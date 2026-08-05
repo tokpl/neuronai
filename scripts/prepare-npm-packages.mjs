@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
+const version = process.argv[2] ?? '0.1.1';
+
 const roots = [
   'c:/projekty/neuron-ai-memory/packages',
   'c:/projekty/neuron-ai-memory/apps',
@@ -15,7 +17,7 @@ const dirs = roots.flatMap((r) =>
 for (const dir of dirs) {
   const p = join(dir, 'package.json');
   const j = JSON.parse(readFileSync(p, 'utf8'));
-  j.version = '0.1.0';
+  j.version = version;
   j.publishConfig = { ...(j.publishConfig ?? {}), access: 'public' };
   j.repository = j.repository ?? {
     type: 'git',
@@ -35,5 +37,5 @@ for (const dir of dirs) {
   }
 
   writeFileSync(p, JSON.stringify(j, null, 2) + '\n');
-  console.log('updated', j.name);
+  console.log('updated', j.name, version);
 }

@@ -1,6 +1,6 @@
 {
   "name": "@neuronai/cursor-integration",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "NeuronAI / cursor-integration - package for Neuron - AI Memory",
   "license": "Apache-2.0",
   "type": "module",

@@ -1,47 +1,29 @@
 # README landing assets
 
-Graphic-first marketing visuals for the root README (product landing page).
+Generated **PNG** set — dark, minimal, continuous scroll (GitHub `#0d1117` + teal).
 
-## Design tokens
+## Style rules
 
-| Token | Value |
-|-------|-------|
-| bg | `#FAFAF9` |
-| surface | `#FFFFFF` |
-| ink | `#111111` |
-| muted | `#6B7280` |
-| line | `#E5E5E5` |
-| accent | `#0F766E` |
-| danger | `#9A3412` |
+- Same canvas / spacing / typography across panels
+- Brand name **NeuronAI** only on hero (optional once)
+- Prefer benefit copy: write once, project-adapted agent, no re-explaining
+- Avoid busy diagrams and repeated logos
 
-Rules: basic SVG only (no scripts / foreignObject). Regenerate with:
+## Files
 
-```bash
-node scripts/generate-landing-svgs.mjs
-```
-
-## Landing SVG set (required)
-
-| File | Section |
-|------|---------|
-| `hero.svg` | Hero |
-| `problem.svg` | The problem |
-| `solution.svg` | NeuronAI remembers |
-| `before-after.svg` | Before vs After |
-| `demo.svg` | Demo storyboard |
-| `cards.svg` | Why NeuronAI |
-| `workflow.svg` | How it works |
-| `folder-structure.svg` | `.neuron/` |
-| `cursor-chat.svg` | Real example |
-| `quickstart.svg` | Quick Start steps |
-| `terminal.svg` | Install terminal mock |
-| `architecture.svg` | Architecture |
-| `roadmap.svg` | Roadmap |
-
-## GIF
-
-- `demo-flow.gif` — drop a real screen recording here; `demo.svg` is the storyboard until then.
-
-## Legacy PNG
-
-Older PNG banners/diagrams may remain in this folder but are **not** used on the landing README path.
+| File | Intent |
+|------|--------|
+| `hero.png` | Slogan + CTA |
+| `problem.png` | Problem left / fix right |
+| `solution.png` | Write once → remembered |
+| `before-after.png` | Chat without vs with memory |
+| `demo.png` | init → scan → ask → answer |
+| `cards.png` | Four benefit cards |
+| `workflow.png` | 3-step only |
+| `folder-structure.png` | `.neuron/` |
+| `cursor-chat.png` | Real example |
+| `quickstart.png` | Install / init / enable |
+| `terminal.png` | Commands |
+| `architecture.png` | Decisions → every chat |
+| `roadmap.png` | Now / Next / Soon / Later |
+| `logo.png` | Mark |

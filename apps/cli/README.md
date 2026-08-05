@@ -7,7 +7,7 @@
 <p align="center"><b>Give Cursor long-term memory.</b></p>
 
 <p align="center">
-  Your AI finally remembers everything about your project.
+  Adapt the agent to your project. Explain decisions once — every next chat already knows.
 </p>
 
 <p align="center">
@@ -17,45 +17,53 @@
   <a href="https://www.npmjs.com/package/neuronai"><img alt="npm" src="https://img.shields.io/badge/npm-neuronai-cb3837?logo=npm" /></a>
 </p>
 
-<p align="center">
-  <a href="#quick-start"><b>Install</b></a>
-  ·
-  <a href="#demo"><b>Demo</b></a>
-  ·
-  <a href="#roadmap"><b>Roadmap</b></a>
-</p>
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/hero.svg" alt="NeuronAI hero — Give Cursor long-term memory" width="100%" />
-</p>
-
 ```bash
 npm install -g neuronai
 ```
 
----
-
-## The problem
+<br/>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/problem.svg" alt="AI forgets your project on every new chat" width="100%" />
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/hero.png" alt="NeuronAI — Give Cursor long-term memory" width="100%" />
 </p>
-
----
-
-## NeuronAI remembers
-
 <p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/solution.svg" alt="NeuronAI project brain remembers architecture, decisions, and patterns" width="100%" />
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/problem.png" alt="The problem vs the fix: stop re-explaining your project" width="100%" />
 </p>
-
----
-
-## Before vs After
-
 <p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/before-after.svg" alt="Without NeuronAI vs with NeuronAI" width="100%" />
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/solution.png" alt="Write once. Remembered forever." width="100%" />
 </p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/before-after.png" alt="Without memory vs with project memory" width="100%" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/demo.png" alt="Demo flow" width="100%" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/cards.png" alt="Why it helps: less repeating, agent fits your project" width="100%" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/workflow.png" alt="Scan → memory → Cursor" width="100%" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/folder-structure.png" alt=".neuron folder" width="100%" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/cursor-chat.png" alt="Real Cursor example" width="100%" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/quickstart.png" alt="Quick Start" width="100%" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/terminal.png" alt="Install in the terminal" width="100%" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/architecture.png" alt="Architecture" width="100%" />
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/roadmap.png" alt="Roadmap" width="100%" />
+</p>
+
+<br/>
 
 ```bash
 npm install -g neuronai && cd your-project && neuron init
@@ -63,102 +71,9 @@ npm install -g neuronai && cd your-project && neuron init
 
 ---
 
-## Demo
+**FAQ** — No Postgres / Docker / API key. Share `.neuron/*.json` via Git. Cursor-first. More: [`docs/faq.md`](https://github.com/tokpl/neuronai/blob/main/docs/faq.md)
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/demo.svg" alt="Demo flow: init, scan, Cursor, question, answer" width="100%" />
-</p>
-
-<p align="center"><i>Drop a real recording at <code>docs/assets/demo-flow.gif</code> when ready.</i></p>
-
----
-
-## Why NeuronAI
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/cards.svg" alt="Why developers love NeuronAI" width="100%" />
-</p>
-
----
-
-## How it works
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/workflow.svg" alt="Repository to Cursor answer pipeline" width="100%" />
-</p>
-
----
-
-## Folder structure
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/folder-structure.svg" alt=".neuron folder structure" width="100%" />
-</p>
-
----
-
-## Real example
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/cursor-chat.svg" alt="Same prompt with and without NeuronAI" width="100%" />
-</p>
-
----
-
-## Quick Start
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/quickstart.svg" alt="Quick Start in three steps" width="100%" />
-</p>
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/terminal.svg" alt="Terminal install commands" width="100%" />
-</p>
-
-<p align="center">Then in Cursor: <b>Settings → Tools & MCP → neuron → Enable</b></p>
-
----
-
-## Architecture
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/architecture.svg" alt="Repo to memory to Cursor architecture" width="100%" />
-</p>
-
----
-
-## Roadmap
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/roadmap.svg" alt="NeuronAI product roadmap" width="100%" />
-</p>
-
----
-
-## FAQ
-
-**Postgres / Docker / API key?** No.  
-**Team share?** Commit `.neuron/*.json` — `git pull` is the share path.  
-**AI agent?** No — long-term project memory for Cursor.  
-More: [`docs/faq.md`](https://github.com/tokpl/neuronai/blob/main/docs/faq.md)
-
-## Contributing
-
-[`CONTRIBUTING.md`](https://github.com/tokpl/neuronai/blob/main/CONTRIBUTING.md) · [`CODE_OF_CONDUCT.md`](https://github.com/tokpl/neuronai/blob/main/CODE_OF_CONDUCT.md)
-
-## Security
-
-[`SECURITY.md`](https://github.com/tokpl/neuronai/blob/main/SECURITY.md)
-
-## License
-
-AGPL-3.0 — see [`LICENSE`](https://github.com/tokpl/neuronai/blob/main/LICENSE). Network use of modified versions requires offering corresponding source.
-
-## Trademark
-
-**NeuronAI** / **Neuron - AI Memory** — brand protected by [`TRADEMARK.md`](https://github.com/tokpl/neuronai/blob/main/TRADEMARK.md). License ≠ trademark.
-
----
+[`CONTRIBUTING`](https://github.com/tokpl/neuronai/blob/main/CONTRIBUTING.md) · [`SECURITY`](https://github.com/tokpl/neuronai/blob/main/SECURITY.md) · [`LICENSE` AGPL-3.0](https://github.com/tokpl/neuronai/blob/main/LICENSE) · [`TRADEMARK`](https://github.com/tokpl/neuronai/blob/main/TRADEMARK.md)
 
 <p align="center">
   <a href="https://github.com/tokpl/neuronai">github.com/tokpl/neuronai</a>

@@ -30,8 +30,19 @@ import type { MemoryEngine } from '@neuronai/memory-engine';
 import { createProjectResolver, type ResolvedProject } from '@neuronai/project-analyzer';
 import { createLocalFileMemoryStack } from '@neuronai/storage';
 import { createLogger, type NeuronLogger } from '@neuronai/observability';
+import type { MemoryType } from '@neuronai/types';
 
 import { createAuthProvider, type AuthProvider } from '../middleware/auth.js';
+
+/** Last suggest-mode draft from neuron_after_task, awaiting Save / Edit / Ignore. */
+export interface PendingMemorySuggestion {
+  type: MemoryType;
+  title: string;
+  draftContent: string;
+  reason: string;
+  confidence: number;
+  task?: string;
+}
 
 export interface NeuronRuntime {
   config: NeuronConfig;
@@ -48,6 +59,8 @@ export interface NeuronRuntime {
   persist?: () => Promise<void>;
   dataDir?: string;
   cwd: string;
+  /** In-process pending suggestion for neuron_resolve_suggestion (not durable). */
+  pendingSuggestion: PendingMemorySuggestion | null;
 }
 
 async function loadPrivacyMode(cwd: string): Promise<PrivacyMode> {
@@ -207,5 +220,6 @@ export async function createNeuronRuntime(cwd = process.cwd()): Promise<NeuronRu
     persist,
     dataDir,
     cwd,
+    pendingSuggestion: null,
   };
 }

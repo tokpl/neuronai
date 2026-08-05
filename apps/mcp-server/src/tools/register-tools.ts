@@ -7,6 +7,7 @@ import {
   handlePrepareTask,
   handleProjectSummary,
   handleRefreshBrain,
+  handleResolveSuggestion,
   handleReviewMemory,
   handleSaveDecision,
   handleScanProject,
@@ -20,6 +21,7 @@ import {
   getContextSchema,
   prepareTaskSchema,
   projectSummarySchema,
+  resolveSuggestionSchema,
   reviewMemorySchema,
   saveDecisionSchema,
   scanProjectSchema,
@@ -39,6 +41,7 @@ export const MVP_TOOL_NAMES = [
   'neuron_update_memory',
   'neuron_review_memory',
   'neuron_after_task',
+  'neuron_resolve_suggestion',
   'neuron_scan_project',
   'neuron_refresh_brain',
   'neuron_project_summary',
@@ -142,10 +145,20 @@ export function registerTools(server: McpServer, runtime: NeuronRuntime): void {
     'neuron_after_task',
     {
       description:
-        'After coding: suggest Save / Edit / Ignore for new project knowledge (respects privacy mode).',
+        'After coding: suggest saving knowledge. Prefer Cursor AskQuestion (askQuestion field); fallback typed Save/Edit/Ignore; then neuron_resolve_suggestion.',
       inputSchema: afterTaskSchema,
     },
     async (args) => handleAfterTask(runtime, args),
+  );
+
+  server.registerTool(
+    'neuron_resolve_suggestion',
+    {
+      description:
+        'Apply the user chat reply to the last neuron_after_task suggestion: action save | edit | ignore. For edit, pass title/content overrides.',
+      inputSchema: resolveSuggestionSchema,
+    },
+    async (args) => handleResolveSuggestion(runtime, args),
   );
 
   server.registerTool(

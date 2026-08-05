@@ -47,6 +47,8 @@ export {
   formatSuggestionMessage,
   type UserPromptMessage,
   type SuggestionUserAction,
+  type SuggestionAskQuestion,
+  type SuggestionAskQuestionOption,
 } from './suggestion/user-messages.js';
 
 export {

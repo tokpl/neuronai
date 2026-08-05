@@ -4,132 +4,180 @@
 
 <h1 align="center">NeuronAI</h1>
 
-<p align="center"><b>Neuron - AI Memory</b></p>
+<p align="center"><b>Give Cursor long-term memory.</b></p>
 
-<p align="center">Local-first project memory for Cursor.</p>
+<p align="center">
+  Your AI finally remembers everything about your project.
+</p>
+
+<p align="center">
+  NeuronAI speeds up AI-assisted development by remembering architectural decisions, conventions, and implementation history — so you stop re-explaining the codebase in every chat.
+</p>
 
 <p align="center">
   <a href="https://github.com/tokpl/neuronai"><img alt="GitHub" src="https://img.shields.io/badge/github-tokpl%2Fneuronai-black?logo=github" /></a>
-  <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-blue" /></a>
+  <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-AGPL--3.0-blue" /></a>
   <a href="https://nodejs.org"><img alt="Node" src="https://img.shields.io/badge/node-%3E%3D22-brightgreen" /></a>
   <img alt="Local-first" src="https://img.shields.io/badge/local--first-no%20cloud-informational" />
-  <img alt="MCP" src="https://img.shields.io/badge/MCP-12%20tools-purple" />
   <a href="https://www.npmjs.com/package/neuronai"><img alt="npm" src="https://img.shields.io/badge/npm-neuronai-cb3837?logo=npm" /></a>
 </p>
 
 <p align="center">
-  <a href="#installation"><b>Install</b></a> ·
+  <a href="#quick-start"><b>Install</b></a> ·
   <a href="#quick-start"><b>Quick Start</b></a> ·
-  <a href="#faq"><b>FAQ</b></a>
+  <a href="#demo"><b>Demo</b></a>
 </p>
-
-![banner](./docs/assets/banner.png)
-
----
-
-## Problem
-
-Cursor starts almost every chat from zero.
-
-It forgets:
-
-- why you chose Postgres over Mongo
-- which module owns payments
-- that controllers must not open the database
-- the footgun that burned last sprint
-
-A bigger context window does not fix this. Repo RAG finds *code*. It does not remember *engineering judgment*.
-
----
-
-## Solution
-
-**NeuronAI** is **Neuron - AI Memory**: a local project brain for Cursor.
-
-1. Scans your repo into `.neuron/`
-2. Stores decisions, patterns, and warnings on disk
-3. Exposes them to Cursor through a small MCP tool set
-4. Shares with the team via Git (`git pull`)
-
-No Docker. No Postgres. No API keys. No cloud account. Telemetry off by default.
-
-![architecture](./docs/assets/architecture.png)
-
----
-
-## Before vs After
-
-> Add a refund flow
-
-| Cursor alone | Cursor + NeuronAI |
-|--------------|-------------------|
-| Invents a new DB client in a route handler | Loads your payment / outbox decisions |
-| Skips domain layer | Respects existing module boundaries |
-| Misses past mistakes | Surfaces known warnings first |
-
-![before vs after](./docs/assets/before-vs-after.png)
-
----
-
-## Demo
-
-![terminal](./docs/assets/demo.png)
-
-```bash
-npx neuronai init
-# or: npm install -g neuronai && neuron init
-```
-
-Open the project in Cursor, then **enable MCP** (servers stay off until you do):
-
-1. **Cursor Settings → Tools & MCP**
-2. Find **neuron** → **Enable**
-3. Wait for a green status (not Error)
-
-Then ask:
-
-> Prepare adding a refund flow using NeuronAI
-
-![cursor workflow](./docs/assets/cursor-workflow.png)
-
----
-
-## Features
-
-1. **One-command init** - wires `.neuron/` + Cursor MCP
-2. **Project scan** - bootstrap brain from the codebase
-3. **Local file storage** - readable JSON under `.neuron/`
-4. **12 MCP tools** - prepare, search, save, review, scan
-5. **Budgeted context** - top facts for *this* task
-6. **Git Team Brain** - commit brain JSON; teammates get it on pull
-7. **Zero secrets required** - no API key for NeuronAI itself
-8. **Privacy default** - local-only, telemetry OFF
-9. **Cursor-first DX** - rules, skills, MCP in `.cursor/`
-
----
-
-## Installation
 
 ```bash
 npm install -g neuronai
 ```
 
-Or:
+---
+
+## The problem
+
+Every AI coding assistant forgets.
+
+**New chat?** It forgets.
+
+**Tomorrow?** It forgets.
+
+**Another computer?** It forgets.
+
+**A month later?** It forgets.
+
+You keep explaining the same project over and over again.
+
+---
+
+## Before / After
+
+> Create auth.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+#### Without NeuronAI
+
+**Cursor**
+
+> How do you authenticate users?<br/>
+> Should I use NextAuth, Clerk, or a custom JWT?<br/>
+> Where should middleware live?
+
+</td>
+<td width="50%" valign="top">
+
+#### With NeuronAI
+
+**Cursor**
+
+> Your project already uses Clerk.<br/>
+> The middleware lives in <code>middleware.ts</code>.<br/>
+> Protected routes are grouped under <code>/(dashboard)</code>.<br/>
+> The session helper is in <code>lib/auth.ts</code>.<br/>
+> I'll follow the existing architecture.
+
+</td>
+</tr>
+</table>
+
+![Before vs After](./docs/assets/before-vs-after.png)
+
+**Stop explaining your project to AI over and over again.**
 
 ```bash
-npx neuronai init
+npm install -g neuronai && cd your-project && neuron init
 ```
 
-After global install you can use either:
+---
 
-```bash
-neuronai init
-neuron init
+## Demo
+
+<!-- When recorded, swap the still for: ./docs/assets/demo-flow.gif (see docs/assets/README-ASSETS.md). -->
+
+```text
+neuron init  →  scan  →  Cursor  →  "Where is authentication implemented?"  →  answer in seconds
+```
+
+<p align="center">
+  <img src="./docs/assets/demo.png" alt="NeuronAI in the terminal" width="720" />
+</p>
+
+<p align="center"><i>Animated loop placeholder: <code>docs/assets/demo-flow.gif</code> — record and drop in (storyboard in <a href="./docs/assets/README-ASSETS.md">README-ASSETS.md</a>).</i></p>
+
+![Cursor workflow](./docs/assets/cursor-workflow.png)
+
+---
+
+## NeuronAI remembers
+
+- Architecture
+- Decisions
+- Business logic
+- Project conventions
+- TODOs
+- Why something was built
+- Relationships between files
+- Patterns
+
+So Cursor starts closer to a teammate who already knows the repo — not a blank chat.
+
+---
+
+## Why developers love NeuronAI
+
+| | |
+|---|---|
+| Remembers previous decisions | Less “how do we usually do X?” |
+| Less prompt engineering | Context arrives with the task |
+| Faster feature development | Fewer wrong turns and rewrites |
+| Works with existing projects | `neuron init` on the repo you already have |
+| Local-first | Stored in your project under `.neuron/` |
+| No cloud | Nothing required for NeuronAI itself |
+| No API keys | Zero secrets to start |
+| Share through Git | Teammates get the same memory on `git pull` |
+
+---
+
+## Without NeuronAI vs with NeuronAI
+
+| Without NeuronAI | With NeuronAI |
+|------------------|---------------|
+| Explain the project every chat | AI remembers |
+| Re-explain architecture | Remembered |
+| Search manually for “how we do auth” | Instant project context |
+| Heavy prompt engineering | Minimal |
+| New teammate’s AI starts from zero | Already understands the project |
+
+---
+
+## What NeuronAI remembers
+
+```text
+Architecture
+    ↓
+Tech stack
+    ↓
+Conventions
+    ↓
+Patterns
+    ↓
+Business rules
+    ↓
+Dependencies
+    ↓
+Decisions
+    ↓
+Connected project knowledge
 ```
 
 ---
 
 ## Quick Start
+
+**About two minutes.**
 
 ```bash
 npm install -g neuronai
@@ -137,60 +185,53 @@ cd your-project
 neuron init
 ```
 
-1. Creates `.neuron/`
-2. Scans the project
-3. Wires Cursor MCP
+Or without a global install:
 
-Enable MCP in Cursor: **Settings → Tools & MCP → neuron → Enable**.
+```bash
+npx neuronai init
+```
 
-Then ask Cursor:
+`neuron init` will:
 
-> Prepare adding rate limiting using NeuronAI
+1. Create `.neuron/` in the project
+2. Scan what it can learn from the codebase
+3. Wire Cursor so NeuronAI is available as an MCP server
+
+Then in Cursor:
+
+1. **Settings → Tools & MCP**
+2. Find **neuron** → **Enable**
+3. Wait for a healthy/green status
+
+Ask something real:
+
+> Prepare adding a refund flow using NeuronAI
+
+or:
+
+> Where is authentication implemented?
 
 ---
 
-## Folder Structure
-
-![folder](./docs/assets/folder-structure.png)
+## How it works
 
 ```text
-.neuron/
-  config.json
-  brain.json
-  knowledge.json
-  decisions.json
-  rules.json
-  graph.json
-  cache/      # gitignored
-  runtime/    # gitignored
-  indexes/    # gitignored
-  logs/       # gitignored
+Your project → neuron init / scan → memory in .neuron/ → Cursor uses it on the next task
 ```
 
-![scan flow](./docs/assets/scan-flow.png)
-
----
-
-## How It Works
-
-```text
-Project -> Scanner -> Memory (.neuron/) -> Knowledge Graph -> MCP -> Cursor
-```
-
-![retrieval](./docs/assets/retrieval-flow.png)
-![knowledge graph](./docs/assets/knowledge-graph.png)
+Details for contributors live under [`docs/`](./docs/). You do not need them to get value in the first two minutes.
 
 ---
 
 ## FAQ
 
-**Postgres / Docker / API key?** No.
+**Do I need Postgres, Docker, or an API key?** No.
 
-**Team share?** Commit `.neuron/*.json`. `git pull` is the Team Brain.
+**How does the team share memory?** Commit the versioned `.neuron/*.json` files. `git pull` is the share path.
 
-**AI agent?** No - Neuron - AI Memory for Cursor.
+**Is this an AI agent?** No — it is long-term project memory for Cursor.
 
-**VS Code?** No - Cursor-first.
+**VS Code?** Cursor-first today.
 
 More: [`docs/faq.md`](./docs/faq.md)
 
@@ -206,15 +247,15 @@ More: [`docs/faq.md`](./docs/faq.md)
 
 ## License
 
-NeuronAI’s **source code** is licensed under the [Apache License 2.0](./LICENSE).
+NeuronAI’s **source code** is licensed under the [GNU Affero General Public License v3.0](./LICENSE) (AGPL-3.0).
 
-You may use, modify, and distribute the software under those terms. See also [`NOTICE`](./NOTICE).
+You may use, modify, and distribute the software under those terms. If you modify NeuronAI and provide it to others over a network, the AGPL also requires that you offer the corresponding source of your modified version. See [`LICENSE`](./LICENSE) for the full terms.
 
 ## Trademark
 
-**NeuronAI** and **Neuron - AI Memory** identify this project. The Apache License does **not** grant trademark rights to the name or logo.
+**NeuronAI** and **Neuron - AI Memory** identify this project. The software license does **not** grant trademark rights to the name or logo.
 
-- Code stays open source (local NeuronAI remains Apache-2.0)
+- Local NeuronAI remains open source under AGPL-3.0
 - The brand and logo are covered by [`TRADEMARK.md`](./TRADEMARK.md)
 - Future Cloud / hosted services may be offered separately; they are optional and do not replace the local OSS product
 

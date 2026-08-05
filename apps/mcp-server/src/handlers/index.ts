@@ -7,5 +7,6 @@ export { handleReviewMemory } from './review-memory.js';
 export { handleUpdateMemory } from './update-memory.js';
 export { handleProjectSummary } from './project-summary.js';
 export { handleAfterTask } from './workflow.js';
+export { handleResolveSuggestion } from './resolve-suggestion.js';
 export { handlePrepareTask } from './intelligence.js';
 export { handleScanProject, handleRefreshBrain } from './scan.js';

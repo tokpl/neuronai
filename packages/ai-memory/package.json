@@ -2,7 +2,7 @@
   "name": "@neuronai/ai-memory",
   "version": "0.1.1",
   "description": "NeuronAI / ai-memory - package for Neuron - AI Memory",
-  "license": "Apache-2.0",
+  "license": "AGPL-3.0",
   "type": "module",
   "exports": {
     ".": {

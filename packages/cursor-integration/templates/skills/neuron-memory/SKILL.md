@@ -23,6 +23,7 @@ Give the agent a **project brain**: architecture, decisions, patterns, and warni
 | Review prose for memorable knowledge | `neuron_review_memory` |
 | Update existing knowledge | `neuron_update_memory` |
 | After finishing work | `neuron_after_task` |
+| Apply Save / Edit / Ignore reply | `neuron_resolve_suggestion` |
 | Bootstrap / refresh brain | `neuron_scan_project` / `neuron_refresh_brain` |
 | What is this project? | `neuron_project_summary` |
 | Health check | `neuron_health` |
@@ -31,7 +32,7 @@ Give the agent a **project brain**: architecture, decisions, patterns, and warni
 
 1. **Analyze** - `neuron_prepare_task` / `neuron_get_context`
 2. **Implement** - follow existing patterns from Neuron
-3. **Review & remember** - `neuron_after_task` or review + save
+3. **Review & remember** - `neuron_after_task` → prefer Cursor **AskQuestion** (Save / Edit / Ignore) → `neuron_resolve_suggestion` (fallback: user types the word in chat)
 
 ## Context budget
 

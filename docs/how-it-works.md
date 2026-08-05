@@ -9,7 +9,7 @@ Project -> Scanner -> Memory (.neuron/) -> Knowledge Graph -> MCP -> Cursor
 1. Local-first - knowledge on disk under `.neuron/`
 2. Git is Team Brain - version the JSON files
 3. neuronai delivers knowledge - Cursor's model writes the answer
-4. Small MCP surface - 12 tools
+4. Small MCP surface - 13 tools
 
 ## Install
 

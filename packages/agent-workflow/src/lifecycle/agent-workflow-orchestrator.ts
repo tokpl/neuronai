@@ -30,6 +30,7 @@ import {
   type MemorySuggestion,
   type MemorySuggestionEngine,
 } from '../suggestion/memory-suggestion-engine.js';
+import type { SuggestionAskQuestion } from '../suggestion/user-messages.js';
 
 export interface AgentTaskSession {
   projectId: string;
@@ -44,6 +45,8 @@ export interface AfterCodingResult {
   quality: QualityCheckResult | null;
   persisted: MemoryRecord | null;
   promptText: string | null;
+  /** Prefer Cursor AskQuestion with these options when available */
+  askQuestion: SuggestionAskQuestion | null;
 }
 
 export interface AgentWorkflowDeps {
@@ -159,6 +162,7 @@ export class AgentWorkflowOrchestrator {
         quality: null,
         persisted: null,
         promptText: null,
+        askQuestion: null,
       };
     }
 
@@ -212,6 +216,7 @@ export class AgentWorkflowOrchestrator {
       quality,
       persisted,
       promptText: suggestion.shouldSuggest ? suggestion.prompt.text : null,
+      askQuestion: suggestion.shouldSuggest ? suggestion.prompt.askQuestion : null,
     };
   }
 

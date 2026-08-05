@@ -26,7 +26,7 @@ for (const dir of dirs) {
   j.homepage = j.homepage ?? 'https://github.com/tokpl/neuronai';
   j.bugs = j.bugs ?? { url: 'https://github.com/tokpl/neuronai/issues' };
   j.engines = j.engines ?? { node: '>=22' };
-  j.license = j.license ?? 'Apache-2.0';
+  j.license = j.license ?? 'AGPL-3.0';
 
   if (j.name === 'neuronai') {
     j.description =

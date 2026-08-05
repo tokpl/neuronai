@@ -2,7 +2,7 @@
 
 Thanks for helping improve **NeuronAI** (**Neuron - AI Memory**) — local-first project memory for Cursor.
 
-By contributing, you agree that your contributions are licensed under the [Apache License 2.0](./LICENSE), unless you state otherwise in writing. See also [TRADEMARK.md](./TRADEMARK.md) (code ≠ brand).
+By contributing, you agree that your contributions are licensed under the [GNU Affero General Public License v3.0](./LICENSE) (AGPL-3.0), unless you state otherwise in writing. There is **no CLA**. See also [TRADEMARK.md](./TRADEMARK.md) (code ≠ brand).
 
 ## Ground rules
 

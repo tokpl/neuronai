@@ -4,13 +4,13 @@
 
 ## What is open source
 
-The **source code** of NeuronAI is released under the [Apache License 2.0](./LICENSE). You may use, modify, and distribute the software under those terms.
+The **source code** of NeuronAI is released under the [GNU Affero General Public License v3.0](./LICENSE) (AGPL-3.0). You may use, modify, and distribute the software under those terms.
 
-The Apache License **does not** grant rights to use the project’s names, logos, or brand assets as trademarks (see Apache License 2.0, Section 6).
+The AGPL-3.0 **does not** grant rights to use the project’s names, logos, or brand assets as trademarks.
 
 ## What remains protected
 
-The following are **not** licensed as free brand assets under Apache-2.0:
+The following are **not** licensed as free brand assets under AGPL-3.0:
 
 - The name **NeuronAI**
 - The phrase **Neuron - AI Memory** (as a product title / slogan)
@@ -36,7 +36,7 @@ Without prior written permission from the project maintainers:
 
 The maintainers may offer optional hosted or commercial services (for example a future Cloud offering) under separate terms. Those services are **not** required to use the local open-source product.
 
-The **local / self-hosted NeuronAI** software remains available under Apache-2.0.
+The **local / self-hosted NeuronAI** software remains available under AGPL-3.0.
 
 ## Questions
 

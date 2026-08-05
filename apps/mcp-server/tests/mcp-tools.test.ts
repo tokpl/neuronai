@@ -6,6 +6,7 @@ import {
   handleAfterTask,
   handleGetContext,
   handlePrepareTask,
+  handleResolveSuggestion,
   handleReviewMemory,
   handleSaveDecision,
   handleSearchMemory,
@@ -36,8 +37,8 @@ describe('auth providers', () => {
 });
 
 describe('mvp tool set', () => {
-  it('exposes exactly 12 tools', () => {
-    expect(MVP_TOOL_NAMES).toHaveLength(12);
+  it('exposes exactly 13 tools', () => {
+    expect(MVP_TOOL_NAMES).toHaveLength(13);
   });
 });
 
@@ -118,10 +119,58 @@ describe('mcp tool handlers', () => {
     expect(after.isError).toBeFalsy();
     const body = JSON.parse(after.content[0]!.text) as {
       ok: boolean;
+      pending: boolean;
+      howToRespond: string;
+      userInstruction: string;
+      askQuestion: { options: { id: string; label: string }[] } | null;
       suggestion: { shouldSuggest: boolean; type: string } | null;
     };
     expect(body.ok).toBe(true);
     expect(body.suggestion?.shouldSuggest).toBe(true);
+    expect(body.pending).toBe(true);
+    expect(body.howToRespond).toMatch(/neuron_resolve_suggestion/);
+    expect(body.userInstruction).toMatch(/AskQuestion/i);
+    expect(body.askQuestion?.options?.length).toBe(3);
+    expect(runtime.pendingSuggestion).not.toBeNull();
+
+    const ignored = await handleResolveSuggestion(runtime, { action: 'ignore' });
+    expect(ignored.isError).toBeFalsy();
+    expect(runtime.pendingSuggestion).toBeNull();
+  });
+
+  it('resolves Save after after_task pending suggestion', async () => {
+    const runtime = await createNeuronRuntime(process.cwd());
+    const unique = `ux-reply-flow-${Date.now()}`;
+    await handleAfterTask(runtime, {
+      task: `Replace Redis cache with local cache ${unique}`,
+      commitMessage: `refactor: ${unique} replace Redis cache - architecture rewrite`,
+      files: [
+        'src/cache/redis.ts',
+        'src/cache/local.ts',
+        'package.json',
+        'src/auth/session.ts',
+        'src/auth/rbac.ts',
+        'docs/architecture.md',
+      ],
+    });
+    expect(runtime.pendingSuggestion).not.toBeNull();
+
+    // Keep title unique so repeated test runs do not hit duplicate detection
+    runtime.pendingSuggestion = {
+      ...runtime.pendingSuggestion!,
+      title: unique,
+      draftContent: `User-facing Save/Edit/Ignore instructions for Cursor chat (${unique}).`,
+    };
+
+    const saved = await handleResolveSuggestion(runtime, { action: 'save' });
+    expect(saved.isError).toBeFalsy();
+    const body = JSON.parse(saved.content[0]!.text) as {
+      status: string;
+      memory: { title: string };
+    };
+    expect(body.status).toBe('stored');
+    expect(body.memory.title).toBe(unique);
+    expect(runtime.pendingSuggestion).toBeNull();
   });
 
   it('prepares tasks via agent intelligence', async () => {

@@ -81,6 +81,24 @@ export const afterTaskSchema = {
   commitMessage: z.string().optional(),
 };
 
+export const resolveSuggestionSchema = {
+  projectId: projectIdSchema,
+  action: z.enum(['save', 'edit', 'ignore']),
+  title: z.string().min(1).optional(),
+  content: z.string().min(1).optional(),
+  type: z
+    .enum([
+      'architecture_decision',
+      'knowledge',
+      'pattern',
+      'mistake',
+      'business_rule',
+      'dependency',
+      'context',
+    ])
+    .optional(),
+};
+
 export const suggestChangesSchema = {
   projectId: projectIdSchema,
   diff: z.string().optional(),

@@ -1,5 +1,27 @@
 {
   "version": 1,
-  "decisions": [],
-  "updatedAt": "2026-08-05T21:22:33.378Z"
+  "decisions": [
+    {
+      "id": "173babe0-0c00-420a-872f-4c61eb0be726",
+      "projectId": "6a0892d9-57eb-4b07-a36d-22ff49ae8106",
+      "type": "architecture_decision",
+      "title": "AGPL-3.0 for first-party NeuronAI (docs/metadata)",
+      "content": "Problem: Need open-source distribution with stronger protection against closed network/SaaS freeriding than a prior permissive license.\nDecision: First-party NeuronAI is AGPL-3.0 (LICENSE, package.json metadata, docs). NOTICE removed. Brand remains under TRADEMARK.md; inbound contributions AGPL with no CLA.\nReason: AGPL remains OSI open source; network use of modified versions typically requires offering corresponding source; trademark policy stays separate from the code license.",
+      "importanceScore": 1,
+      "confidenceScore": 0.7,
+      "freshnessScore": 1,
+      "source": "agent",
+      "status": "active",
+      "version": 1,
+      "tags": [
+        "decision"
+      ],
+      "usageCount": 0,
+      "lastUsedAt": null,
+      "embeddingId": null,
+      "createdAt": "2026-08-05T23:17:53.732Z",
+      "updatedAt": "2026-08-05T23:17:53.732Z"
+    }
+  ],
+  "updatedAt": "2026-08-05T23:17:53.735Z"
 }

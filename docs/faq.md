@@ -31,6 +31,6 @@ No. Cursor-first.
 3. Reload the window if the status stays red.
 
 **What is published to npm?**  
-`neuronai` (CLI) and `@neuronai/*` libraries. See [`PUBLISH.md`](./PUBLISH.md).
+`neuronai` (CLI) and `@neuronai/*` libraries under the **neuronai** org.
 
 https://github.com/tokpl/neuronai

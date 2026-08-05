@@ -20,8 +20,7 @@
 <p align="center">
   <a href="#installation"><b>Install</b></a> ·
   <a href="#quick-start"><b>Quick Start</b></a> ·
-  <a href="#faq"><b>FAQ</b></a> ·
-  <a href="./docs/PUBLISH.md"><b>Publish</b></a>
+  <a href="#faq"><b>FAQ</b></a>
 </p>
 
 ![banner](./docs/assets/banner.png)

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="390" viewBox="0 0 1200 390" role="img" aria-labelledby="title">
+  <title id="title">NeuronAI demo storyboard</title>
+  <rect width="1200" height="390" fill="#FAFAF9"/>
+  <text x="60" y="40" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="400" text-anchor="start">neuron init → scan → ask Cursor → correct answer</text>
+  <rect x="60" y="90" width="200" height="220" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="160" cy="150" r="28" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="160" y="156" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">1</text>
+  <text x="160" y="220" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Terminal</text>
+  <text x="160" y="250" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" text-anchor="middle">neuron init</text><line x1="265" y1="200" x2="275" y2="200" stroke="#0F766E" stroke-width="3"/>
+  <rect x="280" y="90" width="200" height="220" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="380" cy="150" r="28" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="380" y="156" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">2</text>
+  <text x="380" y="220" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Scan</text>
+  <text x="380" y="250" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" text-anchor="middle">.neuron/</text><line x1="485" y1="200" x2="495" y2="200" stroke="#0F766E" stroke-width="3"/>
+  <rect x="500" y="90" width="200" height="220" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="600" cy="150" r="28" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="600" y="156" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">3</text>
+  <text x="600" y="220" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Cursor</text>
+  <text x="600" y="250" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" text-anchor="middle">Enable MCP</text><line x1="705" y1="200" x2="715" y2="200" stroke="#0F766E" stroke-width="3"/>
+  <rect x="720" y="90" width="200" height="220" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="820" cy="150" r="28" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="820" y="156" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">4</text>
+  <text x="820" y="220" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Question</text>
+  <text x="820" y="250" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" text-anchor="middle">Where is auth?</text><line x1="925" y1="200" x2="935" y2="200" stroke="#0F766E" stroke-width="3"/>
+  <rect x="940" y="90" width="200" height="220" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="1040" cy="150" r="28" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="1040" y="156" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">5</text>
+  <text x="1040" y="220" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Answer</text>
+  <text x="1040" y="250" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" text-anchor="middle">Real paths</text>
+  <text x="60" y="350" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" text-anchor="start">Animated GIF placeholder: docs/assets/demo-flow.gif</text>
+
+</svg>

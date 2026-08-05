@@ -67,7 +67,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 - `docs:` documentation only
 - `refactor:` no intended behavior change
 - `test:` tests only
-- `chore:` tooling, deps, CI
+- `chore:` tooling, deps, repo hygiene
 
 Examples: `fix: route MCP logs to stderr`, `docs: add trademark policy`.
 

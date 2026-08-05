@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title">
+  <title id="title">Why NeuronAI</title>
+  <rect width="1200" height="400" fill="#FAFAF9"/>
+  
+  <rect x="40" y="40" width="270" height="150" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="76" cy="80" r="16" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="76" y="85" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle">1</text>
+  <text x="64" y="125" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" text-anchor="start">Remembers decisions</text>
+  <text x="64" y="155" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" text-anchor="start">No more re-explaining architecture</text>
+  <rect x="330" y="40" width="270" height="150" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="366" cy="80" r="16" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="366" y="85" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle">2</text>
+  <text x="354" y="125" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" text-anchor="start">Less prompt engineering</text>
+  <text x="354" y="155" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" text-anchor="start">Context arrives with the task</text>
+  <rect x="620" y="40" width="270" height="150" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="656" cy="80" r="16" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="656" y="85" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle">3</text>
+  <text x="644" y="125" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" text-anchor="start">Faster features</text>
+  <text x="644" y="155" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" text-anchor="start">Fewer wrong turns</text>
+  <rect x="910" y="40" width="270" height="150" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="946" cy="80" r="16" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="946" y="85" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle">4</text>
+  <text x="934" y="125" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" text-anchor="start">Existing projects</text>
+  <text x="934" y="155" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" text-anchor="start">neuron init on any repo</text>
+  <rect x="40" y="220" width="270" height="150" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="76" cy="260" r="16" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="76" y="265" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle">5</text>
+  <text x="64" y="305" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" text-anchor="start">Local-first</text>
+  <text x="64" y="335" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" text-anchor="start">Lives under .neuron/</text>
+  <rect x="330" y="220" width="270" height="150" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="366" cy="260" r="16" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="366" y="265" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle">6</text>
+  <text x="354" y="305" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" text-anchor="start">No cloud</text>
+  <text x="354" y="335" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" text-anchor="start">Nothing to sign up for</text>
+  <rect x="620" y="220" width="270" height="150" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="656" cy="260" r="16" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="656" y="265" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle">7</text>
+  <text x="644" y="305" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" text-anchor="start">No API keys</text>
+  <text x="644" y="335" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" text-anchor="start">Zero secrets to start</text>
+  <rect x="910" y="220" width="270" height="150" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="946" cy="260" r="16" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <text x="946" y="265" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle">8</text>
+  <text x="934" y="305" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" text-anchor="start">Share via Git</text>
+  <text x="934" y="335" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" text-anchor="start">Teammates pull the brain</text>
+</svg>

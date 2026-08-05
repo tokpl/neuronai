@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title">
+  <title id="title">NeuronAI hero — Give Cursor long-term memory</title>
+  <rect width="1200" height="520" fill="#FAFAF9"/>
+  
+  <rect x="40" y="40" width="1120" height="440" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="120" cy="140" r="36" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <circle cx="120" cy="140" r="14" fill="#0F766E"/>
+  <text x="180" y="130" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="36" font-weight="700" text-anchor="start">NeuronAI</text>
+  <text x="180" y="162" fill="#111111" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" text-anchor="start">Give Cursor long-term memory.</text>
+  <text x="180" y="198" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="400" text-anchor="start">Stop re-explaining your project in every chat.</text>
+  <rect x="180" y="230" width="280" height="44" rx="12" fill="#0F766E"/>
+  <text x="320" y="258" fill="#FFFFFF" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" text-anchor="middle">npm install -g neuronai</text>
+  <rect x="80" y="310" width="480" height="140" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="108" cy="338" r="5" fill="#F87171"/><circle cx="128" cy="338" r="5" fill="#FBBF24"/><circle cx="148" cy="338" r="5" fill="#34D399"/>
+  <text x="104" y="372" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">$ npm install -g neuronai</text>
+  <text x="104" y="396" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">$ neuron init</text>
+  <text x="104" y="420" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" text-anchor="start">Project memory ready</text>
+  <rect x="600" y="100" width="520" height="350" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <text x="624" y="140" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" text-anchor="start">Cursor</text>
+  <rect x="624" y="160" width="472" height="80" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <text x="640" y="190" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">User: Where is authentication?</text>
+  <text x="640" y="214" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">Create auth following our patterns.</text>
+  <rect x="624" y="260" width="472" height="150" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <text x="640" y="295" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" text-anchor="start">NeuronAI context loaded</text>
+  <text x="640" y="325" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">Clerk · middleware.ts · /(dashboard)</text>
+  <text x="640" y="350" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">lib/auth.ts · existing architecture</text>
+  <text x="640" y="380" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">I'll follow your project decisions.</text>
+
+</svg>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title">
+  <title id="title">Terminal install mockup</title>
+  <rect width="1200" height="300" fill="#FAFAF9"/>
+  
+  <rect x="60" y="40" width="1080" height="220" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <circle cx="100" cy="72" r="6" fill="#F87171"/><circle cx="124" cy="72" r="6" fill="#FBBF24"/><circle cx="148" cy="72" r="6" fill="#34D399"/>
+  <text x="100" y="120" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="18" font-weight="400" text-anchor="start">$ npm install -g neuronai</text>
+  <text x="100" y="160" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="18" font-weight="400" text-anchor="start">$ cd your-project</text>
+  <text x="100" y="200" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="18" font-weight="400" text-anchor="start">$ neuron init</text>
+  <text x="100" y="240" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="600" text-anchor="start">.neuron/ created · Cursor MCP wired</text>
+
+</svg>

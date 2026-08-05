@@ -1,37 +1,47 @@
-# README marketing assets
+# README landing assets
 
-Visuals used by the root [`README.md`](../../README.md) to sell the **outcome** (Cursor remembers the project), not the stack.
+Graphic-first marketing visuals for the root README (product landing page).
 
-## Current files
+## Design tokens
 
-| File | Role |
-|------|------|
-| `logo.png` | Hero mark |
-| `demo.png` | Terminal / CLI still (interim until GIF) |
-| `demo-flow.gif` | **Primary demo loop** (placeholder until recorded) |
-| `before-vs-after.png` | Side-by-side product effect |
-| `cursor-workflow.png` | Cursor after init |
+| Token | Value |
+|-------|-------|
+| bg | `#FAFAF9` |
+| surface | `#FFFFFF` |
+| ink | `#111111` |
+| muted | `#6B7280` |
+| line | `#E5E5E5` |
+| accent | `#0F766E` |
+| danger | `#9A3412` |
 
-Architecture / knowledge-graph / retrieval PNGs are **not** featured on the marketing README path. Keep them for internal docs if useful.
+Rules: basic SVG only (no scripts / foreignObject). Regenerate with:
 
-## Record `demo-flow.gif` (replace placeholder)
+```bash
+node scripts/generate-landing-svgs.mjs
+```
 
-Target storyboard (≤15s, no narration required):
+## Landing SVG set (required)
 
-1. Terminal: `neuron init` (or `npx neuronai init`)
-2. Brief scan / `.neuron/` created
-3. Cursor chat: *Where is authentication implemented?*
-4. Answer that cites real project paths in ~2 seconds of screen time
+| File | Section |
+|------|---------|
+| `hero.svg` | Hero |
+| `problem.svg` | The problem |
+| `solution.svg` | NeuronAI remembers |
+| `before-after.svg` | Before vs After |
+| `demo.svg` | Demo storyboard |
+| `cards.svg` | Why NeuronAI |
+| `workflow.svg` | How it works |
+| `folder-structure.svg` | `.neuron/` |
+| `cursor-chat.svg` | Real example |
+| `quickstart.svg` | Quick Start steps |
+| `terminal.svg` | Install terminal mock |
+| `architecture.svg` | Architecture |
+| `roadmap.svg` | Roadmap |
 
-Suggested tools: [ScreenToGif](https://www.screentogif.com/), OBS → ffmpeg, or CapCut export as GIF.
+## GIF
 
-Constraints:
+- `demo-flow.gif` — drop a real screen recording here; `demo.svg` is the storyboard until then.
 
-- Dark or light IDE is fine; keep text readable at GitHub width (~720–900px)
-- No secrets, no private customer data
-- Prefer a public demo repo or anonymized paths
+## Legacy PNG
 
-## Optional follow-ups
-
-- `before-after-chat.gif` — animated version of the Create auth Before/After conversation
-- Compress large PNGs if GitHub clone size becomes an issue
+Older PNG banners/diagrams may remain in this folder but are **not** used on the landing README path.

@@ -1,12 +1,11 @@
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const version = process.argv[2] ?? '0.1.1';
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const roots = [
-  'c:/projekty/neuron-ai-memory/packages',
-  'c:/projekty/neuron-ai-memory/apps',
-];
+const roots = [join(root, 'packages'), join(root, 'apps')];
 
 const dirs = roots.flatMap((r) =>
   readdirSync(r, { withFileTypes: true })

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="580" viewBox="0 0 1200 580" role="img" aria-labelledby="title">
+  <title id="title">Real Cursor chat example</title>
+  <rect width="1200" height="580" fill="#FAFAF9"/>
+  
+  <text x="60" y="36" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="15" font-weight="400" text-anchor="start">Same prompt. Different outcome.</text>
+  <rect x="40" y="60" width="550" height="480" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <rect x="40" y="60" width="550" height="48" fill="#FFEDD5"/>
+  <text x="315" y="92" fill="#9A3412" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Without NeuronAI</text>
+  <text x="70" y="150" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" text-anchor="start">User</text>
+  <rect x="70" y="165" width="490" height="60" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <text x="90" y="202" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">Create auth for the dashboard.</text>
+  <text x="70" y="260" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" text-anchor="start">Cursor</text>
+  <rect x="70" y="275" width="490" height="220" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <text x="90" y="315" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">What's your auth stack?</text>
+  <text x="90" y="345" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">Should sessions be cookies or JWT?</text>
+  <text x="90" y="375" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">I can scaffold NextAuth from scratch…</text>
+  <text x="90" y="425" fill="#9A3412" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" text-anchor="start">Guesswork.</text>
+  <rect x="610" y="60" width="550" height="480" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <rect x="610" y="60" width="550" height="48" fill="#CCFBF1"/>
+  <text x="885" y="92" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" text-anchor="middle">With NeuronAI</text>
+  <text x="640" y="150" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" text-anchor="start">User</text>
+  <rect x="640" y="165" width="490" height="60" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <text x="660" y="202" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">Create auth for the dashboard.</text>
+  <text x="640" y="260" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="12" font-weight="400" text-anchor="start">Cursor + NeuronAI</text>
+  <rect x="640" y="275" width="490" height="220" rx="16" fill="#FFFFFF" stroke="#E5E5E5"/>
+  <text x="660" y="315" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" text-anchor="start">Using Clerk (project decision).</text>
+  <text x="660" y="345" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">middleware.ts · /(dashboard) group</text>
+  <text x="660" y="375" fill="#6B7280" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" text-anchor="start">Session helper: lib/auth.ts</text>
+  <text x="660" y="425" fill="#0F766E" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" text-anchor="start">Matches your architecture.</text>
+
+</svg>

@@ -1,5 +1,7 @@
 # Getting started
 
+**NeuronAI** · *Neuron - AI Memory*
+
 ## Install
 
 ```bash
@@ -27,7 +29,7 @@ neuron init
 2. Open **Cursor Settings → Tools & MCP**
 3. Find **neuron** and toggle **Enable** (MCP servers stay off until you enable them)
 4. Wait until the status is green (not Error)
-5. Ask: `Prepare adding X using neuronai`
+5. Ask: `Prepare adding X using NeuronAI`
 
 If Cursor shows `'neuron' is not recognized`, re-run setup so MCP uses `npx`/`node` instead of a bare `neuron` binary:
 

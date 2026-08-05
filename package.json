@@ -1,9 +1,9 @@
 {
-  "name": "neuronai",
+  "name": "neuronai-monorepo",
   "private": true,
   "type": "module",
   "version": "0.1.0",
-  "description": "Local-first AI memory for Cursor (MCP)",
+  "description": "NeuronAI monorepo - Neuron - AI Memory (local-first Cursor project memory)",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -27,7 +27,9 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "test:coverage": "turbo run test -- --coverage",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean",
+    "prepare:npm": "node ./scripts/prepare-npm-packages.mjs",
+    "publish:npm": "pnpm build && pnpm -r --filter './packages/*' --filter './apps/*' publish --access public --no-git-checks"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

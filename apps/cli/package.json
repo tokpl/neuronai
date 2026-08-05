@@ -1,7 +1,7 @@
 {
   "name": "neuronai",
   "version": "0.1.0",
-  "description": "Local-first AI memory for Cursor",
+  "description": "NeuronAI - CLI for Neuron - AI Memory (local-first Cursor project memory)",
   "license": "Apache-2.0",
   "type": "module",
   "bin": {
@@ -20,7 +20,9 @@
     "url": "https://github.com/tokpl/neuronai/issues"
   },
   "keywords": [
+    "NeuronAI",
     "neuronai",
+    "Neuron - AI Memory",
     "cursor",
     "mcp",
     "ai-memory",

@@ -1,7 +1,7 @@
 {
   "name": "@neuronai/mcp-server",
   "version": "0.1.0",
-  "description": "Neuron MCP server - local project memory for Cursor",
+  "description": "NeuronAI / mcp-server - package for Neuron - AI Memory",
   "license": "Apache-2.0",
   "type": "module",
   "publishConfig": {
@@ -19,7 +19,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -51,5 +53,16 @@
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tokpl/neuronai.git"
+  },
+  "homepage": "https://github.com/tokpl/neuronai",
+  "bugs": {
+    "url": "https://github.com/tokpl/neuronai/issues"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

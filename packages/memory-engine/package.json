@@ -1,7 +1,7 @@
 {
   "name": "@neuronai/memory-engine",
-  "version": "0.0.0",
-  "description": "Domain-driven memory lifecycle engine for Neuron AI Memory",
+  "version": "0.1.0",
+  "description": "NeuronAI / memory-engine - package for Neuron - AI Memory",
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
@@ -27,5 +27,19 @@
   "devDependencies": {
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tokpl/neuronai.git"
+  },
+  "homepage": "https://github.com/tokpl/neuronai",
+  "bugs": {
+    "url": "https://github.com/tokpl/neuronai/issues"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

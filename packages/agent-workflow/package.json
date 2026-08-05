@@ -1,7 +1,7 @@
 {
   "name": "@neuronai/agent-workflow",
-  "version": "0.0.0",
-  "description": "Automatic agent workflow: events, change analysis, memory suggestions, privacy modes",
+  "version": "0.1.0",
+  "description": "NeuronAI / agent-workflow - package for Neuron - AI Memory",
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
@@ -29,5 +29,19 @@
   "devDependencies": {
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tokpl/neuronai.git"
+  },
+  "homepage": "https://github.com/tokpl/neuronai",
+  "bugs": {
+    "url": "https://github.com/tokpl/neuronai/issues"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

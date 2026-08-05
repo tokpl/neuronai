@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="./docs/assets/logo.png" alt="neuronai" width="96" />
+  <img src="./docs/assets/logo.png" alt="NeuronAI" width="96" />
 </p>
 
-<h1 align="center">neuronai</h1>
+<h1 align="center">NeuronAI</h1>
 
-<p align="center"><b>Local-first AI memory for Cursor.</b></p>
+<p align="center"><b>Neuron - AI Memory</b></p>
 
-<p align="center">neuronai makes Cursor understand your project.</p>
+<p align="center">Local-first project memory for Cursor.</p>
 
 <p align="center">
   <a href="https://github.com/tokpl/neuronai"><img alt="GitHub" src="https://img.shields.io/badge/github-tokpl%2Fneuronai-black?logo=github" /></a>
@@ -14,12 +14,14 @@
   <a href="https://nodejs.org"><img alt="Node" src="https://img.shields.io/badge/node-%3E%3D22-brightgreen" /></a>
   <img alt="Local-first" src="https://img.shields.io/badge/local--first-no%20cloud-informational" />
   <img alt="MCP" src="https://img.shields.io/badge/MCP-12%20tools-purple" />
+  <a href="https://www.npmjs.com/package/neuronai"><img alt="npm" src="https://img.shields.io/badge/npm-neuronai-cb3837?logo=npm" /></a>
 </p>
 
 <p align="center">
   <a href="#installation"><b>Install</b></a> ·
   <a href="#quick-start"><b>Quick Start</b></a> ·
-  <a href="#faq"><b>FAQ</b></a>
+  <a href="#faq"><b>FAQ</b></a> ·
+  <a href="./docs/PUBLISH.md"><b>Publish</b></a>
 </p>
 
 ![banner](./docs/assets/banner.png)
@@ -43,7 +45,7 @@ A bigger context window does not fix this. Repo RAG finds *code*. It does not re
 
 ## Solution
 
-neuronai is a **local project brain** for Cursor.
+**NeuronAI** is **Neuron - AI Memory**: a local project brain for Cursor.
 
 1. Scans your repo into `.neuron/`
 2. Stores decisions, patterns, and warnings on disk
@@ -60,7 +62,7 @@ No Docker. No Postgres. No API keys. No cloud account. Telemetry off by default.
 
 > Add a refund flow
 
-| Cursor alone | Cursor + neuronai |
+| Cursor alone | Cursor + NeuronAI |
 |--------------|-------------------|
 | Invents a new DB client in a route handler | Loads your payment / outbox decisions |
 | Skips domain layer | Respects existing module boundaries |
@@ -87,7 +89,7 @@ Open the project in Cursor, then **enable MCP** (servers stay off until you do):
 
 Then ask:
 
-> Prepare adding a refund flow using neuronai
+> Prepare adding a refund flow using NeuronAI
 
 ![cursor workflow](./docs/assets/cursor-workflow.png)
 
@@ -101,7 +103,7 @@ Then ask:
 4. **12 MCP tools** - prepare, search, save, review, scan
 5. **Budgeted context** - top facts for *this* task
 6. **Git Team Brain** - commit brain JSON; teammates get it on pull
-7. **Zero secrets required** - no API key for neuronai itself
+7. **Zero secrets required** - no API key for NeuronAI itself
 8. **Privacy default** - local-only, telemetry OFF
 9. **Cursor-first DX** - rules, skills, MCP in `.cursor/`
 
@@ -144,7 +146,7 @@ Enable MCP in Cursor: **Settings → Tools & MCP → neuron → Enable**.
 
 Then ask Cursor:
 
-> Prepare adding rate limiting using neuronai
+> Prepare adding rate limiting using NeuronAI
 
 ---
 
@@ -187,7 +189,7 @@ Project -> Scanner -> Memory (.neuron/) -> Knowledge Graph -> MCP -> Cursor
 
 **Team share?** Commit `.neuron/*.json`. `git pull` is the Team Brain.
 
-**AI agent?** No - local memory for Cursor.
+**AI agent?** No - Neuron - AI Memory for Cursor.
 
 **VS Code?** No - Cursor-first.
 

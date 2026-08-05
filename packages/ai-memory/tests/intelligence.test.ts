@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { MockAIProvider } from '@neuron-ai-memory/ai-provider';
-import { InMemoryEmbeddingStore, MockEmbeddingProvider } from '@neuron-ai-memory/embeddings';
-import { createInMemoryMemoryEngine } from '@neuron-ai-memory/memory-engine';
+import { MockAIProvider } from '@neuronai/ai-provider';
+import { InMemoryEmbeddingStore, MockEmbeddingProvider } from '@neuronai/embeddings';
+import { createInMemoryMemoryEngine } from '@neuronai/memory-engine';
 
 import {
   ConflictDetector,

@@ -1,9 +1,9 @@
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
 import {
   collectProjectSignals,
   createProjectResolver,
   type ResolvedProject,
-} from '@neuron-ai-memory/project-analyzer';
+} from '@neuronai/project-analyzer';
 
 import { createCodeGraphAnalyzer } from '../analyzers/code-graph-analyzer.js';
 import { createDependencyScanner } from '../analyzers/dependency-scanner.js';

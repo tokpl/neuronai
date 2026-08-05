@@ -1,4 +1,4 @@
-import { ValidationError } from '@neuron-ai-memory/types';
+import { ValidationError } from '@neuronai/types';
 
 import type { NeuronRuntime } from '../config/runtime.js';
 import { failResult, okResult } from '../middleware/errors.js';
@@ -29,7 +29,7 @@ export async function handleStoreMemory(
     const stored = outcome.results.find((r) => r.status === 'stored' || r.status === 'superseded_existing');
 
     if (stored?.memory) {
-      // Ensure requested type if pipeline classified differently — update via explicit create fallback
+      // Ensure requested type if pipeline classified differently - update via explicit create fallback
       if (stored.memory.type !== args.type) {
         try {
           const memory = await runtime.engine.createMemory({

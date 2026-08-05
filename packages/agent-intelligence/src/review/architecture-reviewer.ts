@@ -1,8 +1,8 @@
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
 
 import type { AgentContext } from '../context/context-engine.js';
 import { ChangeRiskAnalyzer, type ChangeRiskReport } from '../risk/change-risk-analyzer.js';
-import type { ProjectIntelligenceEngine } from '@neuron-ai-memory/knowledge-graph';
+import type { ProjectIntelligenceEngine } from '@neuronai/knowledge-graph';
 
 export interface ArchitectureReview {
   score: number;
@@ -66,7 +66,7 @@ export class ArchitectureReviewer {
     }
 
     if (!issues.length) {
-      recommendations.push('Looks compatible with known architecture — keep modules cohesive');
+      recommendations.push('Looks compatible with known architecture - keep modules cohesive');
     } else {
       recommendations.push('Search Neuron memories for the affected module before merging');
     }

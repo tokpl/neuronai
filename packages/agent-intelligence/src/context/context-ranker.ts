@@ -1,4 +1,4 @@
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
 
 import type { AnalyzedTask } from './task-analyzer.js';
 

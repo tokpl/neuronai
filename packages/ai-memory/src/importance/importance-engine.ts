@@ -1,4 +1,4 @@
-import type { MemoryType, MemorySource } from '@neuron-ai-memory/types';
+import type { MemoryType, MemorySource } from '@neuronai/types';
 
 export interface ImportanceEngineInput {
   type: MemoryType;

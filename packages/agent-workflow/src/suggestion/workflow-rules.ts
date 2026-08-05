@@ -1,4 +1,4 @@
-import type { MemoryType } from '@neuron-ai-memory/types';
+import type { MemoryType } from '@neuronai/types';
 
 import type { CodeChangeAnalysis } from '../analysis/code-change-analyzer.js';
 
@@ -52,7 +52,7 @@ export const defaultWorkflowRules: WorkflowRule[] = [
         boost: 0.15,
         forceSuggest: true,
         preferredType: 'architecture_decision',
-        reason: `Changed >5 files in module ${hot[0]} — suggest architecture review`,
+        reason: `Changed >5 files in module ${hot[0]} - suggest architecture review`,
       };
     },
   },
@@ -83,7 +83,7 @@ export const defaultWorkflowRules: WorkflowRule[] = [
         boost: 0.12,
         forceSuggest: true,
         preferredType: 'dependency',
-        reason: 'New or changed dependency detected — consider recording the decision',
+        reason: 'New or changed dependency detected - consider recording the decision',
       };
     },
   },
@@ -98,7 +98,7 @@ export const defaultWorkflowRules: WorkflowRule[] = [
         boost: 0.25,
         forceSuggest: true,
         preferredType: 'architecture_decision',
-        reason: 'Database schema / migration changed — always suggest memory',
+        reason: 'Database schema / migration changed - always suggest memory',
       };
     },
   },

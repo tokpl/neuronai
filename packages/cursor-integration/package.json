@@ -1,7 +1,7 @@
 {
-  "name": "@neuron-ai-memory/cursor-integration",
+  "name": "@neuronai/cursor-integration",
   "version": "0.1.0",
-  "description": "Cursor DX — MCP wiring, rules/skills templates, context budget, project brain files",
+  "description": "Cursor DX - MCP wiring, rules/skills templates, context budget, project brain files",
   "license": "Apache-2.0",
   "type": "module",
   "exports": {

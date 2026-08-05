@@ -1,4 +1,4 @@
-import { IntegrationError } from '@neuron-ai-memory/types';
+import { IntegrationError } from '@neuronai/types';
 
 export interface AuthContext {
   authenticated: boolean;

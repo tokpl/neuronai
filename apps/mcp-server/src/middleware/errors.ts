@@ -1,4 +1,4 @@
-import { NeuronError } from '@neuron-ai-memory/types';
+import { NeuronError } from '@neuronai/types';
 
 export interface McpErrorBody {
   ok: false;

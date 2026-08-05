@@ -1,6 +1,6 @@
 /**
  * Link architecture transitions into knowledge-graph friendly records.
- * Does not host git — only evolution edges for the project brain.
+ * Does not host git - only evolution edges for the project brain.
  */
 
 export interface EvolutionTransitionInput {

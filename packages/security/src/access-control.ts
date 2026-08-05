@@ -1,6 +1,6 @@
 /**
  * Access control architecture (local + future cloud).
- * Full SaaS auth is NOT implemented — this is the extension surface.
+ * Full SaaS auth is NOT implemented - this is the extension surface.
  */
 
 export type NeuronRole = 'LOCAL_USER' | 'TEAM_MEMBER' | 'ADMIN' | 'SERVICE_ACCOUNT';
@@ -72,7 +72,7 @@ export class AccessControlLayer {
   }
 }
 
-/** Default local principal — full control of the workstation project. */
+/** Default local principal - full control of the workstation project. */
 export function createLocalUserPrincipal(id = 'local'): AccessPrincipal {
   return { id, role: 'LOCAL_USER' };
 }

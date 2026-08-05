@@ -9,10 +9,8 @@ neuron.config.json
 .DS_Store
 *.log
 .idea/
-.vscode/*
-!.vscode/extensions.json
 
-# Neuron — version knowledge, ignore ephemeral state
+# neuronai - version knowledge, ignore ephemeral state
 .neuron/cache/
 .neuron/runtime/
 .neuron/indexes/
@@ -22,7 +20,7 @@ neuron.config.json
 .neuron/backup/
 .neuron/integrations/
 
-# Local Graft tooling (keep out of the public tree)
+# Local Graft tooling
 graft/
 .ignore
 .cursor/rules/graft.mdc

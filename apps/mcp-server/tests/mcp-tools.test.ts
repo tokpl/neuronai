@@ -112,7 +112,7 @@ describe('mcp tool handlers', () => {
 
     const after = await handleAfterTask(runtime, {
       task: 'Replace Redis cache with local cache',
-      commitMessage: 'refactor: replace Redis cache with local cache — architecture rewrite',
+      commitMessage: 'refactor: replace Redis cache with local cache - architecture rewrite',
       files: ['src/cache/redis.ts', 'src/cache/local.ts', 'package.json'],
     });
     expect(after.isError).toBeFalsy();

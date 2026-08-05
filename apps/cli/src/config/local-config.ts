@@ -33,7 +33,7 @@ export const neuronLocalConfigSchema = z.object({
       mode: z.enum(['manual', 'suggest', 'automatic']).default('suggest'),
       /** Never leave the machine */
       localOnly: z.boolean().default(true),
-      /** Anonymous metrics — OFF by default; never collects source code */
+      /** Anonymous metrics - OFF by default; never collects source code */
       telemetry: z.boolean().default(false),
     })
     .default({ mode: 'suggest', localOnly: true, telemetry: false }),
@@ -53,8 +53,6 @@ export const neuronLocalConfigSchema = z.object({
     .default({ local: { enabled: true } }),
   integrations: z.object({
     cursor: z.boolean().default(true),
-    claudeCode: z.boolean().default(false),
-    vscode: z.boolean().default(false),
   }),
   server: z
     .object({

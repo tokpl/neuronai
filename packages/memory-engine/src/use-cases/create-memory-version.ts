@@ -4,7 +4,7 @@ import {
   NotFoundError,
   type MemoryVersionRecord,
   type MemorySource as MemorySourceValue,
-} from '@neuron-ai-memory/types';
+} from '@neuronai/types';
 
 import { MemoryVersion } from '../domain/entities/index.js';
 import type { EventPublisher } from '../domain/events/index.js';

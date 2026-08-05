@@ -3,9 +3,9 @@
 ## Getting help
 
 1. [docs/getting-started.md](./docs/getting-started.md) and [docs/faq.md](./docs/faq.md)
-2. [docs/cursor-troubleshooting.md](./docs/cursor-troubleshooting.md) — `neuron cursor doctor`
-3. GitHub **Discussions** (Q&A) — enable on the repository
-4. GitHub Issues — bugs and features (use the forms)
+2. [docs/cursor-troubleshooting.md](./docs/cursor-troubleshooting.md) - `neuron cursor doctor`
+3. GitHub **Discussions** (Q&A) - enable on the repository
+4. GitHub Issues - bugs and features (use the forms)
 
 ## Discord
 
@@ -15,7 +15,7 @@ Until then: use GitHub Discussions.
 
 ## Security issues
 
-See [SECURITY.md](./SECURITY.md) — do not file public issues for vulnerabilities.
+See [SECURITY.md](./SECURITY.md) - do not file public issues for vulnerabilities.
 
 ## Commercial / consulting
 

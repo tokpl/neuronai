@@ -1,5 +1,5 @@
 {
-  "name": "@neuron-ai-memory/ai-memory",
+  "name": "@neuronai/ai-memory",
   "version": "0.0.0",
   "description": "AI intelligence layer: extract, classify, score, conflict, search for Neuron memories",
   "license": "Apache-2.0",
@@ -22,10 +22,10 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "@neuron-ai-memory/ai-provider": "workspace:*",
-    "@neuron-ai-memory/embeddings": "workspace:*",
-    "@neuron-ai-memory/memory-engine": "workspace:*",
-    "@neuron-ai-memory/types": "workspace:*"
+    "@neuronai/ai-provider": "workspace:*",
+    "@neuronai/embeddings": "workspace:*",
+    "@neuronai/memory-engine": "workspace:*",
+    "@neuronai/types": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.8.2",

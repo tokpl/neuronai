@@ -4,7 +4,7 @@ import {
   NotFoundError,
   type MemoryRelationRecord,
   type RelationType as RelationTypeValue,
-} from '@neuron-ai-memory/types';
+} from '@neuronai/types';
 
 import { MemoryRelation } from '../domain/entities/index.js';
 import type { EventPublisher } from '../domain/events/index.js';

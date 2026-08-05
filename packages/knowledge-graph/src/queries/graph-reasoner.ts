@@ -20,7 +20,7 @@ export interface ImpactMap {
 }
 
 /**
- * GraphReasoner — multi-hop “what affects X?” style reasoning over the project brain.
+ * GraphReasoner - multi-hop “what affects X?” style reasoning over the project brain.
  */
 export class GraphReasoner {
   private readonly search;

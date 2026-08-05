@@ -54,4 +54,4 @@ export {
   type ProjectResolver,
   type StackDetection,
   type ProjectSignals,
-} from '@neuron-ai-memory/project-analyzer';
+} from '@neuronai/project-analyzer';

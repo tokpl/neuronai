@@ -23,7 +23,7 @@ export function cosineSimilarity(a: number[], b: number[]): number {
   return denom === 0 ? 0 : dot / denom;
 }
 
-/** Deterministic local embedder (no network) — good for tests and hybrid search demos. */
+/** Deterministic local embedder (no network) - good for tests and hybrid search demos. */
 export class HashEmbeddingProvider implements EmbeddingProvider {
   readonly model: string;
   readonly dimensions: number;

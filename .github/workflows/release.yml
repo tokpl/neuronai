@@ -37,6 +37,6 @@ jobs:
   #         registry-url: https://registry.npmjs.org
   #     - run: pnpm install --frozen-lockfile
   #     - run: pnpm build
-  #     - run: pnpm --filter @neuron-ai-memory/cli publish --access public --no-git-checks
+  #     - run: pnpm --filter @neuronai/cli publish --access public --no-git-checks
   #       env:
   #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

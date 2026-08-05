@@ -57,7 +57,7 @@ export interface ExplainLastResult {
 }
 
 /**
- * Internal Neuron observability facade (local JSON traces — no cloud).
+ * Internal Neuron observability facade (local JSON traces - no cloud).
  */
 export class ObservabilityEngine {
   readonly store: TraceStore;
@@ -246,7 +246,7 @@ export class ObservabilityEngine {
         ? e.memoryUsage.memories
             .map(
               (m) =>
-                `${m.title} @ ${Math.round(m.confidence * 100)}% — ${m.reason}`,
+                `${m.title} @ ${Math.round(m.confidence * 100)}% - ${m.reason}`,
             )
             .join('\n')
         : '(none)',

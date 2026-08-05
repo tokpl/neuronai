@@ -2,7 +2,7 @@ import type { GraphEdge } from '../domain/entities/graph-edge.js';
 import type { GraphNode } from '../domain/entities/graph-node.js';
 
 /**
- * Visualization-ready JSON (dashboard / VS Code / web later — no UI in this milestone).
+ * Visualization-ready JSON (dashboard / VS Code / web later - no UI in this milestone).
  */
 export interface GraphJsonExport {
   version: 1;

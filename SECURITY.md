@@ -28,13 +28,13 @@ Include steps to reproduce, impact assessment, and any suggested fix.
 | Local (default) | `LOCAL_USER` / trusted host | None (unless you call an AI provider you configured) |
 | Cloud-ready (future) | API key + roles (`TEAM_MEMBER`, `ADMIN`, `SERVICE_ACCOUNT`) | Only with explicit consent / hosting contract |
 
-ACL roles are architected in `@neuron-ai-memory/security`; full SaaS is out of scope for OSS core.
+ACL roles are architected in `@neuronai/security`; full SaaS is out of scope for OSS core.
 
 ## Secrets
 
 - Never commit `.env` or live keys
 - Use `.env.example` as a template
-- Log via `redactSecrets` / structured logger — never print API keys or `DATABASE_URL` passwords
+- Log via `redactSecrets` / structured logger - never print API keys or `DATABASE_URL` passwords
 - Optional provider keys (`OPENAI_API_KEY`, etc.) stay in the environment
 
 ## Privacy & telemetry

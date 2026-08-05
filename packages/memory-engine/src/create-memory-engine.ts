@@ -2,7 +2,7 @@ import type {
   MemoryRecord,
   MemoryRelationRecord,
   MemoryVersionRecord,
-} from '@neuron-ai-memory/types';
+} from '@neuronai/types';
 
 import {
   DefaultImportanceCalculator,

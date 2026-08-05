@@ -1,11 +1,11 @@
-import type { MemoryRecord, MemoryType } from '@neuron-ai-memory/types';
-import type { MemoryRepository } from '@neuron-ai-memory/memory-engine';
+import type { MemoryRecord, MemoryType } from '@neuronai/types';
+import type { MemoryRepository } from '@neuronai/memory-engine';
 import {
   cosineSimilarity,
   contentHash,
   type EmbeddingProvider,
   type EmbeddingStore,
-} from '@neuron-ai-memory/embeddings';
+} from '@neuronai/embeddings';
 
 export interface MemorySearchQuery {
   projectId: string;

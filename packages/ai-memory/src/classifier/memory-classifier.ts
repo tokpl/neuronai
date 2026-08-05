@@ -1,9 +1,9 @@
-import type { MemoryType } from '@neuron-ai-memory/types';
+import type { MemoryType } from '@neuronai/types';
 import {
   heuristicClassify,
   type HeuristicLabel,
   type AIProvider,
-} from '@neuron-ai-memory/ai-provider';
+} from '@neuronai/ai-provider';
 
 export type ClassifierLabel =
   | 'ARCHITECTURE_DECISION'

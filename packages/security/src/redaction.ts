@@ -18,6 +18,6 @@ export function redactSecrets(input: string): string {
 
 export function assertNoHardcodedSecret(value: string, label: string): void {
   if (/^(sk-|ghp_|xox[baprs]-)/.test(value) || value.includes('password=')) {
-    throw new Error(`${label} looks like a live secret — refuse to embed in source/config samples`);
+    throw new Error(`${label} looks like a live secret - refuse to embed in source/config samples`);
   }
 }

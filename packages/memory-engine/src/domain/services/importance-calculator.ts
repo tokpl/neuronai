@@ -1,7 +1,7 @@
 import type {
   MemoryType as MemoryTypeValue,
   MemorySource as MemorySourceValue,
-} from '@neuron-ai-memory/types';
+} from '@neuronai/types';
 
 export interface ImportanceCalculatorInput {
   type: MemoryTypeValue;

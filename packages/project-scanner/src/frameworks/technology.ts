@@ -1,7 +1,7 @@
 import { access, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { detectProjectStack } from '@neuron-ai-memory/project-analyzer';
+import { detectProjectStack } from '@neuronai/project-analyzer';
 
 import type { ProjectStackProfile } from '../types.js';
 

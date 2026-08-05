@@ -1,4 +1,4 @@
-# @neuron-ai-memory/mcp-server
+# @neuronai/mcp-server
 
 Official MCP server for Neuron AI Memory.
 

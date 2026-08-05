@@ -44,49 +44,49 @@ importers:
 
   apps/cli:
     dependencies:
-      '@neuron-ai-memory/agent-workflow':
+      '@neuronai/agent-workflow':
         specifier: workspace:*
         version: link:../../packages/agent-workflow
-      '@neuron-ai-memory/ai-memory':
+      '@neuronai/ai-memory':
         specifier: workspace:*
         version: link:../../packages/ai-memory
-      '@neuron-ai-memory/ai-provider':
+      '@neuronai/ai-provider':
         specifier: workspace:*
         version: link:../../packages/ai-provider
-      '@neuron-ai-memory/config':
+      '@neuronai/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@neuron-ai-memory/cursor-integration':
+      '@neuronai/cursor-integration':
         specifier: workspace:*
         version: link:../../packages/cursor-integration
-      '@neuron-ai-memory/embeddings':
+      '@neuronai/embeddings':
         specifier: workspace:*
         version: link:../../packages/embeddings
-      '@neuron-ai-memory/mcp-server':
+      '@neuronai/mcp-server':
         specifier: workspace:*
         version: link:../mcp-server
-      '@neuron-ai-memory/memory-engine':
+      '@neuronai/memory-engine':
         specifier: workspace:*
         version: link:../../packages/memory-engine
-      '@neuron-ai-memory/observability':
+      '@neuronai/observability':
         specifier: workspace:*
         version: link:../../packages/observability
-      '@neuron-ai-memory/project-analyzer':
+      '@neuronai/project-analyzer':
         specifier: workspace:*
         version: link:../../packages/project-analyzer
-      '@neuron-ai-memory/project-scanner':
+      '@neuronai/project-scanner':
         specifier: workspace:*
         version: link:../../packages/project-scanner
-      '@neuron-ai-memory/retrieval-engine':
+      '@neuronai/retrieval-engine':
         specifier: workspace:*
         version: link:../../packages/retrieval-engine
-      '@neuron-ai-memory/security':
+      '@neuronai/security':
         specifier: workspace:*
         version: link:../../packages/security
-      '@neuron-ai-memory/storage':
+      '@neuronai/storage':
         specifier: workspace:*
         version: link:../../packages/storage
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../../packages/types
       cac:
@@ -111,49 +111,49 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.8.0
         version: 1.30.0(zod@3.25.76)
-      '@neuron-ai-memory/agent-intelligence':
+      '@neuronai/agent-intelligence':
         specifier: workspace:*
         version: link:../../packages/agent-intelligence
-      '@neuron-ai-memory/agent-workflow':
+      '@neuronai/agent-workflow':
         specifier: workspace:*
         version: link:../../packages/agent-workflow
-      '@neuron-ai-memory/ai-memory':
+      '@neuronai/ai-memory':
         specifier: workspace:*
         version: link:../../packages/ai-memory
-      '@neuron-ai-memory/ai-provider':
+      '@neuronai/ai-provider':
         specifier: workspace:*
         version: link:../../packages/ai-provider
-      '@neuron-ai-memory/config':
+      '@neuronai/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@neuron-ai-memory/cursor-integration':
+      '@neuronai/cursor-integration':
         specifier: workspace:*
         version: link:../../packages/cursor-integration
-      '@neuron-ai-memory/embeddings':
+      '@neuronai/embeddings':
         specifier: workspace:*
         version: link:../../packages/embeddings
-      '@neuron-ai-memory/knowledge-graph':
+      '@neuronai/knowledge-graph':
         specifier: workspace:*
         version: link:../../packages/knowledge-graph
-      '@neuron-ai-memory/memory-engine':
+      '@neuronai/memory-engine':
         specifier: workspace:*
         version: link:../../packages/memory-engine
-      '@neuron-ai-memory/observability':
+      '@neuronai/observability':
         specifier: workspace:*
         version: link:../../packages/observability
-      '@neuron-ai-memory/project-analyzer':
+      '@neuronai/project-analyzer':
         specifier: workspace:*
         version: link:../../packages/project-analyzer
-      '@neuron-ai-memory/project-scanner':
+      '@neuronai/project-scanner':
         specifier: workspace:*
         version: link:../../packages/project-scanner
-      '@neuron-ai-memory/retrieval-engine':
+      '@neuronai/retrieval-engine':
         specifier: workspace:*
         version: link:../../packages/retrieval-engine
-      '@neuron-ai-memory/storage':
+      '@neuronai/storage':
         specifier: workspace:*
         version: link:../../packages/storage
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../../packages/types
       zod:
@@ -172,16 +172,16 @@ importers:
 
   packages/agent-intelligence:
     dependencies:
-      '@neuron-ai-memory/ai-memory':
+      '@neuronai/ai-memory':
         specifier: workspace:*
         version: link:../ai-memory
-      '@neuron-ai-memory/knowledge-graph':
+      '@neuronai/knowledge-graph':
         specifier: workspace:*
         version: link:../knowledge-graph
-      '@neuron-ai-memory/memory-engine':
+      '@neuronai/memory-engine':
         specifier: workspace:*
         version: link:../memory-engine
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -194,13 +194,13 @@ importers:
 
   packages/agent-workflow:
     dependencies:
-      '@neuron-ai-memory/ai-memory':
+      '@neuronai/ai-memory':
         specifier: workspace:*
         version: link:../ai-memory
-      '@neuron-ai-memory/memory-engine':
+      '@neuronai/memory-engine':
         specifier: workspace:*
         version: link:../memory-engine
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -213,16 +213,16 @@ importers:
 
   packages/ai-memory:
     dependencies:
-      '@neuron-ai-memory/ai-provider':
+      '@neuronai/ai-provider':
         specifier: workspace:*
         version: link:../ai-provider
-      '@neuron-ai-memory/embeddings':
+      '@neuronai/embeddings':
         specifier: workspace:*
         version: link:../embeddings
-      '@neuron-ai-memory/memory-engine':
+      '@neuronai/memory-engine':
         specifier: workspace:*
         version: link:../memory-engine
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -235,7 +235,7 @@ importers:
 
   packages/ai-provider:
     dependencies:
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -248,7 +248,7 @@ importers:
 
   packages/config:
     dependencies:
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
       zod:
@@ -277,7 +277,7 @@ importers:
 
   packages/embeddings:
     dependencies:
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -290,10 +290,10 @@ importers:
 
   packages/knowledge-graph:
     dependencies:
-      '@neuron-ai-memory/project-analyzer':
+      '@neuronai/project-analyzer':
         specifier: workspace:*
         version: link:../project-analyzer
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -306,7 +306,7 @@ importers:
 
   packages/memory-engine:
     dependencies:
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -319,7 +319,7 @@ importers:
 
   packages/observability:
     dependencies:
-      '@neuron-ai-memory/security':
+      '@neuronai/security':
         specifier: workspace:*
         version: link:../security
       pino:
@@ -335,7 +335,7 @@ importers:
 
   packages/project-analyzer:
     dependencies:
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -348,10 +348,10 @@ importers:
 
   packages/project-scanner:
     dependencies:
-      '@neuron-ai-memory/project-analyzer':
+      '@neuronai/project-analyzer':
         specifier: workspace:*
         version: link:../project-analyzer
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -364,7 +364,7 @@ importers:
 
   packages/retrieval-engine:
     dependencies:
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -377,7 +377,7 @@ importers:
 
   packages/security:
     dependencies:
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -390,10 +390,10 @@ importers:
 
   packages/storage:
     dependencies:
-      '@neuron-ai-memory/memory-engine':
+      '@neuronai/memory-engine':
         specifier: workspace:*
         version: link:../memory-engine
-      '@neuron-ai-memory/types':
+      '@neuronai/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:

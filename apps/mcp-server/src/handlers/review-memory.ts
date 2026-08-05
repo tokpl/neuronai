@@ -1,5 +1,5 @@
-import { MemoryClassifier, ImportanceEngine } from '@neuron-ai-memory/ai-memory';
-import { MockAIProvider } from '@neuron-ai-memory/ai-provider';
+import { MemoryClassifier, ImportanceEngine } from '@neuronai/ai-memory';
+import { MockAIProvider } from '@neuronai/ai-provider';
 
 import type { NeuronRuntime } from '../config/runtime.js';
 import { failResult, okResult } from '../middleware/errors.js';
@@ -19,7 +19,7 @@ export async function handleReviewMemory(
     if (!classification.memoryType) {
       return okResult({
         shouldSave: false,
-        reason: 'Classified as IGNORE — ephemeral or low-signal content',
+        reason: 'Classified as IGNORE - ephemeral or low-signal content',
         suggestedType: null,
         importance: 0.1,
       });

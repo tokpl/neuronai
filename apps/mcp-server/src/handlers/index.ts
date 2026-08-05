@@ -1,4 +1,4 @@
-/** MVP handlers only — local project memory for Cursor. */
+/** MVP handlers only - local project memory for Cursor. */
 export { handleGetContext, resolveProjectId } from './get-context.js';
 export { handleSearchMemory } from './search-memory.js';
 export { handleSaveDecision } from './save-decision.js';

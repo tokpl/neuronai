@@ -1,4 +1,4 @@
-import { ValidationError } from '@neuron-ai-memory/types';
+import { ValidationError } from '@neuronai/types';
 
 import type { MemoryRepository } from '../repositories/memory-repository.js';
 import { MemoryType } from '../value-objects/memory-type.js';

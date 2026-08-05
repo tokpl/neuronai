@@ -1,5 +1,5 @@
-import { ValidationError } from '@neuron-ai-memory/types';
-import type { MemorySource as MemorySourceValue } from '@neuron-ai-memory/types';
+import { ValidationError } from '@neuronai/types';
+import type { MemorySource as MemorySourceValue } from '@neuronai/types';
 
 const VALUES = [
   'agent',

@@ -1,5 +1,5 @@
-import type { ProjectIntelligenceEngine } from '@neuron-ai-memory/knowledge-graph';
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { ProjectIntelligenceEngine } from '@neuronai/knowledge-graph';
+import type { MemoryRecord } from '@neuronai/types';
 
 import { TaskAnalyzer } from '../context/task-analyzer.js';
 

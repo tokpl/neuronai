@@ -1,4 +1,4 @@
-# @neuron-ai-memory/ai-provider
+# @neuronai/ai-provider
 
 LLM / multimodal AI abstraction for Neuron.
 

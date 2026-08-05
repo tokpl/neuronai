@@ -1,23 +1,23 @@
-# @neuron-ai-memory/memory-engine
+# @neuronai/memory-engine
 
 Domain-driven Memory Core for Neuron AI Memory.
 
 ## Layout
 
-- `domain/entities` — Memory, MemoryVersion, MemoryRelation
-- `domain/value-objects` — typed scores, status, source, type
-- `domain/services` — ImportanceCalculator, MemoryValidator
-- `domain/repositories` — persistence ports (interfaces only)
-- `domain/events` — domain event types + in-memory publisher
-- `use-cases` — application services
-- `infrastructure/in-memory` — test/local adapters
+- `domain/entities` - Memory, MemoryVersion, MemoryRelation
+- `domain/value-objects` - typed scores, status, source, type
+- `domain/services` - ImportanceCalculator, MemoryValidator
+- `domain/repositories` - persistence ports (interfaces only)
+- `domain/events` - domain event types + in-memory publisher
+- `use-cases` - application services
+- `infrastructure/in-memory` - test/local adapters
 
-Postgres adapters live in `@neuron-ai-memory/storage`.
+Postgres adapters live in `@neuronai/storage`.
 
 ## Quick usage
 
 ```ts
-import { createInMemoryMemoryEngine } from '@neuron-ai-memory/memory-engine';
+import { createInMemoryMemoryEngine } from '@neuronai/memory-engine';
 
 const engine = createInMemoryMemoryEngine();
 const memory = await engine.createMemory({

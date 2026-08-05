@@ -1,5 +1,5 @@
 {
-  "name": "@neuron-ai-memory/memory-engine",
+  "name": "@neuronai/memory-engine",
   "version": "0.0.0",
   "description": "Domain-driven memory lifecycle engine for Neuron AI Memory",
   "license": "Apache-2.0",
@@ -22,7 +22,7 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "@neuron-ai-memory/types": "workspace:*"
+    "@neuronai/types": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.8.2",

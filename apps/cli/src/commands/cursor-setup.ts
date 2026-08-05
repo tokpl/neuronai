@@ -13,7 +13,7 @@ export async function runCursorSetup(
 ): Promise<void> {
   ui.title('Neuron cursor setup');
   ui.blank();
-  ui.info('Local-first Cursor integration — no cloud account.');
+  ui.info('Local-first Cursor integration - no cloud account.');
   ui.blank();
 
   const progress = new ProgressUI(3);
@@ -36,7 +36,7 @@ export async function runCursorSetup(
   if (neuronRule) {
     progress.ok('Cursor rules present');
   } else {
-    progress.warn('Neuron rule file not found — try --force');
+    progress.warn('Neuron rule file not found - try --force');
   }
   progress.done();
 
@@ -46,9 +46,14 @@ export async function runCursorSetup(
     ui.warn(w);
   }
   if (!result.cursorDetected) {
-    ui.warn('.cursor folder was created — open this project in Cursor to activate MCP.');
+    ui.warn('.cursor folder was created - open this project in Cursor to activate MCP.');
   }
   ui.blank();
-  ui.suggest('Reload Cursor window / MCP, then run: neuron cursor doctor');
-  ui.suggest('Ask Cursor: Analyze this project using Neuron');
+  ui.info('Enable MCP in Cursor (required):');
+  ui.suggest('1. Cursor Settings → Tools & MCP');
+  ui.suggest('2. Find server "neuron" → Enable');
+  ui.suggest('3. Status should turn green (not Error)');
+  ui.blank();
+  ui.suggest('Then run: neuron cursor doctor');
+  ui.suggest('Ask Cursor: Prepare adding X using neuronai');
 }

@@ -10,7 +10,7 @@ When the user asks **should I**, **which option**, **recommend**, or **why**:
 
 1. Call `neuron_decision_context` or `neuron_reason` with the question
 2. For A vs B, call `neuron_compare_options`
-3. Surface recommendation **with evidence and explanation** — never hide the why
+3. Surface recommendation **with evidence and explanation** - never hide the why
 4. Optionally call `neuron_explain_decision` for the DecisionTrace
 
 Do **not** autonomously change code or claim a decision was applied. Neuron advises only.

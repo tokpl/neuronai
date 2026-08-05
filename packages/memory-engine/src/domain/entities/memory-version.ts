@@ -1,5 +1,5 @@
-import type { MemoryVersionRecord } from '@neuron-ai-memory/types';
-import { ValidationError } from '@neuron-ai-memory/types';
+import type { MemoryVersionRecord } from '@neuronai/types';
+import { ValidationError } from '@neuronai/types';
 
 import { MemorySource } from '../value-objects/index.js';
 

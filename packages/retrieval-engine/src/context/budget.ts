@@ -13,13 +13,13 @@ const PLANS: Record<BudgetComplexity, Omit<ContextBudgetPlan, 'complexity'>> = {
     maxTokens: 1_500,
     maxItems: 5,
     snippetChars: 160,
-    description: 'Small fix — minimal context',
+    description: 'Small fix - minimal context',
   },
   standard: {
     maxTokens: 5_000,
     maxItems: 10,
     snippetChars: 220,
-    description: 'Feature — balanced context',
+    description: 'Feature - balanced context',
   },
   large: {
     maxTokens: 8_000,
@@ -31,7 +31,7 @@ const PLANS: Record<BudgetComplexity, Omit<ContextBudgetPlan, 'complexity'>> = {
     maxTokens: 15_000,
     maxItems: 24,
     snippetChars: 320,
-    description: 'Architecture review — full graph-oriented context',
+    description: 'Architecture review - full graph-oriented context',
   },
 };
 

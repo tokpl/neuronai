@@ -1,5 +1,5 @@
 ---
-description: Architecture Review mode — call Neuron before/after significant refactors
+description: Architecture Review mode - call Neuron before/after significant refactors
 globs:
 alwaysApply: false
 ---

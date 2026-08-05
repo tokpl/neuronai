@@ -16,7 +16,7 @@ export async function runCursorInit(
   if (!(await isNeuronInitialized(cwd)) || options.force) {
     await runInit(cwd, { force: options.force, skipAnalyze: options.skipAnalyze });
   } else {
-    ui.success('Neuron already initialized — refreshing Cursor wiring…');
+    ui.success('Neuron already initialized - refreshing Cursor wiring…');
     const cursor = await setupCursorIntegration(cwd, { force: true });
     await syncProjectBrainFiles(cwd);
     const config = await loadLocalConfig(cwd);

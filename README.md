@@ -1,169 +1,214 @@
-# Neuron
+<p align="center">
+  <img src="./docs/assets/logo.png" alt="neuronai" width="96" />
+</p>
 
-**Local-first AI memory for Cursor.**
+<h1 align="center">neuronai</h1>
 
-Neuron makes Cursor understand your project.
+<p align="center"><b>Local-first AI memory for Cursor.</b></p>
 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
-[![Node](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)](https://nodejs.org)
-[![Local-first](https://img.shields.io/badge/storage-filesystem-informational.svg)](./docs/neuron-folder.md)
-[![MCP](https://img.shields.io/badge/MCP-12%20tools-purple.svg)](./docs/mcp.md)
+<p align="center">neuronai makes Cursor understand your project.</p>
 
-![Neuron banner](./docs/assets/banner.svg)
+<p align="center">
+  <a href="https://github.com/tokpl/neuronai"><img alt="GitHub" src="https://img.shields.io/badge/github-tokpl%2Fneuronai-black?logo=github" /></a>
+  <a href="./LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-blue" /></a>
+  <a href="https://nodejs.org"><img alt="Node" src="https://img.shields.io/badge/node-%3E%3D22-brightgreen" /></a>
+  <img alt="Local-first" src="https://img.shields.io/badge/local--first-no%20cloud-informational" />
+  <img alt="MCP" src="https://img.shields.io/badge/MCP-12%20tools-purple" />
+</p>
+
+<p align="center">
+  <a href="#installation"><b>Install</b></a> ·
+  <a href="#quick-start"><b>Quick Start</b></a> ·
+  <a href="#faq"><b>FAQ</b></a>
+</p>
+
+![banner](./docs/assets/banner.png)
 
 ---
 
-## Why Neuron?
+## Problem
 
-AI coding agents forget everything between chats.
+Cursor starts almost every chat from zero.
 
-They forget why you chose Postgres. Which module owns payments. That you already banned DB access from controllers.
+It forgets:
 
-Repo RAG finds *code*. Neuron remembers *engineering judgment*.
+- why you chose Postgres over Mongo
+- which module owns payments
+- that controllers must not open the database
+- the footgun that burned last sprint
 
-![Before vs after](./docs/assets/before-vs-after.svg)
+A bigger context window does not fix this. Repo RAG finds *code*. It does not remember *engineering judgment*.
 
-| Without Neuron | With Neuron |
-|----------------|-------------|
-| Cursor guesses your architecture | Cursor loads decisions from `.neuron/` |
-| You re-explain the same rules every session | Team shares knowledge via `git pull` |
-| Generic answers | Project-aware answers |
+---
+
+## Solution
+
+neuronai is a **local project brain** for Cursor.
+
+1. Scans your repo into `.neuron/`
+2. Stores decisions, patterns, and warnings on disk
+3. Exposes them to Cursor through a small MCP tool set
+4. Shares with the team via Git (`git pull`)
+
+No Docker. No Postgres. No API keys. No cloud account. Telemetry off by default.
+
+![architecture](./docs/assets/architecture.png)
+
+---
+
+## Before vs After
+
+> Add a refund flow
+
+| Cursor alone | Cursor + neuronai |
+|--------------|-------------------|
+| Invents a new DB client in a route handler | Loads your payment / outbox decisions |
+| Skips domain layer | Respects existing module boundaries |
+| Misses past mistakes | Surfaces known warnings first |
+
+![before vs after](./docs/assets/before-after.svg)
 
 ---
 
 ## Demo
 
-![Terminal demo](./docs/assets/demo.svg)
+![terminal](./docs/assets/terminal-demo.svg)
 
 ```bash
-npm install -g neuron
-cd my-app
-neuron init
-# Open in Cursor → ask anything about the project
+npx neuronai init
+# or: npm install -g neuronai && neuron init
 ```
 
-![Cursor workflow](./docs/assets/cursor-workflow.svg)
+Open the project in Cursor, then **enable MCP** (servers stay off until you do):
+
+1. **Cursor Settings → Tools & MCP**
+2. Find **neuron** → **Enable**
+3. Wait for a green status (not Error)
+
+Then ask:
+
+> Prepare adding a refund flow using neuronai
+
+![cursor workflow](./docs/assets/cursor-workflow.png)
+
+---
+
+## Features
+
+1. **One-command init** - wires `.neuron/` + Cursor MCP
+2. **Project scan** - bootstrap brain from the codebase
+3. **Local file storage** - readable JSON under `.neuron/`
+4. **12 MCP tools** - prepare, search, save, review, scan
+5. **Budgeted context** - top facts for *this* task
+6. **Git Team Brain** - commit brain JSON; teammates get it on pull
+7. **Zero secrets required** - no API key for neuronai itself
+8. **Privacy default** - local-only, telemetry OFF
+9. **Cursor-first DX** - rules, skills, MCP in `.cursor/`
+
+---
+
+## Installation
+
+```bash
+npm install -g neuronai
+```
+
+Or:
+
+```bash
+npx neuronai init
+```
+
+After global install you can use either:
+
+```bash
+neuronai init
+neuron init
+```
 
 ---
 
 ## Quick Start
 
-**Requirements:** Node.js 22+, [Cursor](https://cursor.com)
-
 ```bash
-npm install -g neuron
+npm install -g neuronai
 cd your-project
 neuron init
 ```
 
-That’s it.
+1. Creates `.neuron/`
+2. Scans the project
+3. Wires Cursor MCP
 
-1. Creates `.neuron/` (local project brain)
-2. Wires Cursor MCP (`.cursor/mcp.json`)
-3. Scans the codebase for first memories
+Enable MCP in Cursor: **Settings → Tools & MCP → neuron → Enable**.
 
-No Docker. No Postgres. No OpenAI API key.
+Then ask Cursor:
 
-Reload Cursor MCP, then ask:
-
-> Prepare adding a payments module using Neuron
+> Prepare adding rate limiting using neuronai
 
 ---
 
-## How it works
+## Folder Structure
 
-![Architecture](./docs/assets/architecture.svg)
-
-```text
-Cursor  →  Neuron MCP (12 tools)  →  FileStorageProvider  →  .neuron/
-```
-
-![Retrieval flow](./docs/assets/retrieval-flow.svg)
-
-Neuron **delivers knowledge**. Cursor’s model **writes the answer**.
-
----
-
-## The `.neuron/` folder
-
-![Folder structure](./docs/assets/folder-structure.svg)
+![folder](./docs/assets/folder-structure.png)
 
 ```text
 .neuron/
-  config.json      # project settings (git)
-  brain.json       # project summary (git)
-  knowledge.json   # patterns, warnings, facts (git)
-  decisions.json   # architecture decisions (git)
-  rules.json       # project rules (git)
-  graph.json       # knowledge graph (git)
-  cache/           # ignored
-  runtime/         # ignored
-  indexes/         # ignored
-  logs/            # ignored
+  config.json
+  brain.json
+  knowledge.json
+  decisions.json
+  rules.json
+  graph.json
+  cache/      # gitignored
+  runtime/    # gitignored
+  indexes/    # gitignored
+  logs/       # gitignored
 ```
 
-Team Brain for MVP = **Git**. `git pull` brings the project brain.
-
-![Scan flow](./docs/assets/scan-flow.svg)
-![Memory graph](./docs/assets/memory-graph.svg)
-![Knowledge graph](./docs/assets/knowledge-graph.svg)
+![scan flow](./docs/assets/scan-flow.png)
 
 ---
 
-## MCP tools (MVP)
+## How It Works
 
-Only **12** tools — enough for daily use, not a catalog of 100+:
+```text
+Project -> Scanner -> Memory (.neuron/) -> Knowledge Graph -> MCP -> Cursor
+```
 
-| Tool | Purpose |
-|------|---------|
-| `neuron_prepare_task` | Ranked context before coding |
-| `neuron_get_context` | Context on demand |
-| `neuron_search_memory` | Search knowledge |
-| `neuron_save_decision` | Save a decision |
-| `neuron_store_memory` | Store pattern / warning / fact |
-| `neuron_update_memory` | Versioned update |
-| `neuron_review_memory` | Suggest what to remember |
-| `neuron_after_task` | Save / Edit / Ignore prompt |
-| `neuron_scan_project` | Bootstrap brain from code |
-| `neuron_refresh_brain` | Refresh after changes |
-| `neuron_project_summary` | What is this project? |
-| `neuron_health` | Health check |
-
-Full reference: [docs/mcp.md](./docs/mcp.md)
+![retrieval](./docs/assets/retrieval-flow.png)
+![knowledge graph](./docs/assets/knowledge-graph.png)
 
 ---
 
-## What Neuron is not
+## FAQ
 
-- Not an AI agent / ChatGPT / Claude Code / Cursor replacement
-- Not an enterprise SaaS platform
-- Not a framework for everything
-- Does **not** require cloud sync, websockets, or CRDTs
+**Postgres / Docker / API key?** No.
 
-Neuron is the **best local memory for AI IDEs**.
+**Team share?** Commit `.neuron/*.json`. `git pull` is the Team Brain.
 
----
+**AI agent?** No - local memory for Cursor.
 
-## Documentation
+**VS Code?** No - Cursor-first.
 
-- [Getting started](./docs/getting-started.md)
-- [How it works](./docs/how-it-works.md)
-- [`.neuron/` folder](./docs/neuron-folder.md)
-- [MCP tools](./docs/mcp.md)
-- [FAQ](./docs/faq.md)
-- [Roadmap](./docs/roadmap.md)
-- [MVP scope](./docs/mvp.md)
+More: [`docs/faq.md`](./docs/faq.md)
 
 ---
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
+[`CONTRIBUTING.md`](./CONTRIBUTING.md) · [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md)
 
 ## Security
 
-See [SECURITY.md](./SECURITY.md).
+[`SECURITY.md`](./SECURITY.md)
 
 ## License
 
 [Apache-2.0](./LICENSE)
+
+---
+
+<p align="center">
+  <a href="https://github.com/tokpl/neuronai">github.com/tokpl/neuronai</a>
+</p>

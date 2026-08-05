@@ -1,4 +1,4 @@
-# @neuron-ai-memory/config
+# @neuronai/config
 
 Loads and validates Neuron configuration from:
 

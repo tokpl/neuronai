@@ -1,8 +1,0 @@
-{
-  "id": "shoplite-neuron-demo",
-  "name": "shoplite-neuron-demo",
-  "stack": ["javascript", "express", "postgresql", "frontend"],
-  "generatedAt": "2026-08-05T00:00:00.000Z",
-  "gitFriendly": true,
-  "notes": "Seeded for public demo — safe to commit."
-}

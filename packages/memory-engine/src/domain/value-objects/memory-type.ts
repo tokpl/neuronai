@@ -1,5 +1,5 @@
-import { ValidationError } from '@neuron-ai-memory/types';
-import type { MemoryType as MemoryTypeValue } from '@neuron-ai-memory/types';
+import { ValidationError } from '@neuronai/types';
+import type { MemoryType as MemoryTypeValue } from '@neuronai/types';
 
 const VALUES = [
   'architecture_decision',

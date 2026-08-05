@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { cac } from 'cac';
 
-import { NotImplementedError } from '@neuron-ai-memory/types';
+import { NotImplementedError } from '@neuronai/types';
 
 import { runCursorDoctor } from './commands/cursor-doctor.js';
 import { runCursorInit } from './commands/cursor-init.js';
@@ -17,7 +17,7 @@ import { CLI_VERSION } from './services/neuron-fs.js';
 import { ui } from './ui/output.js';
 
 export function createCli() {
-  const cli = cac('neuron');
+  const cli = cac('neuronai');
 
   cli.version(CLI_VERSION);
   cli.help();
@@ -90,7 +90,7 @@ export function createCli() {
   cli
     .command('mcp', 'Start the Neuron MCP server over stdio (for Cursor)')
     .action(async () => {
-      const { startMcpServer } = await import('@neuron-ai-memory/mcp-server');
+      const { startMcpServer } = await import('@neuronai/mcp-server');
       await startMcpServer(process.env['NEURON_CWD'] ?? process.cwd());
     });
 
@@ -119,7 +119,7 @@ async function main(): Promise<void> {
         'Neuron MCP cannot connect.',
         [
           'Cursor is closed or MCP was not reloaded',
-          'MCP config missing — expected .cursor/mcp.json with server "neuron"',
+          'MCP config missing - expected .cursor/mcp.json with server "neuron"',
           '`neuron` not on PATH for the Cursor process',
         ],
         ['neuron cursor doctor', 'neuron cursor setup --force'],

@@ -197,7 +197,7 @@ describe('cli commands', () => {
     const result = createConfigValidator().validate({
       project: { id: '', name: 'x' },
       memory: { autoSave: false, threshold: 0.5 },
-      integrations: { cursor: true, claudeCode: false, vscode: false },
+      integrations: { cursor: true },
     });
     expect(result.ok).toBe(false);
     expect(result.issues.length).toBeGreaterThan(0);

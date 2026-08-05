@@ -1,6 +1,6 @@
 import type { LanguageAnalysis, LanguageAnalyzer } from './language-analyzer.js';
 
-/** Stub — ready for PHP AST / tokenizer later. */
+/** Stub - ready for PHP AST / tokenizer later. */
 export class PHPAnalyzer implements LanguageAnalyzer {
   readonly language = 'php';
   readonly extensions = ['.php'];
@@ -22,7 +22,7 @@ export class PHPAnalyzer implements LanguageAnalyzer {
   }
 }
 
-/** Stub — Python import discovery basics. */
+/** Stub - Python import discovery basics. */
 export class PythonAnalyzer implements LanguageAnalyzer {
   readonly language = 'python';
   readonly extensions = ['.py'];
@@ -48,7 +48,7 @@ export class PythonAnalyzer implements LanguageAnalyzer {
   }
 }
 
-/** Stub — Java import basics. */
+/** Stub - Java import basics. */
 export class JavaAnalyzer implements LanguageAnalyzer {
   readonly language = 'java';
   readonly extensions = ['.java'];

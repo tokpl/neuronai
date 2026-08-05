@@ -1,4 +1,4 @@
-/** Internal Neuron observability — not a cloud analytics platform. */
+/** Internal Neuron observability - not a cloud analytics platform. */
 
 export type TraceRetentionMode = 'disable' | 'temporary' | 'persistent';
 

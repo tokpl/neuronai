@@ -1,7 +1,7 @@
 import { access, mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
 
 import type {
   NeuronBrain,
@@ -75,7 +75,7 @@ export function resolveNeuronPaths(projectRoot: string): NeuronStoragePaths {
 }
 
 /**
- * Local-first filesystem storage — the only MVP StorageProvider.
+ * Local-first filesystem storage - the only MVP StorageProvider.
  * Versioned knowledge lives at `.neuron/*.json`; cache/runtime/indexes/logs are ephemeral.
  */
 export class FileStorageProvider implements StorageProvider {
@@ -114,7 +114,7 @@ export class FileStorageProvider implements StorageProvider {
       await rename(legacyStore, p.store);
       notes.push('Moved data/store.json → runtime/store.json');
     } else if ((await exists(legacyStore)) && (await exists(p.store))) {
-      notes.push('Legacy data/store.json present; runtime/store.json already exists — left legacy in place');
+      notes.push('Legacy data/store.json present; runtime/store.json already exists - left legacy in place');
     }
 
     if ((await exists(legacyGraph)) && !(await exists(p.graph))) {
@@ -125,7 +125,7 @@ export class FileStorageProvider implements StorageProvider {
     // Import curated markdown brain into JSON if JSON still empty
     const decisions = await this.readDecisions(projectRoot);
     if (decisions.decisions.length === 0 && (await exists(join(p.neuronDir, 'decisions.md')))) {
-      notes.push('Legacy decisions.md detected — run neuron scan to refresh decisions.json');
+      notes.push('Legacy decisions.md detected - run neuron scan to refresh decisions.json');
     }
 
     // Seed brain.json from config if missing
@@ -230,7 +230,7 @@ export class FileStorageProvider implements StorageProvider {
       ready: await exists(p.neuronDir),
       projectRoot: p.projectRoot,
       neuronDir: p.neuronDir,
-      note: 'Local filesystem — no database or API key required',
+      note: 'Local filesystem - no database or API key required',
     };
   }
 }

@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import type { ScanCacheEntry, ScannedFile } from '../types.js';
 
 /**
- * Incremental scanning via mtime + content hash — avoid full rescan when possible.
+ * Incremental scanning via mtime + content hash - avoid full rescan when possible.
  */
 export class IncrementalScanner {
   async loadCache(neuronDir: string): Promise<ScanCacheEntry[]> {

@@ -1,5 +1,5 @@
 {
-  "name": "@neuron-ai-memory/agent-workflow",
+  "name": "@neuronai/agent-workflow",
   "version": "0.0.0",
   "description": "Automatic agent workflow: events, change analysis, memory suggestions, privacy modes",
   "license": "Apache-2.0",
@@ -22,9 +22,9 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "@neuron-ai-memory/ai-memory": "workspace:*",
-    "@neuron-ai-memory/memory-engine": "workspace:*",
-    "@neuron-ai-memory/types": "workspace:*"
+    "@neuronai/ai-memory": "workspace:*",
+    "@neuronai/memory-engine": "workspace:*",
+    "@neuronai/types": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.8.2",

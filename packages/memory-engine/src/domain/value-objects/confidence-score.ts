@@ -1,4 +1,4 @@
-import { ValidationError } from '@neuron-ai-memory/types';
+import { ValidationError } from '@neuronai/types';
 
 export class ConfidenceScore {
   private constructor(readonly value: number) {}

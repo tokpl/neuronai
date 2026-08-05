@@ -1,5 +1,5 @@
 /**
- * Context Budget Manager — caps how much Neuron context reaches Cursor.
+ * Context Budget Manager - caps how much Neuron context reaches Cursor.
  *
  * Never dump thousands of memories. Prefer a short, ranked briefing.
  */
@@ -41,7 +41,7 @@ const PROFILES: Record<CursorTaskSize, ContextBudgetProfile> = {
     maxTokens: 2_000,
     maxItems: 5,
     snippetChars: 180,
-    description: 'Small task — top 5 facts only',
+    description: 'Small task - top 5 facts only',
   },
   standard: {
     taskSize: 'standard',

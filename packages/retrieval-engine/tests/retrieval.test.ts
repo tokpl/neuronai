@@ -7,7 +7,7 @@ import {
   createConflictAwareFilter,
   createMemoryClusterer,
 } from '../src/index.js';
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
 
 function mem(partial: Partial<MemoryRecord> & Pick<MemoryRecord, 'id' | 'title' | 'content' | 'type'>): MemoryRecord {
   return {

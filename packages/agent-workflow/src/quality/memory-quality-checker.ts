@@ -1,5 +1,5 @@
-import { ConflictDetector, jaccardSimilarity } from '@neuron-ai-memory/ai-memory';
-import type { MemoryRecord, MemoryType } from '@neuron-ai-memory/types';
+import { ConflictDetector, jaccardSimilarity } from '@neuronai/ai-memory';
+import type { MemoryRecord, MemoryType } from '@neuronai/types';
 
 export interface QualityCheckInput {
   title: string;
@@ -17,7 +17,7 @@ export interface QualityCheckResult {
 }
 
 /**
- * Gate suggestions before they become memories — duplicate / low confidence / conflicts.
+ * Gate suggestions before they become memories - duplicate / low confidence / conflicts.
  */
 export class MemoryQualityChecker {
   private readonly conflicts = new ConflictDetector();

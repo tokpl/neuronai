@@ -1,23 +1,7 @@
 # Roadmap
 
-## Now (v0.1 MVP)
+- **Now:** local brain + Cursor MCP
+- **Next:** better scan + retrieval (still local)
+- **Later:** optional extras only if they help Cursor understand the project
 
-- Local FileStorageProvider
-- `neuron init` → Cursor MCP
-- 12 MCP tools
-- Git-shareable `.neuron/` brain
-
-## Next
-
-- Better scan → brain quality
-- Stronger retrieval ranking (still local)
-- Polish Cursor DX / onboarding
-
-## Later / experimental (`future/`)
-
-- Architecture review modes
-- Evaluation / benchmarks
-- Optional Postgres
-- Optional cloud sync (not planned for default product)
-
-Neuron stays the best **local** memory for AI — not the largest AI framework.
+https://github.com/tokpl/neuronai

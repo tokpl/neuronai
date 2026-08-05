@@ -13,7 +13,7 @@ export interface UpdateReport {
 const CURRENT_SCHEMA_VERSION = 1;
 
 /**
- * Neuron updater — CLI version check, config schema + brain metadata migrations.
+ * Neuron updater - CLI version check, config schema + brain metadata migrations.
  * Does not phone home; no mandatory cloud account.
  */
 export class NeuronUpdater {
@@ -53,7 +53,7 @@ export class NeuronUpdater {
         notes.push(`Config schema: v${schemaVersion}`);
       }
     } catch {
-      notes.push('Config not found — run neuron init first.');
+      notes.push('Config not found - run neuron init first.');
     }
 
     try {
@@ -81,7 +81,7 @@ export class NeuronUpdater {
 export async function runUpdate(cwd = process.cwd()): Promise<void> {
   ui.title('Neuron update');
   ui.blank();
-  ui.info('Local-first updater — no cloud account required.');
+  ui.info('Local-first updater - no cloud account required.');
   ui.blank();
 
   const report = await new NeuronUpdater().checkAndApply(cwd);

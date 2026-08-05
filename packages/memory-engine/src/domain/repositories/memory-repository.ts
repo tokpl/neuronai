@@ -1,4 +1,4 @@
-import type { MemoryType } from '@neuron-ai-memory/types';
+import type { MemoryType } from '@neuronai/types';
 
 import type { Memory } from '../entities/memory.js';
 

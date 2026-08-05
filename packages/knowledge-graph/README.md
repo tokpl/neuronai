@@ -1,4 +1,4 @@
-# @neuron-ai-memory/knowledge-graph
+# @neuronai/knowledge-graph
 
 Project knowledge graph + intelligence engine (local MVP).
 

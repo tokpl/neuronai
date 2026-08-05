@@ -1,4 +1,4 @@
-# @neuron-ai-memory/storage
+# @neuronai/storage
 
 PostgreSQL persistence for Neuron Memory Core.
 
@@ -23,5 +23,5 @@ pnpm db:migrate
 Integration tests run only when:
 
 ```bash
-NEURON_RUN_DB_TESTS=1 DATABASE_URL=postgresql://neuron:neuron@localhost:5432/neuron pnpm --filter @neuron-ai-memory/storage test
+NEURON_RUN_DB_TESTS=1 DATABASE_URL=postgresql://neuron:neuron@localhost:5432/neuron pnpm --filter @neuronai/storage test
 ```

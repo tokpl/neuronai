@@ -9,7 +9,7 @@ export interface ImplementationPlan {
 }
 
 /**
- * Produces an implementation outline — does not generate code.
+ * Produces an implementation outline - does not generate code.
  */
 export class ImplementationPlanner {
   plan(task: AnalyzedTask, context?: AgentContext): ImplementationPlan {
@@ -46,7 +46,7 @@ export class ImplementationPlanner {
       steps.push({
         order: order++,
         title: 'Connect permissions / auth checks',
-        detail: 'Reuse existing RBAC/middleware — do not bypass AuthService',
+        detail: 'Reuse existing RBAC/middleware - do not bypass AuthService',
       });
     }
 

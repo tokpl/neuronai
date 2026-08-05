@@ -15,6 +15,6 @@ When the user asks **was that correct**, **quality report**, **benchmark**, or *
 
 **Rules**
 
-- Store metrics only — never full chats, prompts, or secrets
-- No model training / RL — improve via measurement + config
+- Store metrics only - never full chats, prompts, or secrets
+- No model training / RL - improve via measurement + config
 - Surface hallucination warnings (e.g. Redis claimed but missing from graph)

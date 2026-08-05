@@ -142,13 +142,13 @@ export class InitialMemoryGenerator {
     if (input.architecture.services.length >= 3) {
       rules.push({
         rule: 'Use dependency injection / service modules for business logic',
-        reason: 'Detected multiple *Service files — consistent DI/service pattern.',
+        reason: 'Detected multiple *Service files - consistent DI/service pattern.',
         confidence: 0.84,
       });
     }
     if (input.architecture.controllers.length && input.architecture.repositories.length) {
       rules.push({
-        rule: 'Controllers must not access the database directly — use repositories/services',
+        rule: 'Controllers must not access the database directly - use repositories/services',
         reason: 'Both controllers and repositories detected.',
         confidence: 0.87,
       });
@@ -162,7 +162,7 @@ export class InitialMemoryGenerator {
     }
     if (input.stack.database.some((d) => /postgres/i.test(d))) {
       rules.push({
-        rule: 'PostgreSQL is the system of record — avoid dual-writes to other stores',
+        rule: 'PostgreSQL is the system of record - avoid dual-writes to other stores',
         reason: 'PostgreSQL detected in stack.',
         confidence: 0.9,
       });

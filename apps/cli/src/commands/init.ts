@@ -1,8 +1,8 @@
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { defaultNeuronConfig } from '@neuron-ai-memory/config';
-import { createProjectResolver } from '@neuron-ai-memory/project-analyzer';
+import { defaultNeuronConfig } from '@neuronai/config';
+import { createProjectResolver } from '@neuronai/project-analyzer';
 
 import type { NeuronLocalConfig } from '../config/local-config.js';
 import { DEFAULT_IGNORE } from '../config/local-config.js';
@@ -26,7 +26,7 @@ import {
 } from '../services/neuron-fs.js';
 import { analyzeAndSeedMemories, openProjectSession } from '../services/project-session.js';
 import { ui } from '../ui/output.js';
-import { createFileStorageProvider } from '@neuron-ai-memory/storage';
+import { createFileStorageProvider } from '@neuronai/storage';
 
 function pickFramework(stack: string[], frameworks: string[]): string {
   const fromFw = frameworks[0];
@@ -116,7 +116,7 @@ export async function runInit(
   const project = await createProjectResolver().resolve(cwd);
   const hasManifest = project.manifests.length > 0;
   if (!hasManifest) {
-    progress.warn('No package manifests found — using folder name');
+    progress.warn('No package manifests found - using folder name');
   } else {
     progress.ok(`Detected project: ${project.name}`);
   }
@@ -159,8 +159,6 @@ export async function runInit(
     },
     integrations: {
       cursor: true,
-      claudeCode: false,
-      vscode: false,
     },
     server: {
       mode: 'local',
@@ -238,7 +236,7 @@ export async function runInit(
     skipped = result.skipped;
 
     try {
-      const { createProjectBrainBootstrap } = await import('@neuron-ai-memory/project-scanner');
+      const { createProjectBrainBootstrap } = await import('@neuronai/project-scanner');
       const scanReport = await createProjectBrainBootstrap().scan({
         root: cwd,
         mode: 'fast',
@@ -272,7 +270,7 @@ export async function runInit(
   progress.start('Cursor integration…');
   const cursorAlready = await pathExists(join(paths.root, '.cursor'));
   if (!cursorAlready) {
-    progress.warn('Cursor folder not found yet — creating .cursor/ for MCP');
+    progress.warn('Cursor folder not found yet - creating .cursor/ for MCP');
   }
   const cursor = await setupCursorIntegration(cwd, { force: options.force });
   report.mcpConfigured = cursor.mcpValid;
@@ -319,9 +317,7 @@ export async function runInit(
     `Cursor MCP: ${cursor.mcpPath}`,
   ]);
   ui.blank();
-  ui.suggest('Open this folder in Cursor and enable MCP server "neuron"');
+  ui.suggest('Cursor Settings → Tools & MCP → enable "neuron"');
   ui.suggest('Verify: neuron doctor');
-  ui.suggest('Verify: neuron doctor');
-  ui.suggest('Summary: ask Cursor — neuron_project_summary');
-  ui.suggest('First chat: Prepare adding a feature using Neuron');
+  ui.suggest('First chat: Prepare adding a feature using neuronai');
 }

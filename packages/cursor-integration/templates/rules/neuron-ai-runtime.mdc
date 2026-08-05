@@ -18,4 +18,4 @@ When choosing models, checking privacy of context, or asking what runs offline:
 - Prefer local models when `allowCloud` is false
 - Never send secrets / `.env` / CRITICAL data to cloud
 - Never store API keys in the project brain
-- Neuron does not train models — it routes to existing providers
+- Neuron does not train models - it routes to existing providers

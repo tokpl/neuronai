@@ -15,7 +15,7 @@ const EXT_LANG: Record<string, SupportedLanguage> = {
 };
 
 /**
- * Extensible language registry — add new extensions here.
+ * Extensible language registry - add new extensions here.
  */
 export class LanguageRegistry {
   detect(relativePath: string): SupportedLanguage {

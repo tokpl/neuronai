@@ -10,7 +10,7 @@ description: >-
 
 ## Goal
 
-Give the agent a **project brain**: architecture, decisions, patterns, and warnings — without overloading the context window.
+Give the agent a **project brain**: architecture, decisions, patterns, and warnings - without overloading the context window.
 
 ## MVP tools (only these)
 
@@ -29,9 +29,9 @@ Give the agent a **project brain**: architecture, decisions, patterns, and warni
 
 ## Standard workflow
 
-1. **Analyze** — `neuron_prepare_task` / `neuron_get_context`
-2. **Implement** — follow existing patterns from Neuron
-3. **Review & remember** — `neuron_after_task` or review + save
+1. **Analyze** - `neuron_prepare_task` / `neuron_get_context`
+2. **Implement** - follow existing patterns from Neuron
+3. **Review & remember** - `neuron_after_task` or review + save
 
 ## Context budget
 
@@ -44,5 +44,5 @@ Never paste thousands of memories into the chat.
 
 ## Privacy
 
-Default is **suggest** mode — propose saves; do not silently store everything.
-Local-first — no cloud account, no API key required for Neuron itself.
+Default is **suggest** mode - propose saves; do not silently store everything.
+Local-first - no cloud account, no API key required for Neuron itself.

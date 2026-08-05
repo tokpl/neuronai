@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 /**
  * Broader project signals for intelligence (docs, schema, git, config).
- * Used by knowledge-graph / CLI analyze — keeps project-analyzer as the discovery layer.
+ * Used by knowledge-graph / CLI analyze - keeps project-analyzer as the discovery layer.
  */
 export interface ProjectSignals {
   documentation: string[];

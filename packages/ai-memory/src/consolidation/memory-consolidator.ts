@@ -1,4 +1,4 @@
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
 
 import { jaccardSimilarity } from '../conflict/conflict-detector.js';
 
@@ -12,7 +12,7 @@ export interface ConsolidationGroup {
 export class MemoryConsolidator {
   /**
    * Groups near-duplicate active memories (same project + high Jaccard).
-   * Does not persist — caller decides how to merge via Memory Engine.
+   * Does not persist - caller decides how to merge via Memory Engine.
    */
   findGroups(memories: MemoryRecord[], threshold = 0.82): ConsolidationGroup[] {
     const active = memories.filter((m) => m.status === 'active');

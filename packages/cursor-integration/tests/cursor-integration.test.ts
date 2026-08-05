@@ -27,8 +27,15 @@ describe('mcp config', () => {
     const merged = mergeNeuronMcpConfig({}, '/proj');
     const v = validateCursorMcpConfig(merged);
     expect(v.ok).toBe(true);
-    expect(v.neuron?.command).toBe('neuron');
-    expect(v.neuron?.args).toEqual(['mcp']);
+    expect(v.neuron?.args).toContain('mcp');
+    // Monorepo: node + apps/cli/dist; published: npx neuronai
+    const cmd = v.neuron?.command ?? '';
+    const ok =
+      cmd === process.execPath ||
+      cmd === 'npx' ||
+      cmd === 'npx.cmd' ||
+      /node(\.exe)?$/i.test(cmd);
+    expect(ok).toBe(true);
   });
 
   it('rejects missing neuron server', () => {
@@ -72,7 +79,13 @@ describe('cursor install + doctor', () => {
     const mcp = JSON.parse(await readFile(installed.mcpPath, 'utf8')) as {
       mcpServers: { neuron: { command: string; args: string[] } };
     };
-    expect(mcp.mcpServers.neuron.command).toBe('neuron');
+    const cmd = mcp.mcpServers.neuron.command;
+    expect(
+      cmd === process.execPath ||
+        cmd === 'npx' ||
+        cmd === 'npx.cmd' ||
+        /node(\.exe)?$/i.test(cmd),
+    ).toBe(true);
     expect(mcp.mcpServers.neuron.args).toContain('mcp');
 
     const rules = await readFile(installed.rulesPath, 'utf8');

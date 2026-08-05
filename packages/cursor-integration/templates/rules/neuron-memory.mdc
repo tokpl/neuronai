@@ -3,9 +3,9 @@ description: When and how Cursor agents should use Neuron AI Memory (BEFORE / DU
 alwaysApply: true
 ---
 
-# Neuron Memory — Cursor agent policy
+# Neuron Memory - Cursor agent policy
 
-Neuron stores **engineering knowledge** for this project (architecture, decisions, patterns, warnings) — not chat transcripts.
+Neuron stores **engineering knowledge** for this project (architecture, decisions, patterns, warnings) - not chat transcripts.
 
 Prefer short, ranked context. Never dump “all memories”.
 
@@ -40,11 +40,11 @@ Then:
 
 - Prefer `neuron_after_task` (suggest mode) → present **Save | Edit | Ignore**
 - Or `neuron_review_memory` → `neuron_save_decision` / `neuron_store_memory`
-- Updates: `neuron_update_memory` (versioned — never silent overwrite)
+- Updates: `neuron_update_memory` (versioned - never silent overwrite)
 
 ## Do not
 
 - Store secrets, tokens, credentials, or raw PII
 - Store full chat transcripts
-- Create duplicates — search first
+- Create duplicates - search first
 - Flood the context window with low-relevance memories

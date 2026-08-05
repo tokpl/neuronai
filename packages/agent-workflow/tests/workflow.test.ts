@@ -83,11 +83,11 @@ describe('WorkflowRules + MemorySuggestionEngine', () => {
     const analyzer = new CodeChangeAnalyzer();
     const analysis = analyzer.analyze({
       files: ['src/cache/redis.ts', 'src/cache/local.ts', 'src/app.ts'],
-      message: 'Replace Redis cache with local cache — architecture rewrite',
+      message: 'Replace Redis cache with local cache - architecture rewrite',
     });
     const suggestion = createMemorySuggestionEngine().suggest({
       analysis,
-      commitMessage: 'Replace Redis cache with local cache — architecture rewrite',
+      commitMessage: 'Replace Redis cache with local cache - architecture rewrite',
     });
     expect(suggestion.shouldSuggest).toBe(true);
     expect(suggestion.type).toBe('architecture_decision');

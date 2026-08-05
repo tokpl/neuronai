@@ -28,7 +28,7 @@ import {
   updateMemorySchema,
 } from '../validation/schemas.js';
 
-/** MVP tool set — local project memory for Cursor. Keep this list small. */
+/** MVP tool set - local project memory for Cursor. Keep this list small. */
 export const MVP_TOOL_NAMES = [
   'neuron_health',
   'neuron_prepare_task',
@@ -123,7 +123,7 @@ export function registerTools(server: McpServer, runtime: NeuronRuntime): void {
   server.registerTool(
     'neuron_update_memory',
     {
-      description: 'Update an existing memory (versioned — never silent overwrite).',
+      description: 'Update an existing memory (versioned - never silent overwrite).',
       inputSchema: updateMemorySchema,
     },
     async (args) => handleUpdateMemory(runtime, args),

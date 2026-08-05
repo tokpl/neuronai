@@ -13,6 +13,7 @@ export {
 export {
   buildNeuronMcpEntry,
   mergeNeuronMcpConfig,
+  resolveNeuronCliInvocation,
   validateCursorMcpConfig,
   type McpValidationResult,
   type NeuronMcpEntry,

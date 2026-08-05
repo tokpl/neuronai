@@ -1,19 +1,25 @@
 {
-  "name": "neuron-ai-memory",
+  "name": "neuronai-monorepo",
   "private": true,
   "type": "module",
   "version": "0.1.0",
-  "description": "Long-term engineering knowledge memory for AI coding agents (MCP)",
+  "description": "Local-first AI memory for Cursor (MCP)",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tokpl/neuronai.git"
+  },
+  "homepage": "https://github.com/tokpl/neuronai",
   "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
     "build": "turbo run build",
-    "dev:mcp": "pnpm --filter @neuron-ai-memory/mcp-server dev",
-    "dev:cli": "pnpm --filter @neuron-ai-memory/cli dev",
+    "dev:mcp": "pnpm --filter @neuronai/mcp-server dev",
+    "dev:cli": "pnpm --filter neuronai dev",
     "neuron": "node apps/cli/dist/index.js",
+    "neuronai": "node apps/cli/dist/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",

@@ -1,7 +1,7 @@
 {
-  "name": "@neuron-ai-memory/project-scanner",
+  "name": "@neuronai/project-scanner",
   "version": "0.1.0",
-  "description": "Project brain bootstrap — codebase scan, stack/arch discovery, initial memories",
+  "description": "Project brain bootstrap - codebase scan, stack/arch discovery, initial memories",
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
@@ -20,8 +20,8 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "@neuron-ai-memory/project-analyzer": "workspace:*",
-    "@neuron-ai-memory/types": "workspace:*"
+    "@neuronai/project-analyzer": "workspace:*",
+    "@neuronai/types": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.8.2",

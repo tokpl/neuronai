@@ -1,5 +1,5 @@
-import { ValidationError } from '@neuron-ai-memory/types';
-import type { RelationType as RelationTypeValue } from '@neuron-ai-memory/types';
+import { ValidationError } from '@neuronai/types';
+import type { RelationType as RelationTypeValue } from '@neuronai/types';
 
 const VALUES = [
   'depends_on',

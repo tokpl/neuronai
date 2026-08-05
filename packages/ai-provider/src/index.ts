@@ -1,4 +1,4 @@
-import { NotImplementedError } from '@neuron-ai-memory/types';
+import { NotImplementedError } from '@neuronai/types';
 
 export interface LlmCompletionRequest {
   system?: string;
@@ -35,7 +35,7 @@ export function createLlmClient(): LlmClient {
 
 /**
  * Deterministic mock for tests and offline development.
- * Heuristic JSON extraction — no network calls.
+ * Heuristic JSON extraction - no network calls.
  */
 export class MockAIProvider implements AIProvider {
   readonly name = 'mock';

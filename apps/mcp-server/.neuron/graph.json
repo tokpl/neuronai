@@ -43,7 +43,7 @@
       "id": "n-dependency-61178f7c-neuron-ai-memory-ai-memo",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/ai-memory",
+      "name": "@neuronai/ai-memory",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -56,7 +56,7 @@
       "id": "n-dependency-648e25ac-neuron-ai-memory-ai-prov",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/ai-provider",
+      "name": "@neuronai/ai-provider",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -69,7 +69,7 @@
       "id": "n-dependency-03353c11-neuron-ai-memory-agent-i",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/agent-intelligence",
+      "name": "@neuronai/agent-intelligence",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -82,7 +82,7 @@
       "id": "n-dependency-ce480e11-neuron-ai-memory-agent-w",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/agent-workflow",
+      "name": "@neuronai/agent-workflow",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -95,7 +95,7 @@
       "id": "n-dependency-51470dcc-neuron-ai-memory-config",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/config",
+      "name": "@neuronai/config",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -108,7 +108,7 @@
       "id": "n-dependency-7ae65567-neuron-ai-memory-cursor-",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/cursor-integration",
+      "name": "@neuronai/cursor-integration",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -121,7 +121,7 @@
       "id": "n-dependency-bc47d986-neuron-ai-memory-embeddi",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/embeddings",
+      "name": "@neuronai/embeddings",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -134,7 +134,7 @@
       "id": "n-dependency-b01a17f5-neuron-ai-memory-knowled",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/knowledge-graph",
+      "name": "@neuronai/knowledge-graph",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -147,7 +147,7 @@
       "id": "n-dependency-c0bb9ac4-neuron-ai-memory-memory-",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/memory-engine",
+      "name": "@neuronai/memory-engine",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -160,7 +160,7 @@
       "id": "n-dependency-fae846d7-neuron-ai-memory-observa",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/observability",
+      "name": "@neuronai/observability",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -173,7 +173,7 @@
       "id": "n-dependency-17a356e4-neuron-ai-memory-project",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/project-analyzer",
+      "name": "@neuronai/project-analyzer",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -186,7 +186,7 @@
       "id": "n-dependency-95aaac00-neuron-ai-memory-project",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/project-scanner",
+      "name": "@neuronai/project-scanner",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -199,7 +199,7 @@
       "id": "n-dependency-86384105-neuron-ai-memory-retriev",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/retrieval-engine",
+      "name": "@neuronai/retrieval-engine",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -212,7 +212,7 @@
       "id": "n-dependency-2e9a0931-neuron-ai-memory-storage",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/storage",
+      "name": "@neuronai/storage",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",
@@ -225,7 +225,7 @@
       "id": "n-dependency-039354af-neuron-ai-memory-types",
       "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
       "type": "DEPENDENCY",
-      "name": "@neuron-ai-memory/types",
+      "name": "@neuronai/types",
       "metadata": {
         "version": "workspace:*",
         "manager": "npm",

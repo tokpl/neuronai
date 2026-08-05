@@ -1,5 +1,5 @@
-import type { MemoryEngine } from '@neuron-ai-memory/memory-engine';
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryEngine } from '@neuronai/memory-engine';
+import type { MemoryRecord } from '@neuronai/types';
 
 import type { AgentContext } from '../context/context-engine.js';
 import type { ImplementationPlan } from '../planning/implementation-planner.js';
@@ -69,7 +69,7 @@ export class SelfImprovementLoop {
     }
 
     if (input.review && input.review.score >= 80 && input.outcome !== 'failed') {
-      suggestions.push('Architecture review scored well — consider saving any new decision explicitly');
+      suggestions.push('Architecture review scored well - consider saving any new decision explicitly');
     }
 
     for (const warning of input.context?.warnings ?? []) {

@@ -1,5 +1,5 @@
-import { createLogger, NEURON_API_VERSION, PACKAGE_VERSION } from '@neuron-ai-memory/observability';
-import type { HealthStatus } from '@neuron-ai-memory/types';
+import { createLogger, NEURON_API_VERSION, PACKAGE_VERSION } from '@neuronai/observability';
+import type { HealthStatus } from '@neuronai/types';
 
 const startedAt = Date.now();
 

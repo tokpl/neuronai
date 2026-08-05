@@ -6,7 +6,7 @@ import type {
 } from './language-analyzer.js';
 
 /**
- * Lightweight TypeScript/JavaScript analyzer (regex-based MVP — no full TS compiler).
+ * Lightweight TypeScript/JavaScript analyzer (regex-based MVP - no full TS compiler).
  */
 export class TypeScriptAnalyzer implements LanguageAnalyzer {
   readonly language = 'typescript';

@@ -1,4 +1,4 @@
-import type { MemoryType } from '@neuron-ai-memory/types';
+import type { MemoryType } from '@neuronai/types';
 
 import type { CodeChangeAnalysis } from '../analysis/code-change-analyzer.js';
 import {
@@ -45,7 +45,7 @@ function pickType(analysis: CodeChangeAnalysis, hits: WorkflowRuleHit[]): Memory
 }
 
 /**
- * Creates memory *suggestions* — never writes to the store by itself.
+ * Creates memory *suggestions* - never writes to the store by itself.
  */
 export class MemorySuggestionEngine {
   constructor(private readonly rules: WorkflowRulesEngine = createWorkflowRulesEngine()) {}

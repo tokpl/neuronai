@@ -1,9 +1,9 @@
-import type { MemoryType, MemorySource } from '@neuron-ai-memory/types';
+import type { MemoryType, MemorySource } from '@neuronai/types';
 import {
   heuristicExtract,
   type AIProvider,
   type HeuristicCandidate,
-} from '@neuron-ai-memory/ai-provider';
+} from '@neuronai/ai-provider';
 
 import { type MemoryClassifier } from '../classifier/memory-classifier.js';
 

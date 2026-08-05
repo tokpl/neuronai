@@ -13,7 +13,7 @@ For **major** work (new systems/modules, payments, marketplace, auth migrations,
 3. Optionally call `neuron_create_plan` if you only need steps
 4. Implement following the approved direction
 5. After coding, call `neuron_review_change` (and `neuron_compare_architecture` when useful)
-6. Propose `neuron_generate_adr` for human approval — never auto-accept
+6. Propose `neuron_generate_adr` for human approval - never auto-accept
 
 **Do not** run full architect analysis for:
 
@@ -21,4 +21,4 @@ For **major** work (new systems/modules, payments, marketplace, auth migrations,
 - trivial CSS
 - tiny one-line fixes
 
-Neuron is architect + reviewer — not an autonomous coder.
+Neuron is architect + reviewer - not an autonomous coder.

@@ -11,7 +11,7 @@ const DOMAIN_LEXICON: Record<string, string[]> = {
 };
 
 /**
- * Understand task intent, domains, related areas, and risk — no LLM required.
+ * Understand task intent, domains, related areas, and risk - no LLM required.
  */
 export class QueryAnalyzer {
   analyze(task: string): AnalyzedQuery {

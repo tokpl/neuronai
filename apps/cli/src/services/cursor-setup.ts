@@ -4,8 +4,8 @@ import {
   installCursorIntegration,
   runCursorDoctorChecks,
   writeProjectBrainFiles,
-} from '@neuron-ai-memory/cursor-integration';
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+} from '@neuronai/cursor-integration';
+import type { MemoryRecord } from '@neuronai/types';
 
 import {
   isNeuronInitialized,

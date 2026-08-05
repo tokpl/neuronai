@@ -1,4 +1,4 @@
-import { redactSecrets } from '@neuron-ai-memory/security';
+import { redactSecrets } from '@neuronai/security';
 
 const SENSITIVE_PATH =
   /(\.env|credentials|secrets?|id_rsa|\.pem|password|api[_-]?key)/i;

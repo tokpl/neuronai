@@ -1,6 +1,6 @@
 /**
  * Error reporting abstraction (Sentry / OTel / self-hosted).
- * Never send without explicit consent — callers must gate with PrivacyConsent.
+ * Never send without explicit consent - callers must gate with PrivacyConsent.
  */
 export interface ErrorReport {
   message: string;
@@ -20,7 +20,7 @@ export class NoopErrorReporter implements ErrorReporter {
 
 export class ConsoleErrorReporter implements ErrorReporter {
   capture(error: ErrorReport): void {
-    // Structured stderr only — no network
+    // Structured stderr only - no network
     console.error(
       JSON.stringify({
         level: 'error',

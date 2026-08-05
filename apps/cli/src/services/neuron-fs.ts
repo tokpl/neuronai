@@ -1,7 +1,7 @@
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
-import { createFileStorageProvider } from '@neuron-ai-memory/storage';
+import { createFileStorageProvider } from '@neuronai/storage';
 
 import {
   neuronLocalConfigSchema,

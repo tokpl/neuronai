@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-import { ConfigError } from '@neuron-ai-memory/types';
+import { ConfigError } from '@neuronai/types';
 
 import { defaultNeuronConfig, neuronConfigSchema, type NeuronConfig } from './schema.js';
 

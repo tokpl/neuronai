@@ -1,4 +1,4 @@
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
 
 import type { AnalyzedQuery, RetrievalHit } from '../types.js';
 import { clamp01 } from '../types.js';
@@ -144,7 +144,7 @@ export class TimeAwareRetriever implements Retriever {
           source: 'decision',
           title: m.title,
           content: isOld
-            ? `${m.content}\n(Superseded ${p.label} decision — prefer newer stack.)`
+            ? `${m.content}\n(Superseded ${p.label} decision - prefer newer stack.)`
             : `${m.content}\n(Current ${p.label} decision.)`,
           type: m.type,
           createdAt: m.createdAt,

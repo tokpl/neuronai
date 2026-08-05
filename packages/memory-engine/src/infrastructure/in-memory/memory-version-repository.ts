@@ -1,4 +1,4 @@
-import type { MemoryVersionRecord } from '@neuron-ai-memory/types';
+import type { MemoryVersionRecord } from '@neuronai/types';
 
 import { MemoryVersion } from '../../domain/entities/memory-version.js';
 import type { MemoryVersionRepository } from '../../domain/repositories/memory-version-repository.js';

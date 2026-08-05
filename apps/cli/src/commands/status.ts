@@ -32,7 +32,7 @@ export async function runStatus(cwd = process.cwd()): Promise<void> {
     // keep metadata count
   }
 
-  const dbStatus = 'local FileStorageProvider (.neuron/) — no database required';
+  const dbStatus = 'local FileStorageProvider (.neuron/) - no database required';
 
   const mcpConfigured = await pathExists(`${paths.root}/.cursor/mcp.json`);
   let mcpStatus = mcpConfigured ? 'Configured (.cursor/mcp.json)' : 'Not configured';

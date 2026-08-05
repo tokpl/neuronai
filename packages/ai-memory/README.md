@@ -1,4 +1,4 @@
-# @neuron-ai-memory/ai-memory
+# @neuronai/ai-memory
 
 Turns raw project signals (conversations, diffs, commits, docs) into **validated engineering memories**.
 

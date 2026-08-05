@@ -1,3 +1,6 @@
+import { existsSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 
 export const neuronMcpServerSchema = z.object({
@@ -18,10 +21,44 @@ export interface NeuronMcpEntry {
   env: Record<string, string>;
 }
 
-export function buildNeuronMcpEntry(cwd: string): NeuronMcpEntry {
+/**
+ * Resolve the neuronai CLI entry for MCP.
+ * Prefer local monorepo build when present; otherwise npx (no global install required).
+ */
+export function resolveNeuronCliInvocation(cwd: string): { command: string; args: string[] } {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const candidates = [
+    // packages/cursor-integration/{src|dist} → apps/cli/dist
+    join(here, '..', '..', '..', 'apps', 'cli', 'dist', 'index.js'),
+    join(here, '..', '..', 'apps', 'cli', 'dist', 'index.js'),
+    // project-local install
+    join(cwd, 'node_modules', 'neuronai', 'dist', 'index.js'),
+    join(cwd, 'apps', 'cli', 'dist', 'index.js'),
+  ];
+
+  for (const candidate of candidates) {
+    const abs = resolve(candidate);
+    if (existsSync(abs)) {
+      return {
+        command: process.execPath,
+        args: [abs, 'mcp'],
+      };
+    }
+  }
+
+  // Published package path - works without `npm i -g`
+  const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
   return {
-    command: 'neuron',
-    args: ['mcp'],
+    command: npxCmd,
+    args: ['-y', 'neuronai', 'mcp'],
+  };
+}
+
+export function buildNeuronMcpEntry(cwd: string): NeuronMcpEntry {
+  const inv = resolveNeuronCliInvocation(cwd);
+  return {
+    command: inv.command,
+    args: inv.args,
     env: {
       NEURON_CWD: cwd,
     },
@@ -34,6 +71,8 @@ export interface McpValidationResult {
   warnings: string[];
   neuron?: NeuronMcpEntry;
 }
+
+const OK_COMMANDS = new Set(['neuron', 'neuronai', 'npx', 'npx.cmd', 'pnpm', 'node', 'node.exe']);
 
 export function validateCursorMcpConfig(raw: unknown): McpValidationResult {
   const errors: string[] = [];
@@ -60,14 +99,18 @@ export function validateCursorMcpConfig(raw: unknown): McpValidationResult {
   }
 
   const entry = neuron.data;
-  if (entry.command !== 'neuron' && entry.command !== 'pnpm' && entry.command !== 'npx') {
-    warnings.push(`Unusual MCP command "${entry.command}" — expected neuron | pnpm | npx`);
+  const cmdBase = entry.command.replace(/^.*[/\\]/, '').toLowerCase();
+  if (!OK_COMMANDS.has(cmdBase) && !OK_COMMANDS.has(entry.command)) {
+    warnings.push(
+      `Unusual MCP command "${entry.command}" - expected node | npx | neuronai | neuron`,
+    );
   }
-  if (entry.command === 'neuron' && !(entry.args ?? []).includes('mcp')) {
-    errors.push('neuron MCP entry should include args: ["mcp"]');
+  const args = entry.args ?? [];
+  if (!args.includes('mcp')) {
+    errors.push('neuron MCP entry should include args ending with "mcp"');
   }
   if (!entry.env?.['NEURON_CWD']) {
-    warnings.push('NEURON_CWD not set — Neuron will use process cwd of the MCP host');
+    warnings.push('NEURON_CWD not set - Neuron will use process cwd of the MCP host');
   }
 
   return {

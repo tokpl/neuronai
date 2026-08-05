@@ -58,7 +58,7 @@ export function renderObservabilityReport(input: ObservabilityReportInput): stri
     lines.push('', '### Memories', '');
     for (const m of input.memoryUsage.memories) {
       lines.push(
-        `- **${m.title}** — ${Math.round(m.confidence * 100)}% — ${m.reason}`,
+        `- **${m.title}** - ${Math.round(m.confidence * 100)}% - ${m.reason}`,
       );
     }
   }
@@ -105,7 +105,7 @@ export function renderObservabilityReport(input: ObservabilityReportInput): stri
     '',
     '---',
     '',
-    '_Internal debugger only — no cloud analytics, no user tracking._',
+    '_Internal debugger only - no cloud analytics, no user tracking._',
     '',
   );
 

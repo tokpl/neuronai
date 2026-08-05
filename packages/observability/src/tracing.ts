@@ -1,5 +1,5 @@
 /**
- * Tracing abstraction — wire OpenTelemetry later without changing call sites.
+ * Tracing abstraction - wire OpenTelemetry later without changing call sites.
  */
 export interface Span {
   end(): void;

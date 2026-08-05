@@ -1,4 +1,4 @@
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
 
 export interface RetrievalEvalCase {
   id: string;
@@ -43,7 +43,7 @@ export class MemoryEvaluation {
       }
       retrievalAccuracy = hits / input.retrievalCases.length;
     } else {
-      notes.push('retrievalAccuracy skipped — no eval cases provided');
+      notes.push('retrievalAccuracy skipped - no eval cases provided');
     }
 
     const usefulnessScore = estimateUsefulness(active);

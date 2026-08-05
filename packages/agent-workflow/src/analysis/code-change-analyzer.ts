@@ -40,7 +40,7 @@ const ARCH_HINT_RE = /architecture|refactor|rewrite|migrate|replace|redesign/i;
 function moduleFromPath(path: string): string {
   const normalized = path.replace(/\\/g, '/');
   const parts = normalized.split('/').filter(Boolean);
-  // Drop filename — modules are directory prefixes
+  // Drop filename - modules are directory prefixes
   const dirs = parts.slice(0, -1);
   if (dirs.length === 0) return 'root';
   if (dirs[0] === 'apps' || dirs[0] === 'packages') {

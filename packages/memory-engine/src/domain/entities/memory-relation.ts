@@ -1,5 +1,5 @@
-import type { MemoryRelationRecord } from '@neuron-ai-memory/types';
-import { ValidationError } from '@neuron-ai-memory/types';
+import type { MemoryRelationRecord } from '@neuronai/types';
+import { ValidationError } from '@neuronai/types';
 
 import { RelationType } from '../value-objects/index.js';
 

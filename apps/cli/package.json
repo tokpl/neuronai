@@ -1,16 +1,31 @@
 {
-  "name": "@neuron-ai-memory/cli",
+  "name": "neuronai",
   "version": "0.1.0",
-  "description": "CLI for Neuron — local-first project memory for Cursor",
+  "description": "Local-first AI memory for Cursor",
   "license": "Apache-2.0",
   "type": "module",
   "bin": {
+    "neuronai": "./dist/index.js",
     "neuron": "./dist/index.js"
   },
   "publishConfig": {
-    "access": "public",
-    "name": "neuron"
+    "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tokpl/neuronai.git"
+  },
+  "homepage": "https://github.com/tokpl/neuronai",
+  "bugs": {
+    "url": "https://github.com/tokpl/neuronai/issues"
+  },
+  "keywords": [
+    "neuronai",
+    "cursor",
+    "mcp",
+    "ai-memory",
+    "local-first"
+  ],
   "files": [
     "dist",
     "README.md"
@@ -27,21 +42,21 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@neuron-ai-memory/ai-memory": "workspace:*",
-    "@neuron-ai-memory/ai-provider": "workspace:*",
-    "@neuron-ai-memory/agent-workflow": "workspace:*",
-    "@neuron-ai-memory/config": "workspace:*",
-    "@neuron-ai-memory/cursor-integration": "workspace:*",
-    "@neuron-ai-memory/embeddings": "workspace:*",
-    "@neuron-ai-memory/mcp-server": "workspace:*",
-    "@neuron-ai-memory/memory-engine": "workspace:*",
-    "@neuron-ai-memory/observability": "workspace:*",
-    "@neuron-ai-memory/project-analyzer": "workspace:*",
-    "@neuron-ai-memory/project-scanner": "workspace:*",
-    "@neuron-ai-memory/retrieval-engine": "workspace:*",
-    "@neuron-ai-memory/security": "workspace:*",
-    "@neuron-ai-memory/storage": "workspace:*",
-    "@neuron-ai-memory/types": "workspace:*",
+    "@neuronai/ai-memory": "workspace:*",
+    "@neuronai/ai-provider": "workspace:*",
+    "@neuronai/agent-workflow": "workspace:*",
+    "@neuronai/config": "workspace:*",
+    "@neuronai/cursor-integration": "workspace:*",
+    "@neuronai/embeddings": "workspace:*",
+    "@neuronai/mcp-server": "workspace:*",
+    "@neuronai/memory-engine": "workspace:*",
+    "@neuronai/observability": "workspace:*",
+    "@neuronai/project-analyzer": "workspace:*",
+    "@neuronai/project-scanner": "workspace:*",
+    "@neuronai/retrieval-engine": "workspace:*",
+    "@neuronai/security": "workspace:*",
+    "@neuronai/storage": "workspace:*",
+    "@neuronai/types": "workspace:*",
     "cac": "^6.7.14",
     "zod": "^3.24.2"
   },

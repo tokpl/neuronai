@@ -5,7 +5,7 @@ export interface Reranker {
   rerank(hits: RankedHit[], query: string): RankedHit[] | Promise<RankedHit[]>;
 }
 
-/** Deterministic local reranker — no external model. */
+/** Deterministic local reranker - no external model. */
 export class SimpleReranker implements Reranker {
   readonly name = 'simple';
   rerank(hits: RankedHit[], query: string): RankedHit[] {
@@ -25,7 +25,7 @@ export class SimpleReranker implements Reranker {
 
 /**
  * Placeholder for future LLM-based reranking (caller injects model).
- * Does not ship or train models — identity pass-through until configured.
+ * Does not ship or train models - identity pass-through until configured.
  */
 export class LLMReranker implements Reranker {
   readonly name = 'llm';

@@ -73,7 +73,7 @@ function resolveImportPath(fromFile: string, specifier: string, root: string): s
     join(base, 'index.ts'),
     join(base, 'index.js'),
   ];
-  // We don't fs-stat all here during graph build — normalize relative path guess
+  // We don't fs-stat all here during graph build - normalize relative path guess
   const preferred = candidates[1] ?? base;
   const rel = relative(root, preferred).replace(/\\/g, '/');
   return rel.startsWith('..') ? null : rel;

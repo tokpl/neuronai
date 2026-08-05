@@ -107,8 +107,8 @@ export async function runDoctorChecks(cwd = process.cwd()): Promise<DoctorCheck[
       ? 'Local FileStorageProvider (.neuron/runtime/store.json)'
       : initialized
         ? 'Local mode ready (store created on first write)'
-        : 'Not initialized — run neuron init',
-    fix: 'neuron init (local filesystem — no database required)',
+        : 'Not initialized - run neuron init',
+    fix: 'neuron init (local filesystem - no database required)',
   });
 
   const hasEnvExample = await pathExists(join(paths.root, '.env.example'));

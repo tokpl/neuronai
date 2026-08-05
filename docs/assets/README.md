@@ -1,17 +1,16 @@
 # docs/assets
 
-Placeholder artwork for README visuals. Replace SVGs with final brand assets before public launch.
+| File | Used in README |
+|------|----------------|
+| `logo.png` / `logo.svg` | Hero |
+| `banner.png` / `banner.svg` | Hero |
+| `terminal-demo.svg` | Demo |
+| `before-after.svg` (+ `before-vs-after.png`) | Before vs After |
+| `architecture.png` / `architecture.svg` | Solution / How it works |
+| `knowledge-graph.png` / `knowledge-graph.svg` | How it works |
+| `scan-flow.png` / `scan-flow.svg` | Folder / scan |
+| `retrieval-flow.png` / `retrieval-flow.svg` | How it works |
+| `folder-structure.png` / `folder-structure.svg` | Folder structure |
+| `cursor-workflow.png` / `cursor-workflow.svg` | Demo |
 
-| File | Purpose |
-|------|---------|
-| `logo.svg` | Mark |
-| `banner.svg` | GitHub social / hero |
-| `demo.svg` | Terminal demo stand-in |
-| `architecture.svg` | System diagram |
-| `memory-graph.svg` | Decisions ↔ modules |
-| `before-vs-after.svg` | Cursor answers comparison |
-| `folder-structure.svg` | `.neuron/` tree |
-| `cursor-workflow.svg` | Developer flow |
-| `scan-flow.svg` | Scan bootstrap |
-| `retrieval-flow.svg` | Context retrieval |
-| `knowledge-graph.svg` | graph.json visualization |
+PNG = primary artwork. SVG = lightweight brand companions.

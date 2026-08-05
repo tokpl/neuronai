@@ -74,7 +74,7 @@ export class ArchitectureQueryService {
       const mems = await this.memories.memoriesForNode(projectId, report.target.id);
       const related = mems.length
         ? mems.map((m) => m.name).join('; ')
-        : 'No linked memories yet — run memory linking after analyze.';
+        : 'No linked memories yet - run memory linking after analyze.';
       return {
         question,
         answer: `Memories related to ${report.target.name}: ${related}`,

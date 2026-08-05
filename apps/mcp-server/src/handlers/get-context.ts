@@ -2,7 +2,7 @@ import {
   createContextBudgetManager,
   inferTaskSize,
   type BudgetCandidate,
-} from '@neuron-ai-memory/cursor-integration';
+} from '@neuronai/cursor-integration';
 
 import type { NeuronRuntime } from '../config/runtime.js';
 import { failResult, okResult } from '../middleware/errors.js';
@@ -91,7 +91,7 @@ export async function handleGetContext(
     const warnings = [
       ...context.warnings,
       ...selection.warnings,
-      ...mistakes.map((m) => `Known issue: ${m.title} — ${m.content}`),
+      ...mistakes.map((m) => `Known issue: ${m.title} - ${m.content}`),
     ];
 
     return okResult({

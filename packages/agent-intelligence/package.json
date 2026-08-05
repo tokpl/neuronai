@@ -1,5 +1,5 @@
 {
-  "name": "@neuron-ai-memory/agent-intelligence",
+  "name": "@neuronai/agent-intelligence",
   "version": "0.0.0",
   "description": "Senior-developer-style agent intelligence: context, planning, risk, architecture review",
   "license": "Apache-2.0",
@@ -20,10 +20,10 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "@neuron-ai-memory/ai-memory": "workspace:*",
-    "@neuron-ai-memory/knowledge-graph": "workspace:*",
-    "@neuron-ai-memory/memory-engine": "workspace:*",
-    "@neuron-ai-memory/types": "workspace:*"
+    "@neuronai/ai-memory": "workspace:*",
+    "@neuronai/knowledge-graph": "workspace:*",
+    "@neuronai/memory-engine": "workspace:*",
+    "@neuronai/types": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.8.2",

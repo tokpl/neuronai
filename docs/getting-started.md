@@ -1,14 +1,16 @@
 # Getting started
 
-Neuron is **local-first project memory** for Cursor.
-
 ## Install
 
 ```bash
-npm install -g neuron
+npm install -g neuronai
 ```
 
-(From this monorepo during development: `pnpm build && pnpm neuron …`)
+Or one-shot:
+
+```bash
+npx neuronai init
+```
 
 ## Init
 
@@ -17,28 +19,31 @@ cd your-project
 neuron init
 ```
 
-This creates `.neuron/`, scans the codebase, and wires `.cursor/mcp.json`.
+(`neuron` and `neuronai` are the same CLI.)
 
 ## Use in Cursor
 
 1. Open the project in Cursor
-2. Reload MCP / enable the `neuron` server
-3. Ask Cursor to prepare a task with Neuron
+2. Open **Cursor Settings → Tools & MCP**
+3. Find **neuron** and toggle **Enable** (MCP servers stay off until you enable them)
+4. Wait until the status is green (not Error)
+5. Ask: `Prepare adding X using neuronai`
 
-Example:
+If Cursor shows `'neuron' is not recognized`, re-run setup so MCP uses `npx`/`node` instead of a bare `neuron` binary:
 
-> Prepare adding rate limiting using Neuron
+```bash
+neuron cursor setup --force
+# or: npx neuronai cursor setup --force
+```
 
 ## Verify
 
 ```bash
 neuron doctor
-neuron cursor doctor
 neuron status
+neuron search architecture
 ```
 
-## Requirements
+No Docker. No Postgres. No API keys.
 
-- Node.js 22+
-- Cursor
-- **No** Docker, Postgres, or API keys for the default loop
+https://github.com/tokpl/neuronai

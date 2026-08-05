@@ -1,4 +1,4 @@
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
 
 export type AgentMode = 'fast' | 'standard' | 'architect' | 'debug' | 'refactor';
 

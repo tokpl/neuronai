@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { access, readFile, readdir } from 'node:fs/promises';
 import { basename, join, resolve } from 'node:path';
 
-import type { ProjectRecord } from '@neuron-ai-memory/types';
+import type { ProjectRecord } from '@neuronai/types';
 
 import { detectProjectStack, type StackDetection } from './detect-stack.js';
 

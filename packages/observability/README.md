@@ -1,4 +1,4 @@
-# @neuron-ai-memory/observability
+# @neuronai/observability
 
 Structured logging via [pino](https://github.com/pinojs/pino).
 

@@ -1,8 +1,8 @@
-import { NotImplementedError, type MemoryRecord } from '@neuron-ai-memory/types';
+import { NotImplementedError, type MemoryRecord } from '@neuronai/types';
 
 /**
  * Optional semantic/hybrid search port.
- * Implemented by `@neuron-ai-memory/ai-memory` HybridMemorySearchEngine.
+ * Implemented by `@neuronai/ai-memory` HybridMemorySearchEngine.
  */
 export interface MemorySearcher {
   search(input: {
@@ -28,7 +28,7 @@ export class SearchMemory {
   async execute(input: SearchMemoryInput): Promise<SearchMemoryResult> {
     if (!this.searcher) {
       throw new NotImplementedError(
-        'SearchMemory (wire HybridMemorySearchEngine from @neuron-ai-memory/ai-memory)',
+        'SearchMemory (wire HybridMemorySearchEngine from @neuronai/ai-memory)',
       );
     }
     return this.searcher.search(input);

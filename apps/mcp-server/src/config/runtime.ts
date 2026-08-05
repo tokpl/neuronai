@@ -1,35 +1,35 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { MockAIProvider } from '@neuron-ai-memory/ai-provider';
+import { MockAIProvider } from '@neuronai/ai-provider';
 import {
   createAgentIntelligence,
   type AgentIntelligence,
-} from '@neuron-ai-memory/agent-intelligence';
+} from '@neuronai/agent-intelligence';
 import {
   createAgentWorkflow,
   parsePrivacyMode,
   type AgentWorkflowOrchestrator,
   type PrivacyMode,
-} from '@neuron-ai-memory/agent-workflow';
+} from '@neuronai/agent-workflow';
 import {
   createMemoryIntelligencePipeline,
   HybridMemorySearchEngine,
   type MemoryIntelligencePipeline,
   type MemorySearchEngine,
-} from '@neuron-ai-memory/ai-memory';
-import type { NeuronConfig } from '@neuron-ai-memory/config';
-import { loadConfig } from '@neuron-ai-memory/config';
-import { InMemoryEmbeddingStore, MockEmbeddingProvider } from '@neuron-ai-memory/embeddings';
+} from '@neuronai/ai-memory';
+import type { NeuronConfig } from '@neuronai/config';
+import { loadConfig } from '@neuronai/config';
+import { InMemoryEmbeddingStore, MockEmbeddingProvider } from '@neuronai/embeddings';
 import {
   createFileGraphRepository,
   createProjectIntelligenceEngine,
   type ProjectIntelligenceEngine,
-} from '@neuron-ai-memory/knowledge-graph';
-import type { MemoryEngine } from '@neuron-ai-memory/memory-engine';
-import { createProjectResolver, type ResolvedProject } from '@neuron-ai-memory/project-analyzer';
-import { createLocalFileMemoryStack } from '@neuron-ai-memory/storage';
-import { createLogger, type NeuronLogger } from '@neuron-ai-memory/observability';
+} from '@neuronai/knowledge-graph';
+import type { MemoryEngine } from '@neuronai/memory-engine';
+import { createProjectResolver, type ResolvedProject } from '@neuronai/project-analyzer';
+import { createLocalFileMemoryStack } from '@neuronai/storage';
+import { createLogger, type NeuronLogger } from '@neuronai/observability';
 
 import { createAuthProvider, type AuthProvider } from '../middleware/auth.js';
 

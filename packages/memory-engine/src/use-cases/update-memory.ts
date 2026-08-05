@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import { NotFoundError, type MemoryRecord } from '@neuron-ai-memory/types';
+import { NotFoundError, type MemoryRecord } from '@neuronai/types';
 
 import { MemoryVersion } from '../domain/entities/index.js';
 import type { EventPublisher } from '../domain/events/index.js';

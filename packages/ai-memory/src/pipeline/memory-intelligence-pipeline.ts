@@ -1,6 +1,6 @@
-import type { MemoryEngine } from '@neuron-ai-memory/memory-engine';
-import type { MemoryRecord, MemorySource } from '@neuron-ai-memory/types';
-import type { AIProvider } from '@neuron-ai-memory/ai-provider';
+import type { MemoryEngine } from '@neuronai/memory-engine';
+import type { MemoryRecord, MemorySource } from '@neuronai/types';
+import type { AIProvider } from '@neuronai/ai-provider';
 
 import { MemoryClassifier } from '../classifier/memory-classifier.js';
 import { ConflictDetector, type ConflictReport } from '../conflict/conflict-detector.js';

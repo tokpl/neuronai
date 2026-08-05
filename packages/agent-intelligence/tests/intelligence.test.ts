@@ -8,7 +8,7 @@ import {
   createArchitectureReviewer,
   createChangeRiskAnalyzer,
 } from '../src/index.js';
-import { createInMemoryMemoryEngine } from '@neuron-ai-memory/memory-engine';
+import { createInMemoryMemoryEngine } from '@neuronai/memory-engine';
 
 describe('TaskAnalyzer', () => {
   it('detects feature areas for vehicle trading', () => {

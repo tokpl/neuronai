@@ -1,6 +1,6 @@
 # /refactor
 
-Refactoring mode — plan only.
+Refactoring mode - plan only.
 
 1. Call `neuron_run_mode` with `modeId: "refactoring"`
 2. Use `neuron_refactor_plan` / `neuron_architecture_review`

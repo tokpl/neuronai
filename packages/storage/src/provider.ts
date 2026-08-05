@@ -1,4 +1,4 @@
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
 
 /** Curated project brain files under `.neuron/` (versioned in git). */
 export interface NeuronBrain {
@@ -40,7 +40,7 @@ export interface StorageStatus {
 }
 
 /**
- * Storage abstraction — MVP ships FileStorageProvider only.
+ * Storage abstraction - MVP ships FileStorageProvider only.
  * SQLite / Postgres are future / experimental.
  */
 export interface StorageProvider {

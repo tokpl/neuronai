@@ -1,7 +1,7 @@
 import type { ContextConflict, RankedHit } from '../types.js';
 
 /**
- * Detect contradictory decisions — do not present both as current truth.
+ * Detect contradictory decisions - do not present both as current truth.
  */
 export class ConflictAwareFilter {
   detect(hits: RankedHit[]): { conflicts: ContextConflict[]; filtered: RankedHit[] } {

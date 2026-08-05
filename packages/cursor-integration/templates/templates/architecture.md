@@ -1,6 +1,6 @@
 # Architecture
 
-_Generated template — populated by `neuron init cursor` / analyze._
+_Generated template - populated by `neuron init cursor` / analyze._
 
 ## Notes
 

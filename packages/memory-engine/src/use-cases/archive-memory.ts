@@ -1,4 +1,4 @@
-import { NotFoundError } from '@neuron-ai-memory/types';
+import { NotFoundError } from '@neuronai/types';
 
 import type { EventPublisher } from '../domain/events/index.js';
 import type { MemoryRepository } from '../domain/repositories/index.js';

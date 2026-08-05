@@ -1,4 +1,4 @@
-import type { MemoryRelationRecord } from '@neuron-ai-memory/types';
+import type { MemoryRelationRecord } from '@neuronai/types';
 
 import { MemoryRelation } from '../../domain/entities/memory-relation.js';
 import type { MemoryRelationRepository } from '../../domain/repositories/memory-relation-repository.js';

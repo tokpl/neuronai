@@ -1,25 +1,31 @@
 # FAQ
 
-### Does Neuron need Postgres or Docker?
+**Does neuronai need Postgres or Docker?**  
+No. Storage is `.neuron/` on disk.
 
-No. Default storage is the filesystem under `.neuron/`.
+**Do I need an OpenAI / Anthropic API key?**  
+No. neuronai provides knowledge; Cursor's model answers.
 
-### Do I need an OpenAI / Anthropic API key?
+**How does the team share memory?**  
+Commit `.neuron/*.json`. `git pull` is Team Brain.
 
-No. Neuron provides knowledge; Cursor’s model answers. Local hash embeddings power search.
+**Is neuronai an AI agent?**  
+No. Local project memory for Cursor.
 
-### How does the team share memory?
+**Install commands?**
 
-Commit `.neuron/*.json` (not cache/runtime). `git pull` is Team Brain for MVP.
+```bash
+npx neuronai init
+npm install -g neuronai
+neuron init
+```
 
-### Is Neuron an AI agent?
+**VS Code extension?**  
+No. Cursor-first.
 
-No. It is local project memory for AI IDEs (Cursor first).
+**MCP shows Error / `'neuron' is not recognized`?**  
+1. Re-run `neuron cursor setup --force` (writes `npx`/`node` instead of a bare `neuron` binary).  
+2. In Cursor: **Settings → Tools & MCP → neuron → Enable**.  
+3. Reload the window if the status stays red.
 
-### Why only 12 MCP tools?
-
-So developers get a clear daily loop — not an enterprise catalog.
-
-### Can I use Postgres later?
-
-Yes — archived under `future/packages/storage-postgres`. Not part of MVP.
+https://github.com/tokpl/neuronai

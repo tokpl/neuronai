@@ -1,4 +1,4 @@
-import { NotFoundError, type MemoryRecord } from '@neuron-ai-memory/types';
+import { NotFoundError, type MemoryRecord } from '@neuronai/types';
 
 import type { MemoryRepository } from '../domain/repositories/index.js';
 

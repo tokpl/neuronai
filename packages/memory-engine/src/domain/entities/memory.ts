@@ -1,5 +1,5 @@
-import type { MemoryRecord } from '@neuron-ai-memory/types';
-import { ValidationError } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
+import { ValidationError } from '@neuronai/types';
 
 import {
   ConfidenceScore,

@@ -1,5 +1,5 @@
-import { ValidationError } from '@neuron-ai-memory/types';
-import type { MemoryStatus as MemoryStatusValue } from '@neuron-ai-memory/types';
+import { ValidationError } from '@neuronai/types';
+import type { MemoryStatus as MemoryStatusValue } from '@neuronai/types';
 
 const VALUES = ['active', 'archived', 'superseded'] as const satisfies readonly MemoryStatusValue[];
 

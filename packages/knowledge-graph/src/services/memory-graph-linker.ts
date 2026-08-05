@@ -1,4 +1,4 @@
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryRecord } from '@neuronai/types';
 
 import { createGraphEdge } from '../domain/entities/graph-edge.js';
 import { createGraphNode, type GraphNode } from '../domain/entities/graph-node.js';

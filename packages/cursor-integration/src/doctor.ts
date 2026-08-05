@@ -36,7 +36,7 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
   checks.push({
     name: 'Cursor project folder',
     ok: cursorExists,
-    detail: cursorExists ? cursorDir : 'Missing .cursor/ — run neuron cursor setup',
+    detail: cursorExists ? cursorDir : 'Missing .cursor/ - run neuron cursor setup',
     fix: 'neuron cursor setup',
   });
 
@@ -128,16 +128,15 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
     detail:
       brainOk === brainFiles.length
         ? `.neuron/{${brainFiles.join(',')}}`
-        : `${brainOk}/${brainFiles.length} brain files — run neuron init`,
+        : `${brainOk}/${brainFiles.length} brain files - run neuron init`,
     fix: 'neuron init',
   });
 
-  // Soft check: can we resolve `neuron` somehow?
   checks.push({
-    name: 'MCP launch path',
+    name: 'Cursor enable step',
     ok: true,
     detail:
-      'Host should run `neuron mcp` (ensure neuron is on PATH, or use pnpm exec from monorepo)',
+      'Settings → Tools & MCP → Enable "neuron" (MCP stays off until toggled)',
   });
 
   const ok = checks.every((c) => c.ok);

@@ -1,4 +1,4 @@
-# @neuron-ai-memory/types
+# @neuronai/types
 
 Shared TypeScript types, DTOs, and the `NeuronError` hierarchy.
 

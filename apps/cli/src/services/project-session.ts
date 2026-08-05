@@ -1,20 +1,20 @@
-import { MockAIProvider } from '@neuron-ai-memory/ai-provider';
+import { MockAIProvider } from '@neuronai/ai-provider';
 import {
   createMemoryIntelligencePipeline,
   HybridMemorySearchEngine,
   ImportanceEngine,
   type MemoryIntelligencePipeline,
   type MemorySearchEngine,
-} from '@neuron-ai-memory/ai-memory';
-import { InMemoryEmbeddingStore, MockEmbeddingProvider } from '@neuron-ai-memory/embeddings';
-import type { MemoryEngine } from '@neuron-ai-memory/memory-engine';
+} from '@neuronai/ai-memory';
+import { InMemoryEmbeddingStore, MockEmbeddingProvider } from '@neuronai/embeddings';
+import type { MemoryEngine } from '@neuronai/memory-engine';
 import {
   buildProjectKnowledgeCandidates,
   createProjectResolver,
   type ResolvedProject,
-} from '@neuron-ai-memory/project-analyzer';
-import { createLocalFileMemoryStack } from '@neuron-ai-memory/storage';
-import type { MemoryRecord, MemoryType } from '@neuron-ai-memory/types';
+} from '@neuronai/project-analyzer';
+import { createLocalFileMemoryStack } from '@neuronai/storage';
+import type { MemoryRecord, MemoryType } from '@neuronai/types';
 
 import { loadMetadata, saveMetadata } from './neuron-fs.js';
 
@@ -161,7 +161,7 @@ export async function analyzeAndSeedMemories(
       created.push(memory);
       stored += 1;
     } catch {
-      // Duplicate or validation — skip
+      // Duplicate or validation - skip
       skipped += 1;
     }
   }

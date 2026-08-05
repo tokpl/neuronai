@@ -51,7 +51,7 @@ export function registerPrompts(server: McpServer, runtime: NeuronRuntime): void
               `Summary of work: ${summary}`,
               '1. Call neuron_after_task or neuron_review_memory with the summary',
               '2. If shouldSave is true, call neuron_save_decision or neuron_store_memory',
-              '3. Avoid duplicates — search first',
+              '3. Avoid duplicates - search first',
             ].join('\n'),
           },
         },

@@ -43,7 +43,7 @@ export class ConfigValidator {
     if (config.server.mode === 'cloud') {
       issues.push({
         path: 'server.mode',
-        message: 'Cloud mode is not supported yet — use local.',
+        message: 'Cloud mode is not supported yet - use local.',
         severity: 'warning',
       });
     }
@@ -51,7 +51,7 @@ export class ConfigValidator {
     if (config.privacy.telemetry === true) {
       issues.push({
         path: 'privacy.telemetry',
-        message: 'Telemetry is enabled — Neuron never sends source code, but metrics are optional.',
+        message: 'Telemetry is enabled - Neuron never sends source code, but metrics are optional.',
         severity: 'warning',
       });
     }

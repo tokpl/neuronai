@@ -1,5 +1,5 @@
 {
-  "name": "@neuron-ai-memory/retrieval-engine",
+  "name": "@neuronai/retrieval-engine",
   "version": "0.1.0",
   "description": "Advanced multi-source retrieval, ranking, compression, and context assembly for Neuron",
   "license": "Apache-2.0",
@@ -20,7 +20,7 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "@neuron-ai-memory/types": "workspace:*"
+    "@neuronai/types": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.8.2",

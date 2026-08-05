@@ -1,7 +1,7 @@
 {
-  "name": "@neuron-ai-memory/observability",
+  "name": "@neuronai/observability",
   "version": "0.1.0",
-  "description": "Internal AI observability — traces, debug, metrics (no cloud analytics)",
+  "description": "Internal AI observability - traces, debug, metrics (no cloud analytics)",
   "license": "Apache-2.0",
   "type": "module",
   "exports": {
@@ -20,7 +20,7 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "@neuron-ai-memory/security": "workspace:*",
+    "@neuronai/security": "workspace:*",
     "pino": "^9.6.0"
   },
   "devDependencies": {

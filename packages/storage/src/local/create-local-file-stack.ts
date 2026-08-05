@@ -5,7 +5,7 @@ import type {
   MemoryRecord,
   MemoryRelationRecord,
   MemoryVersionRecord,
-} from '@neuron-ai-memory/types';
+} from '@neuronai/types';
 import {
   createMemoryEngine,
   InMemoryMemoryRelationRepository,
@@ -13,7 +13,7 @@ import {
   InMemoryMemoryVersionRepository,
   type MemoryEngine,
   type MemorySearcher,
-} from '@neuron-ai-memory/memory-engine';
+} from '@neuronai/memory-engine';
 
 import {
   createFileStorageProvider,
@@ -40,7 +40,7 @@ export interface LocalFileMemoryStack {
   memories: InMemoryMemoryRepository;
   versions: InMemoryMemoryVersionRepository;
   relations: InMemoryMemoryRelationRepository;
-  /** @deprecated use runtimeDir — kept for callers expecting dataDir */
+  /** @deprecated use runtimeDir - kept for callers expecting dataDir */
   dataDir: string;
   runtimeDir: string;
   storePath: string;
@@ -80,7 +80,7 @@ async function loadSnapshot(storePath: string): Promise<LocalFileSnapshot> {
  * Local filesystem memory stack under `.neuron/runtime/` (no Postgres required).
  * Also syncs curated `decisions.json` / `knowledge.json` for git-friendly Team Brain.
  *
- * @param projectRootOrRuntimeDir — project root (preferred) OR legacy `.neuron/data` path
+ * @param projectRootOrRuntimeDir - project root (preferred) OR legacy `.neuron/data` path
  */
 export async function createLocalFileMemoryStack(
   projectRootOrRuntimeDir: string,

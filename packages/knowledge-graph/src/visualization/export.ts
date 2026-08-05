@@ -1,5 +1,5 @@
 /**
- * Local visualization export — graph.json shape (no hosted dashboard).
+ * Local visualization export - graph.json shape (no hosted dashboard).
  */
 export {
   exportGraphJson,

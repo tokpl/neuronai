@@ -1,4 +1,4 @@
-import type { MemoryType } from '@neuron-ai-memory/types';
+import type { MemoryType } from '@neuronai/types';
 
 import type { CodeChangeAnalysis } from '../analysis/code-change-analyzer.js';
 

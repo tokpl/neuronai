@@ -1,4 +1,4 @@
-# @neuron-ai-memory/project-analyzer
+# @neuronai/project-analyzer
 
 Detects project root metadata for Neuron:
 

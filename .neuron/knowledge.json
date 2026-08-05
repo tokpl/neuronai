@@ -1,30 +1,8 @@
 {
   "version": 1,
-  "patterns": [
-    {
-      "id": "pattern-0",
-      "title": "Monorepo layout detected (pnpm workspace)",
-      "content": "Monorepo layout detected (pnpm workspace)"
-    },
-    {
-      "id": "pattern-1",
-      "title": "Architecture contains apps/packages structure",
-      "content": "Architecture contains apps/packages structure"
-    },
-    {
-      "id": "pattern-2",
-      "title": "Package manager is pnpm",
-      "content": "Package manager is pnpm"
-    }
-  ],
-  "warnings": [
-    {
-      "id": "warning-0",
-      "title": "Do not bypass permission service Bypassing permission service caused…",
-      "content": "Do not bypass permission service Bypassing permission service caused auth bugs in the past."
-    }
-  ],
+  "patterns": [],
+  "warnings": [],
   "facts": [],
   "other": [],
-  "updatedAt": "2026-08-05T21:03:50.903Z"
+  "updatedAt": "2026-08-05T21:22:33.377Z"
 }

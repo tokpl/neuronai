@@ -17,11 +17,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 24,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 26,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:29:08.173Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "8395565a-535c-4ccd-b8dc-5372abbb2d3d",
@@ -39,11 +39,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 22,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 24,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:35:55.946Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "ca88a9cf-5ccf-4841-ab38-48276540048b",
@@ -61,11 +61,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 20,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 22,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:46:24.198Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "d119754b-c0de-40df-85ee-f58da7ddda98",
@@ -83,11 +83,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 19,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 21,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:46:33.481Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "f30bbd05-ce50-45ef-880c-b4d0c694a81c",
@@ -105,11 +105,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 18,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 20,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:46:54.875Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "2c1af2a3-6cd5-472d-af9d-530a08a4662c",
@@ -127,11 +127,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 18,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 20,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:47:26.430Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "f4423458-65f7-43af-b0ab-7b0e5c48c8e6",
@@ -149,11 +149,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 17,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 19,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:54:59.342Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "1a32fb84-ba6c-4be9-9aa5-6cb242c25c7d",
@@ -171,11 +171,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 16,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 18,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:06:43.296Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "ef391eb1-1a35-4ccf-9d61-6a3d4ed886cf",
@@ -193,11 +193,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 15,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 17,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:10:47.241Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "29b06c9e-0584-4026-9afc-6a2a89212ee5",
@@ -215,11 +215,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 14,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 16,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:16:09.658Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "1f7d8295-ae1b-4c5e-b3e2-e978bf87fd84",
@@ -237,11 +237,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 13,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 15,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:24:10.255Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "104a978e-4671-4dcd-8ad9-c1b5172c5aa9",
@@ -259,11 +259,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 12,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 14,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:28:49.574Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "f3dd6817-a5f3-48a8-9599-3730a28e684b",
@@ -281,11 +281,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 11,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 13,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:33:34.244Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "a3fdb46b-73e2-4125-bd3e-86010708f8ac",
@@ -303,11 +303,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 10,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 12,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:38:15.294Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "6137fce6-991c-4629-afc9-0c514993cb76",
@@ -325,11 +325,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 9,
-      "lastUsedAt": "2026-08-05T21:03:38.447Z",
+      "usageCount": 11,
+      "lastUsedAt": "2026-08-05T21:19:33.011Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:38:58.548Z",
-      "updatedAt": "2026-08-05T21:03:38.447Z"
+      "updatedAt": "2026-08-05T21:19:33.011Z"
     },
     {
       "id": "9a9a3473-d965-40d4-bb75-49db7caf4b5d",
@@ -506,7 +506,51 @@
       "embeddingId": null,
       "createdAt": "2026-08-05T21:03:38.443Z",
       "updatedAt": "2026-08-05T21:03:38.449Z"
+    },
+    {
+      "id": "56fd9892-f708-4a49-8fc8-fead09053513",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "architecture_decision",
+      "title": "Use RBAC",
+      "content": "Problem: Need scalable permissions\nDecision: Use RBAC with hierarchy\nReason: Easier role management",
+      "importanceScore": 0.945,
+      "confidenceScore": 0.7,
+      "freshnessScore": 1,
+      "source": "agent",
+      "status": "active",
+      "version": 2,
+      "tags": [
+        "decision",
+        "has-alternatives"
+      ],
+      "usageCount": 0,
+      "lastUsedAt": null,
+      "embeddingId": null,
+      "createdAt": "2026-08-05T21:14:25.582Z",
+      "updatedAt": "2026-08-05T21:14:25.590Z"
+    },
+    {
+      "id": "0c6f84bb-e678-4c50-9a75-924666efbc63",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "architecture_decision",
+      "title": "Use RBAC",
+      "content": "Problem: Need scalable permissions\nDecision: Use RBAC with hierarchy\nReason: Easier role management",
+      "importanceScore": 0.945,
+      "confidenceScore": 0.7,
+      "freshnessScore": 1,
+      "source": "agent",
+      "status": "active",
+      "version": 2,
+      "tags": [
+        "decision",
+        "has-alternatives"
+      ],
+      "usageCount": 0,
+      "lastUsedAt": null,
+      "embeddingId": null,
+      "createdAt": "2026-08-05T21:19:33.006Z",
+      "updatedAt": "2026-08-05T21:19:33.014Z"
     }
   ],
-  "updatedAt": "2026-08-05T21:03:38.451Z"
+  "updatedAt": "2026-08-05T21:19:33.016Z"
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@neuron-ai-memory/types",
+  "name": "@neuronai/types",
   "version": "0.0.0",
   "description": "Shared types, DTOs, and error hierarchy for Neuron AI Memory",
   "license": "Apache-2.0",

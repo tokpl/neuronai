@@ -1,4 +1,4 @@
-# @neuron-ai-memory/agent-workflow
+# @neuronai/agent-workflow
 
 Intelligent observer for AI coding agents: events → analysis → suggestion → (optional) memory.
 

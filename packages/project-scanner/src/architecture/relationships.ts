@@ -4,7 +4,7 @@ import type { CodeRelationship, ScannedFile } from '../types.js';
 
 /**
  * Lightweight multi-language relationship extraction (imports / extends / implements).
- * Extensible — no full AST required for bootstrap.
+ * Extensible - no full AST required for bootstrap.
  */
 export class CodeRelationshipAnalyzer {
   async analyze(

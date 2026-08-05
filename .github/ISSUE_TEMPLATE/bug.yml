@@ -1,12 +1,12 @@
 ---
 name: Bug report
-description: Something is broken in Neuron
+description: Something is broken in neuronai
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting. Redact secrets from logs and `neuron doctor` output.
+        Thanks for reporting. Redact secrets from logs and `neuronai doctor` output.
   - type: textarea
     id: description
     attributes:
@@ -33,8 +33,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: Neuron version
-      placeholder: "0.1.0 (neuron --version)"
+      label: neuronai version
+      placeholder: "0.1.0 (neuronai --version)"
   - type: dropdown
     id: host
     attributes:
@@ -45,5 +45,5 @@ body:
   - type: textarea
     id: doctor
     attributes:
-      label: neuron doctor / neuron cursor doctor
+      label: neuronai doctor / neuronai cursor doctor
       description: Paste redacted output

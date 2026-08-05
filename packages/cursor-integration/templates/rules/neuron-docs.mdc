@@ -12,6 +12,6 @@ When the user asks to **explain the project**, update docs, or onboarding materi
 2. For regenerating living docs, call `neuron_generate_docs`
 3. Check health with `neuron_docs_health`
 4. For a module, call `neuron_module_docs`
-5. Prefer writing generated output under `.neuron/docs/` — do not invent a wiki/CMS publish step
+5. Prefer writing generated output under `.neuron/docs/` - do not invent a wiki/CMS publish step
 
 Manual docs remain in `docs/`. Neuron detects drift (e.g. README DB vs Project Brain).

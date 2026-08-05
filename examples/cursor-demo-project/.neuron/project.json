@@ -1,8 +1,0 @@
-{
-  "id": "demo-notify-hub",
-  "name": "notify-hub-demo",
-  "stack": ["javascript", "express", "redis"],
-  "generatedAt": "2026-08-05T00:00:00.000Z",
-  "gitFriendly": true,
-  "notes": "Seeded demo brain — safe to version."
-}

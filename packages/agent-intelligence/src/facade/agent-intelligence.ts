@@ -1,7 +1,7 @@
-import type { MemorySearchEngine } from '@neuron-ai-memory/ai-memory';
-import type { ProjectIntelligenceEngine } from '@neuron-ai-memory/knowledge-graph';
-import type { MemoryEngine } from '@neuron-ai-memory/memory-engine';
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemorySearchEngine } from '@neuronai/ai-memory';
+import type { ProjectIntelligenceEngine } from '@neuronai/knowledge-graph';
+import type { MemoryEngine } from '@neuronai/memory-engine';
+import type { MemoryRecord } from '@neuronai/types';
 
 import { ContextEngine, type AgentContext } from '../context/context-engine.js';
 import { TaskAnalyzer } from '../context/task-analyzer.js';

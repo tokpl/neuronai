@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { createProjectBrainBootstrap } from '@neuron-ai-memory/project-scanner';
+import { createProjectBrainBootstrap } from '@neuronai/project-scanner';
 
 import { isNeuronInitialized, loadLocalConfig, neuronPaths } from '../services/neuron-fs.js';
 import { analyzeAndSeedMemories, openProjectSession } from '../services/project-session.js';
@@ -52,7 +52,7 @@ export async function runScan(
 
   ui.step(3, 3, 'Done');
   ui.blank();
-  ui.success(`Project brain ready — ${report.memoriesCreated} memories, ${report.relationships} relationships`);
+  ui.success(`Project brain ready - ${report.memoriesCreated} memories, ${report.relationships} relationships`);
   ui.info(`  Modules: ${report.modules} · Services: ${report.services} · Deps: ${report.dependencies}`);
   ui.info(`  Report: ${join(cwd, '.neuron', 'project-report.md')}`);
   ui.suggest('Review suggested constitution: .neuron/constitution.md');
@@ -73,7 +73,7 @@ export async function runProjectReport(cwd = process.cwd()): Promise<void> {
     const md = await readFile(join(paths.neuronDir, 'project-report.md'), 'utf8');
     console.log(md);
   } catch {
-    ui.warn('No project-report.md yet — running a fast scan…');
+    ui.warn('No project-report.md yet - running a fast scan…');
     await runScan(cwd, {});
     const md = await readFile(join(paths.neuronDir, 'project-report.md'), 'utf8');
     console.log(md);

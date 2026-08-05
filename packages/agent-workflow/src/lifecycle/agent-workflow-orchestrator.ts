@@ -1,5 +1,5 @@
-import type { MemoryEngine } from '@neuron-ai-memory/memory-engine';
-import type { MemoryRecord } from '@neuron-ai-memory/types';
+import type { MemoryEngine } from '@neuronai/memory-engine';
+import type { MemoryRecord } from '@neuronai/types';
 
 import {
   CodeChangeAnalyzer,

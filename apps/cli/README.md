@@ -206,7 +206,17 @@ More: [`docs/faq.md`](./docs/faq.md)
 
 ## License
 
-[Apache-2.0](./LICENSE)
+NeuronAI’s **source code** is licensed under the [Apache License 2.0](./LICENSE).
+
+You may use, modify, and distribute the software under those terms. See also [`NOTICE`](./NOTICE).
+
+## Trademark
+
+**NeuronAI** and **Neuron - AI Memory** identify this project. The Apache License does **not** grant trademark rights to the name or logo.
+
+- Code stays open source (local NeuronAI remains Apache-2.0)
+- The brand and logo are covered by [`TRADEMARK.md`](./TRADEMARK.md)
+- Future Cloud / hosted services may be offered separately; they are optional and do not replace the local OSS product
 
 ---
 

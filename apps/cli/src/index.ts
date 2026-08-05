@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { cac } from 'cac';
 
 import { NotImplementedError } from '@neuronai/types';
@@ -16,8 +15,35 @@ import { isNeuronCliError, printNeuronError } from './diagnostics/errors.js';
 import { CLI_VERSION } from './services/neuron-fs.js';
 import { ui } from './ui/output.js';
 
+const COMMAND_GUIDE = `
+NeuronAI - Neuron - AI Memory
+
+Usage:
+  neuron <command> [options]
+
+Getting started:
+  neuron init              Create .neuron/ + scan + wire Cursor MCP
+  neuron status            Project + memory status
+  neuron doctor            Diagnose local setup
+
+Memory:
+  neuron build             Rebuild / refresh project brain from code
+  neuron scan              Same as build (fast scan)
+  neuron scan --deep       Deep scan (relations)
+  neuron scan --update     Incremental update from cache
+  neuron search <query>    Search memories
+  neuron reset --force     Wipe local .neuron/ memory
+
+Cursor:
+  neuron cursor setup      Write .cursor MCP / rules / skills
+  neuron cursor doctor     Diagnose Cursor integration
+  neuron mcp               Start MCP server (stdio)
+
+Also available as: neuronai (same CLI)
+`.trim();
+
 export function createCli() {
-  const cli = cac('neuronai');
+  const cli = cac('neuron');
 
   cli.version(CLI_VERSION);
   cli.help();
@@ -41,6 +67,22 @@ export function createCli() {
   cli.command('status', 'Show project and memory status').action(async () => {
     await runStatus(process.cwd());
   });
+
+  cli
+    .command('build', 'Rebuild project brain from the codebase (scan + seed)')
+    .option('--deep', 'Deep scan including code relationships')
+    .option('--update', 'Incremental update using scan cache')
+    .option('--architecture', 'Architecture-focused scan')
+    .action(async (options: { deep?: boolean; update?: boolean; architecture?: boolean }) => {
+      ui.title('Neuron build');
+      ui.info('Refreshing local project brain under .neuron/');
+      await runScan(process.cwd(), {
+        deep: options.deep ?? true,
+        update: options.update,
+        architecture: options.architecture,
+      });
+      await runStatus(process.cwd());
+    });
 
   cli
     .command('scan', 'Bootstrap / refresh project brain from the codebase')
@@ -97,9 +139,46 @@ export function createCli() {
   return cli;
 }
 
+function printGuide(): void {
+  console.log(COMMAND_GUIDE);
+  console.log('');
+  ui.suggest('neuron init');
+  ui.suggest('neuron status');
+  ui.suggest('neuron build');
+}
+
 async function main(): Promise<void> {
+  const argv = process.argv.slice(2);
+  if (argv.length === 0) {
+    printGuide();
+    return;
+  }
+
+  const isHelp = argv.includes('-h') || argv.includes('--help') || argv[0] === 'help';
+  const isVersion = argv.includes('-v') || argv.includes('--version');
+  const subcommand = argv.find((a) => !a.startsWith('-'));
+
   const cli = createCli();
   cli.parse(process.argv, { run: false });
+
+  if (isHelp) {
+    // cac already printed command-specific help when a subcommand was present
+    if (!subcommand || subcommand === 'help') printGuide();
+    return;
+  }
+
+  if (isVersion) {
+    return;
+  }
+
+  if (!cli.matchedCommand) {
+    ui.error(`Unknown command: ${subcommand ?? argv[0]}`);
+    ui.blank();
+    printGuide();
+    process.exitCode = 1;
+    return;
+  }
+
   try {
     await cli.runMatchedCommand();
   } catch (error) {

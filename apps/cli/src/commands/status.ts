@@ -25,9 +25,17 @@ export async function runStatus(cwd = process.cwd()): Promise<void> {
   const paths = neuronPaths(cwd);
 
   let memoryCount = meta.memoryCount;
+  let lastSyncAt = meta.lastSyncAt;
   try {
     const session = await openProjectSession(cwd);
-    memoryCount = session.listMemories().filter((m) => m.status === 'active').length;
+    const active = session.listMemories().filter((m) => m.status === 'active');
+    memoryCount = active.length;
+    const newest = active
+      .map((m) => m.updatedAt)
+      .filter(Boolean)
+      .sort()
+      .at(-1);
+    if (newest) lastSyncAt = newest;
   } catch {
     // keep metadata count
   }
@@ -53,7 +61,7 @@ export async function runStatus(cwd = process.cwd()): Promise<void> {
   ui.blank();
   console.log('Memories:');
   ui.kv('Count', String(memoryCount));
-  ui.kv('Last sync', formatRelativeTime(meta.lastSyncAt));
+  ui.kv('Last sync', formatRelativeTime(lastSyncAt));
   ui.kv('Last analyze', formatRelativeTime(meta.lastAnalyzeAt));
   ui.blank();
   console.log('Runtime:');

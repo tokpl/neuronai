@@ -141,6 +141,19 @@ export async function createLocalFileMemoryStack(
     snapshot.relations = next.relations;
     await writeFile(storePath, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
     await storage.syncFromMemories(projectRoot, next.memories);
+
+    // Keep .neuron/metadata.json in sync for `neuron status`
+    const active = next.memories.filter((m) => m.status === 'active');
+    const metaPath = join(paths.neuronDir, 'metadata.json');
+    let meta: Record<string, unknown> = {};
+    try {
+      meta = JSON.parse(await readFile(metaPath, 'utf8')) as Record<string, unknown>;
+    } catch {
+      meta = { initializedAt: new Date().toISOString(), version: '0.1.0' };
+    }
+    meta['lastSyncAt'] = new Date().toISOString();
+    meta['memoryCount'] = active.length;
+    await writeFile(metaPath, `${JSON.stringify(meta, null, 2)}\n`, 'utf8');
   };
 
   return {

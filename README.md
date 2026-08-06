@@ -23,12 +23,20 @@
 npm install -g neuronai && cd your-project && neuron init
 ```
 
+<p align="center">
+  <img src="./docs/assets/hero.png" alt="NeuronAI — give Cursor long-term memory" width="920" />
+</p>
+
 ---
 
 ## The problem
 
 Every new chat starts from zero. You re-explain the architecture, the conventions, the thing
 you tried last quarter that broke production. Then the agent confidently proposes it again.
+
+<p align="center">
+  <img src="./docs/assets/problem.png" alt="Without memory every chat forgets — with Neuron you write the decision once" width="920" />
+</p>
 
 **Without a project brain**
 
@@ -46,40 +54,70 @@ you tried last quarter that broke production. Then the agent confidently propose
 That knowledge lives in `.neuron/` in your repo, in plain JSON, versioned in Git alongside
 the code it describes.
 
-## Your AI already knows where to look
+<p align="center">
+  <img src="./docs/assets/solution.png" alt="Write once. Remembered forever — agent adapted to your architecture" width="920" />
+</p>
 
-Neuron builds a map of your project and gives your AI the relevant parts when it needs them.
+---
 
-**Neuron does not replace the coding assistant.** It removes repetitive project rediscovery.
+## See it in Cursor
+
+Neuron does **not** replace the coding assistant. It removes repetitive project rediscovery.
+Cursor is told (via the generated rule) to call `neuron_context` **before** broad repository
+exploration, then open the returned paths.
+
+<p align="center">
+  <img src="./docs/assets/before-after.png" alt="Without project memory vs with NeuronAI project memory in Cursor chat" width="920" />
+</p>
+
+<p align="center">
+  <img src="./docs/assets/demo.png" alt="Init once → memory in .neuron/ → ask in Cursor → answers use your architecture" width="920" />
+</p>
+
+---
+
+## Why it helps
+
+<p align="center">
+  <img src="./docs/assets/cards.png" alt="Less repeating, agent fits your project, decisions stick, Git share, local-first, no API key" width="920" />
+</p>
+
+---
+
+## How it works
 
 ```text
-Without NeuronAI
-
-AI receives: "Add payment cancellation."
-
-AI:
-- searches folders
-- searches files
-- searches symbols
-- rediscovers architecture
-- rereads rules
-- spends tokens discovering the project
-
-With NeuronAI
-
-AI receives:
-- billing module
-- relevant files / symbols
-- architecture + project rules
-- remembered decisions
-
-Then it reads only what matters.
+codebase ──scan──▶ .neuron/brain/ ──retrieve──▶ compile ──MCP──▶ Cursor
+                        ▲                                          │
+                        └────────── ask before remembering ◀───────┘
 ```
 
-Cursor is told (via the generated rule) to call `neuron_context` **before** broad repository
-exploration, then open the returned paths. Neuron accelerates; source files remain the authority.
+<p align="center">
+  <img src="./docs/assets/architecture.png" alt="Your repo → .neuron memory → ranked context in Cursor" width="920" />
+</p>
 
-### Inspect what the AI would see
+### Scan builds the brain
+
+`neuron init` / `neuron scan` walks the repo, detects stack and modules, and writes durable
+brain files. Structural code intelligence (symbols, verified imports/calls/routes) lives in the
+**same** `knowledge.json` plane — not a second index, not embeddings.
+
+<p align="center">
+  <img src="./docs/assets/scan-flow.png" alt="Codebase scan detects stack and writes .neuron brain files" width="920" />
+</p>
+
+<p align="center">
+  <img src="./docs/assets/knowledge-graph.png" alt="Modules, decisions, and patterns connected in project memory" width="720" />
+</p>
+
+### Compact context on every task
+
+**Retrieval** is deterministic BM25-style lexical ranking over memories, map locations, and code
+symbols. Relevance is a **gate** — importance never promotes an unrelated memory. When evidence
+exists, expansion follows high-confidence edges (start → related → dependency).
+
+**Brain Compression** packs one markdown document against a hard token budget
+(500 / 1200 / 3500 for minimal / standard / deep).
 
 ```bash
 neuron context "Where should I add a payment endpoint?"
@@ -92,221 +130,119 @@ Project Brain
 Recommended:
   src/billing/service.ts
 
-Because:
-  Service / business logic; belongs to the billing module
-
-Related:
-  src/billing/
-  src/api/routes/index.ts
-
-Relevant:
-  src/billing/
-  src/billing/stripe.ts
-  src/services/payment-service.ts
-
 Rules:
   Never call the payment provider directly from route handlers
 
-Context:
-  182 tokens
-Project corpus:
-  2143 tokens
-Estimated project context avoided:
-  ~1.9k tokens (vs whole-brain paste)
-Compression:
-  91%
-Retrieval:
-  8 ms · MODIFICATION
+Context: 182 / 2143 tokens · 8 ms · MODIFICATION
 ```
 
-`estimatedTokensSaved` compares the compiled context to pasting the whole Project Brain
-(`baseline: whole-brain-verbatim`). It is not a claim about the model's full session bill.
+`estimatedTokensSaved` compares compiled context to pasting the whole brain — **not** a claim
+about the model's full session bill.
 
-## How the Project Brain works
+---
+
+## Install & quick start
+
+```bash
+npm install -g neuronai
+cd your-project
+neuron init
+```
+
+Node.js 22+. Or: `npx neuronai init`. One package, one dependency (`@modelcontextprotocol/sdk`).
+
+<p align="center">
+  <img src="./docs/assets/quickstart.png" alt="Quick start: install, neuron init, enable Cursor MCP" width="920" />
+</p>
+
+<p align="center">
+  <img src="./docs/assets/cursor-workflow.png" alt="Developer workflow: install → init → open Cursor → ask with project context" width="920" />
+</p>
+
+Init detects the project, writes the brain, and wires Cursor. Real output sketch:
 
 ```text
-codebase ──scan──▶ .neuron/brain/ ──retrieve──▶ compile ──MCP──▶ Cursor
-                        ▲                                          │
-                        └────────── ask before remembering ◀───────┘
+[5/8] Initial scan…
+✓ Mapped 5 modules across 15 files
+✓ Learned 21 things about this project
+[7/8] Cursor integration…
+✓ Created Cursor rules + MCP (.cursor/)
 ```
 
-**Project DNA** — what the project *is*: language, framework, database, module layout, entry
-points. Detected from manifests and structure, each claim carrying a confidence and its evidence.
+### Connect Cursor
 
-**Knowledge** — what the project has *decided*: architecture decisions, patterns, constraints,
-warnings. Seeded from your README, code structure and Git history, then grown as you work.
-The same plane also holds the **project map** (where things live) and **code intelligence**
-(exported symbols and verified relationships — imports, calls, routes — each with evidence and
-confidence). Neuron prefers a missing edge over a wrong one.
+`neuron init` writes `.cursor/mcp.json` and agent rules. Then **Settings → Tools & MCP → enable
+"neuron"**. After upgrading NeuronAI, toggle the server off/on (or Reload Window) so the tool
+list refreshes to the current **7 tools**. If chat still shows `neuron_prepare_task` or
+`CallMcpTool` returns `-32602`, that is a **stale Cursor catalog** — reload MCP; do not rewrite
+config.
 
-**Retrieval** — deterministic BM25-style lexical ranking over memories, map locations, and code
-symbols. When evidence exists, context expansion follows high-confidence edges so the agent gets
-a connected slice (start → related → dependency → flow), not a random file list.
+```bash
+neuron cursor     # connection status
+neuron doctor     # stdio catalog + IDE reload guidance
+```
 
-Relevance is a **gate**, not one term in a weighted sum. Importance and freshness are applied
-multiplicatively, so they reorder memories that already match your task but can never promote an
-unrelated one. If nothing matches, Neuron says so instead of returning its most important memory.
+---
 
-**Brain Compression** — the brain can be large; the context sent to the model is small. One
-markdown document, packed against a hard token budget, dropping the least valuable section first:
-patterns before constraints, constraints before decisions, decisions before warnings.
+## What lives on disk
 
-| Mode | Budget | For |
-| --- | --- | --- |
-| `minimal` (default) | 500 tokens | everyday coding |
-| `standard` | 1200 tokens | multi-file features |
-| `deep` | 3500 tokens | architecture and refactors |
+<p align="center">
+  <img src="./docs/assets/folder-structure.png" alt=".neuron folder structure on disk" width="920" />
+</p>
 
-## Local-first, and it is tested
+```text
+.neuron/
+├── prefs.json            # your init answers                 (commit)
+├── brain/
+│   ├── dna.json          # stack, modules, structure         (commit)
+│   ├── knowledge.json    # memories, decisions, rules, code  (commit)
+│   └── health.json       # derived health score              (commit)
+├── runtime/store.json    # regenerable engine store          (ignored)
+└── cache/                # scan cache                        (ignored)
+```
+
+Commit `.neuron/brain/` and your team shares one project memory.
+
+---
+
+## Ask before remembering
+
+Neuron never writes a memory you did not approve. After a change the agent proposes a draft and
+asks **Yes · Edit · No**. From the terminal:
+
+```bash
+neuron remember "Rate limiting belongs in middleware, not individual handlers"
+```
+
+---
+
+## MCP tools
+
+Seven tools, one job each. Full reference: [`docs/mcp.md`](./docs/mcp.md).
+
+| Tool | Purpose |
+| --- | --- |
+| `neuron_context` | Ranked, compressed project knowledge for a task — **call first** |
+| `neuron_search` | Keyword search over memories |
+| `neuron_remember` | Store a decision, pattern, warning or fact |
+| `neuron_update` | Change a memory (versioned) |
+| `neuron_after_task` | Propose what to remember after coding |
+| `neuron_resolve_suggestion` | Apply Yes / Edit / No |
+| `neuron_scan` | Rebuild the brain from the codebase |
+
+---
+
+## Local-first (tested)
 
 | | |
 | --- | --- |
 | Cloud services | none |
 | API keys | none |
 | Database | none — plain JSON files |
-| Telemetry | none, not even opt-in |
-| Network calls at runtime | none |
+| Telemetry | none |
+| Network at runtime | none (`pnpm verify:offline`) |
 
-This is checked, not just asserted. `pnpm verify:offline` runs the whole journey — init, scan,
-search, doctor — with outbound sockets, DNS and `fetch` disabled. Any network attempt throws.
-
-## Install
-
-```bash
-npm install -g neuronai
-```
-
-Node.js 22+. Or without installing:
-
-```bash
-npx neuronai init
-```
-
-One package, one dependency. Nothing to configure.
-
-## Quick start
-
-```bash
-cd your-project
-neuron init
-```
-
-Init detects the project, reads the codebase, writes the brain, and wires Cursor. It asks two
-questions — or none with `--yes`. Real output from a Next.js + PostgreSQL app:
-
-```text
-[5/8] Initial scan…
-✓ Mapped 5 modules across 15 files
-✓ Learned 21 things about this project
-[6/8] Brain creation…
-✓ Project Brain written (.neuron/brain/ + prefs.json)
-[7/8] Cursor integration…
-✓ Created Cursor rules + MCP (.cursor/)
-
-What Neuron learned
-
-Project: acme-shop
-
-Detected
-  Language        typescript
-  Framework       nextjs
-  Database        postgresql
-  Package manager npm
-  Git repository  yes
-  Modules         5 (auth, billing, api, services, repositories)
-  Files read      15
-
-Brain
-  21 memories
-  1 architecture decisions
-  4 conventions (suggested — review them)
-  Architecture confidence 87%
-
-Cursor
-  MCP server      registered in .cursor/mcp.json
-  Agent rules     installed
-```
-
-It tells you what it *could not* work out too, so you are never guessing what it knows.
-
-## Connect Cursor
-
-`neuron init` writes `.cursor/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "neuron": {
-      "command": "npx",
-      "args": ["-y", "neuronai", "mcp"]
-    }
-  }
-}
-```
-
-Then **Cursor Settings → Tools & MCP → enable "neuron"**. Cursor keeps MCP servers off until you
-turn them on. **After upgrading NeuronAI**, toggle the server off/on (or Reload Window) so the
-tool list refreshes to the current 7 tools (`neuron_context`, …). If chat still shows
-`neuron_prepare_task` / `CallMcpTool` returns `-32602`, that is a **stale Cursor catalog**, not a
-bad `mcp.json` — reload MCP; do not rewrite config.
-
-Check the wiring any time:
-
-```bash
-neuron cursor     # connection status and next steps
-neuron doctor     # probes stdio tool catalog; flags IDE reload as a manual gate
-node scripts/mcp-proof-stdio.mjs   # STDIO_MCP_PROOF regression (7 tools + neuron_context call)
-```
-
-Three proofs (do not mix them):
-
-| Label | Meaning |
-| --- | --- |
-| `STDIO_MCP_PROOF` | Configured `neuron mcp` binary lists 7 tools; `neuron_context` callable |
-| `CURSOR_MCP_PROOF` | Cursor IDE chat/Task actually shows and invokes `neuron_context` |
-| `LIVE_AGENT_PROOF` | Real agent A/B with MCP path (blocked until `CURSOR_MCP_PROOF`) |
-## A real example
-
-Ask the terminal what the project knows:
-
-```text
-$ neuron search "how does billing work"
-
-[ 78%] Billing runs through Stripe webhooks
-    Billing runs through Stripe webhooks; we never store card data.
-    knowledge · matched bill · in title · 100% of task terms
-```
-
-And this is the whole context the agent receives for a task — no JSON twin, no ranking metadata,
-no memory ids:
-
-```markdown
-# Task
-change the memory consent UX
-
-## Decisions
-- Ask-before-remember UX: autoSave true with Yes/No consent
-- Project uses modular architecture — Detected modules: cli, mcp-server, brain, storage…
-```
-
-101 tokens selected from a 784-token brain. The licensing decision, the persistence decision and
-the auth pattern were all correctly left out.
-
-## Ask before remembering
-
-Neuron never writes a memory you did not approve. After a change the agent proposes a draft and
-asks:
-
-> I learned something about your project.
-> **Auth lives behind JWT middleware** — all authentication runs through JWT middleware,
-> never inline in route handlers.
-> **Yes** · **Edit** · **No**
-
-Same flow from the terminal:
-
-```bash
-neuron remember "Rate limiting belongs in middleware, not individual handlers"
-```
+---
 
 ## Honest metrics
 
@@ -314,33 +250,19 @@ neuron remember "Rate limiting belongs in middleware, not individual handlers"
 neuron brain
 ```
 
-Every number is labelled **measured** (counted from disk), **derived** (computed from counted
-values) or **estimated** (a labelled heuristic). Token counts use a chars/4 approximation and say
-so. Compression figures appear only after a real compilation has produced them — nothing is
-presented as a saving that was not measured.
-
-Keep these separate forever:
+Keep these labels separate:
 
 | Label | Meaning |
 | --- | --- |
-| **Brain compression** (MEASURED) | Whole brain → compiled `neuron_context` |
-| **Exploration policy** (SIMULATED) | Scripted baseline vs Neuron file/grep ops |
-| **Live agent proof** | Real Cursor/LLM tool traces — currently **UNAVAILABLE** without API keys |
+| **Brain compression** | Whole brain → compiled `neuron_context` (measured) |
+| **Exploration policy** | Scripted baseline vs Neuron ops (simulated) |
+| **Live agent proof** | Real Cursor tool traces — measured on hard MCP A/B for this release; **not** token/latency savings |
 
 Never call Brain compression “agent token savings.” Never call the scripted exploration harness a
-live-agent result.
+live-agent result. Details: [`docs/FINAL_RELEASE_AUDIT.md`](./docs/FINAL_RELEASE_AUDIT.md),
+[`docs/LIVE_AGENT_MCP_VALIDATION.md`](./docs/LIVE_AGENT_MCP_VALIDATION.md).
 
-## Performance
-
-Measured on this machine, cold, single-threaded:
-
-| Project | Files | `init` | `scan` | `scan --update` | search | context |
-| --- | --- | --- | --- | --- | --- | --- |
-| small | 14 | 101 ms | 78 ms | 2 ms | 0.21 ms | 0.23 ms |
-| medium | 242 | 160 ms | 144 ms | 25 ms | 0.08 ms | 0.13 ms |
-| large | 1,842 | 557 ms | 587 ms | 163 ms | 0.09 ms | 0.13 ms |
-
-`--update` skips re-analysis when nothing changed. The brain for a 1,842-file project is 11 KB.
+---
 
 ## Commands
 
@@ -349,47 +271,27 @@ Measured on this machine, cold, single-threaded:
 | `neuron init` | Detect the project, build the brain, wire Cursor |
 | `neuron scan` | Re-learn from the codebase (`--deep`, `--update`) |
 | `neuron search <query>` | Search what the project knows |
+| `neuron context <task>` | Show compact context for a task |
 | `neuron remember <text>` | Add something yourself |
 | `neuron brain` | Metrics: measured, derived, estimated |
 | `neuron status` | Project and memory overview |
-| `neuron cursor` | Cursor connection status and next steps |
-| `neuron doctor` | Diagnose the brain, storage and Cursor setup |
-| `neuron reset --force` | Delete the local brain |
-| `neuron mcp` | Run the MCP server (Cursor calls this for you) |
+| `neuron cursor` | Cursor connection status |
+| `neuron doctor` | Diagnose brain, storage and Cursor setup |
+| `neuron mcp` | MCP server (Cursor calls this) |
 
-## What is on disk
+---
 
-```text
-.neuron/
-├── prefs.json            # your init answers                 (commit)
-├── brain/
-│   ├── dna.json          # stack, modules, structure         (commit)
-│   ├── knowledge.json    # memories, decisions, rules, graph (commit)
-│   └── health.json       # derived health score              (commit)
-├── runtime/store.json    # regenerable engine store          (ignored)
-└── cache/                # scan cache                        (ignored)
-```
+## Roadmap
 
-Commit `.neuron/brain/` and your team shares one project memory. `neuron init` writes the
-matching `.gitignore` block. Delete the folder and NeuronAI is gone — nothing else is touched.
+Local OSS stays free. Cloud is optional convenience — not required for the core product.
 
-Writes go through a temp file and `rename`, so an interrupted write cannot corrupt the brain.
+<p align="center">
+  <img src="./docs/assets/roadmap.png" alt="Roadmap: local OSS now; optional cloud console, sync, and hosted extras later" width="920" />
+</p>
 
-## MCP tools
+---
 
-Seven tools, one job each. Full reference in [`docs/mcp.md`](./docs/mcp.md).
-
-| Tool | Purpose |
-| --- | --- |
-| `neuron_context` | Ranked, compressed project knowledge for a task |
-| `neuron_search` | Keyword search over memories |
-| `neuron_remember` | Store a decision, pattern, warning or fact |
-| `neuron_update` | Change a memory (versioned) |
-| `neuron_after_task` | Propose what to remember after coding |
-| `neuron_resolve_suggestion` | Apply the user's Yes / Edit / No |
-| `neuron_scan` | Rebuild the brain from the codebase |
-
-## Architecture
+## Architecture (monorepo)
 
 ```text
 apps/cli          the neuron binary (bundled, self-contained)
@@ -399,15 +301,9 @@ packages/storage  the one runtime construction path
 packages/*        scanner, config, types, Cursor integration
 ```
 
-`ProjectBrain` owns persistence and lifecycle. Retrieval owns relevance. The compiler owns shape.
-The scanner owns project analysis. The CLI and MCP server are adapters and build the runtime the
-same way, through `createNeuronRuntime()`.
-
 More: [How it works](./docs/how-it-works.md) · [`.neuron/` folder](./docs/neuron-folder.md) ·
 [FAQ](./docs/faq.md) · [Privacy](./docs/privacy.md) ·
-[Production readiness](./docs/PRODUCTION_READINESS.md) ·
-[Daily-use product](./docs/DAILY_USE_PRODUCT.md) ·
-[P4 validation](./docs/P4_PRODUCT_VALIDATION.md)
+[Production readiness](./docs/PRODUCTION_READINESS.md).
 
 ## Contributing
 
@@ -416,15 +312,13 @@ pnpm install
 pnpm verify   # lint, typecheck, test, build, package + offline checks
 ```
 
-`pnpm verify` is the gate. It must pass before a change lands — there is no CI to catch it later.
-
-See [CONTRIBUTING](./CONTRIBUTING.md). Bugs and ideas:
+See [CONTRIBUTING](./CONTRIBUTING.md). Issues:
 [open an issue](https://github.com/tokpl/neuronai/issues).
 
 ## License
 
-[AGPL-3.0](./LICENSE). The name and logo are covered separately by [TRADEMARK](./TRADEMARK.md).
-Security policy: [SECURITY](./SECURITY.md).
+[AGPL-3.0](./LICENSE). Name and logo: [TRADEMARK](./TRADEMARK.md).
+Security: [SECURITY](./SECURITY.md).
 
 <p align="center">
   <a href="https://github.com/tokpl/neuronai">github.com/tokpl/neuronai</a>

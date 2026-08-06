@@ -4,7 +4,7 @@
  * Separates STDIO_MCP_PROOF vs CURSOR_MCP_PROOF vs LIVE_AGENT_PROOF.
  */
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 

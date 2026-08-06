@@ -7,14 +7,25 @@ package** — installing it no longer pulls a dozen `@neuronai/*` packages that 
 matching versions. The workspace libraries are private and bundled into the CLI.
 
 Upgrading from 0.1.x: run `neuron scan` once. The brain layout migrates automatically.
+After upgrading, **reload Cursor MCP** (Settings → Tools & MCP → toggle neuron, or Reload Window)
+so the IDE tool catalog matches the 7-tool surface.
 
 ### Packaging
 
-- One published package with one dependency (`@modelcontextprotocol/sdk`), 107 KB
+- One published package with one dependency (`@modelcontextprotocol/sdk`)
 - `pnpm verify:package` installs the tarball into a clean project and fails if any
   `@neuronai/*` package is resolved from the registry
 - `pnpm verify:offline` runs init, scan, search and doctor with sockets and DNS disabled
 - `pnpm verify` chains lint, typecheck, test, build and both of the above — the release gate
+
+### Cursor MCP
+
+- Product surface is **exactly 7 tools**, primary entry `neuron_context`
+- Legacy names (`neuron_prepare_task`, `neuron_get_context`, …) are gone from the binary
+- `neuron cursor doctor` distinguishes stdio catalog vs IDE catalog / reload guidance
+- Live Cursor Task A/B (hard tool traces, n=20×2 on one repo): agents that call
+  `neuron_context` first showed lower exploration/file-read medians with task success held.
+  Token/latency savings are **not** claimed.
 
 ### Product
 

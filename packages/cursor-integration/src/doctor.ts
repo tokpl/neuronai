@@ -109,7 +109,10 @@ export async function probeConfiguredMcp(
     };
 
     const timer = setTimeout(() => {
-      finish({ tools: [], error: 'MCP probe timed out' });
+      finish({
+        tools: [],
+        error: err.trim() ? `MCP probe timed out: ${err.trim().slice(0, 200)}` : 'MCP probe timed out',
+      });
     }, 12_000);
 
     child.stdout.on('data', (chunk: Buffer) => {

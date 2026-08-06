@@ -11,7 +11,7 @@
  *   node scripts/live-agent-mcp-validation.mjs
  *   node scripts/live-agent-mcp-validation.mjs --status
  */
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';

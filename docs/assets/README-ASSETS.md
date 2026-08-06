@@ -12,18 +12,30 @@ Rich dark continuous PNG set for the product README (not SVG, not ultra-minimal)
 
 ## Scroll order (README)
 
-| File | Content |
+| File | Section |
 |------|---------|
-| `logo.png` | Mark (markdown) |
-| `hero.png` | Slogan, CTA, Cursor mock |
-| `problem.png` | Problem left / fix right |
-| `solution.png` | Write once + benefits |
-| `before-after.png` | Full IDE chat comparison |
-| `demo.png` | Clear story: Init once → Memory in `.neuron/` → Ask in Cursor → Answers use your architecture |
-| `cards.png` | Six why-it-helps cards |
-| `folder-structure.png` | Rich `.neuron/` tree |
-| `architecture.png` | Repo → memory → Cursor (3 panels) |
-| `quickstart.png` | Steps + integrated terminal |
-| `roadmap.png` | **Now:** free local OSS + Git team brain · **Next/Soon/Later:** optional cloud conveniences (console, sync, hosted extras). Local stays free — cloud is not an “enterprise upgrade” story. |
+| `logo.png` | Title mark |
+| `hero.png` | Hero / CTA |
+| `problem.png` | The problem |
+| `solution.png` | The fix |
+| `before-after.png` | Cursor chat comparison |
+| `demo.png` | End-to-end story |
+| `cards.png` | Why it helps |
+| `architecture.png` | Repo → memory → Cursor |
+| `scan-flow.png` | Scan builds the brain |
+| `knowledge-graph.png` | Modules / decisions / patterns |
+| `quickstart.png` | Install steps |
+| `cursor-workflow.png` | Developer workflow |
+| `folder-structure.png` | `.neuron/` on disk |
+| `roadmap.png` | Now / next / soon / later |
 
-Removed from the landing queue (do not use): separate `workflow`, `cursor-chat`, `terminal` panels.
+## Do not use in README (misleading or redundant)
+
+| File | Why |
+|------|-----|
+| `retrieval-flow.png` | Footer implies embeddings/indexing — product is lexical, no embeddings |
+| `before-vs-after.png` | Prefer `before-after.png` |
+| `banner.png` | Prefer `hero.png` |
+| `demo-flow.gif` | Placeholder / broken |
+
+Local stays free — cloud cards on `roadmap.png` are optional convenience, not an “enterprise upgrade” story.

@@ -657,7 +657,7 @@ function scoreRun({ task, arm, sequence, usage, wallMs, status, error, neuronMet
     wall_clock_ms: wallMs,
     sequence: sequence.map((s) => `${s.kind}:${s.name}${s.path ? `(${s.path})` : ''}`),
     sequence_short: sequence.slice(0, 12).map((s) => s.name),
-    list_dir,
+    list_dir: listDir,
     grep_search: grep,
     file_reads: reads,
     edits,

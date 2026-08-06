@@ -62,9 +62,6 @@ function findTranscript(agentId) {
 function extractToolUses(raw) {
   const events = [];
   // tool_use may appear as JSON objects inside lines
-  const re =
-    /"type"\s*:\s*"tool_use"\s*,\s*"name"\s*:\s*"([^"]+)"\s*,\s*"input"\s*:\s*(\{[\s\S]*?\})(?=\s*\},?\s*\{|\s*\}\s*\])/g;
-  // Simpler line-based parse: each assistant message may contain multiple tool_use
   for (const line of raw.split(/\n/)) {
     if (!line.includes('"tool_use"')) continue;
     let idx = 0;
@@ -213,7 +210,6 @@ function scoreRun(key, agentId) {
           ledger.slice(firstUsefulIdx + 1).filter((e) => e.kind === 'list_dir' || e.kind === 'grep')
             .length >= 2);
 
-  const firstTool = ledger[0]?.tool ?? null;
   const correctStart =
     taskId === 'T13'
       ? !ledger.some((e) => e.path && /kubernetes|terraform/i.test(e.path || ''))

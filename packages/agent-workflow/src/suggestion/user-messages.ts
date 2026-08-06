@@ -16,7 +16,10 @@ export interface SuggestionAskQuestionOption {
   label: string;
 }
 
-/** Shape for Cursor AskQuestion (or equivalent UI picker). */
+/**
+ * Payload shaped for Cursor's AskQuestion tool (title + prompt + options).
+ * Agents MUST prefer AskQuestion over pasting options as chat markdown.
+ */
 export interface SuggestionAskQuestion {
   title: string;
   prompt: string;
@@ -27,7 +30,7 @@ export interface UserPromptMessage {
   headline: string;
   body: string;
   options: SuggestionUserAction[];
-  /** Compact string for CLI / MCP text content (user-facing) */
+  /** Compact string for CLI / MCP text fallback when AskQuestion is unavailable */
   text: string;
   /** Prefer presenting this via Cursor AskQuestion when available */
   askQuestion: SuggestionAskQuestion | null;
@@ -38,6 +41,9 @@ const CONFIRM_OPTIONS: SuggestionAskQuestionOption[] = [
   { id: 'edit', label: 'Edit — change the proposed memory' },
   { id: 'ignore', label: "No — don't save it" },
 ];
+
+/** Short AskQuestion window title — emoji + product name. */
+export const ASK_QUESTION_TITLE = '🧠 Project Brain';
 
 /**
  * Build the ask-before-remember UX.
@@ -57,7 +63,7 @@ export function formatSuggestionMessage(input: {
 }): UserPromptMessage {
   if (!input.shouldSuggest) {
     const text =
-      'Nothing durable enough for the Project Brain from this change — no architecture decision, pattern, or lasting constraint to store.';
+      '🧠 Nothing durable enough for the Project Brain from this change — no architecture decision, pattern, or lasting constraint to store.';
     return {
       headline: 'No suggestion',
       body: text,
@@ -67,27 +73,23 @@ export function formatSuggestionMessage(input: {
     };
   }
 
-  const sectionHeading = input.sectionHeading ?? 'Project knowledge to remember';
+  const sectionHeading = input.sectionHeading ?? '🧠 Project knowledge to remember';
   const proposed = input.draftContent.trim() || input.analysis.summary;
   const confirmQuestion = confirmationQuestionForType(input.type);
 
-  const headline = sectionHeading;
-  const body = [sectionHeading, '', proposed, '', confirmQuestion].join('\n');
+  // Visual hierarchy: emoji heading → proposed memory → confirm question.
+  const promptBody = [sectionHeading, '', proposed, '', confirmQuestion].join('\n');
 
-  // Order is load-bearing: proposed memory before confirmation.
   const askQuestion: SuggestionAskQuestion = {
-    title: sectionHeading,
-    prompt: [sectionHeading, '', proposed, '', confirmQuestion].join('\n'),
+    title: ASK_QUESTION_TITLE,
+    prompt: promptBody,
     options: CONFIRM_OPTIONS,
   };
 
   const text = [
-    sectionHeading,
+    promptBody,
     '',
-    proposed,
-    '',
-    confirmQuestion,
-    '',
+    '—',
     'Options:',
     '• Yes — save this',
     '• Edit — change the proposed memory',
@@ -97,8 +99,8 @@ export function formatSuggestionMessage(input: {
   ].join('\n');
 
   return {
-    headline,
-    body,
+    headline: sectionHeading,
+    body: promptBody,
     options: ['save', 'edit', 'ignore'],
     text,
     askQuestion,

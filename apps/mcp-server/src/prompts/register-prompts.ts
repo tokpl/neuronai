@@ -42,9 +42,10 @@ export function registerPrompts(server: McpServer, runtime: McpRuntime): void {
             type: 'text',
             text: [
               `Work completed: ${summary}`,
-              'Call neuron_after_task. If it proposes a draft, show the proposed memory first',
-              '(draft.content / question.prompt), then ask Yes — save / Edit — change proposed memory / No.',
-              'Then call neuron_resolve_suggestion with their answer.',
+              'Call neuron_after_task. If suggest=true and AskQuestion is available,',
+              'call AskQuestion with question.title / question.prompt / question.options',
+              '(prompt already shows the proposed memory). Then neuron_resolve_suggestion.',
+              'Do not paste Yes/Edit/No as markdown when AskQuestion works.',
             ].join('\n'),
           },
         },

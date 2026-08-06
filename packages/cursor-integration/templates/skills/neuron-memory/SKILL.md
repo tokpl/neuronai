@@ -32,11 +32,13 @@ Neuron tells you **where to look** and **what rules apply** before you rediscove
 
 ## After coding
 
-`neuron_after_task` → **show the proposed memory** (`draft.content` / `question.prompt`) →
-ask Yes / Edit / No → `neuron_resolve_suggestion`.
+`neuron_after_task` → **AskQuestion** with `question` (title / prompt / options) when available →
+`neuron_resolve_suggestion`.
 
-Never ask for confirmation before the user has seen the durable knowledge that would be stored.
-Edit rewrites that proposed memory text, not the code.
+`question.prompt` already shows the proposed durable memory before the confirmation line.
+Never ask for confirmation before that text is visible. Never paste Yes/Edit/No as markdown when
+AskQuestion is available. Edit rewrites the proposed memory text, not the code.
+If AskQuestion is missing, fall back to showing `question.prompt` in chat.
 
 ## Context budget
 

@@ -4,19 +4,20 @@ import type { CodeChangeAnalysis } from '../analysis/code-change-analyzer.js';
 
 export interface DurableMemoryDraft {
   title: string;
+  /** Multi-line durable prose stored in Project Brain and shown before confirmation */
   content: string;
-  /** User-facing section heading shown before the Yes/Edit/No question */
+  /** User-facing section heading (includes brain emoji) */
   sectionHeading: string;
 }
 
 const SECTION_BY_TYPE: Record<MemoryType, string> = {
-  architecture_decision: 'Architecture decision to remember',
-  pattern: 'Project pattern to remember',
-  mistake: 'Warning to remember',
-  dependency: 'Dependency decision to remember',
-  business_rule: 'Business rule to remember',
-  knowledge: 'Project knowledge to remember',
-  context: 'Project knowledge to remember',
+  architecture_decision: '🧠 Architecture decision to remember',
+  pattern: '🧠 Project pattern to remember',
+  mistake: '🧠 Warning to remember',
+  dependency: '🧠 Dependency decision to remember',
+  business_rule: '🧠 Business rule to remember',
+  knowledge: '🧠 Project knowledge to remember',
+  context: '🧠 Project knowledge to remember',
 };
 
 function firstLine(text: string | undefined): string | undefined {
@@ -24,35 +25,53 @@ function firstLine(text: string | undefined): string | undefined {
   return line || undefined;
 }
 
-function ownershipClause(modules: string[]): string | undefined {
+function ensureSentence(text: string): string {
+  const t = text.trim();
+  if (!t) return t;
+  return /[.!?]$/.test(t) ? t : `${t}.`;
+}
+
+function ownershipLine(modules: string[]): string | undefined {
   if (modules.length === 0) return undefined;
   const focus = modules.slice(0, 3).join(', ');
   if (modules.length === 1) {
-    return `Canonical ownership sits in ${focus}.`;
+    return `Canonical: ${focus} owns this change — extend there first.`;
   }
-  return `Primary ownership spans ${focus}.`;
+  return `Canonical: primary ownership spans ${focus}.`;
 }
 
-function whyClause(type: MemoryType, analysis: CodeChangeAnalysis): string {
+/** Soft extract of what was replaced/retired from the human decision text. */
+function replacedLine(blob: string): string | undefined {
+  const replace =
+    blob.match(
+      /\b(?:replace[sd]?|retir(?:e|ed|ing)|deprecat(?:e|ed|ing)|remov(?:e|ed|ing)|migrat(?:e|ed|ing)\s+(?:away\s+from|off))\s+([^.;,\n]+)/i,
+    ) ?? null;
+  if (!replace?.[1]) return undefined;
+  const target = replace[1].replace(/\s+/g, ' ').trim();
+  if (target.length < 3 || target.length > 120) return undefined;
+  return `Replaces: ${ensureSentence(target)}`;
+}
+
+function whyLine(type: MemoryType, analysis: CodeChangeAnalysis): string {
   switch (type) {
     case 'architecture_decision':
       return 'Why: future work should extend this architecture rather than reintroduce the previous approach.';
     case 'dependency':
-      return 'Why: future dependency choices should respect this decision unless it is explicitly revisited.';
+      return 'Why: keep dependency choices consistent unless this decision is explicitly revisited.';
     case 'mistake':
       return 'Why: avoid repeating this failure mode in related changes.';
     case 'pattern':
       return 'Why: prefer this established pattern over reinventing the same structure.';
     case 'business_rule':
-      return 'Why: implementers must keep this rule consistent across features.';
+      return 'Why: keep this rule consistent across features.';
     default:
       if (analysis.hasAuthChange) {
-        return 'Why: auth is a high-impact boundary; treat the current approach as the source of truth.';
+        return 'Why: auth is a high-impact boundary — treat the current approach as source of truth.';
       }
       if (analysis.hasSchemaChange) {
         return 'Why: schema changes constrain storage and migrations for later work.';
       }
-      return 'Why: future coding agents should use this as project knowledge instead of rediscovering it.';
+      return 'Why: future coding agents should use this instead of rediscovering it.';
   }
 }
 
@@ -63,20 +82,16 @@ function decisionSentence(input: {
   type: MemoryType;
 }): string {
   const fromCommit = firstLine(input.commitMessage);
-  if (fromCommit) {
-    // Prefer the human decision statement; normalize trailing punctuation lightly.
-    return /[.!?]$/.test(fromCommit) ? fromCommit : `${fromCommit}.`;
-  }
+  if (fromCommit) return ensureSentence(fromCommit);
 
   const fromTask = firstLine(input.task);
   if (fromTask && fromTask.toLowerCase() !== 'untitled task') {
-    return /[.!?]$/.test(fromTask) ? fromTask : `${fromTask}.`;
+    return ensureSentence(fromTask);
   }
 
-  // Fall back to analyzer summary — already durable-ish, not a file dump.
   const summary = input.analysis.summary.trim();
   if (summary && summary !== 'Code changes detected') {
-    return /[.!?]$/.test(summary) ? summary : `${summary}.`;
+    return ensureSentence(summary);
   }
 
   if (input.type === 'dependency') {
@@ -101,20 +116,23 @@ export function synthesizeDurableMemory(input: {
     input.analysis.summary;
 
   const decision = decisionSentence(input);
-  const ownership = ownershipClause(input.analysis.modules);
-  const why = whyClause(input.type, input.analysis);
+  const blob = [input.commitMessage, input.task, input.analysis.summary]
+    .filter(Boolean)
+    .join('\n');
+  const replaced = replacedLine(blob);
+  const ownership = ownershipLine(input.analysis.modules);
+  const why = whyLine(input.type, input.analysis);
 
-  const parts = [decision];
-  if (ownership) parts.push(ownership);
-  parts.push(why);
-
-  // Keep 2–5 short sentences; join with spaces for a readable paragraph block.
-  const content = parts.join(' ').replace(/\s+/g, ' ').trim();
+  // Readable block for AskQuestion + Project Brain storage (not a changelog).
+  const lines = [decision];
+  if (ownership) lines.push(ownership);
+  if (replaced) lines.push(replaced);
+  lines.push(why);
 
   return {
     title,
-    content,
-    sectionHeading: SECTION_BY_TYPE[input.type] ?? 'Project knowledge to remember',
+    content: lines.join('\n\n'),
+    sectionHeading: SECTION_BY_TYPE[input.type] ?? '🧠 Project knowledge to remember',
   };
 }
 

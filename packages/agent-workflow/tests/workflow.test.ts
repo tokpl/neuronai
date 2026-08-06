@@ -147,12 +147,15 @@ describe('WorkflowRules + MemorySuggestionEngine', () => {
 
     expect(suggestion.shouldSuggest).toBe(true);
     expect(suggestion.type).toBe('architecture_decision');
-    expect(suggestion.sectionHeading).toBe('Architecture decision to remember');
+    expect(suggestion.sectionHeading).toBe('🧠 Architecture decision to remember');
     expect(suggestion.draftContent).toMatch(/WorkflowDraftGraphService/i);
     expect(suggestion.draftContent).toMatch(/Why:/i);
+    expect(suggestion.draftContent).toMatch(/Replaces:/i);
     expect(suggestion.draftContent).not.toMatch(/Impact:/i);
     expect(suggestion.draftContent).not.toMatch(/files:\s*\d+/i);
+    expect(suggestion.prompt.askQuestion!.title).toBe('🧠 Project Brain');
     expect(suggestion.prompt.askQuestion!.prompt).toContain(suggestion.draftContent);
+    expect(suggestion.prompt.askQuestion!.prompt.startsWith('🧠')).toBe(true);
     expect(
       suggestion.prompt.askQuestion!.prompt.indexOf(suggestion.draftContent),
     ).toBeLessThan(
@@ -220,7 +223,8 @@ describe('AgentWorkflowOrchestrator', () => {
     });
 
     expect(result.suggestion?.shouldSuggest).toBe(true);
-    expect(result.promptText).toMatch(/Architecture decision to remember/i);
+    expect(result.promptText).toMatch(/🧠 Architecture decision to remember/);
+    expect(result.askQuestion?.title).toBe('🧠 Project Brain');
     expect(result.askQuestion?.options.map((o) => o.id)).toEqual(['save', 'edit', 'ignore']);
     // No engine was supplied, so nothing could have been written.
     expect(result.persisted).toBeNull();
@@ -243,6 +247,7 @@ describe('AgentWorkflowOrchestrator', () => {
     // Proposed memory must be present in the confirmation UX.
     expect(prompt).toContain(draft);
     expect(text).toContain(draft);
+    expect(prompt.startsWith('🧠')).toBe(true);
 
     // And it must appear *before* asking for confirmation.
     const confirmRe = /Should I remember this architecture decision for the project\?/;
@@ -251,7 +256,9 @@ describe('AgentWorkflowOrchestrator', () => {
     expect(text.indexOf(draft)).toBeLessThan(text.search(confirmRe));
 
     // Section heading precedes the body.
-    expect(prompt.indexOf('Architecture decision to remember')).toBeLessThan(prompt.indexOf(draft));
+    expect(prompt.indexOf('🧠 Architecture decision to remember')).toBeLessThan(
+      prompt.indexOf(draft),
+    );
 
     // Options clarify Edit = rewrite proposed memory, not code.
     expect(result.askQuestion!.options).toEqual([
@@ -266,7 +273,7 @@ describe('AgentWorkflowOrchestrator', () => {
     expect(draft).not.toMatch(/^Signals:/m);
     expect(draft).not.toMatch(/^Task:/m);
     expect(draft).toMatch(/Why:/i);
-    expect(draft.length).toBeLessThan(600);
+    expect(draft.length).toBeLessThan(800);
   });
 
   it('does not manufacture a remember prompt for trivial changes', async () => {

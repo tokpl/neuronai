@@ -28,16 +28,27 @@ Neuron already documents one.
 
 Call `neuron_after_task` with a short summary of what changed.
 
-If it proposes a draft, **show the proposed durable memory first** (from `draft.content` /
-`question.prompt`), then ask Yes / Edit / No. Do not ask for confirmation before the user has
-seen what would be stored. Prefer Cursor `AskQuestion` with the returned `question` payload.
+If `suggest` is true:
 
-Typical shape:
+1. **Prefer Cursor `AskQuestion`** when that tool is available. Call it once with the returned
+   `question` payload (`title`, `prompt`, `options`). Follow `present.instruction` from the tool result.
+2. `question.prompt` already contains the **proposed durable memory** and then the confirmation
+   question — never ask Yes/Edit/No without that proposed text visible.
+3. Do **not** restate the options as a markdown list in chat when `AskQuestion` is available.
+4. If `AskQuestion` is unavailable, show `question.prompt` (or `draft.content` + the confirmation
+   line) as plain text.
 
-1. Section heading (e.g. **Architecture decision to remember**)
-2. Concise proposed memory (2–5 sentences — invariants, canonical ownership, what was replaced, why)
-3. *Should I remember this architecture decision for the project?*
-4. Options: **Yes — save this** / **Edit — change the proposed memory** / **No — don't save it**
+Typical `question.prompt` shape:
+
+```
+🧠 Architecture decision to remember
+
+{durable 2–5 sentence proposed memory}
+
+Should I remember this architecture decision for the project?
+```
+
+Options: **Yes — save this** / **Edit — change the proposed memory** / **No — don't save it**
 
 Edit means rewrite the proposed memory text, not the implementation.
 

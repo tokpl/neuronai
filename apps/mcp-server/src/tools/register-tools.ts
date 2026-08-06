@@ -76,7 +76,7 @@ export function registerTools(server: McpServer, runtime: McpRuntime): void {
     'neuron_after_task',
     {
       description:
-        'After coding, propose durable knowledge worth keeping. Present draft.content (or question.prompt) to the user BEFORE asking Yes/Edit/No, then call neuron_resolve_suggestion. Edit rewrites the proposed memory text. Nothing is saved until they answer.',
+        'After coding, propose durable knowledge. If suggest=true: when AskQuestion is available, call it with question.title/prompt/options (prompt already shows the proposed memory). Do not paste Yes/Edit/No as chat markdown. Then neuron_resolve_suggestion. Nothing is saved until they answer.',
       inputSchema: afterTaskSchema,
     },
     async (args) => handleAfterTask(runtime, args),

@@ -22,6 +22,7 @@ export {
 } from './suggestion/memory-suggestion-engine.js';
 export {
   formatSuggestionMessage,
+  ASK_QUESTION_TITLE,
   type UserPromptMessage,
   type SuggestionUserAction,
   type SuggestionAskQuestion,

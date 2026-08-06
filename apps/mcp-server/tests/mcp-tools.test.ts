@@ -189,6 +189,23 @@ describe('ask before remembering', () => {
 
     expect(proposal['suggest']).toBe(true);
     expect(proposal['question']).toBeTruthy();
+    const question = proposal['question'] as {
+      title: string;
+      prompt: string;
+      options: Array<{ id: string; label: string }>;
+    };
+    expect(question.title).toBe('🧠 Project Brain');
+    expect(question.prompt).toMatch(/^🧠 Architecture decision to remember/);
+    expect(question.prompt).toContain(
+      'Should I remember this architecture decision for the project?',
+    );
+    expect(question.prompt.indexOf('refactor authentication architecture')).toBeLessThan(
+      question.prompt.indexOf('Should I remember this architecture decision'),
+    );
+    expect(question.options.map((o) => o.id)).toEqual(['save', 'edit', 'ignore']);
+    const present = proposal['present'] as { prefer: string; instruction: string };
+    expect(present.prefer).toBe('AskQuestion');
+    expect(present.instruction).toMatch(/AskQuestion/);
     // Nothing stored yet.
     expect(runtime.neuron.listMemories()).toHaveLength(0);
 

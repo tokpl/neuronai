@@ -12,6 +12,7 @@ import {
   type WorkflowRulesEngine,
 } from './workflow-rules.js';
 import { formatSuggestionMessage, type UserPromptMessage } from './user-messages.js';
+import { synthesizeDurableMemory } from './synthesize-durable-memory.js';
 
 export interface MemorySuggestion {
   shouldSuggest: boolean;
@@ -22,6 +23,8 @@ export interface MemorySuggestion {
   confidence: number;
   title: string;
   draftContent: string;
+  /** Heading shown above the proposed memory in the confirmation UX */
+  sectionHeading: string;
   analysis: CodeChangeAnalysis;
   ruleHits: WorkflowRuleHit[];
   prompt: UserPromptMessage;
@@ -120,22 +123,12 @@ export class MemorySuggestionEngine {
       input.analysis.summary ??
       'Potentially valuable Project Brain knowledge detected';
 
-    const title =
-      input.commitMessage?.split(/\r?\n/)[0]?.trim() ||
-      input.task?.slice(0, 80) ||
-      input.analysis.summary;
-
-    const draftContent = [
-      input.analysis.summary,
-      input.task ? `Task: ${input.task}` : undefined,
-      input.analysis.modules.length
-        ? `Modules: ${input.analysis.modules.join(', ')}`
-        : undefined,
-      `Impact: ${input.analysis.impact}; files: ${input.analysis.filesChanged}`,
-      ruleHits.length ? `Signals: ${ruleHits.map((r) => r.name).join(', ')}` : undefined,
-    ]
-      .filter(Boolean)
-      .join('\n');
+    const durable = synthesizeDurableMemory({
+      type: classified.memoryType,
+      analysis: input.analysis,
+      commitMessage: input.commitMessage,
+      task: input.task,
+    });
 
     const prompt = formatSuggestionMessage({
       shouldSuggest,
@@ -145,8 +138,9 @@ export class MemorySuggestionEngine {
       reason,
       confidence,
       analysis: input.analysis,
-      title,
-      draftContent,
+      title: durable.title,
+      draftContent: durable.content,
+      sectionHeading: durable.sectionHeading,
     });
 
     return {
@@ -156,8 +150,9 @@ export class MemorySuggestionEngine {
       categoryLabel: classified.label,
       reason,
       confidence,
-      title,
-      draftContent,
+      title: durable.title,
+      draftContent: durable.content,
+      sectionHeading: durable.sectionHeading,
       analysis: input.analysis,
       ruleHits,
       prompt,

@@ -127,6 +127,40 @@ describe('WorkflowRules + MemorySuggestionEngine', () => {
     expect(suggestion.shouldSuggest).toBe(true);
     expect(suggestion.ruleHits.some((h) => h.ruleId === 'module-blast-radius')).toBe(true);
   });
+
+  it('synthesizes durable architecture prose instead of a changelog', () => {
+    const analysis = new CodeChangeAnalyzer().analyze({
+      files: [
+        'apps/builder/src/WorkflowDraftGraphService.ts',
+        'apps/builder/src/Builder/WorkflowBuilderShell.vue',
+        'apps/builder/src/EditCanvas.vue',
+      ],
+      message:
+        'Migrate Workflow Builder to WorkflowDraftGraphService + Vue Flow; replace WorkflowDagEditor',
+    });
+    const suggestion = createMemorySuggestionEngine().suggest({
+      analysis,
+      commitMessage:
+        'Migrate Workflow Builder to WorkflowDraftGraphService + Vue Flow; replace WorkflowDagEditor',
+      task: 'migrate workflow builder graph model',
+    });
+
+    expect(suggestion.shouldSuggest).toBe(true);
+    expect(suggestion.type).toBe('architecture_decision');
+    expect(suggestion.sectionHeading).toBe('Architecture decision to remember');
+    expect(suggestion.draftContent).toMatch(/WorkflowDraftGraphService/i);
+    expect(suggestion.draftContent).toMatch(/Why:/i);
+    expect(suggestion.draftContent).not.toMatch(/Impact:/i);
+    expect(suggestion.draftContent).not.toMatch(/files:\s*\d+/i);
+    expect(suggestion.prompt.askQuestion!.prompt).toContain(suggestion.draftContent);
+    expect(
+      suggestion.prompt.askQuestion!.prompt.indexOf(suggestion.draftContent),
+    ).toBeLessThan(
+      suggestion.prompt.askQuestion!.prompt.indexOf(
+        'Should I remember this architecture decision for the project?',
+      ),
+    );
+  });
 });
 
 describe('MemoryQualityChecker', () => {
@@ -186,10 +220,67 @@ describe('AgentWorkflowOrchestrator', () => {
     });
 
     expect(result.suggestion?.shouldSuggest).toBe(true);
-    expect(result.promptText).toMatch(/I learned something about your project/i);
+    expect(result.promptText).toMatch(/Architecture decision to remember/i);
     expect(result.askQuestion?.options.map((o) => o.id)).toEqual(['save', 'edit', 'ignore']);
     // No engine was supplied, so nothing could have been written.
     expect(result.persisted).toBeNull();
+  });
+
+  it('exposes the proposed durable memory before the confirmation question', async () => {
+    const workflow = createAgentWorkflow({ projectId: 'proj-1', privacy: 'suggest' });
+
+    const result = await workflow.afterCoding({
+      diff: authDiff,
+      commitMessage: 'refactor authentication architecture',
+      task: 'migrate auth to modular session + RBAC',
+    });
+
+    expect(result.suggestion?.shouldSuggest).toBe(true);
+    const draft = result.suggestion!.draftContent;
+    const prompt = result.askQuestion!.prompt;
+    const text = result.promptText!;
+
+    // Proposed memory must be present in the confirmation UX.
+    expect(prompt).toContain(draft);
+    expect(text).toContain(draft);
+
+    // And it must appear *before* asking for confirmation.
+    const confirmRe = /Should I remember this architecture decision for the project\?/;
+    expect(prompt).toMatch(confirmRe);
+    expect(prompt.indexOf(draft)).toBeLessThan(prompt.search(confirmRe));
+    expect(text.indexOf(draft)).toBeLessThan(text.search(confirmRe));
+
+    // Section heading precedes the body.
+    expect(prompt.indexOf('Architecture decision to remember')).toBeLessThan(prompt.indexOf(draft));
+
+    // Options clarify Edit = rewrite proposed memory, not code.
+    expect(result.askQuestion!.options).toEqual([
+      { id: 'save', label: 'Yes — save this' },
+      { id: 'edit', label: 'Edit — change the proposed memory' },
+      { id: 'ignore', label: "No — don't save it" },
+    ]);
+
+    // Durable prose — not a changelog / file dump.
+    expect(draft).not.toMatch(/Impact:\s/i);
+    expect(draft).not.toMatch(/files:\s*\d+/i);
+    expect(draft).not.toMatch(/^Signals:/m);
+    expect(draft).not.toMatch(/^Task:/m);
+    expect(draft).toMatch(/Why:/i);
+    expect(draft.length).toBeLessThan(600);
+  });
+
+  it('does not manufacture a remember prompt for trivial changes', async () => {
+    const workflow = createAgentWorkflow({ projectId: 'proj-1', privacy: 'suggest' });
+
+    const result = await workflow.afterCoding({
+      files: ['README.md'],
+      commitMessage: 'docs: fix typo',
+      summary: 'typo',
+    });
+
+    expect(result.suggestion).toBeNull();
+    expect(result.askQuestion).toBeNull();
+    expect(result.promptText).toBeNull();
   });
 
   it('does not re-suggest knowledge the project already has', async () => {

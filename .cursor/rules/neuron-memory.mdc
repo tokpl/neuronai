@@ -28,14 +28,23 @@ Neuron already documents one.
 
 Call `neuron_after_task` with a short summary of what changed.
 
-If it proposes a draft, ask the user with Cursor's `AskQuestion` using the returned `question`
-options (**Yes** / **Edit** / **No**). If `AskQuestion` is unavailable, ask in plain words:
-*Should I remember this for the project?*
+If it proposes a draft, **show the proposed durable memory first** (from `draft.content` /
+`question.prompt`), then ask Yes / Edit / No. Do not ask for confirmation before the user has
+seen what would be stored. Prefer Cursor `AskQuestion` with the returned `question` payload.
+
+Typical shape:
+
+1. Section heading (e.g. **Architecture decision to remember**)
+2. Concise proposed memory (2–5 sentences — invariants, canonical ownership, what was replaced, why)
+3. *Should I remember this architecture decision for the project?*
+4. Options: **Yes — save this** / **Edit — change the proposed memory** / **No — don't save it**
+
+Edit means rewrite the proposed memory text, not the implementation.
 
 Then call `neuron_resolve_suggestion` with `action: "save" | "edit" | "ignore"`. For an edit, pass
 the corrected `title` and `content`.
 
-Nothing is written to memory until the user answers.
+Nothing is written to memory until the user answers. If there is no durable knowledge, do not invent one.
 
 ## Rules
 

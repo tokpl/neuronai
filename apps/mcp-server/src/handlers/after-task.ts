@@ -5,8 +5,10 @@ import { failResult, okResult } from '../middleware/errors.js';
  * Ask before remembering. Returns a draft and the question to put to the user;
  * nothing is written until neuron_resolve_suggestion.
  *
- * How the agent should behave lives in the tool description and the Cursor rule,
- * not in this payload.
+ * `question.prompt` already embeds the proposed durable memory *before* the
+ * confirmation line — agents must show that text (or `draft.content`) before Yes/Edit/No.
+ *
+ * How the agent should behave also lives in the tool description and the Cursor rule.
  */
 export async function handleAfterTask(
   runtime: McpRuntime,

@@ -7,6 +7,7 @@ import {
 } from '@neuronai/brain';
 
 import type { CodeChangeAnalysis } from '../analysis/code-change-analyzer.js';
+import { confirmationQuestionForType } from './synthesize-durable-memory.js';
 
 export type SuggestionUserAction = 'save' | 'edit' | 'ignore';
 
@@ -32,6 +33,16 @@ export interface UserPromptMessage {
   askQuestion: SuggestionAskQuestion | null;
 }
 
+const CONFIRM_OPTIONS: SuggestionAskQuestionOption[] = [
+  { id: 'save', label: 'Yes — save this' },
+  { id: 'edit', label: 'Edit — change the proposed memory' },
+  { id: 'ignore', label: "No — don't save it" },
+];
+
+/**
+ * Build the ask-before-remember UX.
+ * The proposed durable memory MUST appear before the Yes/Edit/No question.
+ */
 export function formatSuggestionMessage(input: {
   shouldSuggest: boolean;
   type: MemoryType;
@@ -42,9 +53,11 @@ export function formatSuggestionMessage(input: {
   analysis: CodeChangeAnalysis;
   title: string;
   draftContent: string;
+  sectionHeading?: string;
 }): UserPromptMessage {
   if (!input.shouldSuggest) {
-    const text = 'Nothing durable enough for the Project Brain from this change.';
+    const text =
+      'Nothing durable enough for the Project Brain from this change — no architecture decision, pattern, or lasting constraint to store.';
     return {
       headline: 'No suggestion',
       body: text,
@@ -54,64 +67,33 @@ export function formatSuggestionMessage(input: {
     };
   }
 
-  const confidencePct = Math.round(input.confidence * 100);
-  const summary = input.draftContent.trim() || input.analysis.summary;
+  const sectionHeading = input.sectionHeading ?? 'Project knowledge to remember';
+  const proposed = input.draftContent.trim() || input.analysis.summary;
+  const confirmQuestion = confirmationQuestionForType(input.type);
 
-  const headline = 'I learned something about your project.';
-  const body = [
-    `Type: ${input.categoryLabel}`,
-    `Confidence: ${confidencePct}%`,
-    `Reason: ${input.reason}`,
-    '',
-    'Proposed summary:',
-    summary,
-  ].join('\n');
+  const headline = sectionHeading;
+  const body = [sectionHeading, '', proposed, '', confirmQuestion].join('\n');
 
+  // Order is load-bearing: proposed memory before confirmation.
   const askQuestion: SuggestionAskQuestion = {
-    title: 'Add to Project Brain?',
-    prompt: [
-      '🧠 I learned something about your project.',
-      `Type: ${input.categoryLabel}`,
-      `Confidence: ${confidencePct}%`,
-      `Reason: ${input.reason}`,
-      '',
-      'Proposed summary:',
-      summary.slice(0, 500),
-      '',
-      'Save this to the Project Brain?',
-    ].join('\n'),
-    options: [
-      { id: 'save', label: 'Yes' },
-      { id: 'edit', label: 'Edit' },
-      { id: 'ignore', label: 'No' },
-    ],
+    title: sectionHeading,
+    prompt: [sectionHeading, '', proposed, '', confirmQuestion].join('\n'),
+    options: CONFIRM_OPTIONS,
   };
 
   const text = [
-    '🧠 I learned something about your project.',
+    sectionHeading,
     '',
-    `Type:`,
-    input.categoryLabel,
+    proposed,
     '',
-    `Confidence:`,
-    `${confidencePct}%`,
+    confirmQuestion,
     '',
-    `Reason:`,
-    input.reason,
+    'Options:',
+    '• Yes — save this',
+    '• Edit — change the proposed memory',
+    "• No — don't save it",
     '',
-    `Proposed summary:`,
-    '',
-    summary,
-    '',
-    'Reply with:',
-    '',
-    'Yes',
-    '',
-    'No',
-    '',
-    'Edit',
-    '',
-    'If you reply Edit, rewrite the summary before saving.',
+    'If you choose Edit, rewrite the proposed memory text (not the implementation).',
   ].join('\n');
 
   return {

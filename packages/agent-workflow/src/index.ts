@@ -27,6 +27,11 @@ export {
   type SuggestionAskQuestion,
   type SuggestionAskQuestionOption,
 } from './suggestion/user-messages.js';
+export {
+  synthesizeDurableMemory,
+  confirmationQuestionForType,
+  type DurableMemoryDraft,
+} from './suggestion/synthesize-durable-memory.js';
 
 export {
   MemoryQualityChecker,

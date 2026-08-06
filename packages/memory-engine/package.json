@@ -1,6 +1,6 @@
 {
   "name": "@neuronai/memory-engine",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "NeuronAI / memory-engine - package for Neuron - AI Memory",
   "license": "AGPL-3.0",
   "type": "module",

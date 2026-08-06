@@ -1,6 +1,6 @@
 {
   "name": "@neuronai/cursor-integration",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "NeuronAI / cursor-integration - package for Neuron - AI Memory",
   "license": "AGPL-3.0",
   "type": "module",

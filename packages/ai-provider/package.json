@@ -1,6 +1,6 @@
 {
   "name": "@neuronai/ai-provider",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "NeuronAI / ai-provider - package for Neuron - AI Memory",
   "license": "AGPL-3.0",
   "type": "module",

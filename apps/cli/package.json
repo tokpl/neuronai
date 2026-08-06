@@ -1,6 +1,6 @@
 {
   "name": "neuronai",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "NeuronAI - CLI for Neuron - AI Memory (local-first Cursor project memory)",
   "license": "AGPL-3.0",
   "type": "module",

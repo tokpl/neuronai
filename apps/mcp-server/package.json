@@ -37,6 +37,7 @@
     "@neuronai/ai-provider": "workspace:*",
     "@neuronai/agent-intelligence": "workspace:*",
     "@neuronai/agent-workflow": "workspace:*",
+    "@neuronai/brain": "workspace:*",
     "@neuronai/config": "workspace:*",
     "@neuronai/cursor-integration": "workspace:*",
     "@neuronai/embeddings": "workspace:*",

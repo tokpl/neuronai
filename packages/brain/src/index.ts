@@ -1,0 +1,72 @@
+export type {
+  ActiveContext,
+  BrainPaths,
+  BrainPrefs,
+  BrainStatus,
+  DnaConventions,
+  DnaIdentity,
+  DnaMeta,
+  DnaPlatforms,
+  DnaRisk,
+  DnaStack,
+  DnaStructure,
+  Facet,
+  FacetSource,
+  KnowledgeGraph,
+  KnowledgePlane,
+  ProjectDna,
+  ProjectGoal,
+  ProjectGoals,
+  ProjectHealth,
+  Provenance,
+} from './models.js';
+export { resolveBrainPaths } from './paths.js';
+export {
+  computeHealth,
+  emptyActive,
+  emptyDna,
+  emptyGoals,
+  emptyHealth,
+  emptyKnowledge,
+  facet,
+  nowIso,
+} from './defaults.js';
+export {
+  openProjectBrain,
+  ProjectBrain,
+  type OpenProjectBrainOptions,
+} from './project-brain.js';
+export {
+  categoryLabel,
+  categoryFromMemoryType,
+  classifyKnowledge,
+  isPermanentCategory,
+  memoryTypeForCategory,
+  type BrainKnowledgeCategory,
+  type ClassifySignals,
+} from './categories.js';
+export {
+  computeBrainMetrics,
+  explainMetric,
+  formatBrainMetricsReport,
+  type BrainMetric,
+  type BrainMetricsSnapshot,
+  type MetricKind,
+  type MetricsInput,
+} from './metrics.js';
+export {
+  BrainCompiler,
+  createBrainCompiler,
+  resolvePreparationMode,
+  PREPARATION_TOKEN_BUDGETS,
+  estimateTokens,
+  explainCompressionMetric,
+  type PreparationMode,
+  type PreparationModeResolved,
+  type BrainCompileInput,
+  type CompiledBrainPrompt,
+  type CompilerCandidate,
+  type CompressionMetrics,
+  type InclusionRecord,
+  type ExclusionRecord,
+} from './compiler/index.js';

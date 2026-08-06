@@ -14,7 +14,7 @@ const DEFAULT_IGNORE = [
   '.neuron/logs',
 ] as const;
 
-/** Local project config stored at `.neuron/config.json`. */
+/** Local project prefs stored at `.neuron/prefs.json` (via ProjectBrain). */
 export const neuronLocalConfigSchema = z.object({
   schemaVersion: z.number().int().positive().default(1),
   project: z.object({

@@ -1,12 +1,4 @@
-export type {
-  NeuronBrain,
-  NeuronDecisionsFile,
-  NeuronKnowledgeFile,
-  NeuronRulesFile,
-  NeuronStoragePaths,
-  StorageProvider,
-  StorageStatus,
-} from './provider.js';
+export type { NeuronStoragePaths, StorageStatus, ProjectBrain } from './provider.js';
 export {
   FileStorageProvider,
   createFileStorageProvider,

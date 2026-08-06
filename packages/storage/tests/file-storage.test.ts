@@ -4,7 +4,8 @@ import { join } from 'node:path';
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { createFileStorageProvider, createLocalFileMemoryStack } from '../src/index.js';
+import { createLocalFileMemoryStack } from '../src/index.js';
+import { openProjectBrain } from '@neuronai/brain';
 
 const temps: string[] = [];
 
@@ -14,41 +15,32 @@ afterEach(async () => {
   }
 });
 
-describe('FileStorageProvider', () => {
-  it('creates versioned .neuron layout', async () => {
+describe('LocalFileMemoryStack + ProjectBrain', () => {
+  it('opens ProjectBrain and syncs knowledge via learn()', async () => {
     const root = await mkdtemp(join(tmpdir(), 'neuron-storage-'));
     temps.push(root);
-    const storage = createFileStorageProvider();
-    await storage.ensureLayout(root);
-    const paths = storage.paths(root);
-    expect(paths.brain.endsWith('brain.json')).toBe(true);
-    expect(paths.store.includes('runtime')).toBe(true);
-
-    await storage.writeBrain(root, {
-      version: 1,
-      projectId: 'p1',
-      name: 'demo',
-      stack: ['node'],
-      updatedAt: new Date().toISOString(),
+    const brain = await openProjectBrain(root, {
+      seed: { projectId: 'p1', name: 'demo', stack: ['node'] },
     });
-    const brain = await storage.readBrain(root);
-    expect(brain?.name).toBe('demo');
+    expect(brain.paths.dna.replace(/\\/g, '/').endsWith('brain/dna.json')).toBe(true);
+    expect(brain.dna.identity.name?.value).toBe('demo');
   });
 
-  it('persists memory stack under runtime/', async () => {
+  it('persists memory stack and learns into knowledge plane', async () => {
     const root = await mkdtemp(join(tmpdir(), 'neuron-stack-'));
     temps.push(root);
     const stack = await createLocalFileMemoryStack(root);
     await stack.engine.createMemory({
       projectId: 'p1',
       type: 'knowledge',
-      title: 'Use FileStorageProvider',
+      title: 'Use ProjectBrain',
       content: 'Local filesystem is the MVP default.',
       source: 'manual',
     });
     await stack.persist();
     expect(stack.storePath.includes('runtime')).toBe(true);
-    const knowledge = await stack.storage.readKnowledge(root);
-    expect(knowledge.patterns.length + knowledge.other.length).toBeGreaterThan(0);
+    expect(stack.brain.knowledge.memory.length + stack.brain.knowledge.decisions.length).toBeGreaterThan(
+      0,
+    );
   });
 });

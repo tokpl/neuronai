@@ -131,9 +131,7 @@ describe('mcp tool handlers', () => {
     expect(body.howToRespond).toMatch(/neuron_resolve_suggestion/);
     expect(body.userInstruction).toMatch(/AskQuestion/i);
     expect(body.askQuestion?.options?.length).toBe(3);
-    expect(body.askQuestion?.options?.map((o) => o.label).join(' ')).toMatch(
-      /remember|skip|rephrase/i,
-    );
+    expect(body.askQuestion?.options?.map((o) => o.label).join(' ')).toMatch(/Yes|Edit|No/i);
     expect(runtime.pendingSuggestion).not.toBeNull();
 
     const ignored = await handleResolveSuggestion(runtime, { action: 'ignore' });
@@ -186,11 +184,19 @@ describe('mcp tool handlers', () => {
     expect(prep.isError).toBeFalsy();
     const prepBody = JSON.parse(prep.content[0]!.text) as {
       ok: boolean;
+      prompt: string;
       briefing: string;
+      metrics: { promptTokens: number; mode: string };
       plan?: { steps: unknown[] };
+      debug?: unknown;
     };
     expect(prepBody.ok).toBe(true);
-    expect(prepBody.briefing.length).toBeGreaterThan(0);
+    expect(prepBody.prompt.length).toBeGreaterThan(0);
+    expect(prepBody.briefing).toBe(prepBody.prompt);
+    expect(prepBody.metrics.promptTokens).toBeGreaterThan(0);
+    expect(prepBody.plan).toBeUndefined();
+    expect(prepBody.debug).toBeUndefined();
+    expect(prepBody.prompt).not.toMatch(/graphDistance|rankingScore/);
   });
 
   it('returns structured errors for invalid update ids', async () => {

@@ -6,6 +6,9 @@ export const getContextSchema = {
   projectId: projectIdSchema,
   task: z.string().min(1),
   files: z.array(z.string()).optional(),
+  mode: z
+    .enum(['minimal', 'standard', 'deep', 'fast', 'architect', 'debug'])
+    .optional(),
 };
 
 export const searchMemorySchema = {
@@ -121,7 +124,9 @@ export const suggestChangesSchema = {
 export const prepareTaskSchema = {
   projectId: projectIdSchema,
   task: z.string().min(1),
-  mode: z.enum(['fast', 'standard', 'architect', 'debug']).optional(),
+  mode: z
+    .enum(['minimal', 'standard', 'deep', 'fast', 'architect', 'debug'])
+    .optional(),
 };
 
 export const reviewArchitectureSchema = {
@@ -137,7 +142,9 @@ export const analyzeImpactSchema = {
 export const generatePlanSchema = {
   projectId: projectIdSchema,
   featureRequest: z.string().min(1),
-  mode: z.enum(['fast', 'standard', 'architect', 'debug']).optional(),
+  mode: z
+    .enum(['minimal', 'standard', 'deep', 'fast', 'architect', 'debug'])
+    .optional(),
 };
 
 export const projectQuestionSchema = {

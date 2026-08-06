@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@neuronai/ai-memory": "workspace:*",
+    "@neuronai/brain": "workspace:*",
     "@neuronai/knowledge-graph": "workspace:*",
     "@neuronai/memory-engine": "workspace:*",
     "@neuronai/types": "workspace:*"

@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
+import { openProjectBrain, resolveBrainPaths, type ProjectBrain } from '@neuronai/brain';
 import type {
   MemoryRecord,
   MemoryRelationRecord,
@@ -14,12 +15,6 @@ import {
   type MemoryEngine,
   type MemorySearcher,
 } from '@neuronai/memory-engine';
-
-import {
-  createFileStorageProvider,
-  resolveNeuronPaths,
-  type FileStorageProvider,
-} from '../file/file-storage-provider.js';
 
 export interface LocalFileSnapshot {
   version: 1;
@@ -40,12 +35,12 @@ export interface LocalFileMemoryStack {
   memories: InMemoryMemoryRepository;
   versions: InMemoryMemoryVersionRepository;
   relations: InMemoryMemoryRelationRepository;
-  /** @deprecated use runtimeDir - kept for callers expecting dataDir */
+  /** @deprecated use runtimeDir */
   dataDir: string;
   runtimeDir: string;
   storePath: string;
   snapshot: LocalFileSnapshot;
-  storage: FileStorageProvider;
+  brain: ProjectBrain;
   projectRoot: string;
   persist: () => Promise<void>;
   setSearcher: (searcher: MemorySearcher) => void;
@@ -77,18 +72,13 @@ async function loadSnapshot(storePath: string): Promise<LocalFileSnapshot> {
 }
 
 /**
- * Local filesystem memory stack under `.neuron/runtime/` (no Postgres required).
- * Also syncs curated `decisions.json` / `knowledge.json` for git-friendly Team Brain.
- *
- * @param projectRootOrRuntimeDir - project root (preferred) OR legacy `.neuron/data` path
+ * Local filesystem memory stack under `.neuron/runtime/`.
+ * Curated knowledge syncs exclusively via ProjectBrain.learn().
  */
 export async function createLocalFileMemoryStack(
   projectRootOrRuntimeDir: string,
   searcher?: MemorySearcher,
 ): Promise<LocalFileMemoryStack> {
-  const storage = createFileStorageProvider();
-
-  // Back-compat: callers historically passed `.neuron/data`
   const looksLikeDataDir =
     projectRootOrRuntimeDir.replace(/\\/g, '/').endsWith('/.neuron/data') ||
     projectRootOrRuntimeDir.replace(/\\/g, '/').endsWith('/.neuron/runtime');
@@ -97,10 +87,8 @@ export async function createLocalFileMemoryStack(
     ? join(projectRootOrRuntimeDir, '..', '..')
     : projectRootOrRuntimeDir;
 
-  await storage.migrateIfNeeded(projectRoot);
-  await storage.ensureLayout(projectRoot);
-
-  const paths = resolveNeuronPaths(projectRoot);
+  const brain = await openProjectBrain(projectRoot);
+  const paths = resolveBrainPaths(projectRoot);
   const storePath = paths.store;
   await mkdir(dirname(storePath), { recursive: true });
   const snapshot = await loadSnapshot(storePath);
@@ -140,20 +128,7 @@ export async function createLocalFileMemoryStack(
     snapshot.versions = next.versions;
     snapshot.relations = next.relations;
     await writeFile(storePath, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
-    await storage.syncFromMemories(projectRoot, next.memories);
-
-    // Keep .neuron/metadata.json in sync for `neuron status`
-    const active = next.memories.filter((m) => m.status === 'active');
-    const metaPath = join(paths.neuronDir, 'metadata.json');
-    let meta: Record<string, unknown> = {};
-    try {
-      meta = JSON.parse(await readFile(metaPath, 'utf8')) as Record<string, unknown>;
-    } catch {
-      meta = { initializedAt: new Date().toISOString(), version: '0.1.0' };
-    }
-    meta['lastSyncAt'] = new Date().toISOString();
-    meta['memoryCount'] = active.length;
-    await writeFile(metaPath, `${JSON.stringify(meta, null, 2)}\n`, 'utf8');
+    await brain.learn(next.memories);
   };
 
   return {
@@ -165,7 +140,7 @@ export async function createLocalFileMemoryStack(
     runtimeDir: paths.runtimeDir,
     storePath,
     snapshot,
-    storage,
+    brain,
     projectRoot,
     persist,
     setSearcher: (next) => {

@@ -53,6 +53,9 @@ importers:
       '@neuronai/ai-provider':
         specifier: workspace:*
         version: link:../../packages/ai-provider
+      '@neuronai/brain':
+        specifier: workspace:*
+        version: link:../../packages/brain
       '@neuronai/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -123,6 +126,9 @@ importers:
       '@neuronai/ai-provider':
         specifier: workspace:*
         version: link:../../packages/ai-provider
+      '@neuronai/brain':
+        specifier: workspace:*
+        version: link:../../packages/brain
       '@neuronai/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -175,6 +181,9 @@ importers:
       '@neuronai/ai-memory':
         specifier: workspace:*
         version: link:../ai-memory
+      '@neuronai/brain':
+        specifier: workspace:*
+        version: link:../brain
       '@neuronai/knowledge-graph':
         specifier: workspace:*
         version: link:../knowledge-graph
@@ -197,6 +206,9 @@ importers:
       '@neuronai/ai-memory':
         specifier: workspace:*
         version: link:../ai-memory
+      '@neuronai/brain':
+        specifier: workspace:*
+        version: link:../brain
       '@neuronai/memory-engine':
         specifier: workspace:*
         version: link:../memory-engine
@@ -246,6 +258,19 @@ importers:
         specifier: ^3.0.8
         version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
 
+  packages/brain:
+    dependencies:
+      '@neuronai/types':
+        specifier: workspace:*
+        version: link:../types
+    devDependencies:
+      typescript:
+        specifier: ^5.8.2
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.8
+        version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
+
   packages/config:
     dependencies:
       '@neuronai/types':
@@ -264,6 +289,9 @@ importers:
 
   packages/cursor-integration:
     dependencies:
+      '@neuronai/brain':
+        specifier: workspace:*
+        version: link:../brain
       zod:
         specifier: ^3.24.2
         version: 3.25.76
@@ -290,6 +318,9 @@ importers:
 
   packages/knowledge-graph:
     dependencies:
+      '@neuronai/brain':
+        specifier: workspace:*
+        version: link:../brain
       '@neuronai/project-analyzer':
         specifier: workspace:*
         version: link:../project-analyzer
@@ -390,6 +421,9 @@ importers:
 
   packages/storage:
     dependencies:
+      '@neuronai/brain':
+        specifier: workspace:*
+        version: link:../brain
       '@neuronai/memory-engine':
         specifier: workspace:*
         version: link:../memory-engine

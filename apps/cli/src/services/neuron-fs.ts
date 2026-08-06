@@ -1,7 +1,7 @@
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
-import { createFileStorageProvider } from '@neuronai/storage';
+import { openProjectBrain, resolveBrainPaths, type BrainPrefs } from '@neuronai/brain';
 
 import {
   neuronLocalConfigSchema,
@@ -15,18 +15,20 @@ export const CLI_VERSION = '0.1.3';
 
 export function neuronPaths(cwd = process.cwd()) {
   const root = resolve(cwd);
-  const storage = createFileStorageProvider();
-  const p = storage.paths(root);
+  const p = resolveBrainPaths(root);
   return {
     root,
     neuronDir: p.neuronDir,
-    config: p.config,
+    config: p.prefs,
+    prefs: p.prefs,
     metadata: join(p.neuronDir, 'metadata.json'),
-    brain: p.brain,
+    brainDir: p.brainDir,
+    dna: p.dna,
     knowledge: p.knowledge,
-    decisions: p.decisions,
-    rules: p.rules,
-    graph: p.graph,
+    health: p.health,
+    goals: p.goals,
+    active: p.active,
+    evolutionDir: p.evolutionDir,
     dataDir: p.runtimeDir,
     runtimeDir: p.runtimeDir,
     store: p.store,
@@ -49,29 +51,28 @@ export async function pathExists(path: string): Promise<boolean> {
 
 export async function isNeuronInitialized(cwd = process.cwd()): Promise<boolean> {
   const paths = neuronPaths(cwd);
-  return pathExists(paths.config);
+  return pathExists(paths.prefs);
 }
 
 export async function ensureNeuronLayout(cwd = process.cwd()): Promise<void> {
-  const storage = createFileStorageProvider();
-  await storage.migrateIfNeeded(cwd);
-  await storage.ensureLayout(cwd);
+  await openProjectBrain(cwd);
 }
 
 export async function loadLocalConfig(cwd = process.cwd()): Promise<NeuronLocalConfig> {
-  const paths = neuronPaths(cwd);
-  const raw = JSON.parse(await readFile(paths.config, 'utf8')) as unknown;
-  return validateLocalConfig(raw);
+  const brain = await openProjectBrain(cwd);
+  if (!brain.prefs) {
+    throw new Error('Missing .neuron/prefs.json — run neuron init');
+  }
+  return validateLocalConfig(brain.prefs);
 }
 
 export async function saveLocalConfig(
   config: NeuronLocalConfig,
   cwd = process.cwd(),
 ): Promise<void> {
-  const paths = neuronPaths(cwd);
-  await ensureNeuronLayout(cwd);
+  const brain = await openProjectBrain(cwd);
   const parsed = neuronLocalConfigSchema.parse(config);
-  await writeFile(paths.config, `${JSON.stringify(parsed, null, 2)}\n`, 'utf8');
+  await brain.savePrefs(parsed as unknown as BrainPrefs);
 }
 
 export async function loadMetadata(cwd = process.cwd()): Promise<NeuronMetadata> {

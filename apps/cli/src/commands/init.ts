@@ -1,6 +1,7 @@
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
+import { openProjectBrain } from '@neuronai/brain';
 import { defaultNeuronConfig } from '@neuronai/config';
 import { createProjectResolver } from '@neuronai/project-analyzer';
 
@@ -15,7 +16,7 @@ import {
   formatNeuronReport,
   type NeuronInitReport,
 } from '../templates/first-run.js';
-import { CLI_VERSION, ensureNeuronLayout, pathExists } from '../services/neuron-fs.js';
+import { CLI_VERSION, pathExists } from '../services/neuron-fs.js';
 import { setupCursorIntegration, syncProjectBrainFiles } from '../services/cursor-setup.js';
 import { applyNeuronGitignore } from '../services/gitignore.js';
 import {
@@ -27,7 +28,6 @@ import {
 } from '../services/neuron-fs.js';
 import { analyzeAndSeedMemories, openProjectSession } from '../services/project-session.js';
 import { ui } from '../ui/output.js';
-import { createFileStorageProvider } from '@neuronai/storage';
 
 import { askInitPreferences } from './init-preferences.js';
 
@@ -181,15 +181,21 @@ export async function runInit(
   }
 
   await saveLocalConfig(localConfig, cwd);
-  await ensureNeuronLayout(cwd);
-  await createFileStorageProvider().writeBrain(cwd, {
-    version: 1,
+  const brain = await openProjectBrain(cwd, {
+    seed: {
+      projectId: project.projectId,
+      name: project.name,
+      stack: project.stack,
+      summary: `${framework} project initialized with Neuron local memory`,
+    },
+  });
+  brain.seedIdentity({
     projectId: project.projectId,
     name: project.name,
     stack: project.stack,
     summary: `${framework} project initialized with Neuron local memory`,
-    updatedAt: new Date().toISOString(),
   });
+  await brain.save();
   await saveMetadata(
     {
       initializedAt: new Date().toISOString(),
@@ -227,7 +233,7 @@ export async function runInit(
       ? 'Remember automatically (high-confidence knowledge is saved without asking)'
       : prefs.memory.privacyMode === 'manual'
         ? 'Only when you ask'
-        : 'Ask before remembering (“Should I remember this?”)';
+        : 'Ask before adding durable knowledge to the Project Brain (Yes / No / Edit)';
   progress.ok(`Save mode: ${saveLabel}`);
   if (gitignore.applied) {
     progress.ok(`.gitignore updated (${prefs.gitignore})`);
@@ -286,7 +292,7 @@ export async function runInit(
   // 6. Brain creation
   progress.start('Brain creation…');
   await syncProjectBrainFiles(cwd);
-  progress.ok('Project brain files written (.neuron/*.json)');
+  progress.ok('Project Brain written (.neuron/brain/ + prefs.json)');
 
   // 7. Cursor integration
   progress.start('Cursor integration…');

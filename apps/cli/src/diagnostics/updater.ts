@@ -1,7 +1,8 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { openProjectBrain } from '@neuronai/brain';
 
-import { CLI_VERSION, loadMetadata, neuronPaths, saveMetadata } from '../services/neuron-fs.js';
+import { CLI_VERSION, loadMetadata, saveMetadata } from '../services/neuron-fs.js';
 import { ui } from '../ui/output.js';
+import { validateLocalConfig } from '../config/local-config.js';
 
 export interface UpdateReport {
   cliVersion: string;
@@ -13,13 +14,11 @@ export interface UpdateReport {
 const CURRENT_SCHEMA_VERSION = 1;
 
 /**
- * Neuron updater - CLI version check, config schema + brain metadata migrations.
- * Does not phone home; no mandatory cloud account.
+ * Local-first updater — prefs + metadata via ProjectBrain.
  */
 export class NeuronUpdater {
   async checkAndApply(cwd = process.cwd()): Promise<UpdateReport> {
     const notes: string[] = [];
-    const paths = neuronPaths(cwd);
     let schemaVersion = CURRENT_SCHEMA_VERSION;
     let brainMigrated = false;
 
@@ -27,15 +26,15 @@ export class NeuronUpdater {
     notes.push('Self-update: use your package manager (pnpm / npm) when a newer release ships.');
 
     try {
-      const raw = JSON.parse(await readFile(paths.config, 'utf8')) as Record<string, unknown>;
+      const brain = await openProjectBrain(cwd);
+      const raw = (brain.prefs ?? {}) as Record<string, unknown>;
       const stored = typeof raw['schemaVersion'] === 'number' ? raw['schemaVersion'] : 0;
-      if (stored < CURRENT_SCHEMA_VERSION) {
-        raw['schemaVersion'] = CURRENT_SCHEMA_VERSION;
-        // Ensure privacy defaults exist after older configs
+      if (stored < CURRENT_SCHEMA_VERSION || !brain.prefs) {
         const privacy = (raw['privacy'] as Record<string, unknown> | undefined) ?? {};
         if (privacy['telemetry'] === undefined) privacy['telemetry'] = false;
         if (privacy['localOnly'] === undefined) privacy['localOnly'] = true;
         raw['privacy'] = privacy;
+        raw['schemaVersion'] = CURRENT_SCHEMA_VERSION;
         if (!raw['scan']) {
           raw['scan'] = {
             depth: 'fast',
@@ -45,15 +44,19 @@ export class NeuronUpdater {
         if (!raw['providers']) {
           raw['providers'] = { local: { enabled: true } };
         }
-        await writeFile(paths.config, `${JSON.stringify(raw, null, 2)}\n`, 'utf8');
-        notes.push(`Config schema migrated ${stored} → ${CURRENT_SCHEMA_VERSION}`);
+        const parsed = validateLocalConfig(raw);
+        await brain.savePrefs(parsed as unknown as import('@neuronai/brain').BrainPrefs);
+        notes.push(`Prefs schema migrated ${stored} → ${CURRENT_SCHEMA_VERSION}`);
         schemaVersion = CURRENT_SCHEMA_VERSION;
+        brainMigrated = true;
       } else {
         schemaVersion = stored || CURRENT_SCHEMA_VERSION;
-        notes.push(`Config schema: v${schemaVersion}`);
+        notes.push(`Prefs schema: v${schemaVersion}`);
       }
+      await brain.evolve();
+      notes.push(`Brain health: ${brain.status().healthPercent}%`);
     } catch {
-      notes.push('Config not found - run neuron init first.');
+      notes.push('Prefs not found - run neuron init first.');
     }
 
     try {

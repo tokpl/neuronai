@@ -4,7 +4,7 @@ NeuronAI is **local-first** by default.
 
 ## Defaults
 
-- Project knowledge lives under `.neuron/` on your machine (and in git if you choose to commit it)
+- Project knowledge lives under `.neuron/` on your machine (local-only by choice at init, or shared via Git if you opt in)
 - Telemetry and remote error reporting are **off** unless you explicitly enable them
 - No NeuronAI cloud account is required for the open-source local product
 

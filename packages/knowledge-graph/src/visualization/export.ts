@@ -1,5 +1,5 @@
 /**
- * Local visualization export - graph.json shape (no hosted dashboard).
+ * Local visualization export — ephemeral under `.neuron/runtime/`.
  */
 export {
   exportGraphJson,
@@ -7,16 +7,19 @@ export {
 } from '../export/graph-json-export.js';
 
 import { writeFile, mkdir } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { join } from 'node:path';
+
+import { resolveBrainPaths } from '@neuronai/brain';
 
 import type { GraphJsonExport } from '../export/graph-json-export.js';
 
 export async function writeGraphVisualization(
-  neuronDataDir: string,
+  projectRoot: string,
   graph: GraphJsonExport,
 ): Promise<string> {
-  const path = join(neuronDataDir, 'graph.json');
-  await mkdir(dirname(path), { recursive: true });
+  const paths = resolveBrainPaths(projectRoot);
+  const path = join(paths.runtimeDir, 'graph-export.json');
+  await mkdir(paths.runtimeDir, { recursive: true });
   await writeFile(path, JSON.stringify(graph, null, 2), 'utf8');
   return path;
 }

@@ -154,6 +154,7 @@ function assembleBriefing(input: {
   relatedModules: string[];
   ranked: RankedContextItem[];
 }): string {
+  // Internal assembly only — no ranking scores (those stay in RankedContextItem).
   const lines = [
     `Task type: ${input.analyzed.type}`,
     `Affected areas: ${input.analyzed.affectedAreas.join(', ')}`,
@@ -163,14 +164,14 @@ function assembleBriefing(input: {
     '',
     '## Existing Decisions',
     ...(input.decisions.length
-      ? input.decisions.map((d) => `- ${d.title} (score ${d.score.toFixed(2)})`)
+      ? input.decisions.map((d) => `- ${d.title}`)
       : ['- (none ranked highly yet)']),
     '',
     '## Warnings',
     ...(input.warnings.length ? input.warnings.map((w) => `- ${w}`) : ['- (none)']),
     '',
     '## Top context',
-    ...input.ranked.slice(0, 8).map((r) => `- [${r.score.toFixed(2)}] ${r.title}`),
+    ...input.ranked.slice(0, 8).map((r) => `- ${r.title}`),
   ];
   return lines.join('\n');
 }

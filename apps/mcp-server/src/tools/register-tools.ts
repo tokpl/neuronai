@@ -80,7 +80,7 @@ export function registerTools(server: McpServer, runtime: NeuronRuntime): void {
     'neuron_prepare_task',
     {
       description:
-        'Start a coding task with ranked project context (decisions, patterns, warnings). Prefer this before implementing.',
+        'Compile a minimal Project Brain prompt for a coding task (Brain Compression Engine). Default mode=minimal. Use deep for plans/risks; debug or NEURON_DEBUG=1 for internals.',
       inputSchema: prepareTaskSchema,
     },
     async (args) => handlePrepareTask(runtime, args),
@@ -90,7 +90,7 @@ export function registerTools(server: McpServer, runtime: NeuronRuntime): void {
     'neuron_get_context',
     {
       description:
-        'Fetch the most relevant project knowledge for a task (decisions, warnings, related memories).',
+        'Fetch compressed project knowledge for a task (Brain Compiler). Prefer neuron_prepare_task for coding sessions.',
       inputSchema: getContextSchema,
     },
     async (args) => handleGetContext(runtime, args),

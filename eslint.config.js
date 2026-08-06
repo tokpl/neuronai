@@ -10,7 +10,6 @@ export default tseslint.config(
       '**/node_modules/**',
       '**/coverage/**',
       '**/.turbo/**',
-      'graft/**',
     ],
   },
   eslint.configs.recommended,

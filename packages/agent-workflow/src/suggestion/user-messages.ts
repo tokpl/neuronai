@@ -1,5 +1,11 @@
 import type { MemoryType } from '@neuronai/types';
 
+import {
+  categoryLabel,
+  classifyKnowledge,
+  type BrainKnowledgeCategory,
+} from '@neuronai/brain';
+
 import type { CodeChangeAnalysis } from '../analysis/code-change-analyzer.js';
 
 export type SuggestionUserAction = 'save' | 'edit' | 'ignore';
@@ -29,12 +35,16 @@ export interface UserPromptMessage {
 export function formatSuggestionMessage(input: {
   shouldSuggest: boolean;
   type: MemoryType;
+  category: BrainKnowledgeCategory;
+  categoryLabel: string;
   reason: string;
+  confidence: number;
   analysis: CodeChangeAnalysis;
   title: string;
+  draftContent: string;
 }): UserPromptMessage {
   if (!input.shouldSuggest) {
-    const text = 'Nothing important enough to remember from this change.';
+    const text = 'Nothing durable enough for the Project Brain from this change.';
     return {
       headline: 'No suggestion',
       body: text,
@@ -44,34 +54,64 @@ export function formatSuggestionMessage(input: {
     };
   }
 
-  const summary = input.analysis.hasAuthChange
-    ? 'You changed how authentication works.'
-    : input.analysis.summary;
+  const confidencePct = Math.round(input.confidence * 100);
+  const summary = input.draftContent.trim() || input.analysis.summary;
 
-  const headline = 'Remember this for the project?';
-  const body = [input.reason, summary, `About: ${input.title}`].join('\n');
+  const headline = 'I learned something about your project.';
+  const body = [
+    `Type: ${input.categoryLabel}`,
+    `Confidence: ${confidencePct}%`,
+    `Reason: ${input.reason}`,
+    '',
+    'Proposed summary:',
+    summary,
+  ].join('\n');
 
   const askQuestion: SuggestionAskQuestion = {
-    title: 'Remember this?',
+    title: 'Add to Project Brain?',
     prompt: [
-      'I can keep this in project memory so the next chat already knows it.',
-      `About: ${input.title}`,
-      'Should I remember it?',
+      '🧠 I learned something about your project.',
+      `Type: ${input.categoryLabel}`,
+      `Confidence: ${confidencePct}%`,
+      `Reason: ${input.reason}`,
+      '',
+      'Proposed summary:',
+      summary.slice(0, 500),
+      '',
+      'Save this to the Project Brain?',
     ].join('\n'),
     options: [
-      { id: 'save', label: 'Yes — remember it' },
-      { id: 'edit', label: 'Yes — but let me rephrase first' },
-      { id: 'ignore', label: 'No — skip' },
+      { id: 'save', label: 'Yes' },
+      { id: 'edit', label: 'Edit' },
+      { id: 'ignore', label: 'No' },
     ],
   };
 
   const text = [
-    'I found something worth keeping in project memory, so the next chat already knows it.',
+    '🧠 I learned something about your project.',
     '',
-    body,
+    `Type:`,
+    input.categoryLabel,
     '',
-    'Should I remember this?',
-    'Reply: Yes · No · or Yes + your preferred wording if you want to rephrase.',
+    `Confidence:`,
+    `${confidencePct}%`,
+    '',
+    `Reason:`,
+    input.reason,
+    '',
+    `Proposed summary:`,
+    '',
+    summary,
+    '',
+    'Reply with:',
+    '',
+    'Yes',
+    '',
+    'No',
+    '',
+    'Edit',
+    '',
+    'If you reply Edit, rewrite the summary before saving.',
   ].join('\n');
 
   return {
@@ -82,3 +122,7 @@ export function formatSuggestionMessage(input: {
     askQuestion,
   };
 }
+
+/** Re-export helpers used by suggestion engine */
+export { categoryLabel, classifyKnowledge };
+export type { BrainKnowledgeCategory };

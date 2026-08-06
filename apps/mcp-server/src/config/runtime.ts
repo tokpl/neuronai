@@ -1,6 +1,7 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
+import type { ProjectBrain } from '@neuronai/brain';
 import { MockAIProvider } from '@neuronai/ai-provider';
 import {
   createAgentIntelligence,
@@ -22,7 +23,7 @@ import type { NeuronConfig } from '@neuronai/config';
 import { loadConfig } from '@neuronai/config';
 import { InMemoryEmbeddingStore, MockEmbeddingProvider } from '@neuronai/embeddings';
 import {
-  createFileGraphRepository,
+  createBrainGraphRepository,
   createProjectIntelligenceEngine,
   type ProjectIntelligenceEngine,
 } from '@neuronai/knowledge-graph';
@@ -47,6 +48,7 @@ export interface PendingMemorySuggestion {
 export interface NeuronRuntime {
   config: NeuronConfig;
   project: ResolvedProject;
+  brain: ProjectBrain;
   engine: MemoryEngine;
   pipeline: MemoryIntelligencePipeline;
   searchEngine: MemorySearchEngine;
@@ -63,16 +65,10 @@ export interface NeuronRuntime {
   pendingSuggestion: PendingMemorySuggestion | null;
 }
 
-async function loadPrivacyMode(cwd: string): Promise<PrivacyMode> {
-  try {
-    const raw = JSON.parse(await readFile(join(cwd, '.neuron', 'config.json'), 'utf8')) as {
-      privacy?: { mode?: string };
-      workflow?: { privacyMode?: string };
-    };
-    return parsePrivacyMode(raw.privacy?.mode ?? raw.workflow?.privacyMode ?? 'suggest');
-  } catch {
-    return parsePrivacyMode(process.env['NEURON_PRIVACY_MODE']);
-  }
+async function privacyFromBrain(brain: ProjectBrain): Promise<PrivacyMode> {
+  const mode = brain.prefs?.privacy?.mode;
+  if (mode) return parsePrivacyMode(mode);
+  return parsePrivacyMode(process.env['NEURON_PRIVACY_MODE']);
 }
 
 export async function createNeuronRuntime(cwd = process.cwd()): Promise<NeuronRuntime> {
@@ -80,9 +76,9 @@ export async function createNeuronRuntime(cwd = process.cwd()): Promise<NeuronRu
   const logger = createLogger({ name: 'mcp-server', destination: 'stderr' });
   const config = await loadConfig({ optional: true, cwd });
   const project = await createProjectResolver().resolve(cwd);
-  const privacyMode = await loadPrivacyMode(cwd);
 
   const local = await createLocalFileMemoryStack(cwd);
+  const privacyMode = await privacyFromBrain(local.brain);
   const dataDir = local.runtimeDir;
 
   const embeddings = new MockEmbeddingProvider();
@@ -160,8 +156,8 @@ export async function createNeuronRuntime(cwd = process.cwd()): Promise<NeuronRu
     listExistingMemories: listActive,
   });
 
-  // graph.json lives at `.neuron/graph.json` (versioned)
-  const graphRepo = createFileGraphRepository(join(cwd, '.neuron'));
+  // Knowledge graph persists through the same ProjectBrain instance
+  const graphRepo = createBrainGraphRepository(local.brain);
   const projectIntelligence = createProjectIntelligenceEngine(graphRepo);
 
   // Best-effort: build/refresh graph if empty (local DX)
@@ -208,6 +204,7 @@ export async function createNeuronRuntime(cwd = process.cwd()): Promise<NeuronRu
   return {
     config,
     project,
+    brain: local.brain,
     engine,
     pipeline,
     searchEngine,

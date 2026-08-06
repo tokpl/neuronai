@@ -131,8 +131,14 @@ describe('AgentIntelligence facade', () => {
         ).memories,
     });
     const report = await intel.prepareTask('Add vehicle trading system', 'standard');
-    expect(report.markdown).toMatch(/Relevant Architecture/);
-    expect(report.context.briefing.length).toBeGreaterThan(0);
-    expect(report.plan?.steps.length).toBeGreaterThan(0);
+    expect(report.prompt).toMatch(/# Task/);
+    expect(report.markdown).toBe(report.prompt);
+    expect(report.compiled.metrics.promptTokens).toBeGreaterThan(0);
+    expect(report.prompt).not.toMatch(/score 0\./);
+    expect(report.plan).toBeUndefined();
+
+    const deep = await intel.prepareTask('Add vehicle trading system', 'deep');
+    expect(deep.plan?.steps.length).toBeGreaterThan(0);
+    expect(deep.prompt).toMatch(/Approach/);
   });
 });

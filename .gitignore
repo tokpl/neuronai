@@ -10,18 +10,10 @@ neuron.config.json
 *.log
 .idea/
 
-# neuronai - version knowledge, ignore ephemeral state
-.neuron/cache/
-.neuron/runtime/
-.neuron/indexes/
-.neuron/logs/
-.neuron/export/
-.neuron/data/
-.neuron/backup/
-.neuron/integrations/
+# Local Project Brain — never publish (this repo's own knowledge)
+.neuron/
 
-# Local Graft tooling
-graft/
-.ignore
-.cursor/rules/graft.mdc
+# Internal design notes (not product docs for public consumers)
+docs/internal/
+
 .cursor/mcp.json

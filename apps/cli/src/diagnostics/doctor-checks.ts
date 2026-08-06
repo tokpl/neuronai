@@ -54,13 +54,15 @@ export async function runDoctorChecks(cwd = process.cwd()): Promise<DoctorCheck[
   checks.push({
     name: 'Initialized',
     ok: initialized,
-    detail: initialized ? paths.neuronDir : 'Missing .neuron/config.json',
+    detail: initialized ? paths.neuronDir : 'Missing .neuron/prefs.json',
     fix: 'neuron init',
   });
 
   if (initialized) {
     try {
-      const raw = JSON.parse(await readFile(paths.config, 'utf8')) as unknown;
+      const { openProjectBrain } = await import('@neuronai/brain');
+      const brain = await openProjectBrain(cwd);
+      const raw = brain.prefs as unknown;
       const validator = createConfigValidator();
       const result = validator.validate(raw, cwd);
       const pathIssues = result.config
@@ -69,15 +71,23 @@ export async function runDoctorChecks(cwd = process.cwd()): Promise<DoctorCheck[
       const allIssues = [...result.issues, ...pathIssues];
       const errors = allIssues.filter((i) => i.severity === 'error');
       checks.push({
-        name: 'Config valid',
-        ok: errors.length === 0,
+        name: 'Prefs valid',
+        ok: errors.length === 0 && Boolean(brain.prefs),
         detail:
           errors.length === 0
             ? allIssues.length
               ? `OK (${allIssues.length} warning(s))`
-              : paths.config
+              : paths.prefs
             : errors.map((e) => `${e.path}: ${e.message}`).join('; '),
         fix: 'neuron init --force',
+      });
+
+      const s = brain.status();
+      checks.push({
+        name: 'Project Brain',
+        ok: s.dnaUpdated || s.knowledgeUpdated || s.healthPercent >= 0,
+        detail: `health ${s.healthPercent}% · ${s.memoryCount} memories · ${s.decisionCount} decisions`,
+        fix: 'neuron scan',
       });
 
       if (result.config) {
@@ -85,12 +95,12 @@ export async function runDoctorChecks(cwd = process.cwd()): Promise<DoctorCheck[
           name: 'Privacy mode',
           ok: result.config.privacy.localOnly !== false && result.config.privacy.telemetry !== true,
           detail: `localOnly=${result.config.privacy.localOnly !== false}, telemetry=${result.config.privacy.telemetry === true ? 'ON' : 'OFF'}`,
-          fix: 'Set privacy.telemetry=false and privacy.localOnly=true in .neuron/config.json',
+          fix: 'Set privacy.telemetry=false and privacy.localOnly=true in .neuron/prefs.json',
         });
       }
     } catch (error) {
       checks.push({
-        name: 'Config valid',
+        name: 'Prefs valid',
         ok: false,
         detail: String(error),
         fix: 'neuron init --force',

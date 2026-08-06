@@ -1,5 +1,7 @@
 # Docs
 
+Product docs for NeuronAI users (public).
+
 - [Getting started](./getting-started.md)
 - [How it works](./how-it-works.md)
 - [`.neuron/` folder](./neuron-folder.md)

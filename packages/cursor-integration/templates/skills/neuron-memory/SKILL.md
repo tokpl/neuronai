@@ -32,7 +32,7 @@ Give the agent a **project brain**: architecture, decisions, patterns, and warni
 
 1. **Analyze** - `neuron_prepare_task` / `neuron_get_context`
 2. **Implement** - follow existing patterns from Neuron
-3. **Review & remember** - `neuron_after_task` → ask *Should I remember this?* (AskQuestion Yes / No / rephrase) → `neuron_resolve_suggestion`
+3. **Review & learn** - `neuron_after_task` → present Project Brain learning prompt (Type / Confidence / Reason / summary) with AskQuestion **Yes / Edit / No** → `neuron_resolve_suggestion`
 
 ## Context budget
 

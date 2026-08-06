@@ -43,9 +43,9 @@ export async function handleAfterTask(
       privacyMode: runtime.privacyMode,
       pending: Boolean(runtime.pendingSuggestion),
       userInstruction:
-        'Prefer Cursor AskQuestion with askQuestion.options (Yes — remember it / Yes — but let me rephrase / No — skip). If AskQuestion is unavailable, ask the user in plain language whether they want this remembered for the project; they can reply Yes, No, or Yes with a rephrased version. Do not show MCP tool names to the user.',
+        'Prefer Cursor AskQuestion with askQuestion.options (Yes / Edit / No). Present promptText to the user (Type, Confidence, Reason, Proposed summary). Do not show MCP tool names.',
       howToRespond:
-        'After the user answers, call neuron_resolve_suggestion with action save | edit | ignore (Yes→save, No→ignore, rephrase→edit with title/content).',
+        'After the user answers, call neuron_resolve_suggestion with action save | edit | ignore (Yes→save, No→ignore, Edit→edit with title/content).',
     });
   } catch (error) {
     return failResult(error);

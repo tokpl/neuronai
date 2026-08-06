@@ -5,20 +5,10 @@
     "stack": []
   },
   "memory": {
-    "autoSave": false,
-    "importanceThreshold": 0.45,
-    "contextMaxTokens": 3000
+    "autoSave": true,
+    "importanceThreshold": 0.45
   },
-  "providers": {
-    "llm": {
-      "provider": "openai",
-      "model": "gpt-4.1-mini"
-    },
-    "embeddings": {
-      "provider": "openai",
-      "model": "text-embedding-3-small"
-    }
-  },
+  "providers": {},
   "server": {
     "mode": "local",
     "bind": "stdio"

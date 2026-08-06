@@ -26,6 +26,7 @@ export async function runStatus(cwd = process.cwd()): Promise<void> {
 
   let memoryCount = meta.memoryCount;
   let lastSyncAt = meta.lastSyncAt;
+  let brainExplain = '';
   try {
     const session = await openProjectSession(cwd);
     const active = session.listMemories().filter((m) => m.status === 'active');
@@ -36,11 +37,18 @@ export async function runStatus(cwd = process.cwd()): Promise<void> {
       .sort()
       .at(-1);
     if (newest) lastSyncAt = newest;
+    brainExplain = session.brain.explain();
+    const s = session.brain.status();
+    console.log('Project Brain:');
+    ui.kv('Health', `${s.healthPercent}%`);
+    ui.kv('DNA', s.dnaUpdated ? 'Updated' : 'Missing');
+    ui.kv('Knowledge', s.knowledgeUpdated ? 'Updated' : 'Empty');
+    ui.kv('Goal', s.currentGoal ?? '—');
+    ui.kv('Active', s.activeFocus ?? '—');
+    ui.blank();
   } catch {
     // keep metadata count
   }
-
-  const dbStatus = 'local FileStorageProvider (.neuron/) - no database required';
 
   const mcpConfigured = await pathExists(`${paths.root}/.cursor/mcp.json`);
   let mcpStatus = mcpConfigured ? 'Configured (.cursor/mcp.json)' : 'Not configured';
@@ -65,8 +73,12 @@ export async function runStatus(cwd = process.cwd()): Promise<void> {
   ui.kv('Last analyze', formatRelativeTime(meta.lastAnalyzeAt));
   ui.blank();
   console.log('Runtime:');
-  ui.kv('Database', dbStatus);
+  ui.kv('Store', 'ProjectBrain + .neuron/runtime/ (ephemeral)');
   ui.kv('MCP', mcpStatus);
   ui.kv('Mode', config.server?.mode ?? 'local');
-  ui.kv('Store', paths.store);
+  ui.kv('Path', paths.store);
+  if (brainExplain) {
+    ui.blank();
+    ui.info(brainExplain);
+  }
 }

@@ -9,10 +9,10 @@ No. Storage is `.neuron/` on disk.
 No. NeuronAI provides knowledge; Cursor's model answers.
 
 **How does the team share memory?**  
-Commit `.neuron/*.json`. `git pull` is Team Brain.
+Commit `.neuron/brain/` + `prefs.json` (or keep local-only). `git pull` is Team Brain when shared.
 
 **What does `memory.autoSave` mean?**  
-`true` means Neuron is allowed to offer (or auto-write) durable knowledge. With the default *ask* mode it still asks *“Should I remember this?”* before writing. Set `privacy.mode` to `automatic` for silent high-confidence saves, or `manual` to never offer.
+`true` means Neuron may offer (or auto-write) durable Project Brain knowledge. With the default *ask* mode it still confirms with **Yes / Edit / No** (Type · Confidence · Reason · summary). Set `privacy.mode` to `automatic` for silent high-confidence saves, or `manual` to never offer.
 
 **What is `contextMaxTokens`?**  
 How much ranked project memory (in tokens) Neuron may inject into one agent turn (`prepare_task` / `get_context`). Default **3000**. Higher = more memory in context, lower = leaner prompts. Optional — omit it and the default applies.

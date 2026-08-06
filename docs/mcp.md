@@ -23,7 +23,7 @@ Neuron registers **13 tools**.
 After `neuron_after_task`:
 
 1. Agent prefers Cursor **`AskQuestion`** using `askQuestion` from the tool result (**Yes — remember it** / **Yes — but let me rephrase** / **No — skip**)
-2. If `AskQuestion` is unavailable, ask in plain language: *Should I remember this for the project?* (reply **Yes**, **No**, or **Yes** + rephrased text)
+2. If `AskQuestion` is unavailable, show `promptText` (Type / Confidence / Reason / summary) and ask **Yes**, **No**, or **Edit**
 3. Agent calls `neuron_resolve_suggestion` with that action — without exposing tool/JSON details to the user
 4. For rephrase (`edit`), pass `title` and/or `content` overrides from the user’s follow-up
 

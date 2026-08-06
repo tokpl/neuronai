@@ -29,7 +29,7 @@ function blockFor(preset: Exclude<GitIgnorePreset, 'skip'>): string {
   if (preset === 'all-local') {
     lines.push('.neuron/', 'neuron.config.json');
   } else {
-    lines.push('# Keep .neuron/*.json shareable for Team Brain via Git');
+    lines.push('# Keep .neuron/brain/ + prefs.json shareable for Team Brain via Git');
     lines.push(...EPHEMERAL_ENTRIES);
     if (preset === 'ephemeral+config') {
       lines.push('neuron.config.json');

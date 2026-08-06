@@ -3,6 +3,7 @@ import { cac } from 'cac';
 
 import { NotImplementedError } from '@neuronai/types';
 
+import { runBrain } from './commands/brain.js';
 import { runCursorDoctor } from './commands/cursor-doctor.js';
 import { runCursorInit } from './commands/cursor-init.js';
 import { runCursorSetup } from './commands/cursor-setup.js';
@@ -25,6 +26,7 @@ Usage:
 Getting started:
   neuron init              Create .neuron/ + scan + wire Cursor MCP
   neuron init --yes        Same, with recommended defaults (no prompts)
+  neuron brain             Show Project Brain status
   neuron status            Project + memory status
   neuron doctor            Diagnose local setup
 
@@ -71,6 +73,13 @@ export function createCli() {
   cli.command('status', 'Show project and memory status').action(async () => {
     await runStatus(process.cwd());
   });
+
+  cli
+    .command('brain', 'Show Project Brain metrics (measured · derived · estimated)')
+    .option('--explain <metric>', 'Explain one metric (e.g. health, architecture_confidence)')
+    .action(async (options: { explain?: string }) => {
+      await runBrain(process.cwd(), { explain: options.explain });
+    });
 
   cli
     .command('build', 'Rebuild project brain from the codebase (scan + seed)')

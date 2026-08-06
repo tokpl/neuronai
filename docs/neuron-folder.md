@@ -2,25 +2,26 @@
 
 ```text
 .neuron/
-  config.json
-  brain.json
-  knowledge.json
-  decisions.json
-  rules.json
-  graph.json
+  prefs.json              # init answers / privacy
+  brain/
+    dna.json
+    knowledge.json        # memory, decisions, rules, graph, insights, context
+    health.json
+    goals.json
+    active.json
+  evolution/
+  runtime/                # engine store (ephemeral)
   cache/
-  runtime/
-  indexes/
   logs/
 ```
 
 ## Version in Git
 
-Commit the JSON files above so teammates get project knowledge on `git pull`.
+By default Neuron can keep `brain/` + `prefs.json` shareable for a team, or treat the whole folder as local-only — you choose at `neuron init`.
 
-## Do not commit
+Treat `.neuron/` like project notes: no secrets, no raw chat logs.
 
-Ephemeral paths (usually added by `neuron init` into `.gitignore`):
+## Do not commit (ephemeral)
 
 ```gitignore
 .neuron/cache/
@@ -29,8 +30,8 @@ Ephemeral paths (usually added by `neuron init` into `.gitignore`):
 .neuron/logs/
 ```
 
-`neuron init` asks how to update `.gitignore` (recommended ephemeral-only, also ignore `neuron.config.json`, local-only entire `.neuron/`, or skip).
+`neuron init` can also ignore the entire `.neuron/` + `neuron.config.json` (local-only).
 
 ## Migration
 
-If you have a legacy layout (`.neuron/data/store.json`, markdown brain files), the first `neuron init` / MCP start migrates store → `runtime/store.json` and creates the new JSON files.
+Flat legacy files (`brain.json`, `decisions.json`, …) migrate into `brain/` on first open.

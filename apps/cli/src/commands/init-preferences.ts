@@ -19,14 +19,14 @@ export async function askInitPreferences(options: {
     title: 'How should Neuron remember project knowledge?',
     detail: [
       'This only affects durable engineering knowledge — never raw chat logs.',
-      'Default asks: “Should I remember this?” — Yes / No (or rephrase).',
-      'You can change it later in .neuron/config.json (privacy.mode).',
+      'Default asks before adding durable knowledge to the Project Brain — Yes / No / Edit.',
+      'You can change it later in .neuron/prefs.json (privacy.mode).',
     ],
     choices: [
       {
         value: 'suggest',
         label: 'Ask me (recommended)',
-        hint: 'ask “Should I remember this?” before saving',
+        hint: 'ask before adding durable knowledge to the Project Brain',
       },
       {
         value: 'automatic',
@@ -53,7 +53,7 @@ export async function askInitPreferences(options: {
   const gitignore = await askChoice({
     title: 'Update .gitignore for Neuron?',
     detail: [
-      'Team Brain shares .neuron/*.json via Git.',
+      'Team Brain can share .neuron/brain/ + prefs.json via Git.',
       'Ephemeral folders (cache, runtime, logs, …) should usually stay ignored.',
     ],
     choices: [

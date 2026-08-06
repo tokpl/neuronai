@@ -1,3 +1,4 @@
+import type { ProjectBrain } from '@neuronai/brain';
 import { MockAIProvider } from '@neuronai/ai-provider';
 import {
   createMemoryIntelligencePipeline,
@@ -21,6 +22,7 @@ import { loadMetadata, saveMetadata } from './neuron-fs.js';
 export interface ProjectSession {
   cwd: string;
   project: ResolvedProject;
+  brain: ProjectBrain;
   engine: MemoryEngine;
   pipeline: MemoryIntelligencePipeline;
   searchEngine: MemorySearchEngine;
@@ -102,6 +104,7 @@ export async function openProjectSession(cwd = process.cwd()): Promise<ProjectSe
   return {
     cwd,
     project,
+    brain: local.brain,
     engine,
     pipeline,
     searchEngine,

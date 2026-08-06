@@ -1,47 +1,84 @@
+import type { CompiledBrainPrompt } from '@neuronai/brain';
+
 import type { AgentContext } from '../context/context-engine.js';
 import type { ImplementationPlan } from './implementation-planner.js';
 
 export interface PreparationReport {
-  markdown: string;
+  /** Dense prompt for the LLM — single representation, no JSON twin */
+  prompt: string;
+  /** Compression metrics + explainability trail */
+  compiled: CompiledBrainPrompt;
   context: AgentContext;
   plan?: ImplementationPlan;
+  /**
+   * @deprecated Alias of `prompt` (kept so older hosts do not break).
+   * Never a verbose duplicate of the briefing.
+   */
+  markdown: string;
 }
 
+/**
+ * @deprecated Prefer BrainCompiler via AgentIntelligence.prepareTask.
+ * Kept for callers that only have AgentContext.
+ */
 export function buildPreparationReport(
   context: AgentContext,
   plan?: ImplementationPlan,
 ): PreparationReport {
   const lines = [
-    `# Preparation: ${context.task.raw}`,
+    `# Task`,
+    context.task.raw,
     '',
-    `Mode: **${context.mode}** · Type: **${context.task.type}**`,
+    `# Relevant modules`,
+    ...context.relatedModules.slice(0, 6).map((m) => `- ${m}`),
     '',
-    '## Relevant Architecture',
-    ...context.architectureNotes.map((n) => `- ${n}`),
-    '',
-    '## Existing Decisions',
+    `# Architecture decisions`,
     ...(context.decisions.length
-      ? context.decisions.map((d) => `- **${d.title}** - ${clip(d.content, 160)}`)
-      : ['- No strong matching decisions yet']),
+      ? context.decisions.map((d) => `• ${d.title}`)
+      : ['• (none)']),
     '',
-    '## Warnings',
-    ...(context.warnings.length ? context.warnings.map((w) => `- ⚠ ${w}`) : ['- None']),
-    '',
-    '## Suggested Approach',
-    ...(plan
-      ? plan.steps.map((s) => `${s.order}. ${s.title} - ${s.detail}`)
-      : ['- Gather more project memories, then draft a module plan']),
-    '',
-    '## Compact briefing',
-    '```',
-    context.briefing,
-    '```',
+    `# Warnings`,
+    ...(context.warnings.length ? context.warnings.map((w) => `- ${w}`) : ['- None']),
   ];
-
-  return { markdown: lines.join('\n'), context, plan };
-}
-
-function clip(text: string, n: number): string {
-  const t = text.replace(/\s+/g, ' ').trim();
-  return t.length <= n ? t : `${t.slice(0, n)}…`;
+  if (plan?.steps.length) {
+    lines.push('', `# Approach`);
+    for (const s of plan.steps) {
+      lines.push(`${s.order}. ${s.title} - ${s.detail}`);
+    }
+  }
+  const prompt = `${lines.join('\n').trim()}\n`;
+  return {
+    prompt,
+    markdown: prompt,
+    context,
+    plan,
+    compiled: {
+      prompt,
+      mode: context.mode === 'architect' || context.mode === 'debug' ? 'deep' : context.mode === 'fast' ? 'minimal' : 'standard',
+      profile: {
+        mode: context.mode === 'architect' || context.mode === 'debug' ? 'deep' : context.mode === 'fast' ? 'minimal' : 'standard',
+        tokenBudget: 1200,
+        debug: context.mode === 'debug',
+        retrieveLimit: 12,
+        includeHints: context.mode !== 'fast',
+        includePlan: Boolean(plan),
+        includeRisks: false,
+      },
+      metrics: {
+        mode: 'standard',
+        tokenBudget: 1200,
+        knowledgeSearched: 0,
+        knowledgeSelected: 0,
+        knowledgeDiscarded: 0,
+        compressionRatio: 0,
+        promptTokens: Math.ceil(prompt.length / 4),
+        estimatedTokensRemoved: 0,
+        estimatedContextReduction: 0,
+        preparationTimeMs: 0,
+        kindNotes: {},
+      },
+      inclusions: [],
+      exclusions: [],
+    },
+  };
 }

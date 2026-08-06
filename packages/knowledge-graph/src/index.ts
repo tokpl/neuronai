@@ -19,6 +19,10 @@ export {
   createInMemoryGraphRepository,
 } from './repositories/in-memory-graph-repository.js';
 export {
+  BrainGraphRepository,
+  createBrainGraphRepository,
+} from './repositories/brain-graph-repository.js';
+export {
   FileGraphRepository,
   createFileGraphRepository,
 } from './repositories/file-graph-repository.js';

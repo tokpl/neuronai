@@ -112,23 +112,35 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
   });
 
   const brainFiles = [
-    'brain.json',
-    'knowledge.json',
-    'decisions.json',
-    'rules.json',
-    'graph.json',
+    'brain/dna.json',
+    'brain/knowledge.json',
+    'brain/health.json',
+    'brain/goals.json',
+    'brain/active.json',
+    'prefs.json',
   ];
   let brainOk = 0;
   for (const f of brainFiles) {
     if (await exists(join(neuronDir, f))) brainOk += 1;
   }
-  checks.push({
-    name: 'Project brain files',
-    ok: brainOk === brainFiles.length,
-    detail:
+
+  let brainStatus = `${brainOk}/${brainFiles.length} files`;
+  try {
+    const { openProjectBrain } = await import('@neuronai/brain');
+    const brain = await openProjectBrain(projectRoot);
+    const s = brain.status();
+    brainStatus =
       brainOk === brainFiles.length
-        ? `.neuron/{${brainFiles.join(',')}}`
-        : `${brainOk}/${brainFiles.length} brain files - run neuron init`,
+        ? `health ${s.healthPercent}% · DNA ${s.dnaUpdated ? 'ok' : 'missing'} · knowledge ${s.memoryCount}`
+        : `${brainOk}/${brainFiles.length} brain files - run neuron init`;
+  } catch {
+    /* keep count */
+  }
+
+  checks.push({
+    name: 'Project Brain',
+    ok: brainOk === brainFiles.length,
+    detail: brainStatus,
     fix: 'neuron init',
   });
 

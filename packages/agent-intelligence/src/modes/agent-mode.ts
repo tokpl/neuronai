@@ -1,5 +1,9 @@
+import type { PreparationMode } from '@neuronai/brain';
+import { resolvePreparationMode } from '@neuronai/brain';
+
 /**
- * How much context / analysis depth to apply for the agent.
+ * Retrieval profile keys (legacy MCP enums still accepted).
+ * Prompt depth is owned by PreparationMode (minimal | standard | deep).
  */
 export type AgentMode = 'fast' | 'standard' | 'architect' | 'debug';
 
@@ -16,7 +20,7 @@ export interface AgentModeProfile {
 const PROFILES: Record<AgentMode, AgentModeProfile> = {
   fast: {
     mode: 'fast',
-    memoryLimit: 5,
+    memoryLimit: 8,
     graphDepth: 1,
     includeRisks: false,
     includePlan: false,
@@ -27,10 +31,10 @@ const PROFILES: Record<AgentMode, AgentModeProfile> = {
     mode: 'standard',
     memoryLimit: 12,
     graphDepth: 2,
-    includeRisks: true,
-    includePlan: true,
+    includeRisks: false,
+    includePlan: false,
     includeFullGraphHints: false,
-    description: 'Normal development context',
+    description: 'Normal development context + hints',
   },
   architect: {
     mode: 'architect',
@@ -39,24 +43,34 @@ const PROFILES: Record<AgentMode, AgentModeProfile> = {
     includeRisks: true,
     includePlan: true,
     includeFullGraphHints: true,
-    description: 'Full architecture analysis',
+    description: 'Deep architecture analysis (plans + risks)',
   },
   debug: {
     mode: 'debug',
-    memoryLimit: 15,
+    memoryLimit: 20,
     graphDepth: 3,
     includeRisks: true,
-    includePlan: false,
+    includePlan: true,
     includeFullGraphHints: true,
-    description: 'Problems, history, and change blast radius',
+    description: 'Deep retrieval + developer debug dump',
   },
 };
 
-export function resolveAgentMode(value?: string): AgentMode {
-  if (value === 'fast' || value === 'standard' || value === 'architect' || value === 'debug') {
-    return value;
-  }
+/** Map Brain preparation mode → retrieval profile. */
+export function agentModeForPreparation(mode: PreparationMode): AgentMode {
+  if (mode === 'minimal') return 'fast';
+  if (mode === 'deep') return 'architect';
   return 'standard';
+}
+
+/**
+ * Resolve MCP / CLI mode string.
+ * Default is **fast** (maps to preparation minimal) for everyday coding.
+ */
+export function resolveAgentMode(value?: string): AgentMode {
+  const prep = resolvePreparationMode(value);
+  if (value === 'debug' || prep.debug) return 'debug';
+  return agentModeForPreparation(prep.mode);
 }
 
 export function getAgentModeProfile(mode?: AgentMode | string): AgentModeProfile {

@@ -167,9 +167,9 @@ export class ProjectIntelligenceEngine {
     };
   }
 
-  async persistVisualization(dataDir: string, projectId: string, projectName?: string) {
+  async persistVisualization(projectRoot: string, projectId: string, projectName?: string) {
     const map = await this.projectMap(projectId, projectName);
-    const path = await writeGraphVisualization(dataDir, map.export);
+    const path = await writeGraphVisualization(projectRoot, map.export);
     return { path, ...map };
   }
 

@@ -5,5 +5,5 @@
     "rootDir": "src"
   },
   "include": ["src/**/*"],
-  "references": [{ "path": "../types" }, { "path": "../memory-engine" }]
+  "references": [{ "path": "../types" }, { "path": "../memory-engine" }, { "path": "../brain" }]
 }

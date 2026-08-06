@@ -1,6 +1,7 @@
 export {
   resolveAgentMode,
   getAgentModeProfile,
+  agentModeForPreparation,
   type AgentMode,
   type AgentModeProfile,
 } from './modes/agent-mode.js';

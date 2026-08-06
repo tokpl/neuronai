@@ -23,10 +23,8 @@ export {
   type CursorInstallResult,
 } from './install.js';
 export {
-  projectBrainPaths,
   writeProjectBrainFiles,
   type ProjectBrainInput,
-  type ProjectBrainPaths,
 } from './project-brain.js';
 export {
   runCursorDoctorChecks,

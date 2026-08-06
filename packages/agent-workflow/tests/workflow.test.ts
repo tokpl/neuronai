@@ -197,11 +197,12 @@ describe('AgentWorkflowOrchestrator', () => {
       commitMessage: 'refactor authentication architecture',
     });
     expect(result.suggestion?.shouldSuggest).toBe(true);
-    expect(result.promptText).toMatch(/Should I remember this\?/i);
+    expect(result.promptText).toMatch(/I learned something about your project/i);
     expect(result.promptText).toMatch(/\bYes\b/);
     expect(result.promptText).toMatch(/\bNo\b/);
+    expect(result.promptText).toMatch(/\bEdit\b/);
     expect(result.askQuestion?.options.map((o) => o.id)).toEqual(['save', 'edit', 'ignore']);
-    expect(result.askQuestion?.options.map((o) => o.label).join(' ')).toMatch(/remember/i);
+    expect(result.askQuestion?.options.map((o) => o.label).join(' ')).toMatch(/Yes|Edit|No/);
     expect(bus.history().some((e) => e.type === 'AgentStartedTask')).toBe(true);
     expect(bus.history().some((e) => e.type === 'TaskCompleted')).toBe(true);
   });

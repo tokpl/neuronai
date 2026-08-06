@@ -116,8 +116,10 @@ describe('cli commands', () => {
     expect(gitignore).toMatch(/# >>> neuronai/);
     expect(gitignore).not.toMatch(/^\.neuron\/$/m);
 
-    const brain = JSON.parse(await readFile(paths.brain, 'utf8')) as { name: string };
-    expect(brain.name).toBe('demo-next');
+    const dna = JSON.parse(await readFile(paths.dna, 'utf8')) as {
+      identity: { name: { value: string } };
+    };
+    expect(dna.identity.name.value).toBe('demo-next');
 
     const store = JSON.parse(await readFile(paths.store, 'utf8')) as {
       memories: unknown[];

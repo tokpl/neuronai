@@ -4,51 +4,31 @@ import { dirname, join } from 'node:path';
 import type { MemoryRecord } from '@neuronai/types';
 
 import {
-  applyActiveUpdate,
   applyDnaUpdate,
-  applyGoalsUpdate,
   applyGraphUpdate,
   applyHealthUpdate,
   applyKnowledgeUpdate,
-  appendContextCrumb,
+  applyMapUpdate,
   appendDecision,
-  appendInsight,
   evolveHealth,
   explainBrain,
   learnFromMemories,
   queryKnowledge,
   seedDnaIdentity,
+  type BrainQueryHit,
 } from './api.js';
-import {
-  computeHealth,
-  emptyActive,
-  emptyDna,
-  emptyGoals,
-  emptyHealth,
-  emptyKnowledge,
-  nowIso,
-} from './defaults.js';
+import { computeHealth, emptyDna, emptyKnowledge, emptyMap, nowIso } from './defaults.js';
 import type {
-  ActiveContext,
   BrainPaths,
   BrainPrefs,
   BrainStatus,
   KnowledgeGraph,
   KnowledgePlane,
   ProjectDna,
-  ProjectGoals,
   ProjectHealth,
+  ProjectMap,
 } from './models.js';
-import {
-  createBrainCompiler,
-  type BrainCompileInput,
-  type CompiledBrainPrompt,
-} from './compiler/index.js';
-import {
-  computeBrainMetrics,
-  explainMetric,
-  formatBrainMetricsReport,
-} from './metrics.js';
+import { computeBrainMetrics, explainMetric, formatBrainMetricsReport } from './metrics.js';
 import { resolveBrainPaths } from './paths.js';
 
 async function exists(path: string): Promise<boolean> {
@@ -68,9 +48,12 @@ async function readJson<T>(path: string, fallback: T): Promise<T> {
   }
 }
 
+/** Write via temp file + rename so an interrupted write cannot corrupt the brain. */
 async function writeJson(path: string, value: unknown): Promise<void> {
   await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+  const tmp = `${path}.tmp`;
+  await writeFile(tmp, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+  await rename(tmp, path);
 }
 
 export type OpenProjectBrainOptions = {
@@ -83,16 +66,16 @@ export type OpenProjectBrainOptions = {
 };
 
 /**
- * Single runtime entry for the project.
- * All DNA / Knowledge / Health / Goals / Active / Graph mutations go through this API.
+ * Durable project state: persistence and lifecycle only.
+ *
+ * Ranking lives in `./retrieval`, prompt shaping lives in `./compiler`.
+ * ProjectBrain owns what is on disk and nothing else.
  */
 export class ProjectBrain {
   readonly paths: BrainPaths;
   dna: ProjectDna;
   knowledge: KnowledgePlane;
   health: ProjectHealth;
-  goals: ProjectGoals;
-  active: ActiveContext;
   prefs: BrainPrefs | null;
   readonly migrationNotes: string[];
 
@@ -102,8 +85,6 @@ export class ProjectBrain {
       dna: ProjectDna;
       knowledge: KnowledgePlane;
       health: ProjectHealth;
-      goals: ProjectGoals;
-      active: ActiveContext;
       prefs: BrainPrefs | null;
       migrationNotes: string[];
     },
@@ -112,8 +93,6 @@ export class ProjectBrain {
     this.dna = state.dna;
     this.knowledge = state.knowledge;
     this.health = state.health;
-    this.goals = state.goals;
-    this.active = state.active;
     this.prefs = state.prefs;
     this.migrationNotes = state.migrationNotes;
   }
@@ -127,11 +106,8 @@ export class ProjectBrain {
 
     await mkdir(paths.neuronDir, { recursive: true });
     await mkdir(paths.brainDir, { recursive: true });
-    await mkdir(paths.evolutionDir, { recursive: true });
     await mkdir(paths.runtimeDir, { recursive: true });
     await mkdir(paths.cacheDir, { recursive: true });
-    await mkdir(paths.logsDir, { recursive: true });
-    await mkdir(paths.indexesDir, { recursive: true });
 
     const legacyStore = join(paths.neuronDir, 'data', 'store.json');
     if ((await exists(legacyStore)) && !(await exists(paths.store))) {
@@ -150,27 +126,18 @@ export class ProjectBrain {
 
     let dna: ProjectDna;
     let knowledge: KnowledgePlane;
-    let health: ProjectHealth;
-    let goals: ProjectGoals;
-    let active: ActiveContext;
 
-    const hasNewLayout = await exists(paths.knowledge);
-
-    if (hasNewLayout) {
+    if (await exists(paths.knowledge)) {
       dna = await readJson(paths.dna, emptyDna());
       knowledge = await readJson(paths.knowledge, emptyKnowledge());
-      health = await readJson(paths.health, emptyHealth());
-      goals = await readJson(paths.goals, emptyGoals());
-      active = await readJson(paths.active, emptyActive());
     } else {
       const migrated = await migrateFlatLayout(paths, prefs, options.seed);
       dna = migrated.dna;
       knowledge = migrated.knowledge;
-      health = migrated.health;
-      goals = migrated.goals;
-      active = migrated.active;
       notes.push(...migrated.notes);
     }
+
+    notes.push(...(await removeRetiredFiles(paths)));
 
     if (!dna.identity.name && (options.seed || prefs)) {
       dna = emptyDna({
@@ -181,14 +148,10 @@ export class ProjectBrain {
       });
     }
 
-    health = computeHealth(dna, knowledge);
-
     const brain = new ProjectBrain(paths, {
       dna,
       knowledge,
-      health,
-      goals,
-      active,
+      health: computeHealth(dna, knowledge),
       prefs,
       migrationNotes: notes,
     });
@@ -201,8 +164,6 @@ export class ProjectBrain {
     this.dna = await readJson(this.paths.dna, this.dna);
     this.knowledge = await readJson(this.paths.knowledge, this.knowledge);
     this.health = await readJson(this.paths.health, this.health);
-    this.goals = await readJson(this.paths.goals, this.goals);
-    this.active = await readJson(this.paths.active, this.active);
     this.prefs = (await exists(this.paths.prefs))
       ? await readJson<BrainPrefs | null>(this.paths.prefs, this.prefs)
       : this.prefs;
@@ -215,8 +176,6 @@ export class ProjectBrain {
     await writeJson(this.paths.dna, this.dna);
     await writeJson(this.paths.knowledge, this.knowledge);
     await writeJson(this.paths.health, this.health);
-    await writeJson(this.paths.goals, this.goals);
-    await writeJson(this.paths.active, this.active);
     if (this.prefs) {
       await writeJson(this.paths.prefs, this.prefs);
     }
@@ -242,56 +201,38 @@ export class ProjectBrain {
     await this.save();
   }
 
+  /**
+   * Replace the project map. Rebuilt wholesale by scan so that deleted files
+   * stop being reported as authoritative locations.
+   */
+  async updateMap(map: ProjectMap): Promise<void> {
+    applyMapUpdate(this, map);
+    await this.save();
+  }
+
+  getMap(): ProjectMap {
+    return this.knowledge.map ?? emptyMap();
+  }
+
   async updateHealth(patch: Partial<ProjectHealth>): Promise<void> {
     applyHealthUpdate(this, patch);
     await this.save();
   }
 
-  async updateGoals(goals: ProjectGoals): Promise<void> {
-    applyGoalsUpdate(this, goals);
-    await this.save();
-  }
-
-  async updateActive(active: ActiveContext): Promise<void> {
-    applyActiveUpdate(this, active);
-    await this.save();
-  }
-
+  /** Record a decision. Duplicates of existing knowledge are merged, not appended. */
   async recordDecision(decision: MemoryRecord): Promise<void> {
     appendDecision(this, decision);
     await this.save();
   }
 
-  async recordInsight(insight: {
-    id: string;
-    title: string;
-    content: string;
-    kind?: string;
-    confidence?: number;
-  }): Promise<void> {
-    appendInsight(this, insight);
+  /**
+   * Ingest engine memories into the knowledge plane (curated source of truth).
+   * Reports how many duplicates were collapsed.
+   */
+  async learn(memories: MemoryRecord[]): Promise<{ duplicatesRemoved: number }> {
+    const outcome = learnFromMemories(this, memories);
     await this.save();
-  }
-
-  async recordContext(crumb: {
-    id: string;
-    title: string;
-    content: string;
-    tags?: string[];
-  }): Promise<void> {
-    appendContextCrumb(this, crumb);
-    await this.save();
-  }
-
-  /** Ingest engine memories into the knowledge plane (curated SoT). */
-  async learn(memories: MemoryRecord[]): Promise<void> {
-    learnFromMemories(this, memories);
-    await this.save();
-  }
-
-  /** @deprecated use learn() */
-  async syncFromMemories(memories: MemoryRecord[]): Promise<void> {
-    return this.learn(memories);
+    return outcome;
   }
 
   seedIdentity(input: {
@@ -303,16 +244,12 @@ export class ProjectBrain {
     seedDnaIdentity(this, input);
   }
 
-  /** @deprecated use updateGraph */
-  setGraph(graph: { nodes: unknown[]; edges: unknown[] }): void {
-    applyGraphUpdate(this, graph);
-  }
-
   getGraph(): KnowledgeGraph {
     return this.knowledge.graph;
   }
 
-  query(query: string, limit = 10) {
+  /** Ranked read over durable knowledge. Algorithm lives in `./retrieval`. */
+  query(query: string, limit = 10): BrainQueryHit[] {
     return queryKnowledge(this, query, limit);
   }
 
@@ -332,8 +269,6 @@ export class ProjectBrain {
       dna: this.dna,
       knowledge: this.knowledge,
       health: this.health,
-      goals: this.goals,
-      active: this.active,
       initializedAt: this.dna.meta.generatedAt,
     });
   }
@@ -348,34 +283,40 @@ export class ProjectBrain {
     return formatBrainMetricsReport(this.metrics());
   }
 
-  /**
-   * Compile retrieved knowledge into a minimal LLM prompt.
-   * Internal Brain ≠ Prompt — scores, ids, and ranking metadata stay out.
-   */
-  compilePrompt(input: BrainCompileInput): CompiledBrainPrompt {
-    return createBrainCompiler().compile(input);
-  }
-
-  explainPromptInclusion(compiled: CompiledBrainPrompt, titleOrId: string): string {
-    return createBrainCompiler().explainInclusion(compiled, titleOrId);
-  }
-
   status(): BrainStatus {
-    const goal =
-      this.goals.goals.find((g) => g.id === this.goals.currentId) ??
-      this.goals.goals.find((g) => g.status === 'active');
     return {
       healthPercent: this.health.score,
       dnaUpdated: this.health.dnaFresh,
       knowledgeUpdated: this.health.knowledgeFresh,
       architectureHealthy: this.health.architectureHealthy,
-      currentGoal: goal?.title ?? null,
-      activeFocus: this.active.focus,
       confidencePercent: Math.round(this.dna.meta.overallConfidence * 100),
       memoryCount: this.knowledge.memory.length,
       decisionCount: this.knowledge.decisions.length,
     };
   }
+}
+
+/**
+ * Planes that were written on every save but never populated or read.
+ * Removed on open so existing installs stop carrying them.
+ */
+async function removeRetiredFiles(paths: BrainPaths): Promise<string[]> {
+  const notes: string[] = [];
+  const retired = [join(paths.brainDir, 'goals.json'), join(paths.brainDir, 'active.json')];
+  for (const path of retired) {
+    if (await exists(path)) {
+      await rm(path, { force: true });
+      notes.push(`Removed unused ${path.split(/[\\/]/).pop()}`);
+    }
+  }
+  for (const dir of ['evolution', 'indexes', 'logs']) {
+    const target = join(paths.neuronDir, dir);
+    if (await exists(target)) {
+      await rm(target, { recursive: true, force: true });
+      notes.push(`Removed unused .neuron/${dir}/`);
+    }
+  }
+  return notes;
 }
 
 async function migrateFlatLayout(
@@ -385,9 +326,6 @@ async function migrateFlatLayout(
 ): Promise<{
   dna: ProjectDna;
   knowledge: KnowledgePlane;
-  health: ProjectHealth;
-  goals: ProjectGoals;
-  active: ActiveContext;
   notes: string[];
 }> {
   const notes: string[] = [];
@@ -450,8 +388,6 @@ async function migrateFlatLayout(
       nodes: legacyGraph.nodes ?? legacyDataGraph.nodes ?? [],
       edges: legacyGraph.edges ?? legacyDataGraph.edges ?? [],
     },
-    insights: [],
-    context: [],
   };
 
   for (const file of [
@@ -483,14 +419,7 @@ async function migrateFlatLayout(
     notes.push('Migrated flat .neuron/*.json → brain/ layout');
   }
 
-  return {
-    dna,
-    knowledge,
-    health: computeHealth(dna, knowledge),
-    goals: emptyGoals(),
-    active: emptyActive(),
-    notes,
-  };
+  return { dna, knowledge, notes };
 }
 
 export async function openProjectBrain(

@@ -10,8 +10,6 @@ const DEFAULT_IGNORE = [
   '.turbo',
   '.neuron/runtime',
   '.neuron/cache',
-  '.neuron/indexes',
-  '.neuron/logs',
 ] as const;
 
 /** Local project prefs stored at `.neuron/prefs.json` (via ProjectBrain). */
@@ -43,22 +41,9 @@ export const neuronLocalConfigSchema = z.object({
       ignore: z.array(z.string()).default([...DEFAULT_IGNORE]),
     })
     .default({ depth: 'fast', ignore: [...DEFAULT_IGNORE] }),
-  providers: z
-    .record(
-      z.object({
-        enabled: z.boolean().default(false),
-        model: z.string().optional(),
-      }),
-    )
-    .default({ local: { enabled: true } }),
   integrations: z.object({
     cursor: z.boolean().default(true),
   }),
-  server: z
-    .object({
-      mode: z.enum(['local', 'cloud']).default('local'),
-    })
-    .default({ mode: 'local' }),
 });
 
 export type NeuronLocalConfig = z.infer<typeof neuronLocalConfigSchema>;

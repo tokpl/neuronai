@@ -1,6 +1,6 @@
 {
   "name": "@neuronai/agent-workflow",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "NeuronAI / agent-workflow - package for Neuron - AI Memory",
   "license": "AGPL-3.0",
   "type": "module",
@@ -12,10 +12,6 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist",
-    "LICENSE"
-  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -23,7 +19,6 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "@neuronai/ai-memory": "workspace:*",
     "@neuronai/brain": "workspace:*",
     "@neuronai/memory-engine": "workspace:*",
     "@neuronai/types": "workspace:*"
@@ -31,9 +26,6 @@
   "devDependencies": {
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -45,5 +37,6 @@
   },
   "engines": {
     "node": ">=22"
-  }
+  },
+  "private": true
 }

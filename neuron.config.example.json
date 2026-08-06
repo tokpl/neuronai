@@ -2,19 +2,10 @@
   "project": {
     "name": "my-project",
     "type": "application",
-    "stack": []
+    "stack": ["typescript", "nextjs"]
   },
   "memory": {
     "autoSave": true,
     "importanceThreshold": 0.45
-  },
-  "providers": {},
-  "server": {
-    "mode": "local",
-    "bind": "stdio"
-  },
-  "security": {
-    "redaction": true,
-    "allowHardPurge": false
   }
 }

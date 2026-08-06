@@ -5,6 +5,20 @@ import { fileURLToPath } from 'node:url';
 
 import { mergeNeuronMcpConfig, validateCursorMcpConfig } from './mcp-config.js';
 
+/** Retired MCP tool names that mean generated Cursor guidance is out of date. */
+const LEGACY_MARKERS = [
+  'neuron_prepare_task',
+  'neuron_get_context',
+  'neuron_search_memory',
+  'neuron_scan_project',
+  'neuron_store_memory',
+  'neuron_save_decision',
+  'neuron_project_summary',
+] as const;
+
+/** Phrase that must appear once P0 anti-rediscovery guidance shipped. */
+const REQUIRED_GUIDANCE = 'Before broad repository exploration';
+
 export interface CursorInstallResult {
   mcpPath: string;
   rulesPath: string;
@@ -76,25 +90,28 @@ export async function installCursorIntegration(
 
   const validation = validateCursorMcpConfig(merged);
 
-  if (!(await pathExists(rulesPath)) || options.force) {
-    await writeFile(rulesPath, await loadTemplate('rules', 'neuron-memory.mdc'), 'utf8');
-  }
-  if (!(await pathExists(skillPath)) || options.force) {
-    await writeFile(skillPath, await loadTemplate('skills', 'neuron-memory', 'SKILL.md'), 'utf8');
-  }
-
-  const commandFiles = [
-    'neuron-context.md',
-    'neuron-plan.md',
-    'neuron-review.md',
-    'neuron-save.md',
-    'neuron-explain.md',
-  ];
-  for (const file of commandFiles) {
-    const dest = join(commandsDir, file);
-    if (!(await pathExists(dest)) || options.force) {
-      await writeFile(dest, await loadTemplate('commands', file), 'utf8');
+  // Always refresh agent guidance when it still names retired tools — otherwise
+  // an upgrade leaves Cursor calling neuron_prepare_task against a 7-tool server.
+  const refreshGuidance = async (dest: string, templateParts: string[]): Promise<void> => {
+    const missing = !(await pathExists(dest));
+    let stale = false;
+    if (!missing) {
+      const body = await readFile(dest, 'utf8');
+      stale =
+        LEGACY_MARKERS.some((m) => body.includes(m)) ||
+        (templateParts.includes('neuron-memory.mdc') && !body.includes(REQUIRED_GUIDANCE));
     }
+    if (missing || options.force || stale) {
+      await writeFile(dest, await loadTemplate(...templateParts), 'utf8');
+    }
+  };
+
+  await refreshGuidance(rulesPath, ['rules', 'neuron-memory.mdc']);
+  await refreshGuidance(skillPath, ['skills', 'neuron-memory', 'SKILL.md']);
+
+  const commandFiles = ['neuron-context.md', 'neuron-save.md', 'neuron-explain.md'];
+  for (const file of commandFiles) {
+    await refreshGuidance(join(commandsDir, file), ['commands', file]);
   }
 
   return {

@@ -1,49 +1,50 @@
 ---
 name: neuron-memory
 description: >-
-  Use Neuron AI Memory MCP tools for project context, decisions, and reviews
-  in Cursor. Apply when starting features, refactoring, architecture questions,
-  or after important coding outcomes.
+  Use Neuron project memory for context, decisions and reviews in Cursor.
+  Apply when starting features, refactoring, answering architecture questions,
+  or after an important coding outcome.
 ---
 
-# Neuron Memory skill (Cursor)
+# Neuron project memory (Cursor)
 
-## Goal
+Neuron tells you **where to look** and **what rules apply** before you rediscover the project.
 
-Give the agent a **project brain**: architecture, decisions, patterns, and warnings - without overloading the context window.
+## Before exploring the repo
 
-## MVP tools (only these)
+1. Call `neuron_context` with the task.
+2. Prefer returned modules / files / symbols / rules.
+3. Open those files.
+4. Broad-search the tree only if context is empty or clearly incomplete.
+5. Verify Brain tips against source — Neuron accelerates; the code is authority.
 
-| Intent | MCP tool |
-|--------|----------|
-| Start a task / ranked context | `neuron_prepare_task` or `neuron_get_context` |
-| Find something specific | `neuron_search_memory` |
-| Save an architecture decision | `neuron_save_decision` |
-| Store pattern / warning / fact | `neuron_store_memory` |
-| Review prose for memorable knowledge | `neuron_review_memory` |
-| Update existing knowledge | `neuron_update_memory` |
-| After finishing work | `neuron_after_task` |
-| Apply Yes / No / rephrase answer | `neuron_resolve_suggestion` |
-| Bootstrap / refresh brain | `neuron_scan_project` / `neuron_refresh_brain` |
-| What is this project? | `neuron_project_summary` |
-| Health check | `neuron_health` |
+## Tools
 
-## Standard workflow
+| Intent | Tool |
+| --- | --- |
+| Start a task with ranked context | `neuron_context` |
+| Look something up | `neuron_search` |
+| Store a decision, pattern, warning or fact | `neuron_remember` |
+| Change existing knowledge (versioned) | `neuron_update` |
+| Propose what to remember after coding | `neuron_after_task` |
+| Apply the user's Yes / Edit / No answer | `neuron_resolve_suggestion` |
+| Rebuild the brain from the codebase | `neuron_scan` |
 
-1. **Analyze** - `neuron_prepare_task` / `neuron_get_context`
-2. **Implement** - follow existing patterns from Neuron
-3. **Review & learn** - `neuron_after_task` → present Project Brain learning prompt (Type / Confidence / Reason / summary) with AskQuestion **Yes / Edit / No** → `neuron_resolve_suggestion`
+## After coding
+
+`neuron_after_task` → ask Yes / Edit / No → `neuron_resolve_suggestion`.
 
 ## Context budget
 
-Return / consume only what fits the task:
+| Mode | Budget | Use for |
+| --- | --- | --- |
+| `minimal` (default) | 500 tokens | everyday coding |
+| `standard` | 1200 tokens | multi-file features |
+| `deep` | 3500 tokens | architecture and refactors |
 
-- Small task → ~2k tokens / ~5 items
-- Architecture task → up to ~10k tokens / ~16 items
-
-Never paste thousands of memories into the chat.
+One markdown document. Do not ask for "all memories".
 
 ## Privacy
 
-Default is **suggest** mode - propose saves; do not silently store everything.
-Local-first - no cloud account, no API key required for Neuron itself.
+Default mode is **suggest**: Neuron proposes, the user decides. Local-first — no cloud, no API key,
+no telemetry.

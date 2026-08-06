@@ -17,3 +17,12 @@ neuron.config.json
 docs/internal/
 
 .cursor/mcp.json
+
+# >>> neuronai
+# Managed by `neuron init` — edit carefully
+# Keep .neuron/brain/ + prefs.json shareable for Team Brain via Git
+.neuron/cache/
+.neuron/runtime/
+.neuron/integrations/
+# <<< neuronai
+

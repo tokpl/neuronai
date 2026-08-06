@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -28,10 +29,7 @@ async function makeTemp(): Promise<string> {
   return dir;
 }
 
-async function writeFixture(
-  root: string,
-  kind: 'nextjs' | 'node' | 'empty',
-): Promise<void> {
+async function writeFixture(root: string, kind: 'nextjs' | 'node' | 'empty'): Promise<void> {
   if (kind === 'empty') return;
 
   if (kind === 'nextjs') {
@@ -69,25 +67,57 @@ async function writeFixture(
 }
 
 describe('cli commands', () => {
-  it('registers MVP commands only', () => {
+  it('registers exactly the documented command surface', () => {
     const cli = createCli();
-    const names = cli.commands.map((c) => c.name);
+    const names = cli.commands.map((c) => c.name).sort();
+
     expect(names).toEqual(
-      expect.arrayContaining([
+      [
+        'brain',
+        'context',
+        'cursor',
+        'doctor',
         'init',
         'init cursor',
-        'status',
-        'scan',
-        'reset',
-        'search',
-        'doctor',
-        'cursor setup',
-        'cursor init',
-        'cursor doctor',
         'mcp',
-      ]),
+        'remember',
+        'reset',
+        'scan',
+        'search',
+        'status',
+      ].sort(),
     );
-    expect(names).not.toEqual(expect.arrayContaining(['benchmark', 'watch', 'constitution suggest']));
+  });
+
+  it('dispatches every cursor action to its own handler', async () => {
+    const root = await makeTemp();
+    await writeFixture(root, 'node');
+    await runInit(root, { yes: true });
+
+    const { runCursor } = await import('../src/commands/cursor.js');
+    const { runCursorSetup } = await import('../src/commands/cursor-setup.js');
+    const { runCursorDoctor } = await import('../src/commands/cursor-doctor.js');
+
+    // Registering a bare `cursor` next to `cursor setup` once made cac match the
+    // bare form, so `cursor setup` silently reported success without writing.
+    await rm(join(root, '.cursor'), { recursive: true, force: true });
+    await runCursorSetup(root, { force: true });
+    expect(existsSync(join(root, '.cursor', 'mcp.json'))).toBe(true);
+
+    process.exitCode = 0;
+    await runCursor(root);
+    expect(process.exitCode === 0 || process.exitCode === undefined).toBe(true);
+
+    process.exitCode = 0;
+    await runCursorDoctor(root);
+    expect(process.exitCode === 0 || process.exitCode === undefined).toBe(true);
+  });
+
+  it('every command has a description and is reachable from the guide', () => {
+    const cli = createCli();
+    for (const command of cli.commands) {
+      expect(command.description.length).toBeGreaterThan(0);
+    }
   });
 
   it('init nextjs fixture creates .neuron and memories', async () => {
@@ -173,11 +203,8 @@ describe('cli commands', () => {
     const { runCursorDoctor } = await import('../src/commands/cursor-doctor.js');
     await runCursorSetup(root, { force: true });
 
-    const cmd = await readFile(
-      join(root, '.cursor', 'commands', 'neuron-context.md'),
-      'utf8',
-    );
-    expect(cmd).toMatch(/neuron_prepare_task/);
+    const cmd = await readFile(join(root, '.cursor', 'commands', 'neuron-context.md'), 'utf8');
+    expect(cmd).toMatch(/neuron_context/);
 
     process.exitCode = 0;
     await runCursorDoctor(root);

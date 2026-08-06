@@ -3,28 +3,17 @@ import { join } from 'node:path';
 
 import { pathExists } from './neuron-fs.js';
 
-export type GitIgnorePreset =
-  | 'ephemeral'
-  | 'ephemeral+config'
-  | 'all-local'
-  | 'skip';
+export type GitIgnorePreset = 'ephemeral' | 'ephemeral+config' | 'all-local' | 'skip';
 
 const MARKER_BEGIN = '# >>> neuronai';
 const MARKER_END = '# <<< neuronai';
 
-const EPHEMERAL_ENTRIES = [
-  '.neuron/cache/',
-  '.neuron/runtime/',
-  '.neuron/indexes/',
-  '.neuron/logs/',
-  '.neuron/export/',
-  '.neuron/data/',
-  '.neuron/backup/',
-  '.neuron/integrations/',
-] as const;
+/** Regenerable state. Everything else under `.neuron/` is the shareable brain. */
+const EPHEMERAL_ENTRIES = ['.neuron/cache/', '.neuron/runtime/'] as const;
 
 function blockFor(preset: Exclude<GitIgnorePreset, 'skip'>): string {
-  const lines: string[] = [MARKER_BEGIN, '# Managed by `neuron init` — edit carefully'];
+  // ASCII only: this block lands in other people's repos and terminals.
+  const lines: string[] = [MARKER_BEGIN, '# Managed by `neuron init` - edit carefully'];
 
   if (preset === 'all-local') {
     lines.push('.neuron/', 'neuron.config.json');

@@ -1,16 +1,17 @@
 import type { MemoryRecord } from '@neuronai/types';
 
 import { computeHealth, emptyDna, nowIso } from './defaults.js';
+import { dedupeRecords, findDuplicate, mergeRecords } from './dedupe.js';
 import type {
-  ActiveContext,
   BrainPrefs,
   KnowledgeGraph,
   KnowledgePlane,
   ProjectDna,
-  ProjectGoals,
   ProjectHealth,
+  ProjectMap,
 } from './models.js';
 import type { ProjectBrain } from './project-brain.js';
+import { brainDocs, retrieve } from './retrieval/index.js';
 
 /**
  * Public mutation / query helpers on ProjectBrain.
@@ -22,10 +23,7 @@ export function applyDnaUpdate(brain: ProjectBrain, dna: ProjectDna): void {
   brain.health = computeHealth(brain.dna, brain.knowledge);
 }
 
-export function applyKnowledgeUpdate(
-  brain: ProjectBrain,
-  patch: Partial<KnowledgePlane>,
-): void {
+export function applyKnowledgeUpdate(brain: ProjectBrain, patch: Partial<KnowledgePlane>): void {
   brain.knowledge = {
     ...brain.knowledge,
     ...patch,
@@ -33,6 +31,14 @@ export function applyKnowledgeUpdate(
     updatedAt: nowIso(),
   };
   brain.health = computeHealth(brain.dna, brain.knowledge);
+}
+
+export function applyMapUpdate(brain: ProjectBrain, map: ProjectMap): void {
+  brain.knowledge = {
+    ...brain.knowledge,
+    map: { version: 1, updatedAt: nowIso(), entries: map.entries },
+    updatedAt: nowIso(),
+  };
 }
 
 export function applyGraphUpdate(brain: ProjectBrain, graph: KnowledgeGraph): void {
@@ -47,10 +53,7 @@ export function applyGraphUpdate(brain: ProjectBrain, graph: KnowledgeGraph): vo
   };
 }
 
-export function applyHealthUpdate(
-  brain: ProjectBrain,
-  patch: Partial<ProjectHealth>,
-): void {
+export function applyHealthUpdate(brain: ProjectBrain, patch: Partial<ProjectHealth>): void {
   brain.health = {
     ...brain.health,
     ...patch,
@@ -59,65 +62,48 @@ export function applyHealthUpdate(
   };
 }
 
-export function applyGoalsUpdate(brain: ProjectBrain, goals: ProjectGoals): void {
-  brain.goals = { ...goals, version: 1, updatedAt: nowIso() };
-}
-
-export function applyActiveUpdate(brain: ProjectBrain, active: ActiveContext): void {
-  brain.active = { ...active, version: 1, updatedAt: nowIso() };
-}
-
+/**
+ * Append a decision, collapsing it into an existing one when it carries the same
+ * knowledge. Content-level dedupe — id equality alone let duplicates accumulate.
+ */
 export function appendDecision(brain: ProjectBrain, decision: MemoryRecord): void {
   const decisions = brain.knowledge.decisions.filter((d) => d.id !== decision.id);
-  decisions.push(decision);
+
+  const duplicate = findDuplicate(decision, decisions);
+  if (duplicate) {
+    const index = decisions.findIndex((d) => d.id === duplicate.existing.id);
+    decisions[index] = mergeRecords(duplicate.existing, decision);
+  } else {
+    decisions.push(decision);
+  }
+
   applyKnowledgeUpdate(brain, { decisions });
 }
 
-export function appendInsight(
-  brain: ProjectBrain,
-  insight: {
-    id: string;
-    title: string;
-    content: string;
-    kind?: string;
-    confidence?: number;
-  },
-): void {
-  const insights = brain.knowledge.insights.filter((i) => i.id !== insight.id);
-  insights.push({ ...insight, updatedAt: nowIso() });
-  applyKnowledgeUpdate(brain, { insights });
+/** Result of folding engine memories into the knowledge plane. */
+export interface LearnOutcome {
+  duplicatesRemoved: number;
 }
 
-export function appendContextCrumb(
-  brain: ProjectBrain,
-  crumb: {
-    id: string;
-    title: string;
-    content: string;
-    tags?: string[];
-  },
-): void {
-  const context = brain.knowledge.context.filter((c) => c.id !== crumb.id);
-  context.push({ ...crumb, updatedAt: nowIso() });
-  applyKnowledgeUpdate(brain, { context });
-}
-
-export function learnFromMemories(
-  brain: ProjectBrain,
-  memories: MemoryRecord[],
-): void {
+export function learnFromMemories(brain: ProjectBrain, memories: MemoryRecord[]): LearnOutcome {
   const active = memories.filter((m) => m.status === 'active');
-  const decisions = active.filter((m) => m.type === 'architecture_decision');
+  const decisionsRaw = active.filter((m) => m.type === 'architecture_decision');
   const rulesFromMemory = active.filter((m) => m.type === 'business_rule');
-  const used = new Set([...decisions, ...rulesFromMemory].map((m) => m.id));
-  const memory = active.filter((m) => !used.has(m.id));
+  const used = new Set([...decisionsRaw, ...rulesFromMemory].map((m) => m.id));
+  const memoryRaw = active.filter((m) => !used.has(m.id));
+
+  // Collapse repeats that entered the store before write-time dedupe existed.
+  const dedupedDecisions = dedupeRecords(decisionsRaw);
+  const dedupedMemory = dedupeRecords(memoryRaw);
+  const decisions = dedupedDecisions.records;
+  const memory = dedupedMemory.records;
 
   applyKnowledgeUpdate(brain, {
     memory,
     decisions,
     rules: [
       ...brain.knowledge.rules.filter((r) => !r.id.startsWith('mem:')),
-      ...rulesFromMemory.map((m) => ({
+      ...dedupeRecords(rulesFromMemory).records.map((m) => ({
         id: `mem:${m.id}`,
         title: m.title,
         body: m.content,
@@ -125,42 +111,39 @@ export function learnFromMemories(
       })),
     ],
   });
+
+  return { duplicatesRemoved: dedupedDecisions.removed + dedupedMemory.removed };
 }
 
-export function queryKnowledge(
-  brain: ProjectBrain,
-  query: string,
-  limit = 10,
-): Array<{ kind: string; title: string; content: string; score: number }> {
-  const q = query.toLowerCase().trim();
-  if (!q) return [];
+export interface BrainQueryHit {
+  id: string;
+  kind: string;
+  title: string;
+  content: string;
+  score: number;
+  /** Human-readable match reason. Never sent to the LLM. */
+  why: string;
+}
 
-  const hits: Array<{ kind: string; title: string; content: string; score: number }> = [];
+/**
+ * Read helper over the durable brain. Ranking lives in `./retrieval` —
+ * this only adapts the knowledge planes into that engine.
+ */
+export function queryKnowledge(brain: ProjectBrain, query: string, limit = 10): BrainQueryHit[] {
+  if (!query.trim()) return [];
 
-  const push = (kind: string, title: string, content: string) => {
-    const hay = `${title}\n${content}`.toLowerCase();
-    if (!hay.includes(q) && !q.split(/\s+/).some((t) => t.length > 2 && hay.includes(t))) {
-      return;
-    }
-    const score =
-      (hay.includes(q) ? 1 : 0.4) +
-      (title.toLowerCase().includes(q) ? 0.3 : 0);
-    hits.push({ kind, title, content, score });
-  };
+  const result = retrieve(query, brainDocs({ knowledge: brain.knowledge, dna: brain.dna }), {
+    limit,
+  });
 
-  for (const m of brain.knowledge.memory) push('memory', m.title, m.content);
-  for (const d of brain.knowledge.decisions) push('decision', d.title, d.content);
-  for (const r of brain.knowledge.rules) push('rule', r.title, r.body);
-  for (const i of brain.knowledge.insights) push('insight', i.title, i.content);
-  for (const c of brain.knowledge.context) push('context', c.title, c.content);
-
-  const dnaName = brain.dna.identity.name?.value;
-  const dnaSummary = brain.dna.meta.summary;
-  if (dnaName || dnaSummary) {
-    push('dna', dnaName ?? 'DNA', dnaSummary ?? JSON.stringify(brain.dna.stack));
-  }
-
-  return hits.sort((a, b) => b.score - a.score).slice(0, limit);
+  return result.hits.map((hit) => ({
+    id: hit.doc.id,
+    kind: hit.doc.kind,
+    title: hit.doc.title,
+    content: hit.doc.content,
+    score: hit.score,
+    why: hit.why,
+  }));
 }
 
 export function explainBrain(brain: ProjectBrain): string {
@@ -169,8 +152,6 @@ export function explainBrain(brain: ProjectBrain): string {
     `Project Brain health ${s.healthPercent}%`,
     `DNA: ${s.dnaUpdated ? 'present' : 'missing'} (confidence ${s.confidencePercent}%)`,
     `Knowledge: ${s.memoryCount} memories, ${s.decisionCount} decisions`,
-    `Goal: ${s.currentGoal ?? 'none'}`,
-    `Active: ${s.activeFocus ?? 'none'}`,
     `Architecture: ${s.architectureHealthy ? 'healthy' : 'needs attention'}`,
   ];
   if (brain.dna.meta.summary) lines.push(`Summary: ${brain.dna.meta.summary}`);

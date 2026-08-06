@@ -91,9 +91,41 @@ export interface KnowledgeGraph {
   changes?: unknown[];
 }
 
+export type ProjectMapKind = 'module' | 'file' | 'symbol' | 'route';
+
+/**
+ * One thing the project contains, and where it actually lives.
+ *
+ * `path` is always repository-relative and complete — never a bare filename.
+ * Answering "where is X?" is the whole reason this exists.
+ */
+export interface ProjectMapEntry {
+  kind: ProjectMapKind;
+  /** Module name, file path, symbol name, or "POST /api/users". */
+  name: string;
+  /** Repository-relative path. Directories end with `/`. */
+  path: string;
+  /** Short human description, when the scanner can infer one honestly. */
+  purpose?: string;
+  /** Owning module name, when known. */
+  module?: string;
+  /** Canonical concepts this entry relates to (see retrieval/concepts). */
+  concepts?: string[];
+}
+
+/**
+ * Where things are. Rebuilt by `neuron scan`, so deleted files disappear
+ * instead of lingering as confidently wrong locations.
+ */
+export interface ProjectMap {
+  version: 1;
+  updatedAt: string;
+  entries: ProjectMapEntry[];
+}
+
 /**
  * Single knowledge plane (`.neuron/brain/knowledge.json`).
- * Graph / insights / context live here — not parallel SoT files.
+ * The graph and the project map live here too — not in parallel files.
  */
 export interface KnowledgePlane {
   version: 1;
@@ -102,21 +134,7 @@ export interface KnowledgePlane {
   decisions: MemoryRecord[];
   rules: Array<{ id: string; title: string; body: string; critical?: boolean }>;
   graph: KnowledgeGraph;
-  insights: Array<{
-    id: string;
-    title: string;
-    content: string;
-    kind?: string;
-    confidence?: number;
-    updatedAt?: string;
-  }>;
-  context: Array<{
-    id: string;
-    title: string;
-    content: string;
-    tags?: string[];
-    updatedAt?: string;
-  }>;
+  map?: ProjectMap;
 }
 
 export interface ProjectHealth {
@@ -127,28 +145,6 @@ export interface ProjectHealth {
   knowledgeFresh: boolean;
   architectureHealthy: boolean;
   notes: string[];
-}
-
-export interface ProjectGoal {
-  id: string;
-  title: string;
-  status: 'active' | 'done' | 'paused';
-  updatedAt: string;
-}
-
-export interface ProjectGoals {
-  version: 1;
-  updatedAt: string;
-  currentId: string | null;
-  goals: ProjectGoal[];
-}
-
-export interface ActiveContext {
-  version: 1;
-  updatedAt: string;
-  focus: string | null;
-  detail?: string;
-  confidence?: number;
 }
 
 /** Init answers / local prefs (`.neuron/prefs.json`). */
@@ -182,15 +178,9 @@ export interface BrainPaths {
   dna: string;
   knowledge: string;
   health: string;
-  goals: string;
-  active: string;
-  evolutionDir: string;
   runtimeDir: string;
   store: string;
   cacheDir: string;
-  logsDir: string;
-  /** @deprecated ephemeral indexes dir kept for cleanup */
-  indexesDir: string;
 }
 
 /** User-facing `neuron brain` summary. */
@@ -199,8 +189,6 @@ export interface BrainStatus {
   dnaUpdated: boolean;
   knowledgeUpdated: boolean;
   architectureHealthy: boolean;
-  currentGoal: string | null;
-  activeFocus: string | null;
   confidencePercent: number;
   memoryCount: number;
   decisionCount: number;

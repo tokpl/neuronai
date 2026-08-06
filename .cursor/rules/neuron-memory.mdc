@@ -1,54 +1,45 @@
 ---
-description: When and how Cursor agents should use Neuron AI Memory (BEFORE / DURING / AFTER coding)
+description: How Cursor agents should use Neuron project memory (before / during / after coding)
 alwaysApply: true
 ---
 
-# Neuron Memory — Cursor agent policy
+# Neuron project memory
 
-Neuron stores **engineering knowledge** for this project (architecture, decisions, patterns, warnings) — not chat transcripts.
+NeuronAI provides **project-aware context** so you do not rediscover the repository on every task.
 
-Prefer short, ranked context. Never dump “all memories”.
+## Before coding (required)
 
-## BEFORE coding
+Before broad repository exploration (listing trees, grepping for modules, hunting entrypoints):
 
-Always:
+1. Call `neuron_context` with the user's task.
+2. Prefer the returned modules, files, symbols and rules.
+3. Open those paths directly.
+4. Search the repository only when Brain context is missing or insufficient.
+5. Treat Brain suggestions as a shortlist, not guaranteed truth — verify against source files.
 
-1. Call `neuron_prepare_task` (preferred) or `neuron_get_context` for the user task
-2. Check architectural decisions that touch the same areas
-3. Skim `.neuron/brain.json`, `.neuron/decisions.json`, `.neuron/knowledge.json` when present
+For a quick lookup rather than a full task, use `neuron_search`.
 
-If the task is tiny (typo / rename), a lightweight `neuron_search_memory` may be enough.
+## During coding
 
-## DURING coding
+Follow the decisions and constraints that came back. Do not invent a second architecture when
+Neuron already documents one.
 
-Respect:
+## After coding
 
-- Existing patterns from Neuron (`neuron_search_memory` when unsure)
-- Project conventions already recorded
-- Warnings (“do not …”) from Neuron
+Call `neuron_after_task` with a short summary of what changed.
 
-Do not invent a second architecture when Neuron already documents one.
+If it proposes a draft, ask the user with Cursor's `AskQuestion` using the returned `question`
+options (**Yes** / **Edit** / **No**). If `AskQuestion` is unavailable, ask in plain words:
+*Should I remember this for the project?*
 
-## AFTER coding
+Then call `neuron_resolve_suggestion` with `action: "save" | "edit" | "ignore"`. For an edit, pass
+the corrected `title` and `content`.
 
-Ask:
+Nothing is written to memory until the user answers.
 
-1. Did we create durable engineering knowledge?
-2. Should a decision / pattern / warning be saved?
+## Rules
 
-Then:
-
-- Prefer `neuron_after_task` (ask-before-remember mode)
-- **Prefer Cursor `AskQuestion`** when available: use `askQuestion` from the tool result (**Yes — remember it** / **Yes — but let me rephrase** / **No — skip**)
-- If `AskQuestion` is unavailable, ask in plain language: *Should I remember this for the project?* — user replies **Yes**, **No**, or **Yes** plus a rephrased version
-- When they answer, call `neuron_resolve_suggestion` with `action: "save" | "edit" | "ignore"` (Yes→save, No→ignore; for rephrase use edit + `title` / `content`)
-- Do **not** show MCP tool names or JSON to the user; those are for you only
-- Or `neuron_review_memory` → `neuron_save_decision` / `neuron_store_memory`
-- Updates: `neuron_update_memory` (versioned — never silent overwrite)
-
-## Do not
-
-- Store secrets, tokens, credentials, or raw PII
-- Store full chat transcripts
-- Create duplicates — search first
-- Flood the context window with low-relevance memories
+- Never show MCP tool names or raw JSON to the user
+- Never store secrets, tokens, credentials or personal data
+- Never store chat transcripts
+- Prefer updating an existing memory (`neuron_update`) over adding a near-duplicate

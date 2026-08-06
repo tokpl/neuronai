@@ -1,41 +1,93 @@
-# MCP tools (MVP)
+# MCP tools
 
-Neuron registers **13 tools**.
+Neuron registers **7 tools**, one job each. Tool descriptions are context the agent pays for on
+every turn, so they are deliberately short.
 
 | Tool | Purpose |
-|------|---------|
-| `neuron_health` | Health / version |
-| `neuron_prepare_task` | Ranked context before coding |
-| `neuron_get_context` | Context on demand |
-| `neuron_search_memory` | Search memories |
-| `neuron_save_decision` | Save architecture decision |
-| `neuron_store_memory` | Store pattern / warning / fact |
-| `neuron_update_memory` | Versioned update |
-| `neuron_review_memory` | Suggest memorable knowledge |
-| `neuron_after_task` | Ask whether to remember knowledge after work (stores pending draft) |
-| `neuron_resolve_suggestion` | Apply user answer: Yes / No / rephrase |
-| `neuron_scan_project` | Bootstrap brain from codebase |
-| `neuron_refresh_brain` | Refresh after changes |
-| `neuron_project_summary` | Project overview |
+| --- | --- |
+| `neuron_context` | Ranked, compressed project knowledge for a coding task |
+| `neuron_search` | Keyword search over memories |
+| `neuron_remember` | Store a decision, pattern, warning or fact (duplicates merge) |
+| `neuron_update` | Change an existing memory — versioned, old content kept |
+| `neuron_after_task` | Propose what is worth remembering after coding |
+| `neuron_resolve_suggestion` | Apply the user's Yes / Edit / No answer |
+| `neuron_scan` | Rebuild the project brain from the codebase |
 
-## Remember this? (Cursor)
+## `neuron_context`
 
-After `neuron_after_task`:
+The main one. Retrieval ranks, the compiler compresses, and the agent gets a single markdown
+document — no parallel JSON copy, no ranking metadata, no memory ids.
 
-1. Agent prefers Cursor **`AskQuestion`** using `askQuestion` from the tool result (**Yes — remember it** / **Yes — but let me rephrase** / **No — skip**)
-2. If `AskQuestion` is unavailable, show `promptText` (Type / Confidence / Reason / summary) and ask **Yes**, **No**, or **Edit**
-3. Agent calls `neuron_resolve_suggestion` with that action — without exposing tool/JSON details to the user
-4. For rephrase (`edit`), pass `title` and/or `content` overrides from the user’s follow-up
+```json
+{ "task": "add rate limiting to the MCP server tool handlers", "mode": "minimal" }
+```
+
+| Mode | Budget | Use for |
+| --- | --- | --- |
+| `minimal` (default) | 500 tokens | everyday coding |
+| `standard` | 1200 tokens | multi-file features |
+| `deep` | 3500 tokens | architecture and refactors |
+
+The response shape:
+
+```json
+{
+  "ok": true,
+  "context": "…",
+  "mode": "minimal",
+  "intent": "MODIFICATION",
+  "recommendation": {
+    "path": "src/billing/service.ts",
+    "name": "service.ts",
+    "reason": "Service / business logic; belongs to the billing module"
+  },
+  "relevantFiles": [{ "name": "middleware.ts", "path": "src/auth/middleware.ts", "kind": "file", "why": "…" }],
+  "relevantModules": [{ "name": "auth", "path": "src/auth/", "purpose": "Authentication / authorization" }],
+  "relevantRules": [{ "title": "…", "detail": "…" }],
+  "metrics": {
+    "contextTokens": 126,
+    "budgetTokens": 500,
+    "corpusTokens": 1800,
+    "itemsSelected": 5,
+    "itemsDiscarded": 12,
+    "estimatedTokensSaved": 1180,
+    "compressionRatio": 14.3,
+    "baseline": "whole-brain-verbatim",
+    "retrievalMs": 4
+  }
+}
+```
+
+`context` is the only field that should enter the model prompt. Call this **before** exploring the
+repository; open the returned paths next. Ranking scores and memory ids never appear in `context`.
+
+`estimatedTokensSaved` is honest: whole-brain verbatim size minus the compiled context
+(`baseline: "whole-brain-verbatim"`). It is not a measurement of tokens the agent would have
+spent reading source files.
+
+If nothing in the brain matches the task, the context says so rather than returning
+high-importance memories about unrelated topics.
+
+CLI equivalent for debugging:
+
+```bash
+neuron context "Where are API routes?"
+```
+
+## Ask before remembering
+
+1. Agent calls `neuron_after_task` with a summary or diff
+2. If there is something worth keeping, the response carries a `draft` and a `question`
+3. Agent asks the user with Cursor `AskQuestion` (**Yes** / **Edit** / **No**), or in plain words
+4. Agent calls `neuron_resolve_suggestion` with `action: "save" | "edit" | "ignore"`
+
+Nothing is written to memory before step 4.
 
 ## Resources
 
-- `neuron://project/context`
-- `neuron://project/architecture`
-- `neuron://project/decisions`
+- `neuron://project/brain` — stack, decisions, rules, modules and health
 
 ## Prompts
 
 - `neuron_before_coding`
 - `neuron_after_coding`
-
-Experimental / enterprise tools live under `future/` and are **not** registered by default.

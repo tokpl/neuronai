@@ -20,7 +20,6 @@ import { CLI_VERSION, pathExists } from '../services/neuron-fs.js';
 import { setupCursorIntegration, syncProjectBrainFiles } from '../services/cursor-setup.js';
 import { applyNeuronGitignore } from '../services/gitignore.js';
 import {
-  ensureIntegrationStubs,
   isNeuronInitialized,
   neuronPaths,
   saveLocalConfig,
@@ -48,6 +47,10 @@ function pickDatabase(stack: string[]): string {
   return hit.replace(/^db:/, '');
 }
 
+function pickTag(stack: string[], pattern: RegExp): string {
+  return stack.find((s) => pattern.test(s)) ?? 'unknown';
+}
+
 function architectureConfidence(input: {
   modules: number;
   files: number;
@@ -71,7 +74,7 @@ export async function runInit(
 
   if ((await isNeuronInitialized(cwd)) && !options.force) {
     ui.warn(`Neuron already initialized at ${paths.neuronDir}`);
-    ui.suggest('Use --force to reinitialize, or run: neuron analyze');
+    ui.suggest('Use --force to reinitialize, or run: neuron scan');
     ui.suggest('For Cursor wiring only: neuron cursor setup');
     return;
   }
@@ -91,11 +94,17 @@ export async function runInit(
   const progress = new ProgressUI(8);
   const report: NeuronInitReport = {
     projectName: 'unknown',
+    language: 'unknown',
     framework: 'unknown',
     database: 'none detected',
+    packageManager: 'unknown',
+    git: false,
     modules: 0,
+    moduleNames: [],
     filesAnalyzed: 0,
     memoriesCreated: 0,
+    decisions: 0,
+    conventions: 0,
     architectureConfidence: 0,
     cursorRules: false,
     mcpConfigured: false,
@@ -131,7 +140,14 @@ export async function runInit(
   const database = pickDatabase(project.stack);
   report.framework = framework;
   report.database = database;
-  progress.ok(`Detected ${framework}`);
+  report.language = pickTag(
+    project.stack,
+    /^(typescript|javascript|python|go|rust|java|php|ruby)$/i,
+  );
+  report.packageManager = pickTag(project.stack, /^pm:/i).replace(/^pm:/, '');
+  report.git = await pathExists(join(cwd, '.git'));
+  if (framework !== 'unknown') progress.ok(`Detected ${framework}`);
+  else progress.warn('No framework signature found - continuing');
   if (database !== 'none detected') {
     progress.ok(`Found database layer (${database})`);
   }
@@ -160,14 +176,8 @@ export async function runInit(
       depth: 'fast',
       ignore: [...DEFAULT_IGNORE],
     },
-    providers: {
-      local: { enabled: true },
-    },
     integrations: {
       cursor: true,
-    },
-    server: {
-      mode: 'local',
     },
   };
 
@@ -225,8 +235,6 @@ export async function runInit(
     `${JSON.stringify(rootConfig, null, 2)}\n`,
     'utf8',
   );
-  await ensureIntegrationStubs(cwd);
-
   const gitignore = await applyNeuronGitignore(cwd, prefs.gitignore);
   const saveLabel =
     prefs.memory.privacyMode === 'automatic'
@@ -246,8 +254,6 @@ export async function runInit(
   // 5. Initial scan
   progress.start('Initial scan…');
   let stored = 0;
-  let candidates = 0;
-  let skipped = 0;
   let scanModules = 0;
   let scanFiles = 0;
   let scanMemories = 0;
@@ -260,23 +266,19 @@ export async function runInit(
       threshold: localConfig.memory.threshold,
     });
     stored = result.stored;
-    candidates = result.candidates;
-    skipped = result.skipped;
 
     try {
-      const { createProjectBrainBootstrap } = await import('@neuronai/project-scanner');
-      const scanReport = await createProjectBrainBootstrap().scan({
-        root: cwd,
-        mode: 'fast',
-        projectName: localConfig.project.name,
-      });
-      scanModules = scanReport.modules;
-      scanFiles = scanReport.filesScanned;
-      scanMemories = scanReport.memoriesCreated;
-      progress.ok(`Created architecture graph (${scanReport.relationships} relations)`);
+      const scan = await session.scan('fast');
+      scanModules = scan.report.modules;
+      scanFiles = scan.report.filesScanned;
+      scanMemories = scan.memoriesStored;
+      report.moduleNames = scan.report.architecture.modules;
       progress.ok(
-        `Generated initial memories (${stored + scanMemories} total · ${candidates} candidates)`,
+        scanModules > 0
+          ? `Mapped ${scanModules} modules across ${scanFiles} files`
+          : `Read ${scanFiles} files`,
       );
+      progress.ok(`Learned ${stored + scanMemories} things about this project`);
     } catch (err) {
       progress.warn(`Scan partial: ${err instanceof Error ? err.message : 'unknown error'}`);
       progress.ok(`Generated initial memories (${stored})`);
@@ -288,6 +290,8 @@ export async function runInit(
   report.modules = scanModules;
   report.filesAnalyzed = scanFiles;
   report.memoriesCreated = stored + scanMemories;
+  report.decisions = session.brain.knowledge.decisions.length;
+  report.conventions = session.brain.knowledge.rules.length;
 
   // 6. Brain creation
   progress.start('Brain creation…');
@@ -329,30 +333,31 @@ export async function runInit(
 
   ui.blank();
   for (const line of formatNeuronReport(report)) {
-    if (line === 'Neuron Report') ui.title(line);
+    if (line === 'What Neuron learned') ui.title(line);
     else if (line === '') ui.blank();
-    else if (line.endsWith(':') && !line.startsWith(' ')) console.log(line);
+    else if (!line.startsWith(' ')) console.log(line);
     else ui.info(line);
   }
 
   ui.blank();
   ui.welcome([
-    'AI just learned your project.',
-    `Stack: ${framework}${database !== 'none detected' ? ` · ${database}` : ''}`,
-    `Memories seeded: ${report.memoriesCreated}` +
-      (candidates ? ` (${candidates} candidates, ${skipped} skipped)` : ''),
-    `Save mode: ${
+    `The brain lives in ${paths.neuronDir.replace(paths.root, '.')}`,
+    'Commit .neuron/brain/ to share it with your team.',
+    `New knowledge: ${
       prefs.memory.privacyMode === 'automatic'
-        ? 'automatic'
+        ? 'saved automatically'
         : prefs.memory.privacyMode === 'manual'
-          ? 'manual'
-          : 'ask before remembering'
+          ? 'only when you ask'
+          : 'Neuron asks before saving anything'
     }`,
-    `Privacy: local-only · telemetry OFF`,
-    `Cursor MCP: ${cursor.mcpPath}`,
+    'Nothing leaves this machine. No cloud, no API key, no telemetry.',
   ]);
   ui.blank();
-  ui.suggest('Cursor Settings → Tools & MCP → enable "neuron"');
-  ui.suggest('Verify: neuron doctor');
-  ui.suggest('First chat: Prepare adding a feature using neuronai');
+  console.log('Next:');
+  ui.blank();
+  ui.info('  1. Enable it in Cursor — Settings → Tools & MCP → turn on "neuron"');
+  ui.info('  2. Ask a question now — neuron search "how does authentication work"');
+  ui.info('  3. Check everything — neuron doctor');
+  ui.blank();
+  ui.info('  neuron cursor    shows the Cursor connection status any time');
 }

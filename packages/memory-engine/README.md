@@ -1,30 +1,30 @@
 # @neuronai/memory-engine
 
-Domain-driven Memory Core for Neuron AI Memory.
+Memory records, versioning and relations. Internal to NeuronAI — not published.
 
 ## Layout
 
-- `domain/entities` - Memory, MemoryVersion, MemoryRelation
-- `domain/value-objects` - typed scores, status, source, type
-- `domain/services` - ImportanceCalculator, MemoryValidator
-- `domain/repositories` - persistence ports (interfaces only)
-- `domain/events` - domain event types + in-memory publisher
-- `use-cases` - application services
-- `infrastructure/in-memory` - test/local adapters
+- `domain/entities` — Memory, MemoryVersion, MemoryRelation
+- `domain/value-objects` — typed scores, status, source, type
+- `domain/services` — ImportanceCalculator, MemoryValidator
+- `domain/repositories` — persistence ports (interfaces only)
+- `use-cases` — application services
+- `infrastructure/in-memory` — the in-process store
 
-Postgres adapters live in `@neuronai/storage`.
+Persistence to disk lives in `@neuronai/storage`; ranking lives in `@neuronai/brain`.
+There is no database adapter and none is planned.
 
-## Quick usage
+## Usage
 
 ```ts
 import { createInMemoryMemoryEngine } from '@neuronai/memory-engine';
 
 const engine = createInMemoryMemoryEngine();
-const memory = await engine.createMemory({
+await engine.createMemory({
   projectId: 'proj_1',
   type: 'architecture_decision',
-  title: 'Use Postgres',
-  content: 'We chose Postgres over MongoDB for relational integrity.',
+  title: 'Rate limiting belongs in middleware',
+  content: 'Applied once in middleware so every handler inherits it.',
   source: 'manual',
 });
 ```

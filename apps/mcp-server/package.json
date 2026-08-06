@@ -1,16 +1,9 @@
 {
   "name": "@neuronai/mcp-server",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "NeuronAI / mcp-server - package for Neuron - AI Memory",
   "license": "AGPL-3.0",
   "type": "module",
-  "publishConfig": {
-    "access": "public",
-    "name": "@neuronai/mcp-server"
-  },
-  "bin": {
-    "neuron-mcp": "./dist/index.js"
-  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -19,10 +12,6 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist",
-    "LICENSE"
-  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -33,20 +22,9 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.8.0",
-    "@neuronai/ai-memory": "workspace:*",
-    "@neuronai/ai-provider": "workspace:*",
-    "@neuronai/agent-intelligence": "workspace:*",
     "@neuronai/agent-workflow": "workspace:*",
     "@neuronai/brain": "workspace:*",
-    "@neuronai/config": "workspace:*",
-    "@neuronai/cursor-integration": "workspace:*",
-    "@neuronai/embeddings": "workspace:*",
-    "@neuronai/knowledge-graph": "workspace:*",
-    "@neuronai/memory-engine": "workspace:*",
-    "@neuronai/observability": "workspace:*",
-    "@neuronai/project-analyzer": "workspace:*",
     "@neuronai/project-scanner": "workspace:*",
-    "@neuronai/retrieval-engine": "workspace:*",
     "@neuronai/storage": "workspace:*",
     "@neuronai/types": "workspace:*",
     "zod": "^3.24.2"
@@ -66,5 +44,6 @@
   },
   "engines": {
     "node": ">=22"
-  }
+  },
+  "private": true
 }

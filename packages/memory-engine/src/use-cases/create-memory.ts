@@ -23,6 +23,8 @@ export interface CreateMemoryInput {
   tags?: string[];
   manualImportance?: number;
   confidence?: number;
+  /** Evidence paths for scan-derived knowledge. */
+  paths?: string[];
 }
 
 export class CreateMemory {
@@ -59,6 +61,7 @@ export class CreateMemory {
       confidence,
       source,
       tags: input.tags ?? [],
+      paths: input.paths,
     });
 
     await this.memories.save(memory);

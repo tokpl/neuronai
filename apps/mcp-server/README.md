@@ -1,24 +1,32 @@
 # @neuronai/mcp-server
 
-Official MCP server for Neuron AI Memory.
+MCP server for NeuronAI project memory. Local-first, stdio transport, no network calls.
 
 ## Tools
 
-- `neuron_get_context`
-- `neuron_search_memory`
-- `neuron_save_decision`
-- `neuron_store_memory`
-- `neuron_review_memory`
-- `neuron_update_memory`
-- `neuron_project_summary`
-- `neuron_health`
+| Tool | Purpose |
+| --- | --- |
+| `neuron_context` | Ranked, compressed project knowledge for a coding task |
+| `neuron_search` | Keyword search over memories |
+| `neuron_remember` | Store a decision, pattern, warning or fact |
+| `neuron_update` | Change a memory (versioned) |
+| `neuron_after_task` | Propose what is worth remembering after coding |
+| `neuron_resolve_suggestion` | Apply the user's Yes / Edit / No answer |
+| `neuron_scan` | Rebuild the project brain from the codebase |
+
+Also exposes the `neuron://project/brain` resource and the `neuron_before_coding` /
+`neuron_after_coding` prompts.
 
 ## Run
 
 ```bash
 pnpm dev:mcp
-# or
-pnpm neuron mcp
+# or, from an installed CLI
+neuron mcp
 ```
 
-See [docs/mcp-server.md](../../docs/mcp-server.md) and [docs/cursor-setup.md](../../docs/cursor-setup.md).
+Cursor invokes this automatically once `.cursor/mcp.json` exists — `neuron init` writes it.
+
+stdout is reserved for JSON-RPC; all logging goes to stderr.
+
+Full reference: [docs/mcp.md](../../docs/mcp.md).

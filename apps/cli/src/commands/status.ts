@@ -29,7 +29,7 @@ export async function runStatus(cwd = process.cwd()): Promise<void> {
   let brainExplain = '';
   try {
     const session = await openProjectSession(cwd);
-    const active = session.listMemories().filter((m) => m.status === 'active');
+    const active = session.listMemories();
     memoryCount = active.length;
     const newest = active
       .map((m) => m.updatedAt)
@@ -43,8 +43,7 @@ export async function runStatus(cwd = process.cwd()): Promise<void> {
     ui.kv('Health', `${s.healthPercent}%`);
     ui.kv('DNA', s.dnaUpdated ? 'Updated' : 'Missing');
     ui.kv('Knowledge', s.knowledgeUpdated ? 'Updated' : 'Empty');
-    ui.kv('Goal', s.currentGoal ?? '—');
-    ui.kv('Active', s.activeFocus ?? '—');
+    ui.kv('Decisions', String(s.decisionCount));
     ui.blank();
   } catch {
     // keep metadata count
@@ -72,11 +71,10 @@ export async function runStatus(cwd = process.cwd()): Promise<void> {
   ui.kv('Last sync', formatRelativeTime(lastSyncAt));
   ui.kv('Last analyze', formatRelativeTime(meta.lastAnalyzeAt));
   ui.blank();
-  console.log('Runtime:');
-  ui.kv('Store', 'ProjectBrain + .neuron/runtime/ (ephemeral)');
-  ui.kv('MCP', mcpStatus);
-  ui.kv('Mode', config.server?.mode ?? 'local');
-  ui.kv('Path', paths.store);
+  console.log('Storage:');
+  ui.kv('Brain', `${paths.brainDir} (commit this)`);
+  ui.kv('Runtime', `${paths.runtimeDir} (regenerable)`);
+  ui.kv('Cursor MCP', mcpStatus);
   if (brainExplain) {
     ui.blank();
     ui.info(brainExplain);

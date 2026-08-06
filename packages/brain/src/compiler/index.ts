@@ -9,280 +9,223 @@ export {
   explainCompressionMetric,
   type CompressionMetrics,
   type CompressionMetricKind,
-  type ExclusionRecord,
-  type InclusionRecord,
 } from './metrics.js';
 export { clipLine, estimateTokens, normalizeKey } from './tokens.js';
 
+import { dedupeRecords } from '../dedupe.js';
+import type { RetrievalHit, RetrievalStats } from '../retrieval/rank.js';
+import { buildCompressionMetrics, type CompressionMetrics } from './metrics.js';
 import {
   resolvePreparationMode,
   type PreparationMode,
   type PreparationModeResolved,
 } from './modes.js';
-import {
-  buildCompressionMetrics,
-  explainCompressionMetric,
-  type CompressionMetrics,
-  type ExclusionRecord,
-  type InclusionRecord,
-} from './metrics.js';
-import { clipLine, estimateTokens, normalizeKey } from './tokens.js';
+import { clipLine, estimateTokens } from './tokens.js';
 
-export interface CompilerCandidate {
-  id: string;
-  kind: 'decision' | 'warning' | 'architecture' | 'pattern' | 'context';
-  title: string;
-  content: string;
-  /** Internal ranking score — never emitted to the LLM prompt */
-  score: number;
+export interface CompileRecommendation {
+  path: string;
+  name: string;
+  reason: string;
+  related?: Array<{ path: string; name: string }>;
 }
 
 export interface BrainCompileInput {
   task: string;
-  /** MCP mode string or preparation mode */
+  /** MCP mode string or preparation mode. Defaults to minimal. */
   mode?: string;
+  /** Ranked, relevance-gated memories from the retrieval engine. */
+  hits: RetrievalHit[];
+  /** Modules / files the task touches. */
   modules?: string[];
-  architectureNotes?: string[];
-  decisions?: CompilerCandidate[];
-  patterns?: CompilerCandidate[];
-  warnings?: string[];
-  hints?: string[];
-  planSteps?: string[];
-  risks?: string[];
-  /** Force debug dump even if mode is not debug */
-  debug?: boolean;
+  /** Best place to start editing, when the question is modification-oriented. */
+  recommendation?: CompileRecommendation;
+  /** Retrieval telemetry, folded into the compiled metrics. */
+  retrieval?: Pick<RetrievalStats, 'candidates' | 'matched' | 'durationMs'>;
+  /**
+   * Estimated tokens of the entire corpus — the "paste everything" baseline the
+   * compression ratio is measured against. Falls back to the matched hits.
+   */
+  corpusTokens?: number;
 }
 
-export interface CompiledBrainPrompt {
-  /** Single dense prompt for the LLM (markdown). No JSON twin. */
-  prompt: string;
+/** Where the agent-facing text came from. Never included in the prompt itself. */
+export interface CompiledSource {
+  title: string;
+  why: string;
+}
+
+export interface CompiledContext {
+  /** The single canonical representation handed to the agent. */
+  context: string;
   mode: PreparationMode;
-  profile: PreparationModeResolved;
   metrics: CompressionMetrics;
-  inclusions: InclusionRecord[];
-  exclusions: ExclusionRecord[];
-  /** Developer-only — omitted unless debug */
-  debug?: {
-    rawDump: string;
-    candidates: CompilerCandidate[];
-  };
+  sources: CompiledSource[];
+}
+
+type SectionId = 'locations' | 'warnings' | 'decisions' | 'constraints' | 'patterns' | 'context';
+
+interface SectionSpec {
+  id: SectionId;
+  heading: string;
+  /** Lower drops last when the budget is tight. */
+  priority: number;
+  clip: number;
 }
 
 /**
- * Brain Compression Engine — compiles Project Brain retrieval into a minimal prompt.
- * Internal Brain ≠ Prompt.
+ * Display order is reading order; `priority` decides what survives a tight budget.
+ * Locations come first: telling the agent *where to look* is the cheapest, highest
+ * leverage thing the brain can say.
+ */
+const SECTIONS: SectionSpec[] = [
+  { id: 'locations', heading: 'Where to look', priority: 1, clip: 120 },
+  { id: 'decisions', heading: 'Decisions', priority: 2, clip: 220 },
+  { id: 'constraints', heading: 'Constraints', priority: 3, clip: 180 },
+  { id: 'warnings', heading: 'Warnings', priority: 0, clip: 180 },
+  { id: 'patterns', heading: 'Patterns', priority: 4, clip: 160 },
+  { id: 'context', heading: 'Project knowledge', priority: 5, clip: 160 },
+];
+
+const SECTION_FOR_KIND: Record<string, SectionId> = {
+  location: 'locations',
+  decision: 'decisions',
+  warning: 'warnings',
+  rule: 'constraints',
+  pattern: 'patterns',
+  knowledge: 'context',
+  insight: 'context',
+  context: 'context',
+};
+
+/**
+ * Every mode can emit every section. A relevant pattern must never be dropped
+ * just because the mode is minimal — the item cap and token budget do the
+ * limiting, and `priority` decides what survives when they bite.
+ */
+const MODE_MAX_ITEMS: Record<PreparationMode, number> = {
+  minimal: 6,
+  standard: 12,
+  deep: 24,
+};
+
+interface Line {
+  section: SectionId;
+  priority: number;
+  score: number;
+  text: string;
+  title: string;
+  why: string;
+}
+
+/**
+ * Brain Compression Engine.
+ *
+ * Produces exactly one representation of the project context. Ranking scores,
+ * memory ids and internal metadata never reach the compiled text.
  */
 export class BrainCompiler {
-  compile(input: BrainCompileInput): CompiledBrainPrompt {
+  compile(input: BrainCompileInput): CompiledContext {
     const started = Date.now();
     const profile = resolvePreparationMode(input.mode);
-    if (input.debug) profile.debug = true;
 
-    const decisions = dedupeCandidates(input.decisions ?? []);
-    const patterns = dedupeCandidates(input.patterns ?? []);
-    const architecture = uniqueStrings(input.architectureNotes ?? []);
-    const modules = uniqueStrings(input.modules ?? []);
-    const warnings = uniqueStrings(input.warnings ?? []);
-    const hints = uniqueStrings(input.hints ?? []);
-    const planSteps = uniqueStrings(input.planSteps ?? []);
-    const risks = uniqueStrings(input.risks ?? []);
+    // A memory may only ever appear once in the compiled context. Kind is
+    // deliberately ignored here: the same knowledge filed as both a decision and
+    // a note is still one thing to tell the agent.
+    const deduped = dedupeRecords(
+      input.hits.map((hit) => ({
+        id: hit.doc.id,
+        type: 'context',
+        title: hit.doc.title,
+        content: hit.doc.content,
+        tags: hit.doc.tags,
+      })),
+    );
+    const survivingIds = new Set(deduped.records.map((r) => r.id));
+    const hits = input.hits.filter((hit) => survivingIds.has(hit.doc.id));
 
-    const searched =
-      decisions.length +
-      patterns.length +
-      architecture.length +
-      warnings.length +
-      hints.length +
-      planSteps.length +
-      risks.length +
-      modules.length;
+    const lines: Line[] = [];
+    const seen = new Set<string>();
 
-    const inclusions: InclusionRecord[] = [];
-    const exclusions: ExclusionRecord[] = [];
+    for (const hit of hits) {
+      const sectionId = SECTION_FOR_KIND[hit.doc.kind] ?? 'context';
+      const spec = SECTIONS.find((s) => s.id === sectionId);
+      if (!spec) continue;
 
-    const decisionBullets: string[] = [];
-    for (const d of decisions.sort((a, b) => b.score - a.score)) {
-      const line = compressDecision(d);
-      const next = trialPrompt(input.task, profile.mode, {
-        modules,
-        architecture,
-        decisions: [...decisionBullets, line],
-        warnings,
-        hints: profile.includeHints ? hints : [],
-        planSteps: profile.includePlan ? planSteps : [],
-        risks: profile.includeRisks ? risks : [],
-      });
-      if (estimateTokens(next) <= profile.tokenBudget || decisionBullets.length === 0) {
-        decisionBullets.push(line);
-        inclusions.push({
-          id: d.id,
-          title: d.title,
-          reason: `High-signal ${d.kind}; fits token budget (${profile.tokenBudget}).`,
-        });
-      } else {
-        exclusions.push({
-          id: d.id,
-          title: d.title,
-          reason: `Dropped to respect ${profile.mode} token budget (${profile.tokenBudget}).`,
-        });
-      }
-    }
+      const text = compressEntry(hit, spec.clip);
+      const key = text.toLowerCase();
+      if (!text || seen.has(key)) continue;
+      seen.add(key);
 
-    const patternBullets: string[] = [];
-    if (profile.mode !== 'minimal') {
-      for (const p of patterns.sort((a, b) => b.score - a.score).slice(0, 4)) {
-        const line = `• ${clipLine(p.title, 80)}`;
-        const next = trialPrompt(input.task, profile.mode, {
-          modules,
-          architecture,
-          decisions: decisionBullets,
-          warnings,
-          hints: [...hints, ...patternBullets, line],
-          planSteps: profile.includePlan ? planSteps : [],
-          risks: profile.includeRisks ? risks : [],
-        });
-        if (estimateTokens(next) <= profile.tokenBudget) {
-          patternBullets.push(line);
-          inclusions.push({
-            id: p.id,
-            title: p.title,
-            reason: 'Pattern/hint retained under standard/deep budget.',
-          });
-        } else {
-          exclusions.push({
-            id: p.id,
-            title: p.title,
-            reason: 'Pattern omitted — would exceed token budget.',
-          });
-        }
-      }
-    } else {
-      for (const p of patterns) {
-        exclusions.push({
-          id: p.id,
-          title: p.title,
-          reason: 'Minimal mode excludes pattern hints unless they are decisions/warnings.',
-        });
-      }
-    }
-
-    // Trim modules / architecture / warnings to budget
-    let mod = modules.slice(0, profile.mode === 'minimal' ? 4 : 8);
-    let arch = architecture.slice(0, profile.mode === 'minimal' ? 3 : 6);
-    let warn = warnings.slice(0, profile.mode === 'minimal' ? 3 : 6);
-    let hintLines = profile.includeHints ? [...hints.slice(0, 4), ...patternBullets] : [];
-    let plan = profile.includePlan ? planSteps.slice(0, 6) : [];
-    let riskLines = profile.includeRisks ? risks.slice(0, 4) : [];
-
-    let prompt = trialPrompt(input.task, profile.mode, {
-      modules: mod,
-      architecture: arch,
-      decisions: decisionBullets,
-      warnings: warn,
-      hints: hintLines,
-      planSteps: plan,
-      risks: riskLines,
-    });
-
-    // Pack down until under budget (drop lowest-value sections first)
-    while (estimateTokens(prompt) > profile.tokenBudget) {
-      if (riskLines.length) {
-        riskLines = riskLines.slice(0, -1);
-      } else if (plan.length) {
-        plan = plan.slice(0, -1);
-      } else if (hintLines.length) {
-        hintLines = hintLines.slice(0, -1);
-      } else if (arch.length > 1) {
-        arch = arch.slice(0, -1);
-      } else if (mod.length > 1) {
-        mod = mod.slice(0, -1);
-      } else if (decisionBullets.length > 1) {
-        const dropped = decisionBullets.pop();
-        if (dropped) {
-          exclusions.push({
-            id: `decision:${dropped}`,
-            title: dropped,
-            reason: 'Removed during final budget packing.',
-          });
-        }
-      } else if (warn.length) {
-        warn = warn.slice(0, -1);
-      } else {
-        break;
-      }
-      prompt = trialPrompt(input.task, profile.mode, {
-        modules: mod,
-        architecture: arch,
-        decisions: decisionBullets,
-        warnings: warn,
-        hints: hintLines,
-        planSteps: plan,
-        risks: riskLines,
+      lines.push({
+        section: sectionId,
+        priority: spec.priority,
+        score: hit.score,
+        text,
+        title: hit.doc.title,
+        why: hit.why,
       });
     }
 
-    const rawDump = buildRawDump(input, decisions, patterns);
-    const selected =
-      decisionBullets.length +
-      warn.length +
-      mod.length +
-      arch.length +
-      hintLines.length +
-      plan.length +
-      riskLines.length;
+    lines.sort((a, b) => a.priority - b.priority || b.score - a.score);
+
+    const modules = uniqueStrings(input.modules ?? []).slice(
+      0,
+      profile.mode === 'minimal' ? 5 : 10,
+    );
+
+    // Greedy packing: add the most valuable line while the whole document fits.
+    const maxItems = MODE_MAX_ITEMS[profile.mode];
+    const chosen: Line[] = [];
+    for (const line of lines) {
+      if (chosen.length >= maxItems) break;
+      const candidate = [...chosen, line];
+      if (
+        estimateTokens(render(input.task, candidate, modules, input.recommendation)) <=
+        profile.tokenBudget
+      ) {
+        chosen.push(line);
+      }
+    }
+
+    let context = render(input.task, chosen, modules, input.recommendation);
+    // Modules are the cheapest thing to drop if the header alone overflows.
+    if (estimateTokens(context) > profile.tokenBudget && modules.length) {
+      context = render(input.task, chosen, [], input.recommendation);
+    }
+    // Recommendation is high-leverage; drop related paths before dropping it entirely.
+    if (estimateTokens(context) > profile.tokenBudget && input.recommendation?.related?.length) {
+      context = render(input.task, chosen, [], {
+        ...input.recommendation,
+        related: [],
+      });
+    }
+
+    const rawCorpusTokens =
+      input.corpusTokens ??
+      input.hits.reduce(
+        (sum, hit) => sum + estimateTokens(`${hit.doc.title}\n${hit.doc.content}`),
+        0,
+      );
 
     const metrics = buildCompressionMetrics({
       mode: profile.mode,
       tokenBudget: profile.tokenBudget,
-      searched,
-      selected,
-      discarded: Math.max(0, searched - selected),
-      promptTokens: estimateTokens(prompt),
-      rawDumpTokens: estimateTokens(rawDump),
-      preparationTimeMs: Date.now() - started,
+      candidates: input.retrieval?.candidates ?? input.hits.length,
+      relevant: input.retrieval?.matched ?? input.hits.length,
+      selected: chosen.length,
+      duplicatesRemoved: deduped.removed,
+      compiledTokens: estimateTokens(context),
+      rawCorpusTokens,
+      retrievalMs: input.retrieval?.durationMs ?? 0,
+      compileMs: Date.now() - started,
     });
 
-    const result: CompiledBrainPrompt = {
-      prompt,
+    return {
+      context,
       mode: profile.mode,
-      profile,
       metrics,
-      inclusions,
-      exclusions,
+      sources: chosen.map((line) => ({ title: line.title, why: line.why })),
     };
-
-    if (profile.debug) {
-      result.debug = {
-        rawDump,
-        candidates: [...decisions, ...patterns],
-      };
-    }
-
-    return result;
-  }
-
-  explainInclusion(compiled: CompiledBrainPrompt, titleOrId: string): string {
-    const hit =
-      compiled.inclusions.find(
-        (i) => i.id === titleOrId || i.title.toLowerCase().includes(titleOrId.toLowerCase()),
-      ) ??
-      compiled.exclusions.find(
-        (i) => i.id === titleOrId || i.title.toLowerCase().includes(titleOrId.toLowerCase()),
-      );
-    if (!hit) {
-      return `No inclusion/exclusion record for "${titleOrId}".`;
-    }
-    const kept = compiled.inclusions.includes(hit as InclusionRecord);
-    return [
-      kept ? 'Included in prompt' : 'Excluded from prompt',
-      `Title: ${hit.title}`,
-      `Reason: ${hit.reason}`,
-      `Mode: ${compiled.mode} · prompt ~${compiled.metrics.promptTokens} tokens (budget ${compiled.metrics.tokenBudget})`,
-    ].join('\n');
-  }
-
-  explainMetric(compiled: CompiledBrainPrompt, key: string): string {
-    return explainCompressionMetric(compiled.metrics, key);
   }
 }
 
@@ -290,148 +233,99 @@ export function createBrainCompiler(): BrainCompiler {
   return new BrainCompiler();
 }
 
-function trialPrompt(
+/** Resolve the preparation profile without compiling (used by adapters). */
+export function preparationProfile(mode?: string): PreparationModeResolved {
+  return resolvePreparationMode(mode);
+}
+
+function render(
   task: string,
-  mode: PreparationMode,
-  parts: {
-    modules: string[];
-    architecture: string[];
-    decisions: string[];
-    warnings: string[];
-    hints: string[];
-    planSteps: string[];
-    risks: string[];
-  },
+  lines: Line[],
+  modules: string[],
+  recommendation?: CompileRecommendation,
 ): string {
-  const lines: string[] = [
-    `# Task`,
-    task.trim(),
-    '',
-  ];
+  const out: string[] = [`# Task`, task.trim()];
 
-  if (parts.modules.length) {
-    lines.push(`# Relevant modules`);
-    for (const m of parts.modules) lines.push(`- ${clipLine(m, 60)}`);
-    lines.push('');
+  if (recommendation) {
+    out.push(
+      '',
+      '## Recommended start',
+      `- ${clipLine(`${recommendation.name} → ${recommendation.path}`, 120)}`,
+      `- Because: ${clipLine(recommendation.reason, 160)}`,
+    );
+    for (const rel of recommendation.related ?? []) {
+      out.push(`- Related: ${clipLine(`${rel.name} → ${rel.path}`, 100)}`);
+    }
   }
 
-  if (parts.architecture.length) {
-    lines.push(`# Relevant architecture`);
-    for (const a of parts.architecture) lines.push(`- ${clipLine(a, 120)}`);
-    lines.push('');
+  if (modules.length) {
+    out.push('', '## Modules', ...modules.map((m) => `- ${clipLine(m, 80)}`));
   }
 
-  if (parts.decisions.length) {
-    lines.push(`# Architecture decisions`);
-    for (const d of parts.decisions) lines.push(d);
-    lines.push('');
+  for (const spec of SECTIONS) {
+    const section = lines.filter((l) => l.section === spec.id);
+    if (!section.length) continue;
+    out.push('', `## ${spec.heading}`, ...section.map((l) => `- ${l.text}`));
   }
 
-  if (parts.warnings.length) {
-    lines.push(`# Warnings`);
-    for (const w of parts.warnings) lines.push(`- ${clipLine(w, 100)}`);
-    lines.push('');
+  if (lines.length === 0 && !recommendation) {
+    out.push('', 'No stored project knowledge matched this task.');
   }
 
-  if (mode !== 'minimal' && parts.hints.length) {
-    lines.push(`# Implementation hints`);
-    for (const h of parts.hints) lines.push(h.startsWith('•') ? h : `- ${clipLine(h, 100)}`);
-    lines.push('');
-  }
-
-  if (mode === 'deep' && parts.planSteps.length) {
-    lines.push(`# Approach`);
-    parts.planSteps.forEach((s, i) => lines.push(`${i + 1}. ${clipLine(s, 120)}`));
-    lines.push('');
-  }
-
-  if (mode === 'deep' && parts.risks.length) {
-    lines.push(`# Risks`);
-    for (const r of parts.risks) lines.push(`- ${clipLine(r, 100)}`);
-    lines.push('');
-  }
-
-  return lines.join('\n').trim() + '\n';
+  return `${out.join('\n').trim()}\n`;
 }
 
-function compressDecision(d: CompilerCandidate): string {
-  // Prefer first sentence / first line of content; fall back to title
-  const body = d.content
+/**
+ * Turn a memory into one dense line.
+ * Structural prefixes ("Problem:", "Decision:") are dropped so the essence leads.
+ */
+function compressEntry(hit: RetrievalHit, clip: number): string {
+  // A location is a pointer, not prose: "name → path — purpose".
+  const entry = hit.doc.location;
+  if (entry) {
+    const label = entry.kind === 'route' ? entry.name : entry.name;
+    const purpose = entry.purpose ? ` — ${entry.purpose}` : '';
+    return clipLine(`${label} → ${entry.path}${purpose}`, clip);
+  }
+
+  const title = hit.doc.title.replace(/\s+/g, ' ').trim();
+  const body = hit.doc.content
     .split(/\n+/)
-    .map((l) => scrubInternalNoise(l.replace(/^Decision:\s*/i, '').trim()))
+    .map((line) => scrubInternalNoise(line.trim()))
     .filter(Boolean);
-  const essence =
-    body.find((l) => l.length > 20 && !/^Problem:|^Reason:|^Modules:|^Impact:/i.test(l)) ??
-    body[0] ??
-    scrubInternalNoise(d.title);
-  return `• ${clipLine(essence, 140)}`;
+
+  const essence = body.find(
+    (line) => line.length > 24 && !/^(problem|reason|impact|modules|source)\s*:/i.test(line),
+  );
+
+  if (!essence) return clipLine(title, clip);
+
+  const detail = essence.replace(/^(decision|rule|warning|pattern)\s*:\s*/i, '');
+  if (detail.toLowerCase().startsWith(title.toLowerCase())) return clipLine(detail, clip);
+  return clipLine(`${title} — ${detail}`, clip);
 }
 
-/** Strip ranking / storage field names that must never reach the LLM prompt. */
+/** Ranking and storage vocabulary must never leak into the compiled context. */
 function scrubInternalNoise(text: string): string {
   return text
     .replace(
-      /\b(graphDistance|rankingScore|freshness|taskRelevance|importanceScore|confidence|components|rawDump)\b/gi,
+      /\b(graphDistance|rankingScore|taskRelevance|importanceScore|freshnessScore|confidenceScore|components|rawDump|score)\b/gi,
       '',
     )
     .replace(/\s{2,}/g, ' ')
     .trim();
 }
 
-function dedupeCandidates(items: CompilerCandidate[]): CompilerCandidate[] {
-  const seen = new Set<string>();
-  const out: CompilerCandidate[] = [];
-  for (const item of items) {
-    const key = normalizeKey(item.title, item.content);
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(item);
-  }
-  return out;
-}
-
 function uniqueStrings(items: string[]): string[] {
   const seen = new Set<string>();
   const out: string[] = [];
   for (const raw of items) {
-    const t = raw.replace(/\s+/g, ' ').trim();
-    if (!t) continue;
-    const key = t.toLowerCase();
+    const value = raw.replace(/\s+/g, ' ').trim();
+    if (!value) continue;
+    const key = value.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
-    out.push(t);
+    out.push(value);
   }
   return out;
-}
-
-function buildRawDump(
-  input: BrainCompileInput,
-  decisions: CompilerCandidate[],
-  patterns: CompilerCandidate[],
-): string {
-  return JSON.stringify(
-    {
-      task: input.task,
-      modules: input.modules,
-      architectureNotes: input.architectureNotes,
-      decisions: decisions.map((d) => ({
-        id: d.id,
-        title: d.title,
-        content: d.content,
-        score: d.score,
-      })),
-      patterns: patterns.map((p) => ({
-        id: p.id,
-        title: p.title,
-        content: p.content,
-        score: p.score,
-      })),
-      warnings: input.warnings,
-      hints: input.hints,
-      planSteps: input.planSteps,
-      risks: input.risks,
-    },
-    null,
-    2,
-  );
 }

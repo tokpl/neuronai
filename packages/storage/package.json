@@ -1,7 +1,7 @@
 {
   "name": "@neuronai/storage",
-  "version": "0.1.4",
-  "description": "NeuronAI / storage - package for Neuron - AI Memory",
+  "version": "0.2.0",
+  "description": "NeuronAI local runtime and persistence - the single construction path for CLI and MCP",
   "license": "AGPL-3.0",
   "type": "module",
   "exports": {
@@ -12,10 +12,6 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist",
-    "LICENSE"
-  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -24,15 +20,15 @@
   },
   "dependencies": {
     "@neuronai/brain": "workspace:*",
+    "@neuronai/config": "workspace:*",
     "@neuronai/memory-engine": "workspace:*",
+    "@neuronai/project-analyzer": "workspace:*",
+    "@neuronai/project-scanner": "workspace:*",
     "@neuronai/types": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -44,5 +40,6 @@
   },
   "engines": {
     "node": ">=22"
-  }
+  },
+  "private": true
 }

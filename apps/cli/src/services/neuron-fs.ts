@@ -11,7 +11,7 @@ import {
 } from '../config/local-config.js';
 
 export const NEURON_DIR = '.neuron';
-export const CLI_VERSION = '0.1.4';
+export const CLI_VERSION = '0.2.0';
 
 export function neuronPaths(cwd = process.cwd()) {
   const root = resolve(cwd);
@@ -26,17 +26,9 @@ export function neuronPaths(cwd = process.cwd()) {
     dna: p.dna,
     knowledge: p.knowledge,
     health: p.health,
-    goals: p.goals,
-    active: p.active,
-    evolutionDir: p.evolutionDir,
-    dataDir: p.runtimeDir,
     runtimeDir: p.runtimeDir,
     store: p.store,
     cacheDir: p.cacheDir,
-    indexesDir: p.indexesDir,
-    logsDir: p.logsDir,
-    exportDir: join(p.neuronDir, 'export'),
-    integrationsDir: join(p.neuronDir, 'integrations'),
   };
 }
 
@@ -90,33 +82,8 @@ export async function loadMetadata(cwd = process.cwd()): Promise<NeuronMetadata>
   }
 }
 
-export async function saveMetadata(
-  metadata: NeuronMetadata,
-  cwd = process.cwd(),
-): Promise<void> {
+export async function saveMetadata(metadata: NeuronMetadata, cwd = process.cwd()): Promise<void> {
   const paths = neuronPaths(cwd);
   await mkdir(paths.neuronDir, { recursive: true });
   await writeFile(paths.metadata, `${JSON.stringify(metadata, null, 2)}\n`, 'utf8');
-}
-
-export async function ensureIntegrationStubs(cwd = process.cwd()): Promise<void> {
-  const paths = neuronPaths(cwd);
-  const hosts = ['cursor'] as const;
-  for (const host of hosts) {
-    const dir = join(paths.integrationsDir, host);
-    await mkdir(dir, { recursive: true });
-    const readme = join(dir, 'README.md');
-    if (!(await pathExists(readme))) {
-      await writeFile(
-        readme,
-        [
-          `# ${host} integration`,
-          '',
-          'Cursor is wired via `.cursor/` at the project root (`neuron init`).',
-          '',
-        ].join('\n'),
-        'utf8',
-      );
-    }
-  }
 }

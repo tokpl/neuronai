@@ -12,10 +12,15 @@ export type {
   GeneratedMemory,
   SuggestedRule,
   ScanCacheEntry,
+  ScanDelta,
+  ProjectMapEntry,
+  ProjectMapSnapshot,
   ProjectScanReport,
   ScanOptions,
 } from './types.js';
 export { nowIso } from './types.js';
+export { buildProjectMap, type ScanMapEntry, type ScanProjectMap } from './map/builder.js';
+export { extractSymbols } from './symbols/extractor.js';
 
 export {
   FileImportanceAnalyzer,

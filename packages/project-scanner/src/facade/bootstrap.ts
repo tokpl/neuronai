@@ -10,9 +10,86 @@ import { createCodebaseScanner } from '../filesystem/scanner.js';
 import { createTechnologyDetector } from '../frameworks/technology.js';
 import { createGitAnalyzer } from '../git/analyzer.js';
 import { createIncrementalScanner } from '../incremental/scanner.js';
+import { buildProjectMap } from '../map/builder.js';
 import { createInitialMemoryGenerator } from '../memory/generator.js';
-import type { ProjectScanReport, ScanMode, ScanOptions } from '../types.js';
+import { extractSymbols } from '../symbols/extractor.js';
+import type {
+  ArchitectureMap,
+  ProjectMapSnapshot,
+  ProjectScanReport,
+  ProjectStackProfile,
+  ScanCacheEntry,
+  ScanDelta,
+  ScanMode,
+  ScanOptions,
+} from '../types.js';
 import { nowIso } from '../types.js';
+
+const EMPTY_STACK: ProjectStackProfile = {
+  frontend: [],
+  backend: [],
+  database: [],
+  tools: [],
+  languages: [],
+  packageManagers: [],
+  manifests: [],
+};
+
+const EMPTY_ARCHITECTURE: ArchitectureMap = {
+  modules: [],
+  services: [],
+  controllers: [],
+  repositories: [],
+  components: [],
+  routes: [],
+  databaseLayers: [],
+  middleware: [],
+  entrypoints: [],
+  markdown: '',
+};
+
+const EMPTY_MAP: ProjectMapSnapshot = {
+  version: 1,
+  updatedAt: nowIso(),
+  entries: [],
+};
+
+/** An `update` scan where nothing changed. Reported honestly, costs nothing. */
+function unchangedReport(
+  projectName: string,
+  filesScanned: number,
+  filesSkipped: number,
+  delta: ScanDelta,
+): ProjectScanReport {
+  return {
+    projectName,
+    mode: 'update',
+    scannedAt: nowIso(),
+    filesScanned,
+    filesSkipped,
+    modules: 0,
+    services: 0,
+    dependencies: 0,
+    memoriesCreated: 0,
+    relationships: 0,
+    rulesSuggested: 0,
+    unchanged: true,
+    delta,
+    stack: EMPTY_STACK,
+    architecture: EMPTY_ARCHITECTURE,
+    map: EMPTY_MAP,
+    dependencyGraph: [],
+    relationshipsList: [],
+    memories: [],
+    suggestedRules: [],
+    git: { commitsSampled: 0, authors: [], branches: [], potentialDecisions: [] },
+    docs: { readmeSummary: null, docFiles: [], knowledgeBullets: [] },
+    markdown: 'No files changed since the last scan.',
+    architectureMarkdown: '',
+    constitutionMarkdown: '',
+    cursorRulesMarkdown: '',
+  };
+}
 
 /**
  * Full project brain bootstrap engine.
@@ -36,18 +113,53 @@ export class ProjectBrainBootstrap {
     const neuronDir = join(root, '.neuron');
     const concurrency = options.concurrency ?? 16;
 
+    // Keep fast and update on the same corpus ceiling so an incremental pass
+    // cannot "discover" files a truncated fast scan never cached.
     const maxFiles =
-      mode === 'fast' ? 8_000 : mode === 'architecture' ? 20_000 : (options.maxDeepFiles ?? 50_000);
+      mode === 'fast' || mode === 'update'
+        ? 20_000
+        : mode === 'architecture'
+          ? 20_000
+          : (options.maxDeepFiles ?? 50_000);
 
     const walk = await this.files.walk(root, { maxFiles, concurrency });
     let focusFiles = walk.files;
+    const previousCache: ScanCacheEntry[] =
+      options.previousCache ?? (await this.incremental.loadCache(neuronDir));
+    let delta: ScanDelta | undefined =
+      previousCache.length > 0
+        ? this.incremental.computeDelta(walk.files, previousCache)
+        : undefined;
 
     if (mode === 'update') {
-      const cache = options.previousCache ?? (await this.incremental.loadCache(neuronDir));
-      const changed = this.incremental.changedFiles(walk.files, cache);
-      focusFiles = changed.length
-        ? changed
-        : walk.files.filter((f) => f.importance === 'HIGH');
+      delta =
+        delta ??
+        ({
+          added: walk.files.map((f) => f.relativePath),
+          changed: [],
+          deleted: [],
+          unchanged: 0,
+          reanalyzed: walk.files.length,
+        } satisfies ScanDelta);
+
+      // Nothing moved since the last scan: re-deriving the same facts would only
+      // burn time and produce identical output.
+      if (previousCache.length > 0 && this.incremental.unchanged(walk.files, previousCache)) {
+        return unchangedReport(projectName, walk.files.length, walk.skipped, {
+          ...delta,
+          reanalyzed: 0,
+        });
+      }
+
+      // Re-analyze only added/changed files. Deleted paths are handled by map
+      // rebuild + scan-memory invalidation in the runtime. Do NOT fall back to
+      // every HIGH file — under src/ that is effectively the whole repo.
+      const focusPaths = new Set([...delta.added, ...delta.changed]);
+      focusFiles = walk.files.filter((f) => focusPaths.has(f.relativePath));
+      delta = { ...delta, reanalyzed: focusFiles.length };
+    } else if (delta) {
+      // Full scans re-analyze the focus set (HIGH/symbols), not every file.
+      delta = { ...delta, reanalyzed: focusFiles.length };
     }
 
     const stack = await this.tech.detect(root);
@@ -61,6 +173,15 @@ export class ProjectBrainBootstrap {
             concurrency,
           })
         : [];
+
+    // Fast scan still gets export/route hints from HIGH files — locations are
+    // the highest-leverage knowledge for "where is X?".
+    // On update, only touch focusFiles so unchanged files are not re-read.
+    const symbolHints = await extractSymbols(focusFiles, {
+      maxFiles: mode === 'fast' ? 80 : mode === 'update' ? Math.min(200, focusFiles.length || 1) : 200,
+      concurrency,
+    });
+    const relationshipsForMap = [...relationshipsList, ...symbolHints];
 
     const gitInsight = await this.git.analyze(root);
     const docInsight =
@@ -79,6 +200,13 @@ export class ProjectBrainBootstrap {
     const constitutionMarkdown = this.brain.buildConstitutionMarkdown(projectName, suggestedRules);
     const cursorRulesMarkdown = this.brain.buildCursorRules(stack, suggestedRules);
 
+    const map = buildProjectMap({
+      files: walk.files,
+      architecture,
+      relationships: relationshipsForMap,
+      manifests: stack.manifests,
+    });
+
     const report: ProjectScanReport = {
       projectName,
       mode,
@@ -91,8 +219,10 @@ export class ProjectBrainBootstrap {
       memoriesCreated: generated.length,
       relationships: relationshipsList.length,
       rulesSuggested: suggestedRules.length,
+      delta,
       stack,
       architecture,
+      map,
       dependencyGraph,
       relationshipsList,
       memories: generated,
@@ -118,7 +248,7 @@ export class ProjectBrainBootstrap {
       constitutionMarkdown,
     });
 
-    await this.incremental.saveCache(neuronDir, walk.files);
+    await this.incremental.saveCache(neuronDir, walk.files, previousCache);
 
     try {
       const rulesDir = join(root, '.cursor', 'rules');

@@ -84,10 +84,10 @@ describe('memory use cases', () => {
     expect(context.tokenEstimate).toBeGreaterThan(0);
   });
 
-  it('leaves search unimplemented until M2', async () => {
+  it('returns no results when no searcher is wired, rather than throwing', async () => {
     const engine = createInMemoryMemoryEngine();
-    await expect(engine.searchMemory({ projectId: 'p', query: 'auth' })).rejects.toMatchObject({
-      code: 'NOT_IMPLEMENTED',
+    await expect(engine.searchMemory({ projectId: 'p', query: 'auth' })).resolves.toEqual({
+      results: [],
     });
   });
 });

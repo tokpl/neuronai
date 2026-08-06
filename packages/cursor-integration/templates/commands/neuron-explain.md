@@ -1,8 +1,10 @@
 # /neuron-explain
 
-Explain the project architecture using Neuron.
+Explain this project using what Neuron has learned.
 
-1. Call `neuron_project_summary` and/or `neuron_get_context`
-2. Read `.neuron/brain.json` and `.neuron/decisions.json` if present
-3. Explain modules, key decisions, and warnings in plain language
-4. Keep it under one screen unless the user asks for depth
+1. Read the `neuron://project/brain` resource for stack, decisions, rules and modules
+2. Call `neuron_search` for anything the user asked about specifically
+3. Explain modules, key decisions and warnings in plain language
+4. Keep it to one screen unless the user asks for depth
+
+Say plainly when something is not in the brain rather than guessing.

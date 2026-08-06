@@ -1,10 +1,7 @@
 import { access, constants } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-import {
-  neuronLocalConfigSchema,
-  type NeuronLocalConfig,
-} from './local-config.js';
+import { neuronLocalConfigSchema, type NeuronLocalConfig } from './local-config.js';
 
 export interface ConfigIssue {
   path: string;
@@ -18,10 +15,7 @@ export interface ConfigValidationResult {
   issues: ConfigIssue[];
 }
 
-/**
- * Validates `.neuron/config.json` shape, providers, and paths.
- * Telemetry defaults to OFF; cloud server mode is a warning (local-first).
- */
+/** Validates the shape of `.neuron/prefs.json` and the paths it references. */
 export class ConfigValidator {
   validate(input: unknown, cwd = process.cwd()): ConfigValidationResult {
     const issues: ConfigIssue[] = [];
@@ -40,40 +34,22 @@ export class ConfigValidator {
 
     const config = parsed.data;
 
-    if (config.server.mode === 'cloud') {
-      issues.push({
-        path: 'server.mode',
-        message: 'Cloud mode is not supported yet - use local.',
-        severity: 'warning',
-      });
-    }
-
+    // Neuron never sends anything anywhere; these flags exist so a user can see
+    // that in their own config, and so a bad edit is caught rather than honoured.
     if (config.privacy.telemetry === true) {
       issues.push({
         path: 'privacy.telemetry',
-        message: 'Telemetry is enabled - Neuron never sends source code, but metrics are optional.',
+        message: 'Neuron has no telemetry. Set privacy.telemetry to false.',
         severity: 'warning',
       });
     }
 
-    if (config.privacy.localOnly === false && config.server.mode !== 'local') {
+    if (config.privacy.localOnly === false) {
       issues.push({
         path: 'privacy.localOnly',
-        message: 'localOnly is false while server is not local.',
+        message: 'Neuron is local-only. Set privacy.localOnly to true.',
         severity: 'warning',
       });
-    }
-
-    const providers = config.providers ?? {};
-    for (const [name, provider] of Object.entries(providers)) {
-      // Built-in "local" provider does not require a remote model id.
-      if (provider.enabled && !provider.model && name !== 'none' && name !== 'local') {
-        issues.push({
-          path: `providers.${name}.model`,
-          message: `Provider "${name}" is enabled but model is missing.`,
-          severity: 'warning',
-        });
-      }
     }
 
     for (const ignore of config.scan.ignore ?? []) {

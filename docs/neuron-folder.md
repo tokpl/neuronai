@@ -1,37 +1,41 @@
-# `.neuron/` folder
+# The `.neuron/` folder
 
 ```text
 .neuron/
-  prefs.json              # init answers / privacy
-  brain/
-    dna.json
-    knowledge.json        # memory, decisions, rules, graph, insights, context
-    health.json
-    goals.json
-    active.json
-  evolution/
-  runtime/                # engine store (ephemeral)
-  cache/
-  logs/
+├── prefs.json            # init answers, privacy mode        (commit)
+├── brain/
+│   ├── dna.json          # stack, modules, structure         (commit)
+│   ├── knowledge.json    # memories, decisions, rules, graph (commit)
+│   └── health.json       # derived health score              (commit)
+├── runtime/
+│   └── store.json        # engine store — regenerable        (ignore)
+└── cache/                # scan cache                        (ignore)
 ```
 
-## Version in Git
+Everything under `brain/` plus `prefs.json` is the durable source of truth. Everything under
+`runtime/` and `cache/` can be deleted at any time and rebuilt with `neuron scan`.
 
-By default Neuron can keep `brain/` + `prefs.json` shareable for a team, or treat the whole folder as local-only — you choose at `neuron init`.
+## Sharing with a team
 
-Treat `.neuron/` like project notes: no secrets, no raw chat logs.
+Commit `.neuron/brain/` and `prefs.json`. Your teammates get the same architecture decisions,
+constraints and warnings the moment they pull.
 
-## Do not commit (ephemeral)
+`neuron init` offers presets for this and writes the matching `.gitignore` block:
 
-```gitignore
-.neuron/cache/
-.neuron/runtime/
-.neuron/indexes/
-.neuron/logs/
-```
+| Preset | Committed |
+| --- | --- |
+| `ephemeral` (default) | `brain/` + `prefs.json` — team shares the brain |
+| `ephemeral+config` | same, plus `neuron.config.json` |
+| `all-local` | nothing — `.neuron/` stays on your machine |
+| `skip` | leaves your `.gitignore` untouched |
 
-`neuron init` can also ignore the entire `.neuron/` + `neuron.config.json` (local-only).
+Treat `.neuron/` like project notes: no secrets, no credentials, no raw chat logs.
 
 ## Migration
 
-Flat legacy files (`brain.json`, `decisions.json`, …) migrate into `brain/` on first open.
+Older layouts migrate automatically the first time the brain is opened. Flat files
+(`brain.json`, `decisions.json`, `knowledge.json`, `rules.json`, `graph.json`) are folded into
+`brain/` and then removed, and the migration is reported rather than done silently.
+
+The `goals.json` and `active.json` planes were removed — they were written on every save but
+never populated or read. They are deleted on open if present.

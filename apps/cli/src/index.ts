@@ -3,12 +3,16 @@ import { cac } from 'cac';
 
 import { NotImplementedError } from '@neuronai/types';
 
+import { NEURON_BRAIN_FINGERPRINT } from './brain-fingerprint.generated.js';
 import { runBrain } from './commands/brain.js';
+import { runContext } from './commands/context.js';
+import { runCursor } from './commands/cursor.js';
 import { runCursorDoctor } from './commands/cursor-doctor.js';
 import { runCursorInit } from './commands/cursor-init.js';
 import { runCursorSetup } from './commands/cursor-setup.js';
 import { runDoctor } from './commands/doctor.js';
 import { runInit } from './commands/init.js';
+import { runRemember } from './commands/remember.js';
 import { runReset } from './commands/reset.js';
 import { runScan } from './commands/scan.js';
 import { runSearch } from './commands/search.js';
@@ -17,39 +21,38 @@ import { isNeuronCliError, printNeuronError } from './diagnostics/errors.js';
 import { CLI_VERSION } from './services/neuron-fs.js';
 import { ui } from './ui/output.js';
 
+const CLI_VERSION_LABEL = `${CLI_VERSION} (brain ${NEURON_BRAIN_FINGERPRINT.brainVersion}@${NEURON_BRAIN_FINGERPRINT.rankSha})`;
 const COMMAND_GUIDE = `
-NeuronAI - Neuron - AI Memory
+NeuronAI — a local-first Project Brain for AI coding assistants
 
 Usage:
   neuron <command> [options]
 
-Getting started:
-  neuron init              Create .neuron/ + scan + wire Cursor MCP
-  neuron init --yes        Same, with recommended defaults (no prompts)
-  neuron brain             Show Project Brain status
-  neuron status            Project + memory status
-  neuron doctor            Diagnose local setup
+Start here:
+  neuron init              Detect the project, build the brain, wire Cursor
+  neuron cursor            Check the Cursor connection and what to do next
 
-Memory:
-  neuron build             Rebuild / refresh project brain from code
-  neuron scan              Same as build (fast scan)
-  neuron scan --deep       Deep scan (relations)
-  neuron scan --update     Incremental update from cache
-  neuron search <query>    Search memories
-  neuron reset --force     Wipe local .neuron/ memory
+The brain:
+  neuron scan              Re-learn from the codebase (--deep, --update)
+  neuron context <question> What Neuron would tell an AI about this task
+  neuron search <query>    Search what the project knows
+  neuron remember <text>   Add something yourself
+  neuron brain             Metrics: measured, derived, estimated
+  neuron status            Project and memory overview
 
-Cursor:
-  neuron cursor setup      Write .cursor MCP / rules / skills
-  neuron cursor doctor     Diagnose Cursor integration
-  neuron mcp               Start MCP server (stdio)
+Maintenance:
+  neuron doctor            Diagnose the brain, storage and Cursor setup
+  neuron reset --force     Delete the local brain
+  neuron mcp               Run the MCP server (Cursor calls this for you)
 
-Also available as: neuronai (same CLI)
+Everything stays in .neuron/ in this project. No cloud, no API key, no telemetry.
+Also available as: neuronai
 `.trim();
 
 export function createCli() {
   const cli = cac('neuron');
 
-  cli.version(CLI_VERSION);
+  cli.version(CLI_VERSION_LABEL);
   cli.help();
 
   cli
@@ -82,23 +85,7 @@ export function createCli() {
     });
 
   cli
-    .command('build', 'Rebuild project brain from the codebase (scan + seed)')
-    .option('--deep', 'Deep scan including code relationships')
-    .option('--update', 'Incremental update using scan cache')
-    .option('--architecture', 'Architecture-focused scan')
-    .action(async (options: { deep?: boolean; update?: boolean; architecture?: boolean }) => {
-      ui.title('Neuron build');
-      ui.info('Refreshing local project brain under .neuron/');
-      await runScan(process.cwd(), {
-        deep: options.deep ?? true,
-        update: options.update,
-        architecture: options.architecture,
-      });
-      await runStatus(process.cwd());
-    });
-
-  cli
-    .command('scan', 'Bootstrap / refresh project brain from the codebase')
+    .command('scan', 'Re-learn the project brain from the codebase')
     .option('--deep', 'Deep scan including code relationships')
     .option('--update', 'Incremental update using scan cache')
     .option('--architecture', 'Architecture-focused scan')
@@ -113,52 +100,72 @@ export function createCli() {
       await runReset(process.cwd(), options);
     });
 
+  cli.command('search <query>', 'Search the project brain').action(async (query: string) => {
+    await runSearch(query, process.cwd());
+  });
+
   cli
-    .command('search <query>', 'Search project memories')
+    .command('context <query>', 'Show the project context Neuron would give an AI')
     .action(async (query: string) => {
-      await runSearch(query, process.cwd());
+      await runContext(query, process.cwd());
     });
 
-  cli.command('doctor', 'Diagnose config, store, and MCP setup').action(async () => {
+  cli
+    .command('remember <text>', 'Add something to the project brain')
+    .option('--type <type>', 'decision | pattern | mistake | business_rule | knowledge')
+    .option('--title <title>', 'Short title (derived from the text otherwise)')
+    .option('--yes, -y', 'Skip the confirmation prompt')
+    .action(async (text: string, options: { type?: string; title?: string; yes?: boolean }) => {
+      await runRemember(text, process.cwd(), options);
+    });
+
+  cli.command('doctor', 'Diagnose the brain, storage and Cursor setup').action(async () => {
     await runDoctor(process.cwd());
   });
 
+  // One command with an optional action. Registering `cursor` alongside
+  // `cursor setup` made cac match the bare form and silently ignore the
+  // subcommand, so `cursor setup` reported success without writing anything.
   cli
-    .command('cursor setup', 'Write .cursor/mcp.json, rules, skills, and commands')
-    .option('--force', 'Overwrite rules/skills/commands')
-    .action(async (options: { force?: boolean }) => {
-      await runCursorSetup(process.cwd(), options);
+    .command('cursor [action]', 'Cursor status; actions: setup, doctor')
+    .option('--force', 'With setup: overwrite rules, skills and commands')
+    .action(async (action: string | undefined, options: { force?: boolean }) => {
+      if (action === 'setup') {
+        await runCursorSetup(process.cwd(), options);
+        return;
+      }
+      if (action === 'doctor') {
+        await runCursorDoctor(process.cwd());
+        return;
+      }
+      if (action) {
+        ui.error(`Unknown action: neuron cursor ${action}`);
+        ui.blank();
+        ui.suggest('neuron cursor          connection status and next steps');
+        ui.suggest('neuron cursor setup    write .cursor/ config, rules and skills');
+        ui.suggest('neuron cursor doctor   diagnose the Cursor integration');
+        process.exitCode = 1;
+        return;
+      }
+      await runCursor(process.cwd());
     });
 
-  cli
-    .command('cursor init', 'Alias for: neuron init cursor')
-    .option('--force', 'Reinitialize and overwrite Cursor templates')
-    .option('--skip-analyze', 'Skip first project scan')
-    .option('--yes, -y', 'Accept recommended defaults (non-interactive)')
-    .action(async (options: { force?: boolean; skipAnalyze?: boolean; yes?: boolean }) => {
-      await runCursorInit(process.cwd(), options);
-    });
-
-  cli.command('cursor doctor', 'Diagnose Cursor MCP, rules, skills, and project brain').action(async () => {
-    await runCursorDoctor(process.cwd());
-  });
-
-  cli
-    .command('mcp', 'Start the Neuron MCP server over stdio (for Cursor)')
-    .action(async () => {
-      const { startMcpServer } = await import('@neuronai/mcp-server');
+  cli.command('mcp', 'Start the Neuron MCP server over stdio (for Cursor)').action(async () => {
+    const { startMcpServer } = await import('@neuronai/mcp-server');
+    try {
       await startMcpServer(process.env['NEURON_CWD'] ?? process.cwd());
-    });
+    } catch (error) {
+      // The host closing the pipe is a normal shutdown, not a failure.
+      if (isStreamClosed(error)) return;
+      throw error;
+    }
+  });
 
   return cli;
 }
 
 function printGuide(): void {
   console.log(COMMAND_GUIDE);
-  console.log('');
-  ui.suggest('neuron init');
-  ui.suggest('neuron status');
-  ui.suggest('neuron build');
 }
 
 async function main(): Promise<void> {
@@ -172,12 +179,18 @@ async function main(): Promise<void> {
   const isVersion = argv.includes('-v') || argv.includes('--version');
   const subcommand = argv.find((a) => !a.startsWith('-'));
 
+  // Handle top-level help before cac parses, otherwise both its generated help
+  // and our guide are printed one after the other.
+  if (isHelp && (!subcommand || subcommand === 'help')) {
+    printGuide();
+    return;
+  }
+
   const cli = createCli();
   cli.parse(process.argv, { run: false });
 
   if (isHelp) {
-    // cac already printed command-specific help when a subcommand was present
-    if (!subcommand || subcommand === 'help') printGuide();
+    // cac printed command-specific help during parse
     return;
   }
 
@@ -206,8 +219,12 @@ async function main(): Promise<void> {
       process.exitCode = 1;
       return;
     }
+    if (isStreamClosed(error)) return;
+
     const message = error instanceof Error ? error.message : String(error);
-    if (/ECONNREFUSED|ENOENT|MCP|connect/i.test(message)) {
+    // Only a genuine transport failure earns the MCP wiring help. Matching the
+    // word "MCP" anywhere in a message produced misleading advice for unrelated errors.
+    if (errorCode(error) === 'ECONNREFUSED') {
       ui.failHelp(
         'Neuron MCP cannot connect.',
         [
@@ -222,6 +239,19 @@ async function main(): Promise<void> {
     }
     process.exitCode = 1;
   }
+}
+
+function errorCode(error: unknown): string | undefined {
+  return typeof error === 'object' && error !== null && 'code' in error
+    ? String((error as { code: unknown }).code)
+    : undefined;
+}
+
+function isStreamClosed(error: unknown): boolean {
+  const code = errorCode(error);
+  if (code === 'EPIPE' || code === 'ERR_STREAM_DESTROYED') return true;
+  const message = error instanceof Error ? error.message : '';
+  return /closed stream|premature close|write after end/i.test(message);
 }
 
 const isDirectRun =

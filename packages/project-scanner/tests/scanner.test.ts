@@ -129,4 +129,28 @@ describe('bootstrap scan', () => {
     expect(report.architecture.services.length).toBeGreaterThan(0);
     expect(report.constitutionMarkdown).toMatch(/Suggested Constitution/);
   });
+
+  it('builds a retrievable project map with full paths and symbols', async () => {
+    const root = await fixture();
+    const report = await createProjectBrainBootstrap().scan({
+      root,
+      mode: 'fast',
+      projectName: 'Fixture SaaS',
+    });
+
+    expect(report.map.entries.length).toBeGreaterThan(3);
+    expect(report.map.entries.some((e) => e.kind === 'module')).toBe(true);
+    expect(
+      report.map.entries.some(
+        (e) => e.path.includes('src/') && (e.kind === 'file' || e.kind === 'symbol'),
+      ),
+    ).toBe(true);
+    expect(report.map.entries.every((e) => !e.path.includes('\\'))).toBe(true);
+    // Nested entries must carry a directory prefix; root manifests may be bare names.
+    expect(
+      report.map.entries
+        .filter((e) => e.kind === 'module' || e.path.includes('src/'))
+        .every((e) => e.path.includes('/')),
+    ).toBe(true);
+  });
 });

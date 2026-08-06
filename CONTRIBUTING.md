@@ -26,26 +26,27 @@ pnpm test
 Useful scripts:
 
 ```bash
-pnpm lint
-pnpm typecheck
-pnpm build
-pnpm test
-pnpm neuron -- status          # local CLI via monorepo
-# or after global install:
-# npm install -g neuronai && neuron status
+pnpm verify            # the full gate: lint, typecheck, test, build, package, offline
+pnpm verify:package    # packs the CLI and installs it into a clean project
+pnpm verify:offline    # runs the CLI with sockets, DNS and fetch disabled
+pnpm neuron -- status  # run the local CLI from the monorepo
 ```
 
-Published npm package: **`neuronai`** (from `apps/cli`), plus scoped `@neuronai/*` libraries.
+Published npm package: **`neuronai`** only. The `@neuronai/*` workspace libraries are private
+and bundled into the CLI, so a user's install never resolves them from the registry.
 
 ## Issues
 
 1. Search existing issues first
-2. Use the issue templates under **New issue**
-3. For vulnerabilities, follow [SECURITY.md](./SECURITY.md) — **do not** file a public bug with exploit details
+2. For vulnerabilities, follow [SECURITY.md](./SECURITY.md) — **do not** file a public bug with exploit details
 
-Good bug reports include: NeuronAI version (`neuron --version`), OS, minimal repro, and redacted logs.
+Good bug reports include: NeuronAI version (`neuron --version`), OS, minimal repro, the output of
+`neuron doctor`, and redacted logs.
 
 ## Pull requests
+
+**There is no CI on this repository.** `pnpm verify` is the only gate, and it runs on your
+machine — please do not skip it.
 
 1. Fork and create a branch from `main`
 2. Keep PRs focused (one concern per PR when practical)
@@ -53,7 +54,7 @@ Good bug reports include: NeuronAI version (`neuron --version`), OS, minimal rep
 4. Run before opening the PR:
 
 ```bash
-pnpm lint && pnpm typecheck && pnpm test && pnpm build
+pnpm verify
 ```
 
 5. Fill in the PR template (summary, type, checklist)

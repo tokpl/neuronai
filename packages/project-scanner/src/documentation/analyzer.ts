@@ -24,7 +24,9 @@ export class DocumentationAnalyzer {
       }
     }
 
-    for (const f of files.filter((x) => x.relativePath.toLowerCase().startsWith('docs/')).slice(0, 5)) {
+    for (const f of files
+      .filter((x) => x.relativePath.toLowerCase().startsWith('docs/'))
+      .slice(0, 5)) {
       try {
         const raw = await readFile(f.absolutePath, 'utf8');
         knowledgeBullets.push(...extractBullets(raw).slice(0, 4));
@@ -41,11 +43,15 @@ export class DocumentationAnalyzer {
   }
 }
 
+/**
+ * Prose only. Bullets become individual memories, so folding them into the
+ * summary too would bury each fact inside one unsearchable blob.
+ */
 function summarize(md: string): string {
   const lines = md
     .split(/\r?\n/)
     .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith('#') && !l.startsWith('```'));
+    .filter((l) => l && !l.startsWith('#') && !l.startsWith('```') && !/^[-*>|]\s/.test(l));
   return lines.slice(0, 3).join(' ').slice(0, 400);
 }
 

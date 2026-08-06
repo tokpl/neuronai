@@ -1,42 +1,24 @@
 #!/usr/bin/env node
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
-import { createNeuronRuntime } from './config/runtime.js';
-import { logger } from './health.js';
+import { createMcpRuntime } from './config/runtime.js';
+import { createLogger } from './logger.js';
 import { createNeuronMcpServer } from './server/create-server.js';
 
 export { createNeuronMcpServer } from './server/create-server.js';
-export { createNeuronRuntime } from './config/runtime.js';
-export {
-  handleGetContext,
-  handleSearchMemory,
-  handleSaveDecision,
-  handleStoreMemory,
-  handleReviewMemory,
-  handleUpdateMemory,
-  handleProjectSummary,
-} from './handlers/index.js';
+export { createMcpRuntime, type McpRuntime } from './config/runtime.js';
+export { TOOL_NAMES } from './tools/register-tools.js';
+export { VERSION } from './health.js';
 
-export async function startMcpServer(cwd = process.env['NEURON_CWD'] ?? process.cwd()): Promise<void> {
-  // Any accidental createLogger() without destination must not touch stdout
-  process.env['NEURON_MCP_STDIO'] = '1';
-
-  const runtime = await createNeuronRuntime(cwd);
+export async function startMcpServer(
+  cwd = process.env['NEURON_CWD'] ?? process.cwd(),
+): Promise<void> {
+  const runtime = await createMcpRuntime(cwd);
   const server = createNeuronMcpServer(runtime);
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  runtime.logger.info(
-    {
-      project: runtime.project.name,
-      projectId: runtime.project.projectId,
-      mode: runtime.config.server.mode,
-    },
-    'Neuron MCP server started (stdio)',
-  );
-}
-
-async function main(): Promise<void> {
-  await startMcpServer();
+  await server.connect(new StdioServerTransport());
+  runtime.logger.info('Neuron MCP server started (stdio)', {
+    project: runtime.neuron.project.name,
+  });
 }
 
 const isDirectRun =
@@ -44,8 +26,10 @@ const isDirectRun =
   (process.argv[1].endsWith('index.ts') || process.argv[1].endsWith('index.js'));
 
 if (isDirectRun) {
-  main().catch((error: unknown) => {
-    logger.error({ err: error }, 'Failed to start MCP server');
+  startMcpServer().catch((error: unknown) => {
+    createLogger('stderr').error('Failed to start MCP server', {
+      err: error instanceof Error ? error.message : String(error),
+    });
     process.exitCode = 1;
   });
 }

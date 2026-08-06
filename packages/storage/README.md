@@ -1,27 +1,33 @@
 # @neuronai/storage
 
-PostgreSQL persistence for Neuron Memory Core.
+Local runtime and persistence for NeuronAI. No database, no network.
 
-## Contents
+`createNeuronRuntime()` is the **only** way the CLI and the MCP server construct a working
+Neuron. Both adapters call it, so there is exactly one wiring of brain, engine and retrieval.
 
-- Drizzle schema (`src/schema`)
-- SQL migration `migrations/0001_memory_core.sql`
-- Postgres repository adapters implementing memory-engine ports
-- `createPostgresMemoryStack()` helper
+```ts
+import { createNeuronRuntime } from '@neuronai/storage';
 
-## Migrate
+const runtime = await createNeuronRuntime({ cwd: process.cwd() });
 
-```bash
-# from repo root
-pnpm docker:up
-cp .env.example .env
-pnpm db:migrate
+runtime.search('rate limiting');              // ranked memories
+runtime.context({ task: 'add rate limiting' }); // compiled agent context
+await runtime.persist();                       // atomic write + brain sync
 ```
 
-## DB tests
+## On disk
 
-Integration tests run only when:
+| Path | Contents | Committed? |
+| --- | --- | --- |
+| `.neuron/brain/dna.json` | Project identity, stack, structure | yes |
+| `.neuron/brain/knowledge.json` | Memories, decisions, rules, graph | yes |
+| `.neuron/brain/health.json` | Derived health score | yes |
+| `.neuron/prefs.json` | Init answers, privacy mode | yes |
+| `.neuron/runtime/store.json` | Regenerable engine store | no |
+| `.neuron/cache/` | Scan cache | no |
 
-```bash
-NEURON_RUN_DB_TESTS=1 DATABASE_URL=postgresql://neuron:neuron@localhost:5432/neuron pnpm --filter @neuronai/storage test
-```
+Durable files under `.neuron/brain/` are the source of truth. Everything under
+`.neuron/runtime/` and `.neuron/cache/` can be deleted and rebuilt with `neuron scan`.
+
+All writes go through a temp file and `rename`, so an interrupted write cannot corrupt
+the brain.

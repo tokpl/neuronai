@@ -1,41 +1,15 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-
-import type { ProjectBrain } from '@neuronai/brain';
-import { MockAIProvider } from '@neuronai/ai-provider';
-import {
-  createAgentIntelligence,
-  type AgentIntelligence,
-} from '@neuronai/agent-intelligence';
 import {
   createAgentWorkflow,
   parsePrivacyMode,
   type AgentWorkflowOrchestrator,
   type PrivacyMode,
 } from '@neuronai/agent-workflow';
-import {
-  createMemoryIntelligencePipeline,
-  HybridMemorySearchEngine,
-  type MemoryIntelligencePipeline,
-  type MemorySearchEngine,
-} from '@neuronai/ai-memory';
-import type { NeuronConfig } from '@neuronai/config';
-import { loadConfig } from '@neuronai/config';
-import { InMemoryEmbeddingStore, MockEmbeddingProvider } from '@neuronai/embeddings';
-import {
-  createBrainGraphRepository,
-  createProjectIntelligenceEngine,
-  type ProjectIntelligenceEngine,
-} from '@neuronai/knowledge-graph';
-import type { MemoryEngine } from '@neuronai/memory-engine';
-import { createProjectResolver, type ResolvedProject } from '@neuronai/project-analyzer';
-import { createLocalFileMemoryStack } from '@neuronai/storage';
-import { createLogger, type NeuronLogger } from '@neuronai/observability';
+import { createNeuronRuntime, type NeuronRuntime } from '@neuronai/storage';
 import type { MemoryType } from '@neuronai/types';
 
-import { createAuthProvider, type AuthProvider } from '../middleware/auth.js';
+import { createLogger, type Logger } from '../logger.js';
 
-/** Last ask-before-remember draft from neuron_after_task, awaiting Yes / No / rephrase. */
+/** Last ask-before-remember draft, awaiting Yes / No / rephrase. */
 export interface PendingMemorySuggestion {
   type: MemoryType;
   title: string;
@@ -45,178 +19,39 @@ export interface PendingMemorySuggestion {
   task?: string;
 }
 
-export interface NeuronRuntime {
-  config: NeuronConfig;
-  project: ResolvedProject;
-  brain: ProjectBrain;
-  engine: MemoryEngine;
-  pipeline: MemoryIntelligencePipeline;
-  searchEngine: MemorySearchEngine;
+/**
+ * MCP adapter state. The shared runtime does all the wiring; this only adds
+ * what is specific to serving an agent over stdio.
+ */
+export interface McpRuntime {
+  neuron: NeuronRuntime;
   workflow: AgentWorkflowOrchestrator;
-  intelligence: AgentIntelligence;
-  projectIntelligence: ProjectIntelligenceEngine;
   privacyMode: PrivacyMode;
-  auth: AuthProvider;
-  logger: NeuronLogger;
-  persist?: () => Promise<void>;
-  dataDir?: string;
-  cwd: string;
-  /** In-process pending suggestion for neuron_resolve_suggestion (not durable). */
+  logger: Logger;
   pendingSuggestion: PendingMemorySuggestion | null;
 }
 
-async function privacyFromBrain(brain: ProjectBrain): Promise<PrivacyMode> {
-  const mode = brain.prefs?.privacy?.mode;
-  if (mode) return parsePrivacyMode(mode);
-  return parsePrivacyMode(process.env['NEURON_PRIVACY_MODE']);
-}
+export async function createMcpRuntime(cwd = process.cwd()): Promise<McpRuntime> {
+  // stdout is reserved for MCP JSON-RPC — never log there.
+  const logger = createLogger('stderr');
+  const neuron = await createNeuronRuntime({ cwd });
 
-export async function createNeuronRuntime(cwd = process.cwd()): Promise<NeuronRuntime> {
-  // stdout is reserved for MCP JSON-RPC - never log there
-  const logger = createLogger({ name: 'mcp-server', destination: 'stderr' });
-  const config = await loadConfig({ optional: true, cwd });
-  const project = await createProjectResolver().resolve(cwd);
-
-  const local = await createLocalFileMemoryStack(cwd);
-  const privacyMode = await privacyFromBrain(local.brain);
-  const dataDir = local.runtimeDir;
-
-  const embeddings = new MockEmbeddingProvider();
-  const embeddingStore = new InMemoryEmbeddingStore();
-  if (local.snapshot.embeddings?.length) {
-    embeddingStore.importAll(local.snapshot.embeddings);
-  }
-
-  const searchEngine = new HybridMemorySearchEngine(local.memories, embeddings, embeddingStore);
-  local.setSearcher({
-    async search(input) {
-      const hits = await searchEngine.search({
-        projectId: input.projectId,
-        query: input.query,
-        limit: input.limit,
-      });
-      return {
-        results: hits.map((h) => ({ memory: h.memory, score: h.score })),
-      };
-    },
-  });
-
-  const persist = async (): Promise<void> => {
-    local.snapshot.embeddings = embeddingStore.exportAll();
-    await local.persist();
-  };
-
-  const listActive = async () =>
-    local.memories
-      .exportRecords()
-      .filter((m) => m.projectId === project.projectId && m.status === 'active');
-
-  const engine: MemoryEngine = {
-    createMemory: async (input) => {
-      const memory = await local.engine.createMemory(input);
-      await searchEngine.indexMemory(memory);
-      await persist();
-      return memory;
-    },
-    getMemory: (id) => local.engine.getMemory(id),
-    searchMemory: (input) => local.engine.searchMemory(input),
-    updateMemory: async (input) => {
-      const memory = await local.engine.updateMemory(input);
-      await searchEngine.indexMemory(memory);
-      await persist();
-      return memory;
-    },
-    archiveMemory: async (id) => {
-      await local.engine.archiveMemory(id);
-      await persist();
-    },
-    createMemoryVersion: async (input) => {
-      const version = await local.engine.createMemoryVersion(input);
-      await persist();
-      return version;
-    },
-    createRelation: async (input) => {
-      const relation = await local.engine.createRelation(input);
-      await persist();
-      return relation;
-    },
-    getProjectMemoryContext: (input) => local.engine.getProjectMemoryContext(input),
-  };
-
-  const pipeline = createMemoryIntelligencePipeline({
-    engine,
-    ai: new MockAIProvider(),
-    searchEngine,
-  });
-
-  const workflow = createAgentWorkflow({
-    projectId: project.projectId,
-    privacy: privacyMode,
-    engine,
-    listExistingMemories: listActive,
-  });
-
-  // Knowledge graph persists through the same ProjectBrain instance
-  const graphRepo = createBrainGraphRepository(local.brain);
-  const projectIntelligence = createProjectIntelligenceEngine(graphRepo);
-
-  // Best-effort: build/refresh graph if empty (local DX)
-  try {
-    const existing = await graphRepo.findNodes({ projectId: project.projectId, type: 'PROJECT' });
-    if (existing.length === 0) {
-      const built = await projectIntelligence.analyzeProject(cwd, {
-        memories: await listActive(),
-      });
-      logger.info(
-        { nodes: built.stats.nodes, modules: built.stats.modules },
-        'Project knowledge graph initialized',
-      );
-    }
-  } catch (err) {
-    logger.warn({ err }, 'Knowledge graph bootstrap skipped');
-  }
-
-  const intelligence = createAgentIntelligence({
-    projectId: project.projectId,
-    engine,
-    searchEngine,
-    intelligence: projectIntelligence,
-    listMemories: listActive,
-  });
-
-  const auth = createAuthProvider(config.server.mode);
-
-  await mkdir(dataDir, { recursive: true });
-  await writeFile(join(dataDir, '.keep'), '', { flag: 'a' });
-
-  logger.info(
-    {
-      project: project.name,
-      projectId: project.projectId,
-      stack: project.stack,
-      mode: config.server.mode,
-      privacyMode,
-      dataDir,
-    },
-    'Neuron runtime ready',
+  const privacyMode = parsePrivacyMode(
+    neuron.brain.prefs?.privacy?.mode ?? process.env['NEURON_PRIVACY_MODE'],
   );
 
-  return {
-    config,
-    project,
-    brain: local.brain,
-    engine,
-    pipeline,
-    searchEngine,
-    workflow,
-    intelligence,
-    projectIntelligence,
+  const workflow = createAgentWorkflow({
+    projectId: neuron.project.projectId,
+    privacy: privacyMode,
+    engine: neuron.engine,
+    listExistingMemories: async () => neuron.listMemories(),
+  });
+
+  logger.info('Neuron runtime ready', {
+    project: neuron.project.name,
+    memories: neuron.listMemories().length,
     privacyMode,
-    auth,
-    logger,
-    persist,
-    dataDir,
-    cwd,
-    pendingSuggestion: null,
-  };
+  });
+
+  return { neuron, workflow, privacyMode, logger, pendingSuggestion: null };
 }

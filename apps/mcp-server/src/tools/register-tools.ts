@@ -1,151 +1,82 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
-import type { NeuronRuntime } from '../config/runtime.js';
+import type { McpRuntime } from '../config/runtime.js';
 import {
   handleAfterTask,
-  handleGetContext,
-  handlePrepareTask,
-  handleProjectSummary,
-  handleRefreshBrain,
+  handleContext,
+  handleRemember,
   handleResolveSuggestion,
-  handleReviewMemory,
-  handleSaveDecision,
-  handleScanProject,
-  handleSearchMemory,
-  handleStoreMemory,
-  handleUpdateMemory,
+  handleScan,
+  handleSearch,
+  handleUpdate,
 } from '../handlers/index.js';
-import { getHealth, VERSION } from '../health.js';
 import {
   afterTaskSchema,
-  getContextSchema,
-  prepareTaskSchema,
-  projectSummarySchema,
+  contextSchema,
+  rememberSchema,
   resolveSuggestionSchema,
-  reviewMemorySchema,
-  saveDecisionSchema,
-  scanProjectSchema,
-  searchMemorySchema,
-  storeMemorySchema,
-  updateMemorySchema,
+  scanSchema,
+  searchSchema,
+  updateSchema,
 } from '../validation/schemas.js';
 
-/** MVP tool set - local project memory for Cursor. Keep this list small. */
-export const MVP_TOOL_NAMES = [
-  'neuron_health',
-  'neuron_prepare_task',
-  'neuron_get_context',
-  'neuron_search_memory',
-  'neuron_save_decision',
-  'neuron_store_memory',
-  'neuron_update_memory',
-  'neuron_review_memory',
+/**
+ * Seven tools, one job each. Descriptions are context the agent pays for on
+ * every turn, so they stay one line.
+ */
+export const TOOL_NAMES = [
+  'neuron_context',
+  'neuron_search',
+  'neuron_remember',
+  'neuron_update',
   'neuron_after_task',
   'neuron_resolve_suggestion',
-  'neuron_scan_project',
-  'neuron_refresh_brain',
-  'neuron_project_summary',
+  'neuron_scan',
 ] as const;
 
-export function registerTools(server: McpServer, runtime: NeuronRuntime): void {
+export function registerTools(server: McpServer, runtime: McpRuntime): void {
   server.registerTool(
-    'neuron_health',
-    {
-      description: 'Return Neuron MCP server health and version.',
-      inputSchema: {},
-    },
-    async () => {
-      const health = getHealth(runtime.config.server.mode);
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: JSON.stringify(
-              {
-                ...health,
-                version: VERSION,
-                privacyMode: runtime.privacyMode,
-                tools: MVP_TOOL_NAMES.length,
-              },
-              null,
-              2,
-            ),
-          },
-        ],
-      };
-    },
-  );
-
-  server.registerTool(
-    'neuron_prepare_task',
+    'neuron_context',
     {
       description:
-        'Compile a minimal Project Brain prompt for a coding task (Brain Compression Engine). Default mode=minimal. Use deep for plans/risks; debug or NEURON_DEBUG=1 for internals.',
-      inputSchema: prepareTaskSchema,
+        'Before exploring the repository: return where to look (modules, files, symbols), rules and memories for this coding task. Call first; then open only the returned paths.',
+      inputSchema: contextSchema,
     },
-    async (args) => handlePrepareTask(runtime, args),
+    async (args) => handleContext(runtime, args),
   );
 
   server.registerTool(
-    'neuron_get_context',
+    'neuron_search',
     {
-      description:
-        'Fetch compressed project knowledge for a task (Brain Compiler). Prefer neuron_prepare_task for coding sessions.',
-      inputSchema: getContextSchema,
+      description: 'Search project memories by keyword or phrase.',
+      inputSchema: searchSchema,
     },
-    async (args) => handleGetContext(runtime, args),
+    async (args) => handleSearch(runtime, args),
   );
 
   server.registerTool(
-    'neuron_search_memory',
+    'neuron_remember',
     {
-      description: 'Search project engineering memories (local hybrid search).',
-      inputSchema: searchMemorySchema,
+      description: 'Store a decision, pattern, warning or fact. Duplicates are merged, not added.',
+      inputSchema: rememberSchema,
     },
-    async (args) => handleSearchMemory(runtime, args),
+    async (args) => handleRemember(runtime, args),
   );
 
   server.registerTool(
-    'neuron_save_decision',
+    'neuron_update',
     {
-      description: 'Save an architecture or engineering decision to project memory.',
-      inputSchema: saveDecisionSchema,
+      description: 'Update an existing memory. Versioned — the old content is kept.',
+      inputSchema: updateSchema,
     },
-    async (args) => handleSaveDecision(runtime, args),
-  );
-
-  server.registerTool(
-    'neuron_store_memory',
-    {
-      description: 'Store a pattern, warning, or other engineering fact in project memory.',
-      inputSchema: storeMemorySchema,
-    },
-    async (args) => handleStoreMemory(runtime, args),
-  );
-
-  server.registerTool(
-    'neuron_update_memory',
-    {
-      description: 'Update an existing memory (versioned - never silent overwrite).',
-      inputSchema: updateMemorySchema,
-    },
-    async (args) => handleUpdateMemory(runtime, args),
-  );
-
-  server.registerTool(
-    'neuron_review_memory',
-    {
-      description: 'Review prose and suggest whether durable engineering knowledge should be saved.',
-      inputSchema: reviewMemorySchema,
-    },
-    async (args) => handleReviewMemory(runtime, args),
+    async (args) => handleUpdate(runtime, args),
   );
 
   server.registerTool(
     'neuron_after_task',
     {
       description:
-        'After coding: if something is worth keeping, ask the user whether to remember it for the project (AskQuestion Yes/No/rephrase, or plain Yes/No). Then neuron_resolve_suggestion.',
+        'After coding, propose knowledge worth keeping. Ask the user Yes/Edit/No, then call neuron_resolve_suggestion. Nothing is saved until they answer.',
       inputSchema: afterTaskSchema,
     },
     async (args) => handleAfterTask(runtime, args),
@@ -154,37 +85,18 @@ export function registerTools(server: McpServer, runtime: NeuronRuntime): void {
   server.registerTool(
     'neuron_resolve_suggestion',
     {
-      description:
-        'Apply the user answer to the last neuron_after_task suggestion: action save|yes / ignore|no / edit|rephrase. For edit, pass title/content overrides.',
+      description: 'Apply the user answer to the last neuron_after_task draft.',
       inputSchema: resolveSuggestionSchema,
     },
     async (args) => handleResolveSuggestion(runtime, args),
   );
 
   server.registerTool(
-    'neuron_scan_project',
+    'neuron_scan',
     {
-      description: 'Scan the codebase and bootstrap / refresh the local project brain under .neuron/.',
-      inputSchema: scanProjectSchema,
+      description: 'Rescan the codebase and refresh the project brain.',
+      inputSchema: scanSchema,
     },
-    async (args) => handleScanProject(runtime, args),
-  );
-
-  server.registerTool(
-    'neuron_refresh_brain',
-    {
-      description: 'Refresh the project brain after significant code or structure changes.',
-      inputSchema: scanProjectSchema,
-    },
-    async (args) => handleRefreshBrain(runtime, args),
-  );
-
-  server.registerTool(
-    'neuron_project_summary',
-    {
-      description: 'Summarize what Neuron knows about this project (stack, decisions, structure).',
-      inputSchema: projectSummarySchema,
-    },
-    async (args) => handleProjectSummary(runtime, args),
+    async (args) => handleScan(runtime, args),
   );
 }

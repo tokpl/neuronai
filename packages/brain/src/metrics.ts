@@ -1,6 +1,6 @@
-import type { ActiveContext, KnowledgePlane, ProjectDna, ProjectGoals, ProjectHealth } from './models.js';
+import type { KnowledgePlane, ProjectDna, ProjectHealth } from './models.js';
 
-export type MetricKind = 'measured' | 'estimated' | 'derived';
+export type MetricKind = 'measured' | 'derived' | 'estimated';
 
 export interface BrainMetric {
   key: string;
@@ -24,16 +24,26 @@ export interface BrainMetricsSnapshot {
   byKey: Record<string, BrainMetric>;
 }
 
+/** Real numbers from the most recent context compilation, when one has run. */
+export interface LastCompressionSample {
+  mode: string;
+  candidates: number;
+  selected: number;
+  compiledTokens: number;
+  rawCorpusTokens: number;
+  compressionRatio: number;
+  retrievalMs: number;
+  duplicatesRemoved: number;
+}
+
 export type MetricsInput = {
   dna: ProjectDna;
   knowledge: KnowledgePlane;
   health: ProjectHealth;
-  goals: ProjectGoals;
-  active: ActiveContext;
-  /** Optional: engine active memory count if different from knowledge plane */
-  engineMemoryCount?: number;
   /** First brain / prefs init ISO */
   initializedAt?: string | null;
+  /** Measured compression from the last `prepareContext` run. */
+  lastCompression?: LastCompressionSample | null;
 };
 
 function daysBetween(fromIso: string, to = Date.now()): number {
@@ -51,30 +61,27 @@ function relativeAge(iso: string | null | undefined): string {
   if (minutes < 60) return `${minutes}m ago`;
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return `${Math.floor(hours / 24)}d ago`;
 }
 
-function metric(
-  partial: Omit<BrainMetric, 'display'> & { display?: string },
-): BrainMetric {
-  const display =
-    partial.display ??
-    (partial.value === null ? '—' : String(partial.value));
+function metric(partial: Omit<BrainMetric, 'display'> & { display?: string }): BrainMetric {
+  const display = partial.display ?? (partial.value === null ? '—' : String(partial.value));
   return { ...partial, display };
 }
 
 /**
  * Build truthful Brain Metrics from ProjectBrain state.
- * Estimates are heuristic and always labeled `estimated`.
+ *
+ * Every value is either counted from disk (`measured`), computed from counted
+ * values (`derived`), or a labeled heuristic (`estimated`). Nothing is invented:
+ * compression numbers only appear once a real compilation has produced them.
  */
 export function computeBrainMetrics(input: MetricsInput): BrainMetricsSnapshot {
-  const { dna, knowledge, health, goals, active } = input;
+  const { dna, knowledge, health } = input;
   const decisions = knowledge.decisions.length;
   const rules = knowledge.rules.length;
-  const insights = knowledge.insights.length;
   const memoryEntries = knowledge.memory.length;
-  const knowledgeEntries = memoryEntries + decisions + rules + insights + knowledge.context.length;
+  const knowledgeEntries = memoryEntries + decisions + rules;
   const relationships = knowledge.graph.edges?.length ?? 0;
   const nodes = knowledge.graph.nodes?.length ?? 0;
 
@@ -93,7 +100,7 @@ export function computeBrainMetrics(input: MetricsInput): BrainMetricsSnapshot {
     dnaConfidence * 0.45 + decisionConfidence * 0.4 + (health.architectureHealthy ? 15 : 0),
   );
 
-  const knowledgeConfidenceFixed =
+  const knowledgeConfidence =
     knowledgeEntries === 0
       ? 0
       : Math.min(
@@ -108,10 +115,6 @@ export function computeBrainMetrics(input: MetricsInput): BrainMetricsSnapshot {
   const initAt = input.initializedAt ?? dna.meta.generatedAt;
   const brainAgeDays = daysBetween(initAt);
   const lastEvolution = knowledge.updatedAt || health.updatedAt;
-  const currentGoal =
-    goals.goals.find((g) => g.id === goals.currentId)?.title ??
-    goals.goals.find((g) => g.status === 'active')?.title ??
-    null;
 
   const measured: BrainMetric[] = [
     metric({
@@ -121,19 +124,23 @@ export function computeBrainMetrics(input: MetricsInput): BrainMetricsSnapshot {
       display: `${health.score}%`,
       kind: 'measured',
       explanation: [
-        `Health is computed from DNA presence (${health.dnaFresh ? 'yes' : 'no'}),`,
+        `Computed from DNA presence (${health.dnaFresh ? 'yes' : 'no'}),`,
         `knowledge freshness (${health.knowledgeFresh ? 'yes' : 'no'}),`,
         `and DNA overallConfidence (${dnaConfidence}%).`,
         `Notes: ${health.notes.join('; ') || 'none'}.`,
       ].join(' '),
-      sources: ['.neuron/brain/health.json', '.neuron/brain/dna.json', '.neuron/brain/knowledge.json'],
+      sources: [
+        '.neuron/brain/health.json',
+        '.neuron/brain/dna.json',
+        '.neuron/brain/knowledge.json',
+      ],
     }),
     metric({
       key: 'knowledge_entries',
       label: 'Knowledge Entries',
       value: knowledgeEntries,
       kind: 'measured',
-      explanation: `Count of memory (${memoryEntries}) + decisions (${decisions}) + rules (${rules}) + insights (${insights}) + context crumbs (${knowledge.context.length}) in knowledge.json.`,
+      explanation: `Count of memory (${memoryEntries}) + decisions (${decisions}) + rules (${rules}) in knowledge.json.`,
       sources: ['.neuron/brain/knowledge.json'],
     }),
     metric({
@@ -153,14 +160,6 @@ export function computeBrainMetrics(input: MetricsInput): BrainMetricsSnapshot {
       sources: ['.neuron/brain/knowledge.json#rules'],
     }),
     metric({
-      key: 'important_insights',
-      label: 'Important Insights',
-      value: insights,
-      kind: 'measured',
-      explanation: 'Length of knowledge.insights array.',
-      sources: ['.neuron/brain/knowledge.json#insights'],
-    }),
-    metric({
       key: 'relationships',
       label: 'Relationships',
       value: relationships,
@@ -177,7 +176,10 @@ export function computeBrainMetrics(input: MetricsInput): BrainMetricsSnapshot {
         moduleFacet > 0
           ? 'Count of DNA structure.modules facet values.'
           : 'Fallback: count of graph nodes (DNA modules facet empty).',
-      sources: ['.neuron/brain/dna.json#structure.modules', '.neuron/brain/knowledge.json#graph.nodes'],
+      sources: [
+        '.neuron/brain/dna.json#structure.modules',
+        '.neuron/brain/knowledge.json#graph.nodes',
+      ],
     }),
     metric({
       key: 'files_understood',
@@ -205,32 +207,37 @@ export function computeBrainMetrics(input: MetricsInput): BrainMetricsSnapshot {
       explanation: `Relative time since knowledge.updatedAt (${lastEvolution}).`,
       sources: ['.neuron/brain/knowledge.json#updatedAt'],
     }),
-    metric({
-      key: 'current_goal',
-      label: 'Current Goal',
-      value: null,
-      display: currentGoal ?? '—',
-      kind: 'measured',
-      explanation: 'Active / current goal title from goals.json.',
-      sources: ['.neuron/brain/goals.json'],
-    }),
-    metric({
-      key: 'current_context',
-      label: 'Current Context',
-      value: null,
-      display: active.focus ?? '—',
-      kind: 'measured',
-      explanation: 'active.focus from active.json.',
-      sources: ['.neuron/brain/active.json'],
-    }),
   ];
+
+  const sample = input.lastCompression;
+  if (sample) {
+    measured.push(
+      metric({
+        key: 'last_context_tokens',
+        label: 'Last Compiled Context',
+        value: sample.compiledTokens,
+        display: `${sample.compiledTokens} tokens (${sample.mode})`,
+        kind: 'measured',
+        explanation: `Selected ${sample.selected} of ${sample.candidates} memories. Ranking took ${sample.retrievalMs}ms.`,
+        sources: ['last prepareContext() run'],
+      }),
+      metric({
+        key: 'last_duplicates_removed',
+        label: 'Duplicates Removed',
+        value: sample.duplicatesRemoved,
+        kind: 'measured',
+        explanation: 'Memories collapsed as duplicate knowledge during the last compilation.',
+        sources: ['last prepareContext() run'],
+      }),
+    );
+  }
 
   const derived: BrainMetric[] = [
     metric({
       key: 'knowledge_confidence',
       label: 'Knowledge Confidence',
-      value: knowledgeConfidenceFixed,
-      display: `${knowledgeConfidenceFixed}%`,
+      value: knowledgeConfidence,
+      display: `${knowledgeConfidence}%`,
       kind: 'derived',
       explanation:
         'Derived from knowledge freshness flag, entry count (capped), and DNA overallConfidence. Not a model probability.',
@@ -261,65 +268,41 @@ export function computeBrainMetrics(input: MetricsInput): BrainMetricsSnapshot {
     }),
   ];
 
-  // Honest heuristics — labeled estimated, never sold as facts
-  const reuseScore = Math.min(0.92, decisions * 0.02 + rules * 0.015 + knowledgeEntries * 0.004);
-  const estPromptReductionPct = Math.round(reuseScore * 100);
-  const avgDecisionTokens = 180;
-  const estTokensSaved = decisions * avgDecisionTokens * 12; // assume ~12 reuses
-  const estHoursSaved = Math.round((estTokensSaved / 4000) * 10) / 10; // ~4k tokens ≈ 1 “dev focus unit”
+  if (sample) {
+    derived.push(
+      metric({
+        key: 'compression_ratio',
+        label: 'Compression Ratio',
+        value: sample.compressionRatio,
+        display: `${sample.compressionRatio}×`,
+        kind: 'derived',
+        explanation: `Full candidate set was ~${sample.rawCorpusTokens} tokens; the compiled context was ${sample.compiledTokens}.`,
+        sources: ['last prepareContext() run'],
+      }),
+    );
+  }
 
-  const estimated: BrainMetric[] = [
-    metric({
-      key: 'est_prompt_reduction_pct',
-      label: 'Estimated Prompt Reduction',
-      value: estPromptReductionPct,
-      display: `${estPromptReductionPct}%`,
-      kind: 'estimated',
-      explanation:
-        'Heuristic from decision/rule/knowledge counts (capped). Not measured from real prompt logs. Treat as directional only.',
-      sources: ['knowledge.decisions', 'knowledge.rules', 'knowledge entry counts'],
-    }),
-    metric({
-      key: 'est_tokens_saved',
-      label: 'Estimated Context Saved',
-      value: estTokensSaved,
-      display: formatTokens(estTokensSaved),
-      kind: 'estimated',
-      explanation: `Heuristic: decisions × ${avgDecisionTokens} tokens × 12 assumed reuses. Not measured from LLM usage.`,
-      sources: ['knowledge.decisions.length'],
-    }),
-    metric({
-      key: 'est_time_saved_hours',
-      label: 'Estimated Developer Time Saved',
-      value: estHoursSaved,
-      display: `${estHoursSaved}h`,
-      kind: 'estimated',
-      explanation:
-        'Heuristic from estimated tokens saved (÷ ~4000). Not calendar time. Directional only.',
-      sources: ['est_tokens_saved'],
-    }),
-    metric({
-      key: 'est_context_reuse_pct',
-      label: 'Estimated Context Reuse',
-      value: estPromptReductionPct,
-      display: `${estPromptReductionPct}%`,
-      kind: 'estimated',
-      explanation: 'Same heuristic as Estimated Prompt Reduction until real prompt telemetry exists.',
-      sources: ['est_prompt_reduction_pct'],
-    }),
-  ];
+  // Token counts use a chars/4 heuristic rather than a real tokenizer.
+  const estimated: BrainMetric[] = sample
+    ? [
+        metric({
+          key: 'est_raw_corpus_tokens',
+          label: 'Uncompressed Corpus',
+          value: sample.rawCorpusTokens,
+          display: `${sample.rawCorpusTokens} tokens`,
+          kind: 'estimated',
+          explanation:
+            'What the matching memories would cost if pasted verbatim. chars/4 heuristic, not a billed count.',
+          sources: ['last prepareContext() run'],
+        }),
+      ]
+    : [];
 
   const all = [...measured, ...derived, ...estimated];
   const byKey: Record<string, BrainMetric> = {};
   for (const m of all) byKey[m.key] = m;
 
   return { measured, derived, estimated, byKey };
-}
-
-function formatTokens(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M tokens`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k tokens`;
-  return `${n} tokens`;
 }
 
 export function explainMetric(snapshot: BrainMetricsSnapshot, key: string): string {
@@ -341,27 +324,25 @@ export function formatBrainMetricsReport(snapshot: BrainMetricsSnapshot): string
     return `${m.label}${tag}\n${m.display}`;
   };
 
-  const blocks: string[] = ['🧠 Project Brain', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', ''];
+  const blocks: string[] = ['Project Brain', '------------------------------', ''];
 
   const order = [
     'health',
     'knowledge_confidence',
     'architecture_confidence',
     'dna_confidence',
-    'current_goal',
-    'current_context',
     'brain_age_days',
     'last_evolution',
     'knowledge_entries',
     'architecture_decisions',
     'business_rules',
-    'important_insights',
     'relationships',
     'modules_understood',
     'files_understood',
-    'est_prompt_reduction_pct',
-    'est_tokens_saved',
-    'est_time_saved_hours',
+    'last_context_tokens',
+    'compression_ratio',
+    'last_duplicates_removed',
+    'est_raw_corpus_tokens',
   ];
 
   for (const key of order) {
@@ -370,9 +351,8 @@ export function formatBrainMetricsReport(snapshot: BrainMetricsSnapshot): string
     blocks.push(line(m), '');
   }
 
-  blocks.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  blocks.push('');
-  blocks.push('Your AI understands this project.');
-  blocks.push('Estimates are labeled and heuristic — not measured usage.');
+  blocks.push('------------------------------', '');
+  blocks.push('Measured values are counted from .neuron/. Derived values are computed from them.');
+  blocks.push('Estimated values use a chars/4 token heuristic and are labeled as such.');
   return blocks.join('\n');
 }

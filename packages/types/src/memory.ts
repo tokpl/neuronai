@@ -41,6 +41,11 @@ export interface MemoryRecord {
   scope?: MemoryScope;
   /** Optional local actor / future user id */
   ownerId?: string | null;
+  /**
+   * Repo-relative paths this memory was derived from (scan-grounded knowledge).
+   * User-authored memories leave this empty; scan invalidation uses it.
+   */
+  paths?: string[];
 }
 
 export interface MemoryVersionRecord {

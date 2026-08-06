@@ -3,10 +3,8 @@ import { describe, expect, it } from 'vitest';
 import {
   CodeChangeAnalyzer,
   createAgentWorkflow,
-  createEventBus,
   createMemorySuggestionEngine,
   createMemoryQualityChecker,
-  DomainEvents,
   defaultWorkflowRules,
   createWorkflowRulesEngine,
 } from '../src/index.js';
@@ -168,42 +166,71 @@ describe('MemoryQualityChecker', () => {
 
 describe('AgentWorkflowOrchestrator', () => {
   it('manual privacy suppresses suggestions', async () => {
-    const workflow = createAgentWorkflow({
-      projectId: 'proj-1',
-      privacy: 'manual',
-    });
-    await workflow.beforeCoding({ task: 'refactor auth' });
+    const workflow = createAgentWorkflow({ projectId: 'proj-1', privacy: 'manual' });
+
     const result = await workflow.afterCoding({
       diff: authDiff,
       commitMessage: 'refactor authentication architecture',
     });
+
     expect(result.suggestion).toBeNull();
     expect(result.promptText).toBeNull();
   });
 
-  it('suggest mode returns a user prompt', async () => {
-    const bus = createEventBus();
-    const workflow = createAgentWorkflow({
-      projectId: 'proj-1',
-      privacy: 'suggest',
-      eventBus: bus,
-    });
-    await workflow.beforeCoding({ task: 'refactor auth' });
-    await workflow.ingest(
-      DomainEvents.codeChanged('proj-1', { diff: authDiff }, 'agent'),
-    );
+  it('suggest mode asks the user before anything is saved', async () => {
+    const workflow = createAgentWorkflow({ projectId: 'proj-1', privacy: 'suggest' });
+
     const result = await workflow.afterCoding({
       diff: authDiff,
       commitMessage: 'refactor authentication architecture',
     });
+
     expect(result.suggestion?.shouldSuggest).toBe(true);
     expect(result.promptText).toMatch(/I learned something about your project/i);
-    expect(result.promptText).toMatch(/\bYes\b/);
-    expect(result.promptText).toMatch(/\bNo\b/);
-    expect(result.promptText).toMatch(/\bEdit\b/);
     expect(result.askQuestion?.options.map((o) => o.id)).toEqual(['save', 'edit', 'ignore']);
-    expect(result.askQuestion?.options.map((o) => o.label).join(' ')).toMatch(/Yes|Edit|No/);
-    expect(bus.history().some((e) => e.type === 'AgentStartedTask')).toBe(true);
-    expect(bus.history().some((e) => e.type === 'TaskCompleted')).toBe(true);
+    // No engine was supplied, so nothing could have been written.
+    expect(result.persisted).toBeNull();
+  });
+
+  it('does not re-suggest knowledge the project already has', async () => {
+    const workflow = createAgentWorkflow({
+      projectId: 'proj-1',
+      privacy: 'suggest',
+      listExistingMemories: async () => {
+        const draft = await createAgentWorkflow({
+          projectId: 'proj-1',
+          privacy: 'suggest',
+        }).afterCoding({ diff: authDiff, commitMessage: 'refactor authentication architecture' });
+        return [
+          {
+            id: 'existing',
+            projectId: 'proj-1',
+            type: draft.suggestion!.type,
+            title: draft.suggestion!.title,
+            content: draft.suggestion!.draftContent,
+            status: 'active',
+            importanceScore: 0.8,
+            confidenceScore: 0.8,
+            freshnessScore: 1,
+            source: 'agent',
+            tags: [],
+            version: 1,
+            usageCount: 0,
+            lastUsedAt: null,
+            embeddingId: null,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+        ];
+      },
+    });
+
+    const result = await workflow.afterCoding({
+      diff: authDiff,
+      commitMessage: 'refactor authentication architecture',
+    });
+
+    expect(result.suggestion).toBeNull();
+    expect(result.quality?.recommendation).toBe('reject');
   });
 });

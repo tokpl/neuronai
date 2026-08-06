@@ -1,42 +1,58 @@
 # FAQ
 
-**NeuronAI** is the package / product name. **Neuron - AI Memory** is the product title.
+**Does NeuronAI need Postgres, Docker or any database?**
+No. The brain is JSON files in `.neuron/` inside your project.
 
-**Does NeuronAI need Postgres or Docker?**  
-No. Storage is `.neuron/` on disk.
+**Do I need an OpenAI or Anthropic API key?**
+No. Neuron supplies project knowledge; your editor's model writes the code. There is no AI
+provider in the runtime and no place to put a key.
 
-**Do I need an OpenAI / Anthropic API key?**  
-No. NeuronAI provides knowledge; Cursor's model answers.
+**Does anything leave my machine?**
+No. There is no HTTP client in the runtime. `pnpm verify:offline` proves it by running the full
+journey with sockets and DNS disabled — you can run that against a clone yourself.
 
-**How does the team share memory?**  
-Commit `.neuron/brain/` + `prefs.json` (or keep local-only). `git pull` is Team Brain when shared.
+**Is NeuronAI an agent?**
+No. It is memory. It retrieves and compresses what your project already knows and hands it to
+whatever agent you use.
 
-**What does `memory.autoSave` mean?**  
-`true` means Neuron may offer (or auto-write) durable Project Brain knowledge. With the default *ask* mode it still confirms with **Yes / Edit / No** (Type · Confidence · Reason · summary). Set `privacy.mode` to `automatic` for silent high-confidence saves, or `manual` to never offer.
+**How does a team share memory?**
+Commit `.neuron/brain/` and `prefs.json`. Teammates get the same decisions and conventions on
+`git pull`. Choose the `all-local` preset during `neuron init` to keep it to yourself.
 
-**What is `contextMaxTokens`?**  
-How much ranked project memory (in tokens) Neuron may inject into one agent turn (`prepare_task` / `get_context`). Default **3000**. Higher = more memory in context, lower = leaner prompts. Optional — omit it and the default applies.
+**What does `memory.autoSave` mean?**
+Whether agents may propose memories. With the default `suggest` privacy mode Neuron always
+confirms with **Yes / Edit / No** before writing. Set `privacy.mode` to `automatic` for silent
+high-confidence saves, or `manual` to never propose.
 
-**Is NeuronAI an AI agent?**  
-No. Local project memory for Cursor (Neuron - AI Memory).
+**How big is the context Neuron sends?**
+500 tokens by default, 1200 in `standard`, 3500 in `deep`. These are hard budgets, not targets —
+the compiler packs against them and drops the least valuable section first.
 
-**Install commands?**
+**Why did search return nothing?**
+Because nothing in the brain matched. Neuron returns no results rather than its most important
+memory. Add the knowledge with `neuron remember "..."` or re-scan with `neuron scan`.
+
+**Cursor shows Error, or `'neuron' is not recognized`**
+
+1. `neuron cursor setup --force` — rewrites the config to use `npx`
+2. Cursor **Settings → Tools & MCP → neuron → Enable**
+3. Reload the window if the status stays red
+4. `neuron cursor` shows the current state any time
+
+**Is there a VS Code extension?**
+Not yet. Cursor first. Any MCP-capable editor can use the server via `neuron mcp`.
+
+**What is published to npm?**
+One package: `neuronai`. It is self-contained — the workspace libraries are bundled in, not
+published separately, so there are no version-skew failures.
+
+**How do I remove it?**
 
 ```bash
-npx neuronai init
-npm install -g neuronai
-neuron init
+neuron reset --force   # deletes .neuron/
+npm uninstall -g neuronai
 ```
 
-**VS Code extension?**  
-No. Cursor-first.
+Nothing is written outside your project directory.
 
-**MCP shows Error / `'neuron' is not recognized`?**  
-1. Re-run `neuron cursor setup --force` (writes `npx`/`node` instead of a bare `neuron` binary).  
-2. In Cursor: **Settings → Tools & MCP → neuron → Enable**.  
-3. Reload the window if the status stays red.
-
-**What is published to npm?**  
-`neuronai` (CLI) and `@neuronai/*` libraries under the **neuronai** org.
-
-https://github.com/tokpl/neuronai
+[github.com/tokpl/neuronai](https://github.com/tokpl/neuronai)

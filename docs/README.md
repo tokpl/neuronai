@@ -9,4 +9,3 @@ Product docs for NeuronAI users (public).
 - [FAQ](./faq.md)
 - [Privacy](./privacy.md)
 - [Roadmap](./roadmap.md)
-- [Open Source audit](./OPEN_SOURCE_AUDIT.md)

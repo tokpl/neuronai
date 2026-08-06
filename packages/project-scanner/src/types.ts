@@ -3,14 +3,7 @@ export type ScanMode = 'fast' | 'deep' | 'architecture' | 'update';
 export type FileImportance = 'HIGH' | 'MEDIUM' | 'IGNORE' | 'SENSITIVE';
 
 export type SupportedLanguage =
-  | 'javascript'
-  | 'typescript'
-  | 'python'
-  | 'php'
-  | 'java'
-  | 'go'
-  | 'rust'
-  | 'unknown';
+  'javascript' | 'typescript' | 'python' | 'php' | 'java' | 'go' | 'rust' | 'unknown';
 
 export interface ScannedFile {
   relativePath: string;
@@ -46,6 +39,10 @@ export interface ArchitectureMap {
   components: string[];
   routes: string[];
   databaseLayers: string[];
+  /** Cross-cutting middleware files (auth, rate-limit, …). */
+  middleware: string[];
+  /** Likely application entrypoints (main, index, server, app). */
+  entrypoints: string[];
   markdown: string;
 }
 
@@ -75,6 +72,18 @@ export interface GeneratedMemory {
   confidence: number;
   source: string;
   tags: string[];
+  /** Repo-relative paths that evidence this claim. Empty = not path-grounded. */
+  paths?: string[];
+}
+
+/** Explicit file-set delta for incremental scans. */
+export interface ScanDelta {
+  added: string[];
+  changed: string[];
+  deleted: string[];
+  unchanged: number;
+  /** Files whose contents were deeply re-analyzed (relationships/symbols). */
+  reanalyzed: number;
 }
 
 export interface SuggestedRule {
@@ -89,6 +98,21 @@ export interface ScanCacheEntry {
   mtimeMs: number;
 }
 
+export interface ProjectMapEntry {
+  kind: 'module' | 'file' | 'symbol' | 'route';
+  name: string;
+  path: string;
+  purpose?: string;
+  module?: string;
+  concepts?: string[];
+}
+
+export interface ProjectMapSnapshot {
+  version: 1;
+  updatedAt: string;
+  entries: ProjectMapEntry[];
+}
+
 export interface ProjectScanReport {
   projectName: string;
   mode: ScanMode;
@@ -101,8 +125,14 @@ export interface ProjectScanReport {
   memoriesCreated: number;
   relationships: number;
   rulesSuggested: number;
+  /** True when an `update` scan found no changes and skipped re-analysis. */
+  unchanged?: boolean;
+  /** Present on update scans (and full scans that compared a prior cache). */
+  delta?: ScanDelta;
   stack: ProjectStackProfile;
   architecture: ArchitectureMap;
+  /** Retrievable locations — modules, files, symbols, routes. */
+  map: ProjectMapSnapshot;
   dependencyGraph: DependencyEdge[];
   relationshipsList: CodeRelationship[];
   memories: GeneratedMemory[];

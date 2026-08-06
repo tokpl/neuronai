@@ -13,26 +13,6 @@ export interface LoadConfigOptions {
   cwd?: string;
 }
 
-function applyEnvOverrides(config: NeuronConfig): NeuronConfig {
-  const logLevel = process.env['LOG_LEVEL'];
-  const mode = process.env['NEURON_MODE'];
-  const databaseUrl = process.env['DATABASE_URL'];
-
-  const next: NeuronConfig = {
-    ...config,
-    server: {
-      ...config.server,
-      mode: mode === 'cloud' || mode === 'local' ? mode : config.server.mode,
-    },
-  };
-
-  // Preserve unused env awareness for future wiring without mutating schema yet.
-  void logLevel;
-  void databaseUrl;
-
-  return next;
-}
-
 export async function loadConfig(options: LoadConfigOptions = {}): Promise<NeuronConfig> {
   const cwd = options.cwd ?? process.cwd();
   const configPath = resolve(
@@ -73,7 +53,7 @@ export async function loadConfig(options: LoadConfigOptions = {}): Promise<Neuro
     });
   }
 
-  return applyEnvOverrides(parsed.data);
+  return parsed.data;
 }
 
 export function validateConfig(input: unknown): NeuronConfig {

@@ -1,40 +1,36 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
-import type { NeuronRuntime } from '../config/runtime.js';
+import type { McpRuntime } from '../config/runtime.js';
 
-async function memoriesByType(runtime: NeuronRuntime, type: string) {
-  const ctx = await runtime.engine.getProjectMemoryContext({
-    projectId: runtime.project.projectId,
-    limit: 100,
-    maxTokens: 20_000,
-  });
-  return ctx.memories.filter((m) => m.type === type);
-}
-
-export function registerResources(server: McpServer, runtime: NeuronRuntime): void {
+/**
+ * One browsable resource: what the brain durably knows.
+ * Task-scoped retrieval belongs to neuron_context, not here.
+ */
+export function registerResources(server: McpServer, runtime: McpRuntime): void {
   server.registerResource(
-    'project-context',
-    'neuron://project/context',
+    'project-brain',
+    'neuron://project/brain',
     {
-      description: 'Current high-signal project context for coding agents',
+      description: 'What Neuron knows about this project: stack, decisions, rules, health',
       mimeType: 'application/json',
     },
     async () => {
-      const summary = await runtime.engine.getProjectMemoryContext({
-        projectId: runtime.project.projectId,
-        limit: 30,
-        maxTokens: runtime.config.memory.contextMaxTokens,
-      });
+      const { brain, project } = runtime.neuron;
       return {
         contents: [
           {
-            uri: 'neuron://project/context',
+            uri: 'neuron://project/brain',
             mimeType: 'application/json',
             text: JSON.stringify(
               {
-                project: runtime.project,
-                memories: summary.memories,
-                warnings: summary.warnings,
+                project: { name: project.name, stack: project.stack },
+                status: brain.status(),
+                decisions: brain.knowledge.decisions.map((d) => ({
+                  title: d.title,
+                  content: d.content,
+                })),
+                rules: brain.knowledge.rules.map((r) => ({ title: r.title, body: r.body })),
+                modules: brain.dna.structure.modules?.value ?? [],
               },
               null,
               2,
@@ -43,42 +39,5 @@ export function registerResources(server: McpServer, runtime: NeuronRuntime): vo
         ],
       };
     },
-  );
-
-  server.registerResource(
-    'project-architecture',
-    'neuron://project/architecture',
-    {
-      description: 'Architecture decisions and dependency notes',
-      mimeType: 'application/json',
-    },
-    async () => {
-      const decisions = await memoriesByType(runtime, 'architecture_decision');
-      const deps = await memoriesByType(runtime, 'dependency');
-      return {
-        contents: [
-          {
-            uri: 'neuron://project/architecture',
-            mimeType: 'application/json',
-            text: JSON.stringify({ decisions, dependencies: deps }, null, 2),
-          },
-        ],
-      };
-    },
-  );
-
-  server.registerResource(
-    'project-decisions',
-    'neuron://project/decisions',
-    { description: 'Active architecture decisions', mimeType: 'application/json' },
-    async () => ({
-      contents: [
-        {
-          uri: 'neuron://project/decisions',
-          mimeType: 'application/json',
-          text: JSON.stringify(await memoriesByType(runtime, 'architecture_decision'), null, 2),
-        },
-      ],
-    }),
   );
 }

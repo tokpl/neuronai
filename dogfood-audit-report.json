@@ -1,0 +1,698 @@
+{
+  "fixture": "C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-dogfood-vQ9UbU",
+  "totals": {
+    "queries": 22,
+    "correct": 22,
+    "acceptable": 0,
+    "incorrect": 0,
+    "rediscoveryYes": 22,
+    "rediscoveryPartial": 0,
+    "rediscoveryNo": 0,
+    "avgContextTokens": 154,
+    "avgRetrievalMs": 3.8
+  },
+  "rows": [
+    {
+      "category": "location",
+      "query": "Where is authentication implemented?",
+      "intent": "LOCATION",
+      "modules": [
+        "src/auth/"
+      ],
+      "files": [
+        "src/auth/jwt.ts (signToken)",
+        "src/auth/jwt.ts (verifyToken)",
+        "src/auth/middleware.ts (authenticateRequest)"
+      ],
+      "symbols": [
+        "signToken",
+        "verifyToken",
+        "authenticateRequest"
+      ],
+      "rules": [
+        "Authentication uses the AuthService abstraction"
+      ],
+      "recommendation": {
+        "path": "src/auth/",
+        "reason": "Authentication / authorization; belongs to the auth module"
+      },
+      "contextTokens": 187,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3052,
+      "retrievalMs": 26,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhere is authentication implemented?\n\n## Recommended start\n- auth → src/auth/\n- Because: Authentication / authorization; belongs to the auth module\n- Related: authenticateRequest → src/auth/middleware.ts\n- Related: signToken → src/auth/jwt.ts\n- Related: verifyToken → src/auth/jwt.ts\n\n## Where to look\n- auth → src/auth/ — Authentication / authorization\n- signToken → src/auth/jwt.ts — Exporte"
+    },
+    {
+      "category": "location",
+      "query": "Where are API routes defined?",
+      "intent": "LOCATION",
+      "modules": [],
+      "files": [
+        "src/api/routes/index.ts",
+        "src/api/routes/users.ts",
+        "src/billing/routes.ts",
+        "src/billing/routes.ts (billingRouter)",
+        "src/api/routes/users.ts (usersRouter)"
+      ],
+      "symbols": [
+        "billingRouter",
+        "usersRouter"
+      ],
+      "rules": [],
+      "recommendation": {
+        "path": "src/api/routes/index.ts",
+        "reason": "API routes / endpoints; belongs to the api module"
+      },
+      "contextTokens": 201,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3038,
+      "retrievalMs": 6,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhere are API routes defined?\n\n## Recommended start\n- index.ts → src/api/routes/index.ts\n- Because: API routes / endpoints; belongs to the api module\n- Related: users.ts → src/api/routes/users.ts\n- Related: routes.ts → src/billing/routes.ts\n- Related: billingRouter → src/billing/routes.ts\n\n## Where to look\n- index.ts → src/api/routes/index.ts — API routes / endpoints\n- users.ts → src/api/ro"
+    },
+    {
+      "category": "location",
+      "query": "Where is billing implemented?",
+      "intent": "LOCATION",
+      "modules": [
+        "src/billing/"
+      ],
+      "files": [
+        "src/billing/invoices/service.ts (cancelInvoice)",
+        "src/billing/invoices/service.ts (InvoiceService)",
+        "src/billing/invoices/service.ts",
+        "src/billing/invoices/repository.ts",
+        "src/billing/routes.ts (billingRouter)",
+        "src/billing/invoices/repository.ts (InvoiceRepository)"
+      ],
+      "symbols": [
+        "cancelInvoice",
+        "InvoiceService",
+        "billingRouter",
+        "InvoiceRepository"
+      ],
+      "rules": [],
+      "recommendation": {
+        "path": "src/billing/invoices/service.ts",
+        "reason": "Exported symbol; belongs to the billing module; defines cancelInvoice"
+      },
+      "contextTokens": 194,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3045,
+      "retrievalMs": 2,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhere is billing implemented?\n\n## Recommended start\n- cancelInvoice → src/billing/invoices/service.ts\n- Because: Exported symbol; belongs to the billing module; defines cancelInvoice\n- Related: InvoiceService → src/billing/invoices/service.ts\n- Related: service.ts → src/billing/invoices/service.ts\n- Related: billingRouter → src/billing/routes.ts\n\n## Where to look\n- cancelInvoice → src/billi"
+    },
+    {
+      "category": "location",
+      "query": "Where is database access?",
+      "intent": "LOCATION",
+      "modules": [
+        "src/db/"
+      ],
+      "files": [
+        "src/db/schema.ts",
+        "drizzle.config.ts",
+        "src/payments/repository.ts",
+        "src/users/repository.ts",
+        "src/billing/invoices/repository.ts"
+      ],
+      "symbols": [],
+      "rules": [],
+      "recommendation": {
+        "path": "src/payments/repository.ts",
+        "reason": "Repository / data access; belongs to the payments module"
+      },
+      "contextTokens": 181,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3058,
+      "retrievalMs": 2,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhere is database access?\n\n## Recommended start\n- repository.ts → src/payments/repository.ts\n- Because: Repository / data access; belongs to the payments module\n- Related: repository.ts → src/users/repository.ts\n- Related: repository.ts → src/billing/invoices/repository.ts\n- Related: schema.ts → src/db/schema.ts\n\n## Where to look\n- db → src/db/ — Data access\n- schema.ts → src/db/schema.ts —"
+    },
+    {
+      "category": "location",
+      "query": "Where is the payment integration?",
+      "intent": "LOCATION",
+      "modules": [
+        "src/payments/"
+      ],
+      "files": [
+        "src/payments/service.ts (PaymentService)",
+        "src/payments/service.ts",
+        "src/payments/repository.ts",
+        "src/payments/stripe.ts (StripeClient)",
+        "src/db/schema.ts (payments)"
+      ],
+      "symbols": [
+        "PaymentService",
+        "StripeClient",
+        "payments"
+      ],
+      "rules": [],
+      "recommendation": {
+        "path": "src/payments/service.ts",
+        "reason": "Exported symbol; belongs to the payments module; defines PaymentService"
+      },
+      "contextTokens": 182,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3057,
+      "retrievalMs": 4,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhere is the payment integration?\n\n## Recommended start\n- PaymentService → src/payments/service.ts\n- Because: Exported symbol; belongs to the payments module; defines PaymentService\n- Related: service.ts → src/payments/service.ts\n- Related: repository.ts → src/payments/repository.ts\n- Related: PaymentRepository → src/payments/repository.ts\n\n## Where to look\n- PaymentService → src/payments/s"
+    },
+    {
+      "category": "location",
+      "query": "Where is configuration loaded?",
+      "intent": "CONFIGURATION",
+      "modules": [
+        "src/config/"
+      ],
+      "files": [
+        "src/config/env.ts (loadConfig)",
+        "drizzle.config.ts",
+        "package.json",
+        "tsconfig.json"
+      ],
+      "symbols": [
+        "loadConfig"
+      ],
+      "rules": [],
+      "recommendation": null,
+      "contextTokens": 124,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3115,
+      "retrievalMs": 2,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhere is configuration loaded?\n\n## Where to look\n- loadConfig → src/config/env.ts — Exported symbol\n- drizzle.config.ts → drizzle.config.ts — Database schema or migration\n- config → src/config/ — Project module: config\n- package.json → package.json — Project configuration\n- tsconfig.json → tsconfig.json — Project configuration\n\n## Project knowledge\n- config module — The config module is at "
+    },
+    {
+      "category": "modification",
+      "query": "Where should I add a new payment endpoint?",
+      "intent": "MODIFICATION",
+      "modules": [],
+      "files": [
+        "src/billing/routes.ts",
+        "src/api/routes/index.ts",
+        "src/api/routes/users.ts",
+        "src/billing/routes.ts (billingRouter)"
+      ],
+      "symbols": [
+        "billingRouter"
+      ],
+      "rules": [
+        "Never call Stripe directly from route handlers",
+        "Cross-cutting concerns belong in middleware, not route handlers"
+      ],
+      "recommendation": {
+        "path": "src/billing/routes.ts",
+        "reason": "API routes / endpoints; belongs to the billing module"
+      },
+      "contextTokens": 206,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3033,
+      "retrievalMs": 3,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhere should I add a new payment endpoint?\n\n## Recommended start\n- routes.ts → src/billing/routes.ts\n- Because: API routes / endpoints; belongs to the billing module\n- Related: index.ts → src/api/routes/index.ts\n- Related: users.ts → src/api/routes/users.ts\n- Related: billingRouter → src/billing/routes.ts\n\n## Where to look\n- routes.ts → src/billing/routes.ts — API routes / endpoints\n- index"
+    },
+    {
+      "category": "modification",
+      "query": "Where should validation for invoices go?",
+      "intent": "LOCATION",
+      "modules": [],
+      "files": [
+        "src/billing/invoices/validation.ts (validateInvoiceInput)",
+        "src/db/schema.ts (invoices)",
+        "src/billing/invoices/repository.ts",
+        "src/billing/invoices/service.ts (cancelInvoice)",
+        "src/billing/invoices/service.ts",
+        "src/billing/invoices/repository.ts (InvoiceRepository)"
+      ],
+      "symbols": [
+        "validateInvoiceInput",
+        "invoices",
+        "cancelInvoice",
+        "InvoiceRepository"
+      ],
+      "rules": [],
+      "recommendation": {
+        "path": "src/billing/invoices/repository.ts",
+        "reason": "Repository / data access; belongs to the billing module"
+      },
+      "contextTokens": 202,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3037,
+      "retrievalMs": 2,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhere should validation for invoices go?\n\n## Recommended start\n- repository.ts → src/billing/invoices/repository.ts\n- Because: Repository / data access; belongs to the billing module\n- Related: cancelInvoice → src/billing/invoices/service.ts\n- Related: InvoiceService → src/billing/invoices/service.ts\n- Related: service.ts → src/billing/invoices/service.ts\n\n## Where to look\n- validateInvoice"
+    },
+    {
+      "category": "modification",
+      "query": "Where should I add a new authentication provider?",
+      "intent": "MODIFICATION",
+      "modules": [
+        "src/auth/"
+      ],
+      "files": [
+        "src/auth/jwt.ts (signToken)",
+        "src/auth/jwt.ts (verifyToken)",
+        "src/auth/middleware.ts (authenticateRequest)"
+      ],
+      "symbols": [
+        "signToken",
+        "verifyToken",
+        "authenticateRequest"
+      ],
+      "rules": [
+        "Authentication uses the AuthService abstraction"
+      ],
+      "recommendation": {
+        "path": "src/auth/middleware.ts",
+        "reason": "Exported symbol; belongs to the auth module; defines authenticateRequest"
+      },
+      "contextTokens": 194,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3045,
+      "retrievalMs": 4,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhere should I add a new authentication provider?\n\n## Recommended start\n- authenticateRequest → src/auth/middleware.ts\n- Because: Exported symbol; belongs to the auth module; defines authenticateRequest\n- Related: auth → src/auth/\n- Related: signToken → src/auth/jwt.ts\n- Related: verifyToken → src/auth/jwt.ts\n\n## Where to look\n- auth → src/auth/ — Authentication / authorization\n- signToken "
+    },
+    {
+      "category": "modification",
+      "query": "Where should I modify the billing logic?",
+      "intent": "MODIFICATION",
+      "modules": [],
+      "files": [
+        "src/billing/invoices/service.ts",
+        "src/payments/service.ts",
+        "src/billing/invoices/service.ts (cancelInvoice)",
+        "src/billing/invoices/service.ts (InvoiceService)",
+        "src/billing/invoices/repository.ts"
+      ],
+      "symbols": [
+        "cancelInvoice",
+        "InvoiceService"
+      ],
+      "rules": [
+        "Use dependency injection / service modules for business logic"
+      ],
+      "recommendation": {
+        "path": "src/billing/invoices/service.ts",
+        "reason": "Service / business logic; belongs to the billing module"
+      },
+      "contextTokens": 211,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3028,
+      "retrievalMs": 2,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhere should I modify the billing logic?\n\n## Recommended start\n- service.ts → src/billing/invoices/service.ts\n- Because: Service / business logic; belongs to the billing module\n- Related: service.ts → src/billing/service.ts\n- Related: service.ts → src/payments/service.ts\n- Related: cancelInvoice → src/billing/invoices/service.ts\n\n## Where to look\n- service.ts → src/billing/invoices/service."
+    },
+    {
+      "category": "modification",
+      "query": "Where should I add a test for PaymentService?",
+      "intent": "MODIFICATION",
+      "modules": [],
+      "files": [
+        "tests/payments/PaymentService.test.ts",
+        "tests/auth/AuthService.test.ts",
+        "src/payments/service.ts (PaymentService)",
+        "src/payments/service.ts",
+        "src/billing/invoices/service.ts (InvoiceService)",
+        "src/billing/invoices/service.ts"
+      ],
+      "symbols": [
+        "PaymentService",
+        "InvoiceService"
+      ],
+      "rules": [],
+      "recommendation": {
+        "path": "tests/payments/PaymentService.test.ts",
+        "reason": "Service / business logic"
+      },
+      "contextTokens": 201,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3038,
+      "retrievalMs": 6,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhere should I add a test for PaymentService?\n\n## Recommended start\n- PaymentService.test.ts → tests/payments/PaymentService.test.ts\n- Because: Service / business logic\n- Related: AuthService.test.ts → tests/auth/AuthService.test.ts\n- Related: PaymentService → src/payments/service.ts\n- Related: service.ts → src/payments/service.ts\n\n## Where to look\n- PaymentService.test.ts → tests/payments/"
+    },
+    {
+      "category": "architecture",
+      "query": "How is authentication structured?",
+      "intent": "ARCHITECTURE",
+      "modules": [
+        "src/auth/"
+      ],
+      "files": [
+        "src/auth/jwt.ts (signToken)",
+        "src/auth/jwt.ts (verifyToken)",
+        "src/auth/middleware.ts (authenticateRequest)"
+      ],
+      "symbols": [
+        "signToken",
+        "verifyToken",
+        "authenticateRequest"
+      ],
+      "rules": [
+        "Authentication uses the AuthService abstraction"
+      ],
+      "recommendation": null,
+      "contextTokens": 125,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3114,
+      "retrievalMs": 3,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nHow is authentication structured?\n\n## Where to look\n- auth → src/auth/ — Authentication / authorization\n- signToken → src/auth/jwt.ts — Exported symbol\n- verifyToken → src/auth/jwt.ts — Exported symbol\n- authenticateRequest → src/auth/middleware.ts — Exported symbol\n\n## Constraints\n- Authentication uses the AuthService abstraction.\n\n## Patterns\n- Authentication is handled by JWT / auth modu"
+    },
+    {
+      "category": "architecture",
+      "query": "How does billing flow through the application?",
+      "intent": "IMPLEMENTATION",
+      "modules": [
+        "src/billing/"
+      ],
+      "files": [
+        "src/billing/invoices/service.ts (cancelInvoice)",
+        "src/billing/invoices/service.ts (InvoiceService)",
+        "src/billing/invoices/service.ts",
+        "src/billing/invoices/repository.ts"
+      ],
+      "symbols": [
+        "cancelInvoice",
+        "InvoiceService"
+      ],
+      "rules": [
+        "All billing mutations go through BillingService"
+      ],
+      "recommendation": {
+        "path": "src/billing/invoices/service.ts",
+        "reason": "Exported symbol; belongs to the billing module; defines cancelInvoice"
+      },
+      "contextTokens": 212,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3027,
+      "retrievalMs": 3,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nHow does billing flow through the application?\n\n## Recommended start\n- cancelInvoice → src/billing/invoices/service.ts\n- Because: Exported symbol; belongs to the billing module; defines cancelInvoice\n- Related: InvoiceService → src/billing/invoices/service.ts\n- Related: service.ts → src/billing/invoices/service.ts\n- Related: repository.ts → src/billing/invoices/repository.ts\n\n## Where to lo"
+    },
+    {
+      "category": "architecture",
+      "query": "What layer owns database access?",
+      "intent": "ARCHITECTURE",
+      "modules": [
+        "src/db/"
+      ],
+      "files": [
+        "src/db/schema.ts",
+        "drizzle.config.ts",
+        "src/payments/repository.ts",
+        "src/users/repository.ts",
+        "src/billing/invoices/repository.ts"
+      ],
+      "symbols": [],
+      "rules": [],
+      "recommendation": null,
+      "contextTokens": 111,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3128,
+      "retrievalMs": 4,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhat layer owns database access?\n\n## Where to look\n- db → src/db/ — Data access\n- schema.ts → src/db/schema.ts — Database schema or migration\n- drizzle.config.ts → drizzle.config.ts — Database schema or migration\n- repository.ts → src/payments/repository.ts — Repository / data access\n- repository.ts → src/users/repository.ts — Repository / data access\n- repository.ts → src/billing/invoices/"
+    },
+    {
+      "category": "architecture",
+      "query": "How are API requests handled?",
+      "intent": "IMPLEMENTATION",
+      "modules": [],
+      "files": [
+        "src/api/routes/index.ts",
+        "src/api/routes/users.ts",
+        "src/billing/routes.ts",
+        "src/auth/middleware.ts (authenticateRequest)"
+      ],
+      "symbols": [
+        "authenticateRequest"
+      ],
+      "rules": [
+        "Cross-cutting concerns belong in middleware, not route handlers",
+        "Never call Stripe directly from route handlers"
+      ],
+      "recommendation": {
+        "path": "src/api/routes/index.ts",
+        "reason": "API routes / endpoints; belongs to the api module"
+      },
+      "contextTokens": 206,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3033,
+      "retrievalMs": 2,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nHow are API requests handled?\n\n## Recommended start\n- index.ts → src/api/routes/index.ts\n- Because: API routes / endpoints; belongs to the api module\n- Related: users.ts → src/api/routes/users.ts\n- Related: routes.ts → src/billing/routes.ts\n- Related: authenticateRequest → src/auth/middleware.ts\n\n## Where to look\n- index.ts → src/api/routes/index.ts — API routes / endpoints\n- users.ts → src"
+    },
+    {
+      "category": "architecture",
+      "query": "What conventions does this project follow?",
+      "intent": "CONVENTION",
+      "modules": [],
+      "files": [],
+      "symbols": [],
+      "rules": [
+        "Cross-cutting concerns belong in middleware, not route handlers",
+        "PostgreSQL is the system of record - avoid dual-writes to other stores",
+        "Use dependency injection / service modules for business logic"
+      ],
+      "recommendation": null,
+      "contextTokens": 221,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3018,
+      "retrievalMs": 1,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhat conventions does this project follow?\n\n## Decisions\n- Project uses modular architecture — Detected modules: api, auth, billing, billing-admin, billing-ui, config, db, payments, users. Prefer keeping boundaries between modules.\n\n## Constraints\n- Cross-cutting concerns belong in middleware, not route handlers. Middleware files detected in the codebase. (convention inferred from the codeb"
+    },
+    {
+      "category": "rules",
+      "query": "What rule applies to payment code?",
+      "intent": "CONVENTION",
+      "modules": [
+        "src/payments/"
+      ],
+      "files": [
+        "src/payments/service.ts (PaymentService)",
+        "src/payments/service.ts",
+        "src/payments/repository.ts",
+        "src/db/schema.ts (payments)"
+      ],
+      "symbols": [
+        "PaymentService",
+        "payments"
+      ],
+      "rules": [
+        "Never call Stripe directly from route handlers"
+      ],
+      "recommendation": null,
+      "contextTokens": 107,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3132,
+      "retrievalMs": 2,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhat rule applies to payment code?\n\n## Where to look\n- PaymentService → src/payments/service.ts — Exported symbol\n- service.ts → src/payments/service.ts — Service / business logic\n- payments → src/payments/ — Project module: payments\n- repository.ts → src/payments/repository.ts — Repository / data access\n- payments → src/db/schema.ts — Exported symbol\n\n## Constraints\n- Never call Stripe dir"
+    },
+    {
+      "category": "rules",
+      "query": "What decision was made about authentication?",
+      "intent": "DECISION",
+      "modules": [
+        "src/auth/"
+      ],
+      "files": [
+        "src/auth/jwt.ts (signToken)",
+        "src/auth/jwt.ts (verifyToken)",
+        "src/auth/middleware.ts (authenticateRequest)"
+      ],
+      "symbols": [
+        "signToken",
+        "verifyToken",
+        "authenticateRequest"
+      ],
+      "rules": [
+        "Authentication uses the AuthService abstraction"
+      ],
+      "recommendation": null,
+      "contextTokens": 128,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3111,
+      "retrievalMs": 3,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhat decision was made about authentication?\n\n## Where to look\n- auth → src/auth/ — Authentication / authorization\n- signToken → src/auth/jwt.ts — Exported symbol\n- verifyToken → src/auth/jwt.ts — Exported symbol\n- authenticateRequest → src/auth/middleware.ts — Exported symbol\n\n## Constraints\n- Authentication uses the AuthService abstraction.\n\n## Patterns\n- Authentication is handled by JWT "
+    },
+    {
+      "category": "rules",
+      "query": "What should I avoid when modifying billing?",
+      "intent": "CONVENTION",
+      "modules": [],
+      "files": [
+        "src/billing/invoices/service.ts (cancelInvoice)",
+        "src/billing/invoices/service.ts"
+      ],
+      "symbols": [
+        "cancelInvoice"
+      ],
+      "rules": [
+        "PostgreSQL is the system of record - avoid dual-writes to other stores",
+        "All billing mutations go through BillingService",
+        "Never call Stripe directly from route handlers"
+      ],
+      "recommendation": null,
+      "contextTokens": 128,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3111,
+      "retrievalMs": 3,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhat should I avoid when modifying billing?\n\n## Where to look\n- cancelInvoice → src/billing/invoices/service.ts — Exported symbol\n- service.ts → src/billing/invoices/service.ts — Service / business logic\n\n## Constraints\n- PostgreSQL is the system of record - avoid dual-writes to other stores. PostgreSQL detected in stack. (convention inferred from the codebase — review before treating as bi"
+    },
+    {
+      "category": "unrelated",
+      "query": "What is the weather tomorrow?",
+      "intent": "GENERAL_PROJECT",
+      "modules": [],
+      "files": [],
+      "symbols": [],
+      "rules": [],
+      "recommendation": null,
+      "contextTokens": 22,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3217,
+      "retrievalMs": 1,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhat is the weather tomorrow?\n\nNo stored project knowledge matched this task.\n"
+    },
+    {
+      "category": "unrelated",
+      "query": "How do I deploy this to Kubernetes?",
+      "intent": "IMPLEMENTATION",
+      "modules": [],
+      "files": [],
+      "symbols": [],
+      "rules": [],
+      "recommendation": null,
+      "contextTokens": 23,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3216,
+      "retrievalMs": 1,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nHow do I deploy this to Kubernetes?\n\nNo stored project knowledge matched this task.\n"
+    },
+    {
+      "category": "unrelated",
+      "query": "What is React?",
+      "intent": "GENERAL_PROJECT",
+      "modules": [],
+      "files": [],
+      "symbols": [],
+      "rules": [],
+      "recommendation": null,
+      "contextTokens": 18,
+      "corpusTokens": 3239,
+      "estimatedTokensSaved": 3221,
+      "retrievalMs": 1,
+      "correct": "correct",
+      "rediscovery": "YES",
+      "noisePaths": [],
+      "contextPreview": "# Task\nWhat is React?\n\nNo stored project knowledge matched this task.\n"
+    }
+  ],
+  "mutation": {
+    "before": {
+      "map": 57
+    },
+    "after": {
+      "mapCount": 38,
+      "hasOldBillingDir": false,
+      "hasPaymentsDomain": true,
+      "hasDeletedHealth": false,
+      "hasNotifications": true,
+      "hasPaymentServiceSymbol": false,
+      "hasCheckoutServiceSymbol": true
+    },
+    "incrementalMs": 518,
+    "afterBillingQuery": {
+      "modules": [],
+      "files": [
+        "src/payments/service.ts",
+        "src/payments-domain/routes.ts",
+        "src/payments-domain/core/service.ts",
+        "src/payments-domain/invoices/service.ts",
+        "src/payments-domain/invoices/service.ts",
+        "src/payments/service.ts"
+      ],
+      "recommendation": "src/payments-domain/routes.ts",
+      "contextHasSrcBilling": false,
+      "contextHasPaymentsDomain": true
+    }
+  },
+  "scale": {
+    "small": {
+      "generatedModules": 0,
+      "scanMs": 594,
+      "incrementalMs": 532,
+      "contextTokens": 209,
+      "retrievalMs": 10
+    },
+    "medium": {
+      "generatedModules": 40,
+      "scanMs": 562,
+      "incrementalMs": 542,
+      "contextTokens": 205,
+      "retrievalMs": 12
+    },
+    "large": {
+      "generatedModules": 120,
+      "scanMs": 510,
+      "incrementalMs": 428,
+      "contextTokens": 205,
+      "retrievalMs": 13
+    }
+  }
+}

@@ -27,6 +27,7 @@ export interface CreateMemoryProps {
   embeddingId?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
+  paths?: string[];
 }
 
 export class Memory {
@@ -45,6 +46,7 @@ export class Memory {
   private _usageCount: number;
   private _lastUsedAt: Date | null;
   private _embeddingId: string | null;
+  private _paths: string[];
   readonly createdAt: Date;
   private _updatedAt: Date;
 
@@ -64,6 +66,7 @@ export class Memory {
     this._usageCount = props.usageCount ?? 0;
     this._lastUsedAt = props.lastUsedAt ?? null;
     this._embeddingId = props.embeddingId ?? null;
+    this._paths = normalizePaths(props.paths);
     this.createdAt = props.createdAt ?? new Date();
     this._updatedAt = props.updatedAt ?? this.createdAt;
 
@@ -193,6 +196,7 @@ export class Memory {
       embeddingId: this._embeddingId,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this._updatedAt.toISOString(),
+      ...(this._paths.length ? { paths: [...this._paths] } : {}),
     };
   }
 
@@ -215,6 +219,20 @@ export class Memory {
       embeddingId: record.embeddingId,
       createdAt: new Date(record.createdAt),
       updatedAt: new Date(record.updatedAt),
+      paths: record.paths,
     });
   }
+}
+
+function normalizePaths(paths: string[] | undefined): string[] {
+  if (!paths?.length) return [];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of paths) {
+    const p = raw.replace(/\\/g, '/').replace(/^\.\//, '').trim();
+    if (!p || seen.has(p)) continue;
+    seen.add(p);
+    out.push(p);
+  }
+  return out;
 }

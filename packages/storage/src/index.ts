@@ -1,11 +1,19 @@
-export type { NeuronStoragePaths, StorageStatus, ProjectBrain } from './provider.js';
-export {
-  FileStorageProvider,
-  createFileStorageProvider,
-  resolveNeuronPaths,
-} from './file/file-storage-provider.js';
 export {
   createLocalFileMemoryStack,
   type LocalFileMemoryStack,
   type LocalFileSnapshot,
 } from './local/create-local-file-stack.js';
+export {
+  createNeuronRuntime,
+  type CreateRuntimeOptions,
+  type NeuronRuntime,
+  type ScanOutcome,
+} from './runtime.js';
+export {
+  listStaleScanMemories,
+  isScanMemoryStale,
+  isUserAuthored,
+  isScanDerived,
+  evidencePathsFor,
+  normalizeEvidencePath,
+} from './scan-invalidation.js';

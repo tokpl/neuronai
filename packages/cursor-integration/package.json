@@ -1,6 +1,6 @@
 {
   "name": "@neuronai/cursor-integration",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "NeuronAI / cursor-integration - package for Neuron - AI Memory",
   "license": "AGPL-3.0",
   "type": "module",
@@ -12,11 +12,6 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist",
-    "templates",
-    "LICENSE"
-  ],
   "scripts": {
     "build": "tsc -p tsconfig.json && node ./scripts/copy-templates.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -31,9 +26,6 @@
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/tokpl/neuronai.git"
@@ -44,5 +36,6 @@
   },
   "engines": {
     "node": ">=22"
-  }
+  },
+  "private": true
 }

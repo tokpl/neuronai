@@ -1,122 +1,54 @@
-import type { MemoryType } from '@neuronai/types';
-import { ValidationError } from '@neuronai/types';
+import { ValidationError, type MemoryType } from '@neuronai/types';
 
-import type { NeuronRuntime, PendingMemorySuggestion } from '../config/runtime.js';
+import type { McpRuntime } from '../config/runtime.js';
 import { failResult, okResult } from '../middleware/errors.js';
-import { resolveProjectId } from './get-context.js';
+import { handleRemember } from './remember.js';
 
 export type ResolveSuggestionAction = 'save' | 'edit' | 'ignore';
 
-const ACTION_ALIASES: Record<string, ResolveSuggestionAction> = {
-  save: 'save',
-  yes: 'save',
-  y: 'save',
-  remember: 'save',
-  edit: 'edit',
-  rephrase: 'edit',
-  ignore: 'ignore',
-  no: 'ignore',
-  n: 'ignore',
-  skip: 'ignore',
-};
-
-export function normalizeResolveAction(raw: string): ResolveSuggestionAction {
-  const key = raw.trim().toLowerCase();
-  const mapped = ACTION_ALIASES[key];
-  if (!mapped) {
-    throw new ValidationError(`Unknown suggestion action: ${raw}`, { action: raw });
-  }
-  return mapped;
-}
-
-function clearPending(runtime: NeuronRuntime): void {
-  runtime.pendingSuggestion = null;
-}
-
-function mergePending(
-  pending: PendingMemorySuggestion | null,
-  args: {
-    title?: string;
-    content?: string;
-    type?: MemoryType;
-  },
-): PendingMemorySuggestion {
-  const title = args.title?.trim() || pending?.title;
-  const draftContent = args.content?.trim() || pending?.draftContent;
-  const type = args.type ?? pending?.type ?? 'architecture_decision';
-
-  if (!title || !draftContent) {
-    throw new ValidationError(
-      'No pending suggestion to resolve. Pass title and content, or run neuron_after_task first.',
-      { hasPending: Boolean(pending) },
-    );
-  }
-
-  return {
-    type,
-    title,
-    draftContent,
-    reason: pending?.reason ?? 'User confirmed suggestion',
-    confidence: pending?.confidence ?? 1,
-    task: pending?.task,
-  };
-}
-
+/** Apply the user's answer to the pending ask-before-remember draft. */
 export async function handleResolveSuggestion(
-  runtime: NeuronRuntime,
+  runtime: McpRuntime,
   args: {
     projectId?: string;
-    action: string;
+    action: ResolveSuggestionAction;
     title?: string;
     content?: string;
     type?: MemoryType;
   },
 ) {
   try {
-    runtime.auth.assertAuthorized(process.env['NEURON_API_KEY']);
-    const projectId = resolveProjectId(runtime, args.projectId);
-    const action = normalizeResolveAction(args.action);
+    const pending = runtime.pendingSuggestion;
 
-    if (action === 'ignore') {
-      const hadPending = Boolean(runtime.pendingSuggestion);
-      clearPending(runtime);
-      return okResult({
-        status: 'ignored',
-        hadPending,
-        message: 'Suggestion discarded. Nothing was saved.',
-      });
+    if (args.action === 'ignore') {
+      runtime.pendingSuggestion = null;
+      return okResult({ status: 'ignored', message: 'Nothing was saved.' });
     }
 
-    if (action === 'edit' && !args.title && !args.content && !args.type) {
+    if (args.action === 'edit' && !args.title && !args.content && !args.type) {
+      throw new ValidationError('Edit requires at least one of: title, content, type.');
+    }
+
+    const title = args.title?.trim() || pending?.title;
+    const content = args.content?.trim() || pending?.draftContent;
+    const type = args.type ?? pending?.type ?? 'architecture_decision';
+
+    if (!title || !content) {
       throw new ValidationError(
-        'Edit requires at least one of: title, content, type. Or reply with your changes and pass them here.',
+        'No pending suggestion to resolve. Call neuron_after_task first, or pass title and content.',
       );
     }
 
-    const draft = mergePending(runtime.pendingSuggestion, args);
-    const memory = await runtime.engine.createMemory({
-      projectId,
-      type: draft.type,
-      title: draft.title,
-      content: draft.draftContent,
-      source: 'agent',
-      tags: ['user-confirmed', ...(draft.task ? ['after-task'] : [])],
-      manualImportance: draft.confidence,
-      confidence: draft.confidence,
+    const result = await handleRemember(runtime, {
+      projectId: args.projectId,
+      type,
+      title,
+      content,
+      tags: ['user-confirmed'],
     });
-    await runtime.searchEngine.indexMemory(memory);
-    if (runtime.persist) await runtime.persist();
-    clearPending(runtime);
 
-    return okResult({
-      status: 'stored',
-      action,
-      memory,
-      message:
-        action === 'edit'
-          ? 'Edited suggestion saved to project memory.'
-          : 'Suggestion saved to project memory.',
-    });
+    runtime.pendingSuggestion = null;
+    return result;
   } catch (error) {
     return failResult(error);
   }

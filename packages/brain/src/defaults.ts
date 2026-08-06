@@ -1,11 +1,10 @@
 import type {
-  ActiveContext,
   Facet,
   FacetSource,
   KnowledgePlane,
   ProjectDna,
-  ProjectGoals,
   ProjectHealth,
+  ProjectMap,
   Provenance,
 } from './models.js';
 
@@ -86,9 +85,12 @@ export function emptyKnowledge(): KnowledgePlane {
     decisions: [],
     rules: [],
     graph: { nodes: [], edges: [] },
-    insights: [],
-    context: [],
+    map: emptyMap(),
   };
+}
+
+export function emptyMap(): ProjectMap {
+  return { version: 1, updatedAt: nowIso(), entries: [] };
 }
 
 export function emptyHealth(): ProjectHealth {
@@ -103,32 +105,11 @@ export function emptyHealth(): ProjectHealth {
   };
 }
 
-export function emptyGoals(): ProjectGoals {
-  return {
-    version: 1,
-    updatedAt: nowIso(),
-    currentId: null,
-    goals: [],
-  };
-}
-
-export function emptyActive(): ActiveContext {
-  return {
-    version: 1,
-    updatedAt: nowIso(),
-    focus: null,
-  };
-}
-
-export function computeHealth(
-  dna: ProjectDna,
-  knowledge: KnowledgePlane,
-): ProjectHealth {
+export function computeHealth(dna: ProjectDna, knowledge: KnowledgePlane): ProjectHealth {
   const hasDna =
     Boolean(dna.identity.name ?? dna.identity.projectId ?? dna.stack.tags) ||
     dna.meta.overallConfidence > 0;
-  const memoryCount =
-    knowledge.memory.length + knowledge.decisions.length + knowledge.rules.length;
+  const memoryCount = knowledge.memory.length + knowledge.decisions.length + knowledge.rules.length;
   const knowledgeFresh = memoryCount > 0;
   const dnaFresh = hasDna;
   const confidence = dna.meta.overallConfidence;

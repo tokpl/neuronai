@@ -3,10 +3,9 @@
 ## Supported versions
 
 | Version | Supported |
-|---------|-----------|
-| 0.1.x   | Yes (best effort) |
-| pre-0.1 | No |
-|
+| ------- | --------- |
+| 0.2.x   | Yes       |
+| 0.1.x   | No — superseded by the 0.2 rearchitecture |
 
 Pre-1.0: fixes land on the default branch first.
 
@@ -16,38 +15,41 @@ Pre-1.0: fixes land on the default branch first.
 
 Prefer:
 
-1. GitHub Security Advisories (once the repository is published), or
+1. GitHub Security Advisories, or
 2. A private report to the maintainers.
 
 Include steps to reproduce, impact assessment, and any suggested fix.
 
-## Threat model (summary)
+## Threat model
 
-| Mode | Auth | Data leaving device |
-|------|------|---------------------|
-| Local (default) | `LOCAL_USER` / trusted host | None (unless you call an AI provider you configured) |
-| Cloud-ready (future) | API key + roles (`TEAM_MEMBER`, `ADMIN`, `SERVICE_ACCOUNT`) | Only with explicit consent / hosting contract |
+Neuron runs entirely on your machine. There is no server, no account and no network client.
 
-ACL roles are architected in `@neuronai/security`; full SaaS is out of scope for OSS core.
+| Surface | Exposure |
+| --- | --- |
+| Data leaving the device | None. Verifiable with `pnpm verify:offline`. |
+| Authentication | None required — there is nothing remote to authenticate to. |
+| Network listeners | None. The MCP server speaks stdio to its parent process. |
+| Third-party services | None. No AI provider, no analytics, no update check. |
+
+The only trust boundary is the MCP stdio channel between Neuron and your editor.
 
 ## Secrets
 
-- Never commit `.env` or live keys
-- Use `.env.example` as a template
-- Log via `redactSecrets` / structured logger - never print API keys or `DATABASE_URL` passwords
-- Optional provider keys (`OPENAI_API_KEY`, etc.) stay in the environment
+- Neuron never reads `.env` files and never stores their contents
+- Memory contents are written by you or proposed for your approval — review before accepting
+- Never paste credentials into `neuron remember`
+- Treat `.neuron/brain/` as as sensitive as the source it describes
 
-## Privacy & telemetry
+## Telemetry
 
-- Telemetry and remote error reporting are **opt-in** (`NEURON_TELEMETRY=0` default; in-app consent required)
-- See [docs/privacy.md](./docs/privacy.md)
+There is none. Not opt-in, not anonymous, not aggregate. `neuron doctor` verifies the setting
+has not been tampered with, and `pnpm verify:offline` proves the runtime makes no network calls
+at all by running it with sockets, DNS and `fetch` disabled.
 
-## Product security notes
+## Operator guidance
 
-Neuron may store project knowledge that could include sensitive context. Operators should:
+- Prefer per-project brains; do not share `.neuron/` across unrelated codebases
+- Restrict MCP access to trusted editor hosts
+- `neuron reset --force` removes the brain completely; nothing is retained elsewhere
 
-- Prefer **local / self-hosted** deployments for private codebases
-- Keep secret redaction enabled when logging
-- Treat memory contents as sensitive as source code
-- Restrict MCP access to trusted agent hosts
-- Use `neuron purge --force` / backup tools when rotating machines
+See also [docs/privacy.md](./docs/privacy.md).

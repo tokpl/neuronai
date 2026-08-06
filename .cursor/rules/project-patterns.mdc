@@ -16,4 +16,4 @@ alwaysApply: false
 
 - Use dependency injection / service modules for business logic
 
-Ask Neuron (`neuron_prepare_task`, `neuron_project_map`) before inventing new patterns.
+Load project context with `neuron_context` before inventing new patterns.

@@ -31,6 +31,18 @@ const HIGH_SEGMENTS = [
   'frontend',
 ];
 
+/** Noisy / generated trees live under src but should not drive deep analysis. */
+const BULK_SEGMENTS = [
+  'generated',
+  'gen',
+  'vendor',
+  'experimental',
+  'legacy',
+  'fixtures',
+  '__generated__',
+  '_bulk',
+];
+
 const MEDIUM_SEGMENTS = ['config', 'configs', 'test', 'tests', 'docs', 'documentation', 'scripts'];
 
 export class FileImportanceAnalyzer {
@@ -41,6 +53,8 @@ export class FileImportanceAnalyzer {
   classify(relativePath: string): FileImportance {
     const parts = relativePath.replace(/\\/g, '/').toLowerCase().split('/');
     if (parts.some((p) => IGNORE_DIRS.has(p))) return 'IGNORE';
+    // Before HIGH_SEGMENTS: `src/generated/...` must not count as HIGH.
+    if (BULK_SEGMENTS.some((s) => parts.includes(s))) return 'MEDIUM';
     if (HIGH_SEGMENTS.some((s) => parts.includes(s))) return 'HIGH';
     if (MEDIUM_SEGMENTS.some((s) => parts.includes(s))) return 'MEDIUM';
     if (/\.(md|json|ya?ml|toml|lock)$/i.test(relativePath)) return 'MEDIUM';

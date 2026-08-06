@@ -1,4 +1,4 @@
-import { openProjectBrain } from '@neuronai/brain';
+import { openProjectBrain, type BrainPrefs } from '@neuronai/brain';
 
 import { CLI_VERSION, loadMetadata, saveMetadata } from '../services/neuron-fs.js';
 import { ui } from '../ui/output.js';
@@ -45,7 +45,7 @@ export class NeuronUpdater {
           raw['providers'] = { local: { enabled: true } };
         }
         const parsed = validateLocalConfig(raw);
-        await brain.savePrefs(parsed as unknown as import('@neuronai/brain').BrainPrefs);
+        await brain.savePrefs(parsed as unknown as BrainPrefs);
         notes.push(`Prefs schema migrated ${stored} → ${CURRENT_SCHEMA_VERSION}`);
         schemaVersion = CURRENT_SCHEMA_VERSION;
         brainMigrated = true;

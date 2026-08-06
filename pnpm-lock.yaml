@@ -17,6 +17,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^3.0.8
         version: 3.2.7(vitest@3.2.7(@types/node@22.20.1)(tsx@4.23.8))
+      esbuild:
+        specifier: ^0.28.1
+        version: 0.28.1
       eslint:
         specifier: ^9.22.0
         version: 9.39.5
@@ -44,15 +47,10 @@ importers:
 
   apps/cli:
     dependencies:
-      '@neuronai/agent-workflow':
-        specifier: workspace:*
-        version: link:../../packages/agent-workflow
-      '@neuronai/ai-memory':
-        specifier: workspace:*
-        version: link:../../packages/ai-memory
-      '@neuronai/ai-provider':
-        specifier: workspace:*
-        version: link:../../packages/ai-provider
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.8.0
+        version: 1.30.0(zod@3.25.76)
+    devDependencies:
       '@neuronai/brain':
         specifier: workspace:*
         version: link:../../packages/brain
@@ -62,30 +60,12 @@ importers:
       '@neuronai/cursor-integration':
         specifier: workspace:*
         version: link:../../packages/cursor-integration
-      '@neuronai/embeddings':
-        specifier: workspace:*
-        version: link:../../packages/embeddings
       '@neuronai/mcp-server':
         specifier: workspace:*
         version: link:../mcp-server
-      '@neuronai/memory-engine':
-        specifier: workspace:*
-        version: link:../../packages/memory-engine
-      '@neuronai/observability':
-        specifier: workspace:*
-        version: link:../../packages/observability
       '@neuronai/project-analyzer':
         specifier: workspace:*
         version: link:../../packages/project-analyzer
-      '@neuronai/project-scanner':
-        specifier: workspace:*
-        version: link:../../packages/project-scanner
-      '@neuronai/retrieval-engine':
-        specifier: workspace:*
-        version: link:../../packages/retrieval-engine
-      '@neuronai/security':
-        specifier: workspace:*
-        version: link:../../packages/security
       '@neuronai/storage':
         specifier: workspace:*
         version: link:../../packages/storage
@@ -95,10 +75,9 @@ importers:
       cac:
         specifier: ^6.7.14
         version: 6.7.14
-      zod:
-        specifier: ^3.24.2
-        version: 3.25.76
-    devDependencies:
+      esbuild:
+        specifier: ^0.28.1
+        version: 0.28.1
       tsx:
         specifier: ^4.19.3
         version: 4.23.8
@@ -108,54 +87,24 @@ importers:
       vitest:
         specifier: ^3.0.8
         version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
+      zod:
+        specifier: ^3.24.2
+        version: 3.25.76
 
   apps/mcp-server:
     dependencies:
       '@modelcontextprotocol/sdk':
         specifier: ^1.8.0
         version: 1.30.0(zod@3.25.76)
-      '@neuronai/agent-intelligence':
-        specifier: workspace:*
-        version: link:../../packages/agent-intelligence
       '@neuronai/agent-workflow':
         specifier: workspace:*
         version: link:../../packages/agent-workflow
-      '@neuronai/ai-memory':
-        specifier: workspace:*
-        version: link:../../packages/ai-memory
-      '@neuronai/ai-provider':
-        specifier: workspace:*
-        version: link:../../packages/ai-provider
       '@neuronai/brain':
         specifier: workspace:*
         version: link:../../packages/brain
-      '@neuronai/config':
-        specifier: workspace:*
-        version: link:../../packages/config
-      '@neuronai/cursor-integration':
-        specifier: workspace:*
-        version: link:../../packages/cursor-integration
-      '@neuronai/embeddings':
-        specifier: workspace:*
-        version: link:../../packages/embeddings
-      '@neuronai/knowledge-graph':
-        specifier: workspace:*
-        version: link:../../packages/knowledge-graph
-      '@neuronai/memory-engine':
-        specifier: workspace:*
-        version: link:../../packages/memory-engine
-      '@neuronai/observability':
-        specifier: workspace:*
-        version: link:../../packages/observability
-      '@neuronai/project-analyzer':
-        specifier: workspace:*
-        version: link:../../packages/project-analyzer
       '@neuronai/project-scanner':
         specifier: workspace:*
         version: link:../../packages/project-scanner
-      '@neuronai/retrieval-engine':
-        specifier: workspace:*
-        version: link:../../packages/retrieval-engine
       '@neuronai/storage':
         specifier: workspace:*
         version: link:../../packages/storage
@@ -176,77 +125,14 @@ importers:
         specifier: ^3.0.8
         version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
 
-  packages/agent-intelligence:
-    dependencies:
-      '@neuronai/ai-memory':
-        specifier: workspace:*
-        version: link:../ai-memory
-      '@neuronai/brain':
-        specifier: workspace:*
-        version: link:../brain
-      '@neuronai/knowledge-graph':
-        specifier: workspace:*
-        version: link:../knowledge-graph
-      '@neuronai/memory-engine':
-        specifier: workspace:*
-        version: link:../memory-engine
-      '@neuronai/types':
-        specifier: workspace:*
-        version: link:../types
-    devDependencies:
-      typescript:
-        specifier: ^5.8.2
-        version: 5.9.3
-      vitest:
-        specifier: ^3.0.8
-        version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
-
   packages/agent-workflow:
     dependencies:
-      '@neuronai/ai-memory':
-        specifier: workspace:*
-        version: link:../ai-memory
       '@neuronai/brain':
         specifier: workspace:*
         version: link:../brain
       '@neuronai/memory-engine':
         specifier: workspace:*
         version: link:../memory-engine
-      '@neuronai/types':
-        specifier: workspace:*
-        version: link:../types
-    devDependencies:
-      typescript:
-        specifier: ^5.8.2
-        version: 5.9.3
-      vitest:
-        specifier: ^3.0.8
-        version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
-
-  packages/ai-memory:
-    dependencies:
-      '@neuronai/ai-provider':
-        specifier: workspace:*
-        version: link:../ai-provider
-      '@neuronai/embeddings':
-        specifier: workspace:*
-        version: link:../embeddings
-      '@neuronai/memory-engine':
-        specifier: workspace:*
-        version: link:../memory-engine
-      '@neuronai/types':
-        specifier: workspace:*
-        version: link:../types
-    devDependencies:
-      typescript:
-        specifier: ^5.8.2
-        version: 5.9.3
-      vitest:
-        specifier: ^3.0.8
-        version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
-
-  packages/ai-provider:
-    dependencies:
       '@neuronai/types':
         specifier: workspace:*
         version: link:../types
@@ -303,59 +189,11 @@ importers:
         specifier: ^3.0.8
         version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
 
-  packages/embeddings:
-    dependencies:
-      '@neuronai/types':
-        specifier: workspace:*
-        version: link:../types
-    devDependencies:
-      typescript:
-        specifier: ^5.8.2
-        version: 5.9.3
-      vitest:
-        specifier: ^3.0.8
-        version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
-
-  packages/knowledge-graph:
-    dependencies:
-      '@neuronai/brain':
-        specifier: workspace:*
-        version: link:../brain
-      '@neuronai/project-analyzer':
-        specifier: workspace:*
-        version: link:../project-analyzer
-      '@neuronai/types':
-        specifier: workspace:*
-        version: link:../types
-    devDependencies:
-      typescript:
-        specifier: ^5.8.2
-        version: 5.9.3
-      vitest:
-        specifier: ^3.0.8
-        version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
-
   packages/memory-engine:
     dependencies:
       '@neuronai/types':
         specifier: workspace:*
         version: link:../types
-    devDependencies:
-      typescript:
-        specifier: ^5.8.2
-        version: 5.9.3
-      vitest:
-        specifier: ^3.0.8
-        version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
-
-  packages/observability:
-    dependencies:
-      '@neuronai/security':
-        specifier: workspace:*
-        version: link:../security
-      pino:
-        specifier: ^9.6.0
-        version: 9.14.0
     devDependencies:
       typescript:
         specifier: ^5.8.2
@@ -393,40 +231,23 @@ importers:
         specifier: ^3.0.8
         version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
 
-  packages/retrieval-engine:
-    dependencies:
-      '@neuronai/types':
-        specifier: workspace:*
-        version: link:../types
-    devDependencies:
-      typescript:
-        specifier: ^5.8.2
-        version: 5.9.3
-      vitest:
-        specifier: ^3.0.8
-        version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
-
-  packages/security:
-    dependencies:
-      '@neuronai/types':
-        specifier: workspace:*
-        version: link:../types
-    devDependencies:
-      typescript:
-        specifier: ^5.8.2
-        version: 5.9.3
-      vitest:
-        specifier: ^3.0.8
-        version: 3.2.7(@types/node@22.20.1)(tsx@4.23.8)
-
   packages/storage:
     dependencies:
       '@neuronai/brain':
         specifier: workspace:*
         version: link:../brain
+      '@neuronai/config':
+        specifier: workspace:*
+        version: link:../config
       '@neuronai/memory-engine':
         specifier: workspace:*
         version: link:../memory-engine
+      '@neuronai/project-analyzer':
+        specifier: workspace:*
+        version: link:../project-analyzer
+      '@neuronai/project-scanner':
+        specifier: workspace:*
+        version: link:../project-scanner
       '@neuronai/types':
         specifier: workspace:*
         version: link:../types
@@ -730,9 +551,6 @@ packages:
     engines: {node: ^22.20 || ^24.12 || >=25}
     cpu: [x64]
     os: [linux]
-
-  '@pinojs/redact@0.4.0':
-    resolution: {integrity: sha512-k2ENnmBugE/rzQfEcdWHcCY+/FM3VLzH9cYEsbdsoqrvzAKRhUZeRNhAZvB8OitQJ1TBed3yqWtdjzS6wJKBwg==}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -1058,10 +876,6 @@ packages:
 
   ast-v8-to-istanbul@0.3.12:
     resolution: {integrity: sha512-BRRC8VRZY2R4Z4lFIL35MwNXmwVqBityvOIwETtsCSwvjl0IdgFsy9NhdaA6j74nUdtJJlIypeRhpDam19Wq3g==}
-
-  atomic-sleep@1.0.0:
-    resolution: {integrity: sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==}
-    engines: {node: '>=8.0.0'}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -1598,10 +1412,6 @@ packages:
     resolution: {integrity: sha512-W67iLl4J2EXEGTbfeHCffrjDfitvLANg0UlX3wFUUSTx92KXRFegMHUVgSqE+wvhAbi4WqjGg9czysTV2Epbew==}
     engines: {node: '>= 0.4'}
 
-  on-exit-leak-free@2.1.2:
-    resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
-    engines: {node: '>=14.0.0'}
-
   on-finished@2.4.1:
     resolution: {integrity: sha512-oVlzkg3ENAhCk2zdv7IJwd/QUD4z2RxRwpkcGY8psCVcCYZNq4wYnVWALHM+brtuJjePWiYF/ClmuDr8Ch5+kg==}
     engines: {node: '>= 0.8'}
@@ -1661,16 +1471,6 @@ packages:
     resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
     engines: {node: '>=12'}
 
-  pino-abstract-transport@2.0.0:
-    resolution: {integrity: sha512-F63x5tizV6WCh4R6RHyi2Ml+M70DNRXt/+HANowMflpgGFMAym/VKm6G7ZOQRjqN7XbGxK1Lg9t6ZrtzOaivMw==}
-
-  pino-std-serializers@7.1.0:
-    resolution: {integrity: sha512-BndPH67/JxGExRgiX1dX0w1FvZck5Wa4aal9198SrRhZjH3GxKQUKIBnYJTdj2HDN3UQAS06HlfcSbQj2OHmaw==}
-
-  pino@9.14.0:
-    resolution: {integrity: sha512-8OEwKp5juEvb/MjpIc4hjqfgCNysrS94RIOMXYvpYCdm/jglrKEiAYmiumbmGhCvs+IcInsphYDFwqrjr7398w==}
-    hasBin: true
-
   pkce-challenge@5.0.1:
     resolution: {integrity: sha512-wQ0b/W4Fr01qtpHlqSqspcj3EhBvimsdh0KlHhH8HRZnMsEa0ea2fTULOXOS9ccQr3om+GcGRk4e+isrZWV8qQ==}
     engines: {node: '>=16.20.0'}
@@ -1688,9 +1488,6 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  process-warning@5.1.0:
-    resolution: {integrity: sha512-jQSaVHsPgtyw60e1rQ/A+/ArPEj/S8pS/vFnyGa/gYFXrKk/6RuDkoqVDQ5NI5MmS01698ltlAk0NoDBNLujRw==}
-
   proxy-addr@2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
     engines: {node: '>= 0.10'}
@@ -1703,9 +1500,6 @@ packages:
     resolution: {integrity: sha512-O9gl3zCl5h5blw1KGUzQKhA5oUXSl8rwUIM5o0S3nCXMliSvy5Dzx7/DJcI+SwgICv+IneSZwhBh1oSyEHA71A==}
     engines: {node: '>=0.6'}
 
-  quick-format-unescaped@4.0.4:
-    resolution: {integrity: sha512-tYC1Q1hgyRuHgloV/YXs2w15unPVh8qfu/qCTfhTYamaw7fyhumKa2yGpdSo87vY32rIclj+4fWYQXUMs9EHvg==}
-
   range-parser@1.3.0:
     resolution: {integrity: sha512-hek2mFQpPuI4E1BBKrSto+BU3e3x4xuarsbiwr3+lf7p44juvFMV0XFWQAP3xUyqXA4RrXLIoaSUGbSt056ZMw==}
     engines: {node: '>= 0.6'}
@@ -1713,10 +1507,6 @@ packages:
   raw-body@3.0.2:
     resolution: {integrity: sha512-K5zQjDllxWkf7Z5xJdV0/B0WTNqx6vxG70zJE4N0kBs4LovmEYWJzQGxC9bS9RAKu3bgM40lrd5zoLJ12MQ5BA==}
     engines: {node: '>= 0.10'}
-
-  real-require@0.2.0:
-    resolution: {integrity: sha512-57frrGM/OCTLqLOAh0mhVA9VBMHd+9U7Zb2THMGdBUoZVOtGbJzjxsYGDJ3A9AYYCP4hn6y1TVbaOfzWtm5GFg==}
-    engines: {node: '>= 12.13.0'}
 
   require-from-string@2.0.2:
     resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
@@ -1734,10 +1524,6 @@ packages:
   router@2.2.0:
     resolution: {integrity: sha512-nLTrUKm2UyiL7rlhapu/Zl45FwNgkZGaCpZbIHajDYgwlJCOzLSk+cIPAnsEqV955GjILJnKbdQC1nVPz+gAYQ==}
     engines: {node: '>= 18'}
-
-  safe-stable-stringify@2.5.0:
-    resolution: {integrity: sha512-b3rppTKm9T+PsVCBEOUR46GWI7fdOs00VKZ1+9c1EWDaDMvjQc6tUwuFyIprgGgTcWoVHSKrU8H31ZHA2e0RHA==}
-    engines: {node: '>=10'}
 
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
@@ -1789,16 +1575,9 @@ packages:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
 
-  sonic-boom@4.2.1:
-    resolution: {integrity: sha512-w6AxtubXa2wTXAUsZMMWERrsIRAdrK0Sc+FUytWvYAhBJLyuI4llrMIC1DtlNSdI99EI86KZum2MMq3EAZlF9Q==}
-
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
-
-  split2@4.2.0:
-    resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
-    engines: {node: '>= 10.x'}
 
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
@@ -1840,9 +1619,6 @@ packages:
   test-exclude@7.0.2:
     resolution: {integrity: sha512-u9E6A+ZDYdp7a4WnarkXPZOx8Ilz46+kby6p1yZ8zsGTz9gYa6FIS7lj2oezzNKmtdyyJNNmmXDppga5GB7kSw==}
     engines: {node: '>=18'}
-
-  thread-stream@3.2.0:
-    resolution: {integrity: sha512-zLBvqpwr4Esa0kRjcrzGU6zL25lePWaCLMx0RQFrmteozIfeNdaMLpG5U7PeHzvlFkAWaRKA9/KVW4F60iB+qw==}
 
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
@@ -2245,8 +2021,6 @@ snapshots:
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
 
-  '@pinojs/redact@0.4.0': {}
-
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
@@ -2558,8 +2332,6 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       estree-walker: 3.0.3
       js-tokens: 10.0.0
-
-  atomic-sleep@1.0.0: {}
 
   balanced-match@1.0.2: {}
 
@@ -3109,8 +2881,6 @@ snapshots:
 
   object-inspect@1.13.4: {}
 
-  on-exit-leak-free@2.1.2: {}
-
   on-finished@2.4.1:
     dependencies:
       ee-first: 1.1.1
@@ -3163,26 +2933,6 @@ snapshots:
 
   picomatch@4.0.5: {}
 
-  pino-abstract-transport@2.0.0:
-    dependencies:
-      split2: 4.2.0
-
-  pino-std-serializers@7.1.0: {}
-
-  pino@9.14.0:
-    dependencies:
-      '@pinojs/redact': 0.4.0
-      atomic-sleep: 1.0.0
-      on-exit-leak-free: 2.1.2
-      pino-abstract-transport: 2.0.0
-      pino-std-serializers: 7.1.0
-      process-warning: 5.1.0
-      quick-format-unescaped: 4.0.4
-      real-require: 0.2.0
-      safe-stable-stringify: 2.5.0
-      sonic-boom: 4.2.1
-      thread-stream: 3.2.0
-
   pkce-challenge@5.0.1: {}
 
   postcss@8.5.25:
@@ -3194,8 +2944,6 @@ snapshots:
   prelude-ls@1.2.1: {}
 
   prettier@3.9.6: {}
-
-  process-warning@5.1.0: {}
 
   proxy-addr@2.0.7:
     dependencies:
@@ -3209,8 +2957,6 @@ snapshots:
       es-define-property: 1.0.1
       side-channel: 1.1.1
 
-  quick-format-unescaped@4.0.4: {}
-
   range-parser@1.3.0: {}
 
   raw-body@3.0.2:
@@ -3219,8 +2965,6 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.3
       unpipe: 1.0.0
-
-  real-require@0.2.0: {}
 
   require-from-string@2.0.2: {}
 
@@ -3267,8 +3011,6 @@ snapshots:
       path-to-regexp: 8.4.2
     transitivePeerDependencies:
       - supports-color
-
-  safe-stable-stringify@2.5.0: {}
 
   safer-buffer@2.1.2: {}
 
@@ -3339,13 +3081,7 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
-  sonic-boom@4.2.1:
-    dependencies:
-      atomic-sleep: 1.0.0
-
   source-map-js@1.2.1: {}
-
-  split2@4.2.0: {}
 
   stackback@0.0.2: {}
 
@@ -3388,10 +3124,6 @@ snapshots:
       '@istanbuljs/schema': 0.1.6
       glob: 10.5.0
       minimatch: 10.2.6
-
-  thread-stream@3.2.0:
-    dependencies:
-      real-require: 0.2.0
 
   tinybench@2.9.0: {}
 

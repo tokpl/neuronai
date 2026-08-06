@@ -1,20 +1,3 @@
-export type {
-  NeuronEvent,
-  NeuronEventType,
-  NeuronEventSource,
-  EventBus,
-  EventHandler,
-} from './events/types.js';
-export { createNeuronEvent } from './events/types.js';
-export { InMemoryEventBus, createEventBus } from './events/event-bus.js';
-export { DomainEvents } from './events/domain-events.js';
-export type {
-  AgentStartedTaskPayload,
-  CodeChangedPayload,
-  GitCommittedPayload,
-  TaskCompletedPayload,
-} from './events/domain-events.js';
-
 export {
   CodeChangeAnalyzer,
   createCodeChangeAnalyzer,
@@ -22,12 +5,6 @@ export {
   type ChangeKind,
   type FileChange,
 } from './analysis/code-change-analyzer.js';
-export {
-  GitMemoryAnalyzer,
-  createGitMemoryAnalyzer,
-  type GitCommitInfo,
-  type GitAnalysisResult,
-} from './analysis/git-memory-analyzer.js';
 
 export {
   WorkflowRulesEngine,
@@ -69,23 +46,8 @@ export {
 } from './privacy/privacy-mode.js';
 
 export {
-  createHookRegistry,
-  runHooks,
-  type HookRegistry,
-  type BeforeTaskHook,
-  type AfterTaskHook,
-  type BeforeCommitHook,
-  type AfterCommitHook,
-  type BeforeTaskHookInput,
-  type AfterTaskHookInput,
-  type BeforeCommitHookInput,
-  type AfterCommitHookInput,
-} from './hooks/hook-interfaces.js';
-
-export {
   AgentWorkflowOrchestrator,
   createAgentWorkflow,
   type AgentWorkflowDeps,
-  type AgentTaskSession,
   type AfterCodingResult,
 } from './lifecycle/agent-workflow-orchestrator.js';

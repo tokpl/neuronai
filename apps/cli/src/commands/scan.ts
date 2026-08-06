@@ -1,10 +1,7 @@
-import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { createProjectBrainBootstrap } from '@neuronai/project-scanner';
-
-import { isNeuronInitialized, loadLocalConfig, neuronPaths } from '../services/neuron-fs.js';
-import { analyzeAndSeedMemories, openProjectSession } from '../services/project-session.js';
+import { isNeuronInitialized } from '../services/neuron-fs.js';
+import { openProjectSession } from '../services/project-session.js';
 import { syncProjectBrainFiles } from '../services/cursor-setup.js';
 import { ui } from '../ui/output.js';
 
@@ -31,51 +28,41 @@ export async function runScan(
   ui.info(`Mode: ${mode}`);
   ui.step(1, 3, 'Analyzing project…');
 
-  const config = await loadLocalConfig(cwd);
-  const bootstrap = createProjectBrainBootstrap();
-  const report = await bootstrap.scan({
-    root: cwd,
-    mode,
-    projectName: config.project.name,
-  });
+  const session = await openProjectSession(cwd);
 
-  ui.step(2, 3, 'Seeding memories from scan…');
-  try {
-    const session = await openProjectSession(cwd);
-    // Prefer scan-generated candidates via analyze path as well
-    await analyzeAndSeedMemories(session, { threshold: config.memory.threshold });
-  } catch {
-    ui.warn('Memory store seed skipped (session unavailable)');
-  }
+  ui.step(2, 3, 'Learning from the codebase…');
+  const { report, memoriesStored, duplicatesSkipped, staleMemoriesRemoved } =
+    await session.scan(mode);
 
   await syncProjectBrainFiles(cwd);
 
   ui.step(3, 3, 'Done');
   ui.blank();
-  ui.success(`Project brain ready - ${report.memoriesCreated} memories, ${report.relationships} relationships`);
-  ui.info(`  Modules: ${report.modules} · Services: ${report.services} · Deps: ${report.dependencies}`);
+
+  if (report.delta) {
+    const d = report.delta;
+    console.log(
+      `✓ ${d.unchanged} unchanged · ${d.changed.length} changed · ${d.added.length} added · ${d.deleted.length} deleted · ${d.reanalyzed ?? 0} reanalyzed`,
+    );
+    if (report.unchanged) {
+      ui.success('Brain already up to date — nothing to re-analyze.');
+      return;
+    }
+  }
+
+  ui.success(
+    `Project brain ready — ${memoriesStored} new memories, ${report.relationships} relationships`,
+  );
+  ui.info(
+    `  Modules: ${report.modules} · Services: ${report.services} · Files: ${report.filesScanned}`,
+  );
+  if (staleMemoriesRemoved > 0) {
+    ui.info(`  Removed ${staleMemoriesRemoved} stale scan fact(s)`);
+  }
+  if (duplicatesSkipped > 0) {
+    ui.info(`  Skipped ${duplicatesSkipped} memories already known`);
+  }
   ui.info(`  Report: ${join(cwd, '.neuron', 'project-report.md')}`);
   ui.suggest('Review suggested constitution: .neuron/constitution.md');
   ui.suggest('Cursor rules: .cursor/rules/project-patterns.mdc');
-}
-
-export async function runProjectReport(cwd = process.cwd()): Promise<void> {
-  if (!(await isNeuronInitialized(cwd))) {
-    ui.error('Neuron is not initialized.');
-    ui.suggest('Run: neuron init');
-    process.exitCode = 1;
-    return;
-  }
-
-  ui.title('Neuron project report');
-  const paths = neuronPaths(cwd);
-  try {
-    const md = await readFile(join(paths.neuronDir, 'project-report.md'), 'utf8');
-    console.log(md);
-  } catch {
-    ui.warn('No project-report.md yet - running a fast scan…');
-    await runScan(cwd, {});
-    const md = await readFile(join(paths.neuronDir, 'project-report.md'), 'utf8');
-    console.log(md);
-  }
 }

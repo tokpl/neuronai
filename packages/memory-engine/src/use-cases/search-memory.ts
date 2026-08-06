@@ -1,9 +1,6 @@
-import { NotImplementedError, type MemoryRecord } from '@neuronai/types';
+import type { MemoryRecord } from '@neuronai/types';
 
-/**
- * Optional semantic/hybrid search port.
- * Implemented by `@neuronai/ai-memory` HybridMemorySearchEngine.
- */
+/** Ranking port. The runtime wires this to the lexical engine in `@neuronai/brain`. */
 export interface MemorySearcher {
   search(input: {
     projectId: string;
@@ -26,11 +23,8 @@ export class SearchMemory {
   constructor(private readonly searcher?: MemorySearcher) {}
 
   async execute(input: SearchMemoryInput): Promise<SearchMemoryResult> {
-    if (!this.searcher) {
-      throw new NotImplementedError(
-        'SearchMemory (wire HybridMemorySearchEngine from @neuronai/ai-memory)',
-      );
-    }
+    // No searcher wired means nothing is indexed, which is an empty result — not an error.
+    if (!this.searcher) return { results: [] };
     return this.searcher.search(input);
   }
 }

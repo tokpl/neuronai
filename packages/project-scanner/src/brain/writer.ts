@@ -62,20 +62,8 @@ export class ProjectBrainWriter {
     await writeFile(constitutionPath, input.constitutionMarkdown, 'utf8');
     await writeFile(reportPath, input.reportMarkdown, 'utf8');
 
-    await writeFile(
-      join(neuronDir, 'scan-memories.json'),
-      JSON.stringify(
-        {
-          version: 1,
-          generatedAt: new Date().toISOString(),
-          memories: input.memories,
-          suggestedRules: input.suggestedRules,
-        },
-        null,
-        2,
-      ),
-      'utf8',
-    );
+    // Generated memories and rules go straight into the brain via the runtime;
+    // they used to be mirrored into scan-memories.json, which nothing ever read.
 
     return { architecturePath, constitutionPath, reportPath };
   }
@@ -118,7 +106,7 @@ export class ProjectBrainWriter {
       '',
       ...rules.map((r) => `- ${r.rule}`),
       '',
-      'Ask Neuron (`neuron_prepare_task`, `neuron_project_map`) before inventing new patterns.',
+      'Load project context with `neuron_context` before inventing new patterns.',
       '',
     ].join('\n');
   }
@@ -154,7 +142,7 @@ export function renderProjectReport(report: ProjectScanReport): string {
     '',
     '- Review `.neuron/constitution.md` (suggested only)',
     '- Open project in Cursor - MCP tools are ready',
-    '- Prefer `neuron_prepare_task` over inventing architecture',
+    '- Load context with `neuron_context` before inventing architecture',
     '',
   ].join('\n');
 }

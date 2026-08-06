@@ -1,12 +1,8 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
 
 import { openProjectBrain, resolveBrainPaths, type ProjectBrain } from '@neuronai/brain';
-import type {
-  MemoryRecord,
-  MemoryRelationRecord,
-  MemoryVersionRecord,
-} from '@neuronai/types';
+import type { MemoryRecord, MemoryRelationRecord, MemoryVersionRecord } from '@neuronai/types';
 import {
   createMemoryEngine,
   InMemoryMemoryRelationRepository,
@@ -21,13 +17,6 @@ export interface LocalFileSnapshot {
   memories: MemoryRecord[];
   versions: MemoryVersionRecord[];
   relations: MemoryRelationRecord[];
-  embeddings?: Array<{
-    memoryId: string;
-    projectId: string;
-    vector: number[];
-    model: string;
-    contentHash: string;
-  }>;
 }
 
 export interface LocalFileMemoryStack {
@@ -35,30 +24,27 @@ export interface LocalFileMemoryStack {
   memories: InMemoryMemoryRepository;
   versions: InMemoryMemoryVersionRepository;
   relations: InMemoryMemoryRelationRepository;
-  /** @deprecated use runtimeDir */
-  dataDir: string;
   runtimeDir: string;
   storePath: string;
   snapshot: LocalFileSnapshot;
   brain: ProjectBrain;
   projectRoot: string;
-  persist: () => Promise<void>;
+  persist: () => Promise<{ duplicatesRemoved: number }>;
   setSearcher: (searcher: MemorySearcher) => void;
 }
 
 function emptySnapshot(): LocalFileSnapshot {
-  return { version: 1, memories: [], versions: [], relations: [], embeddings: [] };
+  return { version: 1, memories: [], versions: [], relations: [] };
 }
 
 async function loadSnapshot(storePath: string): Promise<LocalFileSnapshot> {
   try {
-    const raw = JSON.parse(await readFile(storePath, 'utf8')) as LocalFileSnapshot;
+    const raw = JSON.parse(await readFile(storePath, 'utf8')) as Partial<LocalFileSnapshot>;
     return {
       version: 1,
       memories: raw.memories ?? [],
       versions: raw.versions ?? [],
       relations: raw.relations ?? [],
-      embeddings: raw.embeddings ?? [],
     };
   } catch (error) {
     const isMissing =
@@ -72,21 +58,13 @@ async function loadSnapshot(storePath: string): Promise<LocalFileSnapshot> {
 }
 
 /**
- * Local filesystem memory stack under `.neuron/runtime/`.
- * Curated knowledge syncs exclusively via ProjectBrain.learn().
+ * Regenerable runtime store under `.neuron/runtime/`.
+ * Curated knowledge is projected into ProjectBrain on every persist.
  */
 export async function createLocalFileMemoryStack(
-  projectRootOrRuntimeDir: string,
+  projectRoot: string,
   searcher?: MemorySearcher,
 ): Promise<LocalFileMemoryStack> {
-  const looksLikeDataDir =
-    projectRootOrRuntimeDir.replace(/\\/g, '/').endsWith('/.neuron/data') ||
-    projectRootOrRuntimeDir.replace(/\\/g, '/').endsWith('/.neuron/runtime');
-
-  const projectRoot = looksLikeDataDir
-    ? join(projectRootOrRuntimeDir, '..', '..')
-    : projectRootOrRuntimeDir;
-
   const brain = await openProjectBrain(projectRoot);
   const paths = resolveBrainPaths(projectRoot);
   const storePath = paths.store;
@@ -107,28 +85,27 @@ export async function createLocalFileMemoryStack(
     versions,
     relations,
     searcher: {
-      search: (input) => {
-        if (!activeSearcher) {
-          return Promise.resolve({ results: [] });
-        }
-        return activeSearcher.search(input);
-      },
+      search: (input) =>
+        activeSearcher ? activeSearcher.search(input) : Promise.resolve({ results: [] }),
     },
   });
 
-  const persist = async (): Promise<void> => {
+  const persist = async (): Promise<{ duplicatesRemoved: number }> => {
     const next: LocalFileSnapshot = {
       version: 1,
       memories: memories.exportRecords(),
       versions: versions.exportRecords(),
       relations: relations.exportRecords(),
-      embeddings: snapshot.embeddings ?? [],
     };
     snapshot.memories = next.memories;
     snapshot.versions = next.versions;
     snapshot.relations = next.relations;
-    await writeFile(storePath, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
-    await brain.learn(next.memories);
+
+    const tmp = `${storePath}.tmp`;
+    await writeFile(tmp, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
+    await rename(tmp, storePath);
+
+    return brain.learn(next.memories);
   };
 
   return {
@@ -136,7 +113,6 @@ export async function createLocalFileMemoryStack(
     memories,
     versions,
     relations,
-    dataDir: paths.runtimeDir,
     runtimeDir: paths.runtimeDir,
     storePath,
     snapshot,

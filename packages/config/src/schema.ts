@@ -1,10 +1,12 @@
 import { z } from 'zod';
 
-const providerSchema = z.object({
-  provider: z.string().min(1),
-  model: z.string().min(1),
-});
-
+/**
+ * `neuron.config.json` — optional, project-root, human-editable.
+ *
+ * Only what the product actually reads. No provider registry, no server mode,
+ * no security toggles: Neuron runs locally over stdio and has nothing to configure
+ * in those directions.
+ */
 export const neuronConfigSchema = z.object({
   project: z.object({
     name: z.string().min(1),
@@ -12,22 +14,10 @@ export const neuronConfigSchema = z.object({
     stack: z.array(z.string()).default([]),
   }),
   memory: z.object({
+    /** Whether agents may propose memories without being asked. */
     autoSave: z.boolean().default(true),
+    /** Minimum importance for scanned knowledge to be kept. */
     importanceThreshold: z.number().min(0).max(1).default(0.45),
-    /** Max tokens of ranked memory injected into agent context (prepare_task / get_context). */
-    contextMaxTokens: z.number().int().positive().default(3000),
-  }),
-  providers: z.object({
-    llm: providerSchema.optional(),
-    embeddings: providerSchema.optional(),
-  }),
-  server: z.object({
-    mode: z.enum(['local', 'cloud']).default('local'),
-    bind: z.enum(['stdio', 'http']).default('stdio'),
-  }),
-  security: z.object({
-    redaction: z.boolean().default(true),
-    allowHardPurge: z.boolean().default(false),
   }),
 });
 
@@ -42,15 +32,5 @@ export const defaultNeuronConfig: NeuronConfig = {
   memory: {
     autoSave: true,
     importanceThreshold: 0.45,
-    contextMaxTokens: 3000,
-  },
-  providers: {},
-  server: {
-    mode: 'local',
-    bind: 'stdio',
-  },
-  security: {
-    redaction: true,
-    allowHardPurge: false,
   },
 };

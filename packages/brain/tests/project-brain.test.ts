@@ -86,14 +86,14 @@ describe('ProjectBrain', () => {
     await expect(readFile(join(neuron, 'brain.json'), 'utf8')).rejects.toThrow();
   });
 
-  it('syncFromMemories updates knowledge plane', async () => {
+  it('learn() folds engine memories into the knowledge plane', async () => {
     const root = await mkdtemp(join(tmpdir(), 'neuron-brain-sync-'));
     temps.push(root);
     const brain = await openProjectBrain(root, {
       seed: { projectId: 'p1', name: 'sync' },
     });
 
-    await brain.syncFromMemories([
+    await brain.learn([
       {
         id: 'm1',
         projectId: 'p1',

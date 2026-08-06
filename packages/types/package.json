@@ -1,6 +1,6 @@
 {
   "name": "@neuronai/types",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "NeuronAI / types - package for Neuron - AI Memory",
   "license": "AGPL-3.0",
   "type": "module",
@@ -12,10 +12,6 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist",
-    "LICENSE"
-  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -25,9 +21,6 @@
   "devDependencies": {
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -39,5 +32,6 @@
   },
   "engines": {
     "node": ">=22"
-  }
+  },
+  "private": true
 }

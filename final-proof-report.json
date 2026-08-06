@@ -1,0 +1,2422 @@
+{
+  "generatedAt": "2026-08-06T15:25:22.293Z",
+  "neuronBin": "C:\\projekty\\neuron-ai-memory\\apps\\cli\\dist\\index.js",
+  "repos": [
+    {
+      "name": "A-ts-app",
+      "root": "C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-proof-A-ts-app-nyTLE8",
+      "tools": [
+        "neuron_after_task",
+        "neuron_context",
+        "neuron_remember",
+        "neuron_resolve_suggestion",
+        "neuron_scan",
+        "neuron_search",
+        "neuron_update"
+      ],
+      "rows": [
+        {
+          "repo": "A-ts-app",
+          "category": "location",
+          "query": "Where is authentication implemented?",
+          "intent": "LOCATION",
+          "topResult": "src/auth/service.ts",
+          "relevantFiles": [
+            "src/auth/jwt.ts",
+            "src/auth/service.ts",
+            "src/auth/service.ts"
+          ],
+          "relevantModules": [
+            "src/auth/"
+          ],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "src/auth/service.ts",
+          "contextTokens": 187,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2235,
+          "retrievalMs": 10,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "location",
+          "query": "Where are API routes defined?",
+          "intent": "LOCATION",
+          "topResult": "src/api/routes/index.ts",
+          "relevantFiles": [
+            "src/api/routes/index.ts",
+            "src/api/routes/users.ts",
+            "src/billing/routes.ts",
+            "src/billing/routes.ts",
+            "src/api/routes/users.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers"
+          ],
+          "recommendation": "src/api/routes/index.ts",
+          "contextTokens": 204,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2218,
+          "retrievalMs": 13,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "location",
+          "query": "Where is billing implemented?",
+          "intent": "LOCATION",
+          "topResult": "src/billing/routes.ts",
+          "relevantFiles": [
+            "src/billing/routes.ts",
+            "src/billing/routes.ts",
+            "src/billing/service.ts",
+            "src/billing/service.ts",
+            "src/services/payment-service.ts"
+          ],
+          "relevantModules": [
+            "src/billing/"
+          ],
+          "rules": [],
+          "recommendation": "src/billing/routes.ts",
+          "contextTokens": 179,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2243,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "location",
+          "query": "Where is database access?",
+          "intent": "LOCATION",
+          "topResult": "src/repositories/user-repository.ts",
+          "relevantFiles": [
+            "src/db/schema.ts",
+            "src/repositories/user-repository.ts",
+            "src/db/client.ts",
+            "src/db/schema.ts"
+          ],
+          "relevantModules": [
+            "src/db/"
+          ],
+          "rules": [
+            "Database access must stay inside repositories"
+          ],
+          "recommendation": "src/repositories/user-repository.ts",
+          "contextTokens": 167,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2255,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "location",
+          "query": "Where are background jobs?",
+          "intent": "LOCATION",
+          "topResult": "src/workers/email-job.ts",
+          "relevantFiles": [
+            "src/workers/email-job.ts",
+            "src/workers/billing-job.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "src/workers/email-job.ts",
+          "contextTokens": 97,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2325,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "location",
+          "query": "Where are tests for authentication?",
+          "intent": "LOCATION",
+          "topResult": "tests/auth/AuthService.test.ts",
+          "relevantFiles": [
+            "tests/auth/AuthService.test.ts",
+            "src/auth/jwt.ts",
+            "src/auth/service.ts"
+          ],
+          "relevantModules": [
+            "src/auth/"
+          ],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "tests/auth/AuthService.test.ts",
+          "contextTokens": 187,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2235,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "location",
+          "query": "Where is the Stripe integration?",
+          "intent": "LOCATION",
+          "topResult": "src/services/stripe.ts",
+          "relevantFiles": [
+            "src/services/stripe.ts",
+            "src/services/stripe.ts",
+            "src/services/stripe.ts",
+            "src/services/payment-service.ts",
+            "src/services/payment-service.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "src/services/stripe.ts",
+          "contextTokens": 188,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2234,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "modification",
+          "query": "Where should I add a new payment endpoint?",
+          "intent": "MODIFICATION",
+          "topResult": "src/billing/routes.ts",
+          "relevantFiles": [
+            "src/billing/routes.ts",
+            "src/api/routes/index.ts",
+            "src/api/routes/users.ts",
+            "src/billing/routes.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers",
+            "Cross-cutting concerns belong in middleware, not route handlers"
+          ],
+          "recommendation": "src/billing/routes.ts",
+          "contextTokens": 206,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2216,
+          "retrievalMs": 4,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "modification",
+          "query": "Where should I implement invoice cancellation?",
+          "intent": "MODIFICATION",
+          "topResult": "src/services/payment-service.ts",
+          "relevantFiles": [
+            "src/billing/invoices.ts",
+            "src/billing/invoices.ts",
+            "src/services/payment-service.ts",
+            "src/services/payment-service.ts",
+            "src/services/stripe.ts"
+          ],
+          "relevantModules": [
+            "src/billing/"
+          ],
+          "rules": [],
+          "recommendation": "src/services/payment-service.ts",
+          "contextTokens": 193,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2229,
+          "retrievalMs": 3,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "modification",
+          "query": "Where should I add authentication middleware?",
+          "intent": "MODIFICATION",
+          "topResult": "src/auth/",
+          "relevantFiles": [],
+          "relevantModules": [
+            "src/auth/"
+          ],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers",
+            "Authentication uses the AuthService abstraction",
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "src/auth/",
+          "contextTokens": 173,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2249,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "modification",
+          "query": "Where should I add a new background job?",
+          "intent": "MODIFICATION",
+          "topResult": "src/workers/email-job.ts",
+          "relevantFiles": [
+            "src/workers/email-job.ts",
+            "src/workers/billing-job.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "src/workers/email-job.ts",
+          "contextTokens": 100,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2322,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "modification",
+          "query": "Where should I modify database access?",
+          "intent": "MODIFICATION",
+          "topResult": "src/repositories/user-repository.ts",
+          "relevantFiles": [
+            "src/db/schema.ts",
+            "src/repositories/user-repository.ts",
+            "src/db/schema.ts",
+            "src/db/client.ts"
+          ],
+          "relevantModules": [
+            "src/db/"
+          ],
+          "rules": [
+            "Database access must stay inside repositories"
+          ],
+          "recommendation": "src/repositories/user-repository.ts",
+          "contextTokens": 170,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2252,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "rules",
+          "query": "What rule should I follow when modifying payments?",
+          "intent": "CONVENTION",
+          "topResult": "src/billing/",
+          "relevantFiles": [
+            "src/services/payment-service.ts",
+            "src/services/payment-service.ts",
+            "src/services/stripe.ts"
+          ],
+          "relevantModules": [
+            "src/billing/"
+          ],
+          "rules": [
+            "Never call Stripe directly from route handlers",
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": null,
+          "contextTokens": 114,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2308,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "rules",
+          "query": "What conventions should I follow?",
+          "intent": "CONVENTION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers",
+            "Use dependency injection / service modules for business logic",
+            "PostgreSQL is the system of record - avoid dual-writes to other stores"
+          ],
+          "recommendation": null,
+          "contextTokens": 151,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2271,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "rules",
+          "query": "How does this project handle authentication?",
+          "intent": "IMPLEMENTATION",
+          "topResult": "src/auth/",
+          "relevantFiles": [
+            "src/auth/jwt.ts"
+          ],
+          "relevantModules": [
+            "src/auth/",
+            "src/services/"
+          ],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "src/auth/",
+          "contextTokens": 201,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2221,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "rules",
+          "query": "What architecture decisions affect billing?",
+          "intent": "ARCHITECTURE",
+          "topResult": "src/billing/",
+          "relevantFiles": [
+            "src/services/payment-service.ts",
+            "src/services/payment-service.ts",
+            "src/billing/routes.ts",
+            "src/billing/routes.ts",
+            "src/services/stripe.ts"
+          ],
+          "relevantModules": [
+            "src/billing/"
+          ],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 113,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2309,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "symbol",
+          "query": "Where is BillingService?",
+          "intent": "LOCATION",
+          "topResult": "src/billing/service.ts",
+          "relevantFiles": [
+            "src/billing/service.ts",
+            "src/billing/service.ts",
+            "src/services/payment-service.ts",
+            "src/services/payment-service.ts",
+            "src/services/stripe.ts",
+            "src/services/stripe.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "src/billing/service.ts",
+          "contextTokens": 192,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2230,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "symbol",
+          "query": "Where is PaymentService?",
+          "intent": "LOCATION",
+          "topResult": "src/services/payment-service.ts",
+          "relevantFiles": [
+            "src/services/payment-service.ts",
+            "src/services/payment-service.ts",
+            "src/services/stripe.ts",
+            "src/billing/service.ts",
+            "src/billing/service.ts",
+            "src/services/stripe.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "src/services/payment-service.ts",
+          "contextTokens": 192,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2230,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "symbol",
+          "query": "Where is createInvoice?",
+          "intent": "LOCATION",
+          "topResult": "src/billing/invoices.ts",
+          "relevantFiles": [
+            "src/billing/invoices.ts",
+            "src/billing/invoices.ts",
+            "src/services/payment-service.ts",
+            "src/services/payment-service.ts",
+            "src/services/stripe.ts"
+          ],
+          "relevantModules": [
+            "src/billing/"
+          ],
+          "rules": [],
+          "recommendation": "src/billing/invoices.ts",
+          "contextTokens": 188,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2234,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "symbol",
+          "query": "Where is auth middleware?",
+          "intent": "LOCATION",
+          "topResult": "src/billing/routes.ts",
+          "relevantFiles": [
+            "src/auth/middleware.ts",
+            "src/auth/middleware.ts",
+            "src/billing/routes.ts",
+            "src/api/routes/index.ts",
+            "src/api/routes/users.ts"
+          ],
+          "relevantModules": [
+            "src/auth/"
+          ],
+          "rules": [],
+          "recommendation": "src/billing/routes.ts",
+          "contextTokens": 167,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2255,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "symbol",
+          "query": "Where is the Stripe client?",
+          "intent": "LOCATION",
+          "topResult": "src/services/stripe.ts",
+          "relevantFiles": [
+            "src/services/stripe.ts",
+            "src/services/stripe.ts",
+            "src/db/client.ts",
+            "src/services/stripe.ts",
+            "src/services/payment-service.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "src/services/stripe.ts",
+          "contextTokens": 179,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2243,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "negative",
+          "query": "How do I deploy Kubernetes?",
+          "intent": "IMPLEMENTATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 21,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2401,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "negative",
+          "query": "Where is the React component library?",
+          "intent": "LOCATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 41,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2381,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "negative",
+          "query": "How does Terraform work?",
+          "intent": "IMPLEMENTATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 20,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2402,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "A-ts-app",
+          "category": "negative",
+          "query": "Where is the AWS Lambda?",
+          "intent": "LOCATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 20,
+          "corpusTokens": 2422,
+          "estimatedTokensAvoided": 2402,
+          "retrievalMs": 1,
+          "correct": "correct"
+        }
+      ]
+    },
+    {
+      "name": "B-monorepo",
+      "root": "C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-proof-B-monorepo-nelRiU",
+      "tools": [
+        "neuron_after_task",
+        "neuron_context",
+        "neuron_remember",
+        "neuron_resolve_suggestion",
+        "neuron_scan",
+        "neuron_search",
+        "neuron_update"
+      ],
+      "rows": [
+        {
+          "repo": "B-monorepo",
+          "category": "location",
+          "query": "Where is authentication implemented?",
+          "intent": "LOCATION",
+          "topResult": "packages/auth/src/service.ts",
+          "relevantFiles": [
+            "packages/auth/src/service.ts",
+            "packages/auth/src/service.ts",
+            "packages/auth/src/middleware.ts",
+            "packages/auth/src/middleware.ts"
+          ],
+          "relevantModules": [
+            "packages/auth/"
+          ],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "packages/auth/src/service.ts",
+          "contextTokens": 186,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1596,
+          "retrievalMs": 8,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "location",
+          "query": "Where are API routes defined?",
+          "intent": "LOCATION",
+          "topResult": "apps/api/src/routes/billing.ts",
+          "relevantFiles": [
+            "apps/api/src/routes/billing.ts",
+            "apps/api/src/routes/billing.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers",
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "apps/api/src/routes/billing.ts",
+          "contextTokens": 245,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1537,
+          "retrievalMs": 3,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "location",
+          "query": "Where is billing implemented?",
+          "intent": "LOCATION",
+          "topResult": "packages/billing/src/PaymentService.ts",
+          "relevantFiles": [
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/PaymentService.ts",
+            "apps/api/src/routes/billing.ts",
+            "packages/billing/src/invoices.ts",
+            "packages/billing/src/stripe.ts"
+          ],
+          "relevantModules": [
+            "packages/billing/"
+          ],
+          "rules": [],
+          "recommendation": "packages/billing/src/PaymentService.ts",
+          "contextTokens": 206,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1576,
+          "retrievalMs": 11,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "location",
+          "query": "Where is database access?",
+          "intent": "LOCATION",
+          "topResult": "packages/database/src/schema.ts",
+          "relevantFiles": [
+            "packages/database/src/schema.ts",
+            "packages/database/src/schema.ts",
+            "packages/database/src/client.ts"
+          ],
+          "relevantModules": [
+            "packages/database/"
+          ],
+          "rules": [
+            "Database access must stay inside repositories"
+          ],
+          "recommendation": "packages/database/src/schema.ts",
+          "contextTokens": 212,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1570,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "location",
+          "query": "Where are background jobs?",
+          "intent": "LOCATION",
+          "topResult": "apps/api/src/workers/jobs.ts",
+          "relevantFiles": [
+            "apps/api/src/workers/jobs.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "apps/api/src/workers/jobs.ts",
+          "contextTokens": 64,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1718,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "location",
+          "query": "Where are tests for authentication?",
+          "intent": "LOCATION",
+          "topResult": "packages/auth/src/service.ts",
+          "relevantFiles": [
+            "packages/auth/src/service.ts",
+            "packages/auth/src/service.ts",
+            "packages/auth/src/middleware.ts",
+            "packages/auth/src/middleware.ts"
+          ],
+          "relevantModules": [
+            "packages/auth/"
+          ],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "packages/auth/src/service.ts",
+          "contextTokens": 185,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1597,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "location",
+          "query": "Where is the Stripe integration?",
+          "intent": "LOCATION",
+          "topResult": "packages/billing/src/PaymentService.ts",
+          "relevantFiles": [
+            "packages/billing/src/stripe.ts",
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/invoices.ts"
+          ],
+          "relevantModules": [
+            "packages/billing/"
+          ],
+          "rules": [
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "packages/billing/src/PaymentService.ts",
+          "contextTokens": 206,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1576,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "modification",
+          "query": "Where should I add a new payment endpoint?",
+          "intent": "MODIFICATION",
+          "topResult": "apps/api/src/routes/billing.ts",
+          "relevantFiles": [
+            "apps/api/src/routes/billing.ts",
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/PaymentService.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers",
+            "Cross-cutting concerns belong in middleware, not route handlers"
+          ],
+          "recommendation": "apps/api/src/routes/billing.ts",
+          "contextTokens": 251,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1531,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "modification",
+          "query": "Where should I implement invoice cancellation?",
+          "intent": "MODIFICATION",
+          "topResult": "packages/billing/src/PaymentService.ts",
+          "relevantFiles": [
+            "packages/billing/src/invoices.ts",
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/PaymentService.ts"
+          ],
+          "relevantModules": [
+            "packages/billing/"
+          ],
+          "rules": [
+            "Never call Stripe directly from route handlers",
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": "packages/billing/src/PaymentService.ts",
+          "contextTokens": 201,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1581,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "modification",
+          "query": "Where should I add authentication middleware?",
+          "intent": "MODIFICATION",
+          "topResult": "packages/auth/",
+          "relevantFiles": [],
+          "relevantModules": [
+            "packages/auth/"
+          ],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers",
+            "Authentication uses the AuthService abstraction",
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "packages/auth/",
+          "contextTokens": 176,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1606,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "modification",
+          "query": "Where should I add a new background job?",
+          "intent": "MODIFICATION",
+          "topResult": "apps/api/src/workers/jobs.ts",
+          "relevantFiles": [
+            "apps/api/src/workers/jobs.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "apps/api/src/workers/jobs.ts",
+          "contextTokens": 67,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1715,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "modification",
+          "query": "Where should I modify database access?",
+          "intent": "MODIFICATION",
+          "topResult": "packages/database/src/schema.ts",
+          "relevantFiles": [
+            "packages/database/src/schema.ts",
+            "packages/database/src/schema.ts",
+            "packages/database/src/client.ts"
+          ],
+          "relevantModules": [
+            "packages/database/"
+          ],
+          "rules": [
+            "Database access must stay inside repositories"
+          ],
+          "recommendation": "packages/database/src/schema.ts",
+          "contextTokens": 215,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1567,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "rules",
+          "query": "What rule should I follow when modifying payments?",
+          "intent": "CONVENTION",
+          "topResult": "packages/billing/",
+          "relevantFiles": [
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/invoices.ts"
+          ],
+          "relevantModules": [
+            "packages/billing/"
+          ],
+          "rules": [
+            "Never call Stripe directly from route handlers",
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": null,
+          "contextTokens": 120,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1662,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "rules",
+          "query": "What conventions should I follow?",
+          "intent": "CONVENTION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers",
+            "Use dependency injection / service modules for business logic"
+          ],
+          "recommendation": null,
+          "contextTokens": 106,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1676,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "rules",
+          "query": "How does this project handle authentication?",
+          "intent": "IMPLEMENTATION",
+          "topResult": "packages/auth/",
+          "relevantFiles": [],
+          "relevantModules": [
+            "packages/auth/",
+            "apps/web/"
+          ],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "packages/auth/",
+          "contextTokens": 210,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1572,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "rules",
+          "query": "What architecture decisions affect billing?",
+          "intent": "ARCHITECTURE",
+          "topResult": "packages/billing/",
+          "relevantFiles": [
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/PaymentService.ts",
+            "apps/api/src/routes/billing.ts",
+            "packages/billing/src/invoices.ts"
+          ],
+          "relevantModules": [
+            "packages/billing/"
+          ],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 143,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1639,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "symbol",
+          "query": "Where is BillingService?",
+          "intent": "LOCATION",
+          "topResult": "packages/billing/src/service.ts",
+          "relevantFiles": [
+            "packages/billing/src/service.ts",
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/service.ts",
+            "packages/billing/src/invoices.ts"
+          ],
+          "relevantModules": [
+            "packages/billing/"
+          ],
+          "rules": [
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": "packages/billing/src/service.ts",
+          "contextTokens": 186,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1596,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "symbol",
+          "query": "Where is PaymentService?",
+          "intent": "LOCATION",
+          "topResult": "packages/billing/src/PaymentService.ts",
+          "relevantFiles": [
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/PaymentService.ts",
+            "packages/auth/src/service.ts",
+            "packages/auth/src/service.ts"
+          ],
+          "relevantModules": [
+            "packages/billing/"
+          ],
+          "rules": [],
+          "recommendation": "packages/billing/src/PaymentService.ts",
+          "contextTokens": 233,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1549,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "symbol",
+          "query": "Where is createInvoice?",
+          "intent": "LOCATION",
+          "topResult": "packages/billing/src/invoices.ts",
+          "relevantFiles": [
+            "packages/billing/src/invoices.ts",
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/stripe.ts",
+            "apps/api/src/routes/billing.ts"
+          ],
+          "relevantModules": [
+            "packages/billing/"
+          ],
+          "rules": [],
+          "recommendation": "packages/billing/src/invoices.ts",
+          "contextTokens": 204,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1578,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "symbol",
+          "query": "Where is auth middleware?",
+          "intent": "LOCATION",
+          "topResult": "packages/auth/src/middleware.ts",
+          "relevantFiles": [
+            "packages/auth/src/middleware.ts",
+            "packages/auth/src/middleware.ts",
+            "apps/api/src/routes/billing.ts",
+            "packages/auth/src/service.ts",
+            "packages/auth/src/service.ts"
+          ],
+          "relevantModules": [
+            "packages/auth/"
+          ],
+          "rules": [],
+          "recommendation": "packages/auth/src/middleware.ts",
+          "contextTokens": 190,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1592,
+          "retrievalMs": 3,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "symbol",
+          "query": "Where is the Stripe client?",
+          "intent": "LOCATION",
+          "topResult": "packages/database/src/client.ts",
+          "relevantFiles": [
+            "packages/billing/src/stripe.ts",
+            "packages/database/src/client.ts",
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/PaymentService.ts",
+            "packages/billing/src/invoices.ts"
+          ],
+          "relevantModules": [
+            "packages/billing/"
+          ],
+          "rules": [],
+          "recommendation": "packages/database/src/client.ts",
+          "contextTokens": 206,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1576,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "negative",
+          "query": "How do I deploy Kubernetes?",
+          "intent": "IMPLEMENTATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 21,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1761,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "negative",
+          "query": "Where is the React component library?",
+          "intent": "LOCATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 41,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1741,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "negative",
+          "query": "How does Terraform work?",
+          "intent": "IMPLEMENTATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 20,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1762,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "B-monorepo",
+          "category": "negative",
+          "query": "Where is the AWS Lambda?",
+          "intent": "LOCATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 20,
+          "corpusTokens": 1782,
+          "estimatedTokensAvoided": 1762,
+          "retrievalMs": 0,
+          "correct": "correct"
+        }
+      ]
+    },
+    {
+      "name": "C-python",
+      "root": "C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-proof-C-python-RWyjC8",
+      "tools": [
+        "neuron_after_task",
+        "neuron_context",
+        "neuron_remember",
+        "neuron_resolve_suggestion",
+        "neuron_scan",
+        "neuron_search",
+        "neuron_update"
+      ],
+      "rows": [
+        {
+          "repo": "C-python",
+          "category": "location",
+          "query": "Where is authentication implemented?",
+          "intent": "LOCATION",
+          "topResult": "app/api/auth_routes.py",
+          "relevantFiles": [
+            "app/api/auth_routes.py",
+            "app/services/auth_service.py",
+            "app/middleware/auth.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "app/api/auth_routes.py",
+          "contextTokens": 176,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1216,
+          "retrievalMs": 7,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "location",
+          "query": "Where are API routes defined?",
+          "intent": "LOCATION",
+          "topResult": "app/api/routes.py",
+          "relevantFiles": [
+            "app/api/routes.py",
+            "app/api/billing_routes.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers",
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "app/api/routes.py",
+          "contextTokens": 252,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1140,
+          "retrievalMs": 11,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "location",
+          "query": "Where is billing implemented?",
+          "intent": "LOCATION",
+          "topResult": "app/api/billing_routes.py",
+          "relevantFiles": [
+            "app/api/billing_routes.py",
+            "app/services/billing_service.py",
+            "app/services/payment_service.py",
+            "app/services/stripe_client.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": "app/api/billing_routes.py",
+          "contextTokens": 236,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1156,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "location",
+          "query": "Where is database access?",
+          "intent": "LOCATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [
+            "Database access must stay inside repositories"
+          ],
+          "recommendation": null,
+          "contextTokens": 71,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1321,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "location",
+          "query": "Where are background jobs?",
+          "intent": "LOCATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 21,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1371,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "location",
+          "query": "Where are tests for authentication?",
+          "intent": "LOCATION",
+          "topResult": "app/api/auth_routes.py",
+          "relevantFiles": [
+            "app/api/auth_routes.py",
+            "app/services/auth_service.py",
+            "app/middleware/auth.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "app/api/auth_routes.py",
+          "contextTokens": 176,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1216,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "location",
+          "query": "Where is the Stripe integration?",
+          "intent": "LOCATION",
+          "topResult": "app/services/stripe_client.py",
+          "relevantFiles": [
+            "app/services/stripe_client.py",
+            "app/services/payment_service.py",
+            "app/api/billing_routes.py",
+            "app/services/billing_service.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "app/services/stripe_client.py",
+          "contextTokens": 238,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1154,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "modification",
+          "query": "Where should I add a new payment endpoint?",
+          "intent": "MODIFICATION",
+          "topResult": "app/api/billing_routes.py",
+          "relevantFiles": [
+            "app/api/billing_routes.py",
+            "app/api/auth_routes.py",
+            "app/services/payment_service.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers",
+            "Cross-cutting concerns belong in middleware, not route handlers"
+          ],
+          "recommendation": "app/api/billing_routes.py",
+          "contextTokens": 207,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1185,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "modification",
+          "query": "Where should I implement invoice cancellation?",
+          "intent": "MODIFICATION",
+          "topResult": "app/services/payment_service.py",
+          "relevantFiles": [
+            "app/services/payment_service.py",
+            "app/services/stripe_client.py",
+            "app/api/billing_routes.py",
+            "app/services/billing_service.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers",
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": "app/services/payment_service.py",
+          "contextTokens": 208,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1184,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "modification",
+          "query": "Where should I add authentication middleware?",
+          "intent": "MODIFICATION",
+          "topResult": "app/api/auth_routes.py",
+          "relevantFiles": [
+            "app/api/auth_routes.py"
+          ],
+          "relevantModules": [
+            "app/middleware/"
+          ],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers",
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "app/api/auth_routes.py",
+          "contextTokens": 199,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1193,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "modification",
+          "query": "Where should I add a new background job?",
+          "intent": "MODIFICATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 24,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1368,
+          "retrievalMs": 1,
+          "correct": "acceptable"
+        },
+        {
+          "repo": "C-python",
+          "category": "modification",
+          "query": "Where should I modify database access?",
+          "intent": "MODIFICATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [
+            "Database access must stay inside repositories"
+          ],
+          "recommendation": null,
+          "contextTokens": 74,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1318,
+          "retrievalMs": 2,
+          "correct": "acceptable"
+        },
+        {
+          "repo": "C-python",
+          "category": "rules",
+          "query": "What rule should I follow when modifying payments?",
+          "intent": "CONVENTION",
+          "topResult": "app/services/payment_service.py",
+          "relevantFiles": [
+            "app/services/payment_service.py",
+            "app/services/stripe_client.py",
+            "app/api/billing_routes.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers",
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": null,
+          "contextTokens": 153,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1239,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "rules",
+          "query": "What conventions should I follow?",
+          "intent": "CONVENTION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers",
+            "Use dependency injection / service modules for business logic"
+          ],
+          "recommendation": null,
+          "contextTokens": 106,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1286,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "rules",
+          "query": "How does this project handle authentication?",
+          "intent": "IMPLEMENTATION",
+          "topResult": "app/services/",
+          "relevantFiles": [],
+          "relevantModules": [
+            "app/models/",
+            "app/services/",
+            "app/workers/"
+          ],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "app/services/",
+          "contextTokens": 197,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1195,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "rules",
+          "query": "What architecture decisions affect billing?",
+          "intent": "ARCHITECTURE",
+          "topResult": "app/services/payment_service.py",
+          "relevantFiles": [
+            "app/services/payment_service.py",
+            "app/api/billing_routes.py",
+            "app/services/billing_service.py",
+            "app/services/stripe_client.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": null,
+          "contextTokens": 152,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1240,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "symbol",
+          "query": "Where is BillingService?",
+          "intent": "LOCATION",
+          "topResult": "app/services/billing_service.py",
+          "relevantFiles": [
+            "app/services/billing_service.py",
+            "app/services/payment_service.py",
+            "app/services/stripe_client.py",
+            "app/api/billing_routes.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": "app/services/billing_service.py",
+          "contextTokens": 236,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1156,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "symbol",
+          "query": "Where is PaymentService?",
+          "intent": "LOCATION",
+          "topResult": "app/services/payment_service.py",
+          "relevantFiles": [
+            "app/services/payment_service.py",
+            "app/services/stripe_client.py",
+            "app/services/billing_service.py",
+            "app/services/auth_service.py"
+          ],
+          "relevantModules": [
+            "app/services/"
+          ],
+          "rules": [
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": "app/services/payment_service.py",
+          "contextTokens": 204,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1188,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "symbol",
+          "query": "Where is createInvoice?",
+          "intent": "LOCATION",
+          "topResult": "app/services/payment_service.py",
+          "relevantFiles": [
+            "app/services/payment_service.py",
+            "app/services/stripe_client.py",
+            "app/api/billing_routes.py",
+            "app/services/billing_service.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "app/services/payment_service.py",
+          "contextTokens": 236,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1156,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "symbol",
+          "query": "Where is auth middleware?",
+          "intent": "LOCATION",
+          "topResult": "app/api/auth_routes.py",
+          "relevantFiles": [
+            "app/api/auth_routes.py",
+            "app/middleware/auth.py",
+            "app/api/billing_routes.py",
+            "app/services/auth_service.py"
+          ],
+          "relevantModules": [
+            "app/middleware/"
+          ],
+          "rules": [],
+          "recommendation": "app/api/auth_routes.py",
+          "contextTokens": 200,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1192,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "symbol",
+          "query": "Where is the Stripe client?",
+          "intent": "LOCATION",
+          "topResult": "app/services/stripe_client.py",
+          "relevantFiles": [
+            "app/services/stripe_client.py",
+            "app/services/payment_service.py",
+            "app/api/billing_routes.py",
+            "app/services/billing_service.py"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "app/services/stripe_client.py",
+          "contextTokens": 237,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1155,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "negative",
+          "query": "How do I deploy Kubernetes?",
+          "intent": "IMPLEMENTATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 21,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1371,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "negative",
+          "query": "Where is the React component library?",
+          "intent": "LOCATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 41,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1351,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "negative",
+          "query": "How does Terraform work?",
+          "intent": "IMPLEMENTATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 20,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1372,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "C-python",
+          "category": "negative",
+          "query": "Where is the AWS Lambda?",
+          "intent": "LOCATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 20,
+          "corpusTokens": 1392,
+          "estimatedTokensAvoided": 1372,
+          "retrievalMs": 1,
+          "correct": "correct"
+        }
+      ]
+    },
+    {
+      "name": "D-noisy",
+      "root": "C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-proof-D-noisy-DhiDge",
+      "tools": [
+        "neuron_after_task",
+        "neuron_context",
+        "neuron_remember",
+        "neuron_resolve_suggestion",
+        "neuron_scan",
+        "neuron_search",
+        "neuron_update"
+      ],
+      "rows": [
+        {
+          "repo": "D-noisy",
+          "category": "location",
+          "query": "Where is authentication implemented?",
+          "intent": "LOCATION",
+          "topResult": "src/core/auth/service.ts",
+          "relevantFiles": [
+            "src/core/auth/service.ts",
+            "src/core/auth/service.ts",
+            "src/core/auth/middleware.ts",
+            "src/core/auth/middleware.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "src/core/auth/service.ts",
+          "contextTokens": 209,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2002,
+          "retrievalMs": 9,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "location",
+          "query": "Where are API routes defined?",
+          "intent": "LOCATION",
+          "topResult": "src/api/routes.ts",
+          "relevantFiles": [
+            "src/api/routes.ts",
+            "src/api/routes.ts",
+            "src/features/billing/routes.ts",
+            "src/features/billing/routes.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers"
+          ],
+          "recommendation": "src/api/routes.ts",
+          "contextTokens": 241,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 1970,
+          "retrievalMs": 11,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "location",
+          "query": "Where is billing implemented?",
+          "intent": "LOCATION",
+          "topResult": "src/features/billing/routes.ts",
+          "relevantFiles": [
+            "src/features/billing/routes.ts",
+            "src/features/billing/routes.ts",
+            "src/features/billing/service.ts",
+            "src/features/billing/service.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/payments/PaymentService.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "src/features/billing/routes.ts",
+          "contextTokens": 209,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2002,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "location",
+          "query": "Where is database access?",
+          "intent": "LOCATION",
+          "topResult": "src/core/db/repository.ts",
+          "relevantFiles": [
+            "src/core/db/repository.ts",
+            "src/core/db/client.ts",
+            "src/core/db/repository.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Database access must stay inside repositories"
+          ],
+          "recommendation": "src/core/db/repository.ts",
+          "contextTokens": 184,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2027,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "location",
+          "query": "Where are background jobs?",
+          "intent": "LOCATION",
+          "topResult": "src/workers/jobs.ts",
+          "relevantFiles": [
+            "src/workers/jobs.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "src/workers/jobs.ts",
+          "contextTokens": 57,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2154,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "location",
+          "query": "Where are tests for authentication?",
+          "intent": "LOCATION",
+          "topResult": "src/core/auth/service.ts",
+          "relevantFiles": [
+            "src/core/auth/service.ts",
+            "src/core/auth/service.ts",
+            "src/core/auth/middleware.ts",
+            "src/core/auth/middleware.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "src/core/auth/service.ts",
+          "contextTokens": 209,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2002,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "location",
+          "query": "Where is the Stripe integration?",
+          "intent": "LOCATION",
+          "topResult": "src/features/payments/PaymentService.ts",
+          "relevantFiles": [
+            "src/features/payments/stripe.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/billing/invoices.ts",
+            "src/features/billing/routes.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "src/features/payments/PaymentService.ts",
+          "contextTokens": 211,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2000,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "modification",
+          "query": "Where should I add a new payment endpoint?",
+          "intent": "MODIFICATION",
+          "topResult": "src/features/billing/routes.ts",
+          "relevantFiles": [
+            "src/features/billing/routes.ts",
+            "src/api/routes.ts",
+            "src/api/routes.ts",
+            "src/features/billing/routes.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers",
+            "Cross-cutting concerns belong in middleware, not route handlers"
+          ],
+          "recommendation": "src/features/billing/routes.ts",
+          "contextTokens": 209,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2002,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "modification",
+          "query": "Where should I implement invoice cancellation?",
+          "intent": "MODIFICATION",
+          "topResult": "src/features/payments/PaymentService.ts",
+          "relevantFiles": [
+            "src/features/billing/invoices.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/payments/stripe.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers",
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": "src/features/payments/PaymentService.ts",
+          "contextTokens": 211,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2000,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "modification",
+          "query": "Where should I add authentication middleware?",
+          "intent": "MODIFICATION",
+          "topResult": "src/api/routes.ts",
+          "relevantFiles": [
+            "src/api/routes.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers",
+            "Authentication uses the AuthService abstraction",
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "src/api/routes.ts",
+          "contextTokens": 175,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2036,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "modification",
+          "query": "Where should I add a new background job?",
+          "intent": "MODIFICATION",
+          "topResult": "src/workers/jobs.ts",
+          "relevantFiles": [
+            "src/workers/jobs.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "src/workers/jobs.ts",
+          "contextTokens": 61,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2150,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "modification",
+          "query": "Where should I modify database access?",
+          "intent": "MODIFICATION",
+          "topResult": "src/core/db/repository.ts",
+          "relevantFiles": [
+            "src/core/db/repository.ts",
+            "src/core/db/client.ts",
+            "src/core/db/repository.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Database access must stay inside repositories",
+            "PostgreSQL is the system of record - avoid dual-writes to other stores"
+          ],
+          "recommendation": "src/core/db/repository.ts",
+          "contextTokens": 196,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2015,
+          "retrievalMs": 3,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "rules",
+          "query": "What rule should I follow when modifying payments?",
+          "intent": "CONVENTION",
+          "topResult": "src/features/payments/PaymentService.ts",
+          "relevantFiles": [
+            "src/features/payments/PaymentService.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/payments/stripe.ts",
+            "src/features/billing/invoices.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers",
+            "All billing mutations go through BillingService"
+          ],
+          "recommendation": null,
+          "contextTokens": 124,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2087,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "rules",
+          "query": "What conventions should I follow?",
+          "intent": "CONVENTION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [
+            "Cross-cutting concerns belong in middleware, not route handlers",
+            "Use dependency injection / service modules for business logic",
+            "PostgreSQL is the system of record - avoid dual-writes to other stores"
+          ],
+          "recommendation": null,
+          "contextTokens": 151,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2060,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "rules",
+          "query": "How does this project handle authentication?",
+          "intent": "IMPLEMENTATION",
+          "topResult": "src/core/auth/service.ts",
+          "relevantFiles": [
+            "src/core/auth/service.ts",
+            "src/core/auth/service.ts"
+          ],
+          "relevantModules": [
+            "src/admin/"
+          ],
+          "rules": [
+            "Authentication uses the AuthService abstraction"
+          ],
+          "recommendation": "src/core/auth/service.ts",
+          "contextTokens": 218,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 1993,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "rules",
+          "query": "What architecture decisions affect billing?",
+          "intent": "ARCHITECTURE",
+          "topResult": "src/features/payments/PaymentService.ts",
+          "relevantFiles": [
+            "src/features/payments/PaymentService.ts",
+            "src/features/billing/routes.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/billing/routes.ts",
+            "src/features/billing/service.ts",
+            "src/features/billing/service.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 129,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2082,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "symbol",
+          "query": "Where is BillingService?",
+          "intent": "LOCATION",
+          "topResult": "src/features/billing/service.ts",
+          "relevantFiles": [
+            "src/features/billing/service.ts",
+            "src/features/billing/service.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/billing/invoices.ts",
+            "src/features/billing/routes.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "src/features/billing/service.ts",
+          "contextTokens": 212,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 1999,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "symbol",
+          "query": "Where is PaymentService?",
+          "intent": "LOCATION",
+          "topResult": "src/features/payments/PaymentService.ts",
+          "relevantFiles": [
+            "src/features/payments/PaymentService.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/payments/stripe.ts",
+            "src/features/billing/service.ts",
+            "src/features/billing/service.ts",
+            "src/core/auth/service.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "src/features/payments/PaymentService.ts",
+          "contextTokens": 211,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2000,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "symbol",
+          "query": "Where is createInvoice?",
+          "intent": "LOCATION",
+          "topResult": "src/features/billing/invoices.ts",
+          "relevantFiles": [
+            "src/features/billing/invoices.ts",
+            "src/features/payments/stripe.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/billing/routes.ts",
+            "src/features/billing/routes.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "src/features/billing/invoices.ts",
+          "contextTokens": 210,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2001,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "symbol",
+          "query": "Where is auth middleware?",
+          "intent": "LOCATION",
+          "topResult": "src/api/routes.ts",
+          "relevantFiles": [
+            "src/core/auth/middleware.ts",
+            "src/core/auth/middleware.ts",
+            "src/api/routes.ts",
+            "src/features/billing/routes.ts",
+            "src/core/auth/service.ts",
+            "src/core/auth/service.ts",
+            "src/api/routes.ts"
+          ],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": "src/api/routes.ts",
+          "contextTokens": 172,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2039,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "symbol",
+          "query": "Where is the Stripe client?",
+          "intent": "LOCATION",
+          "topResult": "src/core/db/client.ts",
+          "relevantFiles": [
+            "src/features/payments/stripe.ts",
+            "src/core/db/client.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/payments/PaymentService.ts",
+            "src/features/billing/invoices.ts"
+          ],
+          "relevantModules": [],
+          "rules": [
+            "Never call Stripe directly from route handlers"
+          ],
+          "recommendation": "src/core/db/client.ts",
+          "contextTokens": 205,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2006,
+          "retrievalMs": 2,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "negative",
+          "query": "How do I deploy Kubernetes?",
+          "intent": "IMPLEMENTATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 21,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2190,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "negative",
+          "query": "Where is the React component library?",
+          "intent": "LOCATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 198,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2013,
+          "retrievalMs": 1,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "negative",
+          "query": "How does Terraform work?",
+          "intent": "IMPLEMENTATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 20,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2191,
+          "retrievalMs": 0,
+          "correct": "correct"
+        },
+        {
+          "repo": "D-noisy",
+          "category": "negative",
+          "query": "Where is the AWS Lambda?",
+          "intent": "LOCATION",
+          "topResult": null,
+          "relevantFiles": [],
+          "relevantModules": [],
+          "rules": [],
+          "recommendation": null,
+          "contextTokens": 20,
+          "corpusTokens": 2211,
+          "estimatedTokensAvoided": 2191,
+          "retrievalMs": 1,
+          "correct": "correct"
+        }
+      ]
+    }
+  ],
+  "incremental": {
+    "root": "C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-incr-NDLb5a",
+    "fileCount": 8000,
+    "scenarios": [
+      {
+        "scenario": "initial scan (via init)",
+        "filesChanged": "n/a",
+        "filesAnalyzed": "full",
+        "timeMs": 1237,
+        "delta": null
+      },
+      {
+        "scenario": "full rescan",
+        "filesChanged": "n/a",
+        "filesAnalyzed": 8022,
+        "timeMs": 1100,
+        "delta": {
+          "unchanged": 8022,
+          "changed": 0,
+          "added": 0,
+          "deleted": 0,
+          "reanalyzed": 8022
+        }
+      },
+      {
+        "scenario": "no-change update",
+        "filesChanged": 0,
+        "filesAnalyzed": 0,
+        "timeMs": 989,
+        "delta": {
+          "unchanged": 8022,
+          "changed": 0,
+          "added": 0,
+          "deleted": 0,
+          "reanalyzed": 0
+        }
+      },
+      {
+        "scenario": "1 file changed",
+        "filesChanged": 1,
+        "filesAnalyzed": 1,
+        "timeMs": 1154,
+        "delta": {
+          "unchanged": 8021,
+          "changed": 1,
+          "added": 0,
+          "deleted": 0,
+          "reanalyzed": 1
+        }
+      },
+      {
+        "scenario": "10 files changed",
+        "filesChanged": 10,
+        "filesAnalyzed": 10,
+        "timeMs": 1148,
+        "delta": {
+          "unchanged": 8012,
+          "changed": 10,
+          "added": 0,
+          "deleted": 0,
+          "reanalyzed": 10
+        }
+      },
+      {
+        "scenario": "100 files changed",
+        "filesChanged": 100,
+        "filesAnalyzed": 100,
+        "timeMs": 1176,
+        "delta": {
+          "unchanged": 7972,
+          "changed": 50,
+          "added": 50,
+          "deleted": 0,
+          "reanalyzed": 100
+        }
+      },
+      {
+        "scenario": "1 module/file added",
+        "filesChanged": 1,
+        "filesAnalyzed": 1,
+        "timeMs": 1122,
+        "delta": {
+          "unchanged": 8072,
+          "changed": 0,
+          "added": 1,
+          "deleted": 0,
+          "reanalyzed": 1
+        }
+      },
+      {
+        "scenario": "module renamed (billing→payments)",
+        "filesChanged": "rename",
+        "filesAnalyzed": 3,
+        "timeMs": 1258,
+        "delta": {
+          "unchanged": 8070,
+          "changed": 0,
+          "added": 3,
+          "deleted": 3,
+          "reanalyzed": 3
+        }
+      },
+      {
+        "scenario": "module deleted (workers)",
+        "filesChanged": "delete",
+        "filesAnalyzed": 0,
+        "timeMs": 1189,
+        "delta": {
+          "unchanged": 8070,
+          "changed": 0,
+          "added": 0,
+          "deleted": 3,
+          "reanalyzed": 0
+        }
+      }
+    ]
+  },
+  "rename": {
+    "root": "C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-rename-3pqMjI",
+    "delta": {
+      "unchanged": 19,
+      "changed": 0,
+      "added": 3,
+      "deleted": 3,
+      "reanalyzed": 3
+    },
+    "mapHasOldBilling": false,
+    "mapHasPayments": true,
+    "userMemorySurvived": true,
+    "staleScanMemoriesWithOnlyBillingPaths": 0,
+    "userRuleTitle": "Never call Stripe directly from route handlers",
+    "pass": true
+  },
+  "architectureAudit": [
+    {
+      "check": "no duplicate engines/indexes",
+      "ok": true,
+      "detail": "clean"
+    },
+    {
+      "check": "templates free of legacy MCP tool names",
+      "ok": true,
+      "detail": "clean"
+    },
+    {
+      "check": "no cloud/embedding runtime remnants",
+      "ok": true,
+      "detail": "clean"
+    },
+    {
+      "check": "packed CLI has zero @neuronai/* runtime deps",
+      "ok": true,
+      "detail": "none"
+    }
+  ],
+  "packed": {
+    "version": "neuron/0.2.0 (brain 0.2.0@54d649e408c6) win32-x64 node-v24.18.0",
+    "doctorOk": true,
+    "contextOk": true,
+    "cursorDoctor": "Neuron cursor doctor\n\n✓ Cursor project folder: C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-packed-a39HXg\\stranger\\.cursor\n✓ MCP configuration: neuron → C:\\Program Files\\nodejs\\node.exe C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-packed-a39HXg\\stranger\\node_modules\\neuronai\\dist\\index.js mcp\n✓ Neuron rules: C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-packed-a39HXg\\stranger\\.cursor\\rules\\neuron-memory.mdc\n✓ Neuron skill: C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-packed-a39HXg\\stranger\\.cursor\\skills\\neuron-memory\\SKILL.md\n✓ Cursor commands: 3/3 command prompts installed\n✓ Brain retrieval: READY · health 95% · knowledge 25\n✓ Tool catalog: READY · 7 tools (neuron_after_task, neuron_context, neuron_remember, neuron_resolve_suggestion, neuron_scan, neuron_search, neuron_update)\n✓ Cursor enable step: After setup/upgrade: Settings → Tools & MCP → toggle \"neuron\" off then on (or Reload Window)\n\n✓ Cursor integration looks healthy.\n→ In Cursor chat, call neuron_context before exploring the repo\n",
+    "mcpTools": [
+      "neuron_after_task",
+      "neuron_context",
+      "neuron_remember",
+      "neuron_resolve_suggestion",
+      "neuron_scan",
+      "neuron_search",
+      "neuron_update"
+    ],
+    "mcpOk": true,
+    "reloadMentioned": true,
+    "work": "C:\\Users\\sonde\\AppData\\Local\\Temp\\neuron-packed-a39HXg"
+  },
+  "bugs": [],
+  "fixes": [],
+  "summary": {
+    "queries": 100,
+    "correct": 98,
+    "acceptable": 2,
+    "incorrect": 0,
+    "correctOrAcceptablePct": 100,
+    "locationModificationOkPct": 100,
+    "modificationOkPct": 100,
+    "negativeOkPct": 100,
+    "avgContextTokens": 153,
+    "avgRetrievalMs": 1.9,
+    "incremental": {
+      "noChangeMs": 989,
+      "fullRescanMs": 1100,
+      "noChangeReanalyzed": 0,
+      "oneFileReanalyzed": 1,
+      "oneFileMs": 1154,
+      "noChangeReanalyzedZero": true,
+      "oneFileNotFullRepo": true,
+      "noChangeMuchFasterThanFull": false
+    },
+    "renamePass": true,
+    "architectureOk": true
+  },
+  "verdict": "GO",
+  "blockers": []
+}

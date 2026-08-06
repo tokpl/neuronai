@@ -39,4 +39,4 @@ export {
 
 /** MCP / public API surface version for clients */
 export const NEURON_API_VERSION = 'neuron/v1';
-export const PACKAGE_VERSION = '0.1.2';
+export const PACKAGE_VERSION = '0.1.3';

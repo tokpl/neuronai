@@ -1,6 +1,6 @@
 {
   "name": "@neuronai/agent-intelligence",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "NeuronAI / agent-intelligence - package for Neuron - AI Memory",
   "license": "AGPL-3.0",
   "type": "module",

@@ -2,8 +2,17 @@ import { copyFileSync, existsSync, readFileSync, writeFileSync, readdirSync } fr
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const version = process.argv[2] ?? '0.1.2';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const rootPkgPath = join(root, 'package.json');
+const rootPkg = JSON.parse(readFileSync(rootPkgPath, 'utf8'));
+
+/** Prefer CLI arg; otherwise keep current root package.json version (never hardcode a stale release). */
+const version = process.argv[2] ?? rootPkg.version;
+if (!version || typeof version !== 'string') {
+  console.error('Missing version. Usage: pnpm prepare:npm <version>  (e.g. 0.1.3)');
+  process.exit(1);
+}
+
 const licenseSrc = join(root, 'LICENSE');
 
 const roots = [join(root, 'packages'), join(root, 'apps')];
@@ -68,8 +77,6 @@ for (const dir of dirs) {
   console.log('updated', j.name, version);
 }
 
-const rootPkgPath = join(root, 'package.json');
-const rootPkg = JSON.parse(readFileSync(rootPkgPath, 'utf8'));
 rootPkg.version = version;
 rootPkg.license = 'AGPL-3.0';
 writeFileSync(rootPkgPath, JSON.stringify(rootPkg, null, 2) + '\n');

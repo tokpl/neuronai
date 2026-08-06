@@ -11,6 +11,9 @@ export type LocationRole =
   | 'service'
   | 'repository'
   | 'database'
+  | 'middleware'
+  | 'worker'
+  | 'adapter'
   | 'config'
   | 'test'
   | 'ui'
@@ -24,6 +27,9 @@ const ROLE_BOOST: Record<LocationRole, number> = {
   route: 0.2,
   service: 0.16,
   repository: 0.12,
+  middleware: 0.14,
+  worker: 0.1,
+  adapter: 0.08,
   core_module: 0.1,
   entrypoint: 0.08,
   config: 0.05,
@@ -80,6 +86,9 @@ export function locationRole(loc: ProjectMapEntry): LocationRole {
     return 'database';
   }
   if (/repository|repositories/.test(blob)) return 'repository';
+  if (/middleware/.test(blob)) return 'middleware';
+  if (/\b(worker|job|jobs)\b/.test(blob)) return 'worker';
+  if (/\b(client|adapter|stripe|sdk)\b/.test(blob) && !/service/.test(blob)) return 'adapter';
   if (/\bservice\b/.test(blob) || /service\.[tj]sx?$/.test(path)) return 'service';
   if (/config|env\.[tj]s$|dotenv/.test(blob) || purpose.includes('configuration')) return 'config';
   if (

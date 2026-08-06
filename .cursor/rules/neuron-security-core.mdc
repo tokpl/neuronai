@@ -8,14 +8,18 @@ alwaysApply: false
 
 Before analyzing a file or pasting sensitive context into the model:
 
-1. Call `neuron_security_check` (or `neuron_check_context`) with the text
-2. If secrets are found, use the **sanitized** text only
-3. Optionally `neuron_trust_report` for freshly edited README/docs
-4. For a full pass: `neuron_security_scan`
+1. Call `neuron_context` with a security-focused task (e.g. “check this snippet for secrets before analysis”) and the text or file path.
+2. Use `neuron_search` for known secret patterns, SECURITY constitution rules, and prior sanitization guidance.
+3. If secrets are found, use **sanitized** text only — never echo raw credentials into the model or chat.
+4. Verify against source files and `.env.example`; do not trust Brain alone for redaction.
 
 Example:
 
 - User: “Analyze this file”
 - Neuron: Contains API key → sanitized before analysis
+
+After a durable security lesson (pattern to avoid, redaction rule): call `neuron_after_task`, ask the user (**Yes** / **Edit** / **No**), then `neuron_resolve_suggestion`. Never store secret values in memory.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.
 
 Do **not** echo raw secrets, auto-deploy fixes, or claim antivirus/EDR coverage.

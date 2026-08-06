@@ -38,12 +38,16 @@ The response shape:
   "intent": "MODIFICATION",
   "recommendation": {
     "path": "src/billing/service.ts",
-    "name": "service.ts",
-    "reason": "Service / business logic; belongs to the billing module"
+    "name": "BillingService",
+    "symbol": "BillingService.cancelInvoice()",
+    "reason": "Owns invoice lifecycle; verified callers in billing routes",
+    "related": [{ "path": "src/billing/routes.ts", "name": "routes.ts" }],
+    "flow": [{ "label": "POST /invoices/:id/cancel" }, { "label": "BillingService.cancelInvoice()" }]
   },
   "relevantFiles": [{ "name": "middleware.ts", "path": "src/auth/middleware.ts", "kind": "file", "why": "…" }],
   "relevantModules": [{ "name": "auth", "path": "src/auth/", "purpose": "Authentication / authorization" }],
   "relevantRules": [{ "title": "…", "detail": "…" }],
+  "flow": [{ "label": "POST /invoices/:id/cancel" }, { "label": "BillingService.cancelInvoice()" }],
   "metrics": {
     "contextTokens": 126,
     "budgetTokens": 500,
@@ -53,10 +57,16 @@ The response shape:
     "estimatedTokensSaved": 1180,
     "compressionRatio": 14.3,
     "baseline": "whole-brain-verbatim",
-    "retrievalMs": 4
+    "retrievalMs": 4,
+    "estimatedRediscoveryAvoided": 240,
+    "rediscoveryBaseline": "simulated-structural-exploration"
   }
 }
 ```
+
+`estimatedTokensSaved` is vs pasting the whole brain. `estimatedRediscoveryAvoided` is a **simulated**
+estimate of structural exploration the agent might otherwise do — not measured agent file-read
+savings.
 
 `context` is the only field that should enter the model prompt. Call this **before** exploring the
 repository; open the returned paths next. Ranking scores and memory ids never appear in `context`.

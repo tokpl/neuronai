@@ -8,11 +8,11 @@ alwaysApply: false
 
 When the user asks **why** Neuron suggested something (“Why did you suggest this?”, explain-last, show reasoning):
 
-1. Call `neuron_explain_reasoning` for the reasoning path + confidence
-2. Call `neuron_trace_last` for the operation summary
-3. Call `neuron_trace_context` for memories / context used
-4. Optionally `neuron_performance_metrics` if they ask about latency
+1. Call `neuron_context` with the explain question and reference the suggestion or task when possible.
+2. Prefer returned memories, rules, files, and reasoning notes; open cited paths and verify against source.
+3. Use `neuron_search` for related decisions, prior traces, and confidence/context notes in the Brain.
+4. Summarize the reasoning path and evidence — do not dump raw MCP payloads to the user.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.
 
 Do **not** dump secrets, full source files, or send traces to cloud analytics.
-
-Note: `neuron_debug_context` is for **past incidents**, not the last operation’s context.

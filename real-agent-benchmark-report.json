@@ -1,0 +1,922 @@
+{
+  "generatedAt": "2026-08-06T15:58:17.828Z",
+  "methodology": {
+    "type": "scripted_exploration_policy",
+    "description": "Baseline arm rediscovers the repo with list_dir + ripgrep + file opens. Neuron arm calls neuron_context first, then opens returned paths, with limited rg fallback only on miss. Not a live multi-turn LLM coding agent.",
+    "primary_question": "Does Project Brain measurably reduce the work an AI coding agent has to perform to understand an unfamiliar codebase?",
+    "live_agent_traces": "unavailable_no_api_key",
+    "agent_tokens": "UNAVAILABLE",
+    "agent_llm_latency": "UNAVAILABLE"
+  },
+  "environment": {
+    "node": "v24.18.0",
+    "platform": "win32",
+    "neuronBin": "C:\\projekty\\neuron-ai-memory\\apps\\cli\\dist\\index.js",
+    "fixtureRoot": "(deleted)",
+    "apiKeys": {
+      "CURSOR_API_KEY": false,
+      "ANTHROPIC_API_KEY": false
+    }
+  },
+  "tasks": [
+    {
+      "id": "L1",
+      "category": "location",
+      "task": "Where is authentication implemented?"
+    },
+    {
+      "id": "L2",
+      "category": "location",
+      "task": "Where are API routes defined?"
+    },
+    {
+      "id": "L3",
+      "category": "location",
+      "task": "Where is Stripe integration?"
+    },
+    {
+      "id": "L4",
+      "category": "location",
+      "task": "Where are invoices handled?"
+    },
+    {
+      "id": "L5",
+      "category": "location",
+      "task": "Where is database access?"
+    },
+    {
+      "id": "M1",
+      "category": "modification",
+      "task": "Add a new payment endpoint."
+    },
+    {
+      "id": "M2",
+      "category": "modification",
+      "task": "Add invoice cancellation."
+    },
+    {
+      "id": "M3",
+      "category": "modification",
+      "task": "Add authentication middleware."
+    },
+    {
+      "id": "M4",
+      "category": "modification",
+      "task": "Add a background job."
+    },
+    {
+      "id": "M5",
+      "category": "modification",
+      "task": "Modify database access."
+    },
+    {
+      "id": "D1",
+      "category": "dependency",
+      "task": "What depends on BillingService?"
+    },
+    {
+      "id": "D2",
+      "category": "dependency",
+      "task": "What calls createInvoice?"
+    },
+    {
+      "id": "D3",
+      "category": "impact",
+      "task": "What would be affected by changing the payment service?"
+    },
+    {
+      "id": "D4",
+      "category": "flow",
+      "task": "What is the flow from API route to payment provider?"
+    },
+    {
+      "id": "D5",
+      "category": "impact",
+      "task": "Which tests should change if invoice logic changes?"
+    },
+    {
+      "id": "R1",
+      "category": "rules",
+      "task": "What rule applies when modifying payments?"
+    },
+    {
+      "id": "R2",
+      "category": "rules",
+      "task": "What conventions should be followed?"
+    },
+    {
+      "id": "R3",
+      "category": "rules",
+      "task": "What architectural decision affects billing?"
+    },
+    {
+      "id": "N1",
+      "category": "negative",
+      "task": "How does Kubernetes deployment work in this project?"
+    },
+    {
+      "id": "N2",
+      "category": "negative",
+      "task": "Where is the Terraform AWS Lambda defined?"
+    }
+  ],
+  "results": [
+    {
+      "task": "Where is authentication implemented?",
+      "category": "location",
+      "baseline": {
+        "tool_calls": 7,
+        "exploration_calls": 6,
+        "file_reads": 3,
+        "directories_explored": 3,
+        "first_useful_file_op": 6,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 4,
+        "exploration_calls": 1,
+        "file_reads": 2,
+        "directories_explored": 1,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": "src/auth/service.ts",
+        "brain_compression": {
+          "contextTokens": 145,
+          "corpusTokens": 4530,
+          "compressionRatio": 31.24,
+          "estimatedTokensSaved": 4385,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 13
+      }
+    },
+    {
+      "task": "Where are API routes defined?",
+      "category": "location",
+      "baseline": {
+        "tool_calls": 6,
+        "exploration_calls": 5,
+        "file_reads": 1,
+        "directories_explored": 3,
+        "first_useful_file_op": 5,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 5,
+        "exploration_calls": 0,
+        "file_reads": 4,
+        "directories_explored": 0,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": "src/api/routes/index.ts",
+        "brain_compression": {
+          "contextTokens": 171,
+          "corpusTokens": 4530,
+          "compressionRatio": 26.49,
+          "estimatedTokensSaved": 4359,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 17
+      }
+    },
+    {
+      "task": "Where is Stripe integration?",
+      "category": "location",
+      "baseline": {
+        "tool_calls": 7,
+        "exploration_calls": 6,
+        "file_reads": 3,
+        "directories_explored": 3,
+        "first_useful_file_op": 6,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 4,
+        "exploration_calls": 0,
+        "file_reads": 3,
+        "directories_explored": 0,
+        "first_useful_file_op": 3,
+        "starting_point": "ACCEPTABLE",
+        "correctness": "partially correct",
+        "recommendation": "src/payments/service.ts",
+        "brain_compression": {
+          "contextTokens": 207,
+          "corpusTokens": 4530,
+          "compressionRatio": 21.88,
+          "estimatedTokensSaved": 4323,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 4
+      }
+    },
+    {
+      "task": "Where are invoices handled?",
+      "category": "location",
+      "baseline": {
+        "tool_calls": 6,
+        "exploration_calls": 5,
+        "file_reads": 2,
+        "directories_explored": 3,
+        "first_useful_file_op": 5,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 4,
+        "exploration_calls": 0,
+        "file_reads": 3,
+        "directories_explored": 0,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": "src/billing/invoices/repository.ts",
+        "brain_compression": {
+          "contextTokens": 207,
+          "corpusTokens": 4530,
+          "compressionRatio": 21.88,
+          "estimatedTokensSaved": 4323,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 3
+      }
+    },
+    {
+      "task": "Where is database access?",
+      "category": "location",
+      "baseline": {
+        "tool_calls": 5,
+        "exploration_calls": 4,
+        "file_reads": 1,
+        "directories_explored": 3,
+        "first_useful_file_op": 4,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 7,
+        "exploration_calls": 1,
+        "file_reads": 5,
+        "directories_explored": 1,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": "src/payments/repository.ts",
+        "brain_compression": {
+          "contextTokens": 201,
+          "corpusTokens": 4530,
+          "compressionRatio": 22.54,
+          "estimatedTokensSaved": 4329,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 3
+      }
+    },
+    {
+      "task": "Add a new payment endpoint.",
+      "category": "modification",
+      "baseline": {
+        "tool_calls": 8,
+        "exploration_calls": 7,
+        "file_reads": 4,
+        "directories_explored": 3,
+        "first_useful_file_op": 7,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 5,
+        "exploration_calls": 0,
+        "file_reads": 4,
+        "directories_explored": 0,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 106,
+          "corpusTokens": 4530,
+          "compressionRatio": 42.74,
+          "estimatedTokensSaved": 4424,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 5
+      }
+    },
+    {
+      "task": "Add invoice cancellation.",
+      "category": "modification",
+      "baseline": {
+        "tool_calls": 6,
+        "exploration_calls": 5,
+        "file_reads": 2,
+        "directories_explored": 3,
+        "first_useful_file_op": 5,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 4,
+        "exploration_calls": 0,
+        "file_reads": 3,
+        "directories_explored": 0,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 131,
+          "corpusTokens": 4530,
+          "compressionRatio": 34.58,
+          "estimatedTokensSaved": 4399,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 2
+      }
+    },
+    {
+      "task": "Add authentication middleware.",
+      "category": "modification",
+      "baseline": {
+        "tool_calls": 7,
+        "exploration_calls": 6,
+        "file_reads": 3,
+        "directories_explored": 3,
+        "first_useful_file_op": 6,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 5,
+        "exploration_calls": 1,
+        "file_reads": 3,
+        "directories_explored": 1,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 136,
+          "corpusTokens": 4530,
+          "compressionRatio": 33.31,
+          "estimatedTokensSaved": 4394,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 5
+      }
+    },
+    {
+      "task": "Add a background job.",
+      "category": "modification",
+      "baseline": {
+        "tool_calls": 9,
+        "exploration_calls": 9,
+        "file_reads": 0,
+        "directories_explored": 6,
+        "first_useful_file_op": null,
+        "starting_point": "WRONG",
+        "correctness": "incorrect",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 3,
+        "exploration_calls": 0,
+        "file_reads": 2,
+        "directories_explored": 0,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 49,
+          "corpusTokens": 4530,
+          "compressionRatio": 92.45,
+          "estimatedTokensSaved": 4481,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 1
+      }
+    },
+    {
+      "task": "Modify database access.",
+      "category": "modification",
+      "baseline": {
+        "tool_calls": 7,
+        "exploration_calls": 6,
+        "file_reads": 2,
+        "directories_explored": 3,
+        "first_useful_file_op": 6,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 6,
+        "exploration_calls": 1,
+        "file_reads": 4,
+        "directories_explored": 1,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 102,
+          "corpusTokens": 4530,
+          "compressionRatio": 44.41,
+          "estimatedTokensSaved": 4428,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 3
+      }
+    },
+    {
+      "task": "What depends on BillingService?",
+      "category": "dependency",
+      "baseline": {
+        "tool_calls": 6,
+        "exploration_calls": 5,
+        "file_reads": 2,
+        "directories_explored": 3,
+        "first_useful_file_op": 5,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 3,
+        "exploration_calls": 0,
+        "file_reads": 2,
+        "directories_explored": 0,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": "src/billing/service.ts",
+        "brain_compression": {
+          "contextTokens": 167,
+          "corpusTokens": 4530,
+          "compressionRatio": 27.13,
+          "estimatedTokensSaved": 4363,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 2
+      }
+    },
+    {
+      "task": "What calls createInvoice?",
+      "category": "dependency",
+      "baseline": {
+        "tool_calls": 5,
+        "exploration_calls": 4,
+        "file_reads": 1,
+        "directories_explored": 3,
+        "first_useful_file_op": 4,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 4,
+        "exploration_calls": 0,
+        "file_reads": 3,
+        "directories_explored": 0,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": "src/billing/invoices/service.ts",
+        "brain_compression": {
+          "contextTokens": 220,
+          "corpusTokens": 4530,
+          "compressionRatio": 20.59,
+          "estimatedTokensSaved": 4310,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 2
+      }
+    },
+    {
+      "task": "What would be affected by changing the payment service?",
+      "category": "impact",
+      "baseline": {
+        "tool_calls": 8,
+        "exploration_calls": 7,
+        "file_reads": 4,
+        "directories_explored": 3,
+        "first_useful_file_op": 7,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 3,
+        "exploration_calls": 0,
+        "file_reads": 2,
+        "directories_explored": 0,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 140,
+          "corpusTokens": 4530,
+          "compressionRatio": 32.36,
+          "estimatedTokensSaved": 4390,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 3
+      }
+    },
+    {
+      "task": "What is the flow from API route to payment provider?",
+      "category": "flow",
+      "baseline": {
+        "tool_calls": 7,
+        "exploration_calls": 6,
+        "file_reads": 3,
+        "directories_explored": 3,
+        "first_useful_file_op": 6,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 5,
+        "exploration_calls": 0,
+        "file_reads": 4,
+        "directories_explored": 0,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 112,
+          "corpusTokens": 4530,
+          "compressionRatio": 40.45,
+          "estimatedTokensSaved": 4418,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 4
+      }
+    },
+    {
+      "task": "Which tests should change if invoice logic changes?",
+      "category": "impact",
+      "baseline": {
+        "tool_calls": 5,
+        "exploration_calls": 4,
+        "file_reads": 1,
+        "directories_explored": 3,
+        "first_useful_file_op": 4,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 8,
+        "exploration_calls": 4,
+        "file_reads": 6,
+        "directories_explored": 0,
+        "first_useful_file_op": 8,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 149,
+          "corpusTokens": 4530,
+          "compressionRatio": 30.4,
+          "estimatedTokensSaved": 4381,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 5
+      }
+    },
+    {
+      "task": "What rule applies when modifying payments?",
+      "category": "rules",
+      "baseline": {
+        "tool_calls": 6,
+        "exploration_calls": 5,
+        "file_reads": 2,
+        "directories_explored": 3,
+        "first_useful_file_op": 5,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 4,
+        "exploration_calls": 0,
+        "file_reads": 3,
+        "directories_explored": 0,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 123,
+          "corpusTokens": 4530,
+          "compressionRatio": 36.83,
+          "estimatedTokensSaved": 4407,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 4
+      }
+    },
+    {
+      "task": "What conventions should be followed?",
+      "category": "rules",
+      "baseline": {
+        "tool_calls": 5,
+        "exploration_calls": 4,
+        "file_reads": 1,
+        "directories_explored": 2,
+        "first_useful_file_op": 5,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 4,
+        "exploration_calls": 3,
+        "file_reads": 1,
+        "directories_explored": 0,
+        "first_useful_file_op": 4,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 152,
+          "corpusTokens": 4530,
+          "compressionRatio": 29.8,
+          "estimatedTokensSaved": 4378,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 1
+      }
+    },
+    {
+      "task": "What architectural decision affects billing?",
+      "category": "rules",
+      "baseline": {
+        "tool_calls": 6,
+        "exploration_calls": 5,
+        "file_reads": 2,
+        "directories_explored": 3,
+        "first_useful_file_op": 5,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 4,
+        "exploration_calls": 0,
+        "file_reads": 3,
+        "directories_explored": 0,
+        "first_useful_file_op": 2,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 143,
+          "corpusTokens": 4530,
+          "compressionRatio": 31.68,
+          "estimatedTokensSaved": 4387,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 3
+      }
+    },
+    {
+      "task": "How does Kubernetes deployment work in this project?",
+      "category": "negative",
+      "baseline": {
+        "tool_calls": 6,
+        "exploration_calls": 6,
+        "file_reads": 1,
+        "directories_explored": 2,
+        "first_useful_file_op": null,
+        "starting_point": "ACCEPTABLE",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 1,
+        "exploration_calls": 0,
+        "file_reads": 0,
+        "directories_explored": 0,
+        "first_useful_file_op": null,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": "src/experimental/",
+        "brain_compression": {
+          "contextTokens": 204,
+          "corpusTokens": 4530,
+          "compressionRatio": 22.21,
+          "estimatedTokensSaved": 4326,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 2
+      }
+    },
+    {
+      "task": "Where is the Terraform AWS Lambda defined?",
+      "category": "negative",
+      "baseline": {
+        "tool_calls": 5,
+        "exploration_calls": 5,
+        "file_reads": 0,
+        "directories_explored": 2,
+        "first_useful_file_op": null,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "tokens_if_available": null,
+        "time_if_available": null
+      },
+      "neuron": {
+        "tool_calls": 1,
+        "exploration_calls": 0,
+        "file_reads": 0,
+        "directories_explored": 0,
+        "first_useful_file_op": null,
+        "starting_point": "CORRECT",
+        "correctness": "correct",
+        "recommendation": null,
+        "brain_compression": {
+          "contextTokens": 25,
+          "corpusTokens": 4530,
+          "compressionRatio": 181.2,
+          "estimatedTokensSaved": 4505,
+          "baseline": "whole-brain-verbatim",
+          "label": "Brain compression — not measured agent token savings"
+        },
+        "tokens_if_available": null,
+        "time_if_available": 1
+      }
+    }
+  ],
+  "aggregates": {
+    "baseline": {
+      "tasks": 20,
+      "avg_tool_calls": 6.4,
+      "avg_exploration_calls": 5.5,
+      "avg_file_reads": 1.9,
+      "avg_blind_file_reads": 1.1,
+      "avg_directories_explored": 3,
+      "avg_first_useful_file_op": 4.6,
+      "correct": 19,
+      "partially_correct": 0,
+      "incorrect": 1,
+      "wrong_starting_point": 1,
+      "starting_correct": 18,
+      "starting_acceptable": 1
+    },
+    "neuron": {
+      "tasks": 20,
+      "avg_tool_calls": 4.2,
+      "avg_exploration_calls": 0.6,
+      "avg_file_reads": 2.9,
+      "avg_blind_file_reads": 0.2,
+      "avg_directories_explored": 0.2,
+      "avg_first_useful_file_op": 2.3,
+      "correct": 19,
+      "partially_correct": 1,
+      "incorrect": 0,
+      "wrong_starting_point": 0,
+      "starting_correct": 19,
+      "starting_acceptable": 1
+    },
+    "exploration_reduction_pct": 89.1,
+    "file_read_reduction_pct": -52.6,
+    "first_useful_op_delta": 2.3
+  },
+  "rediscovery_reduction": {
+    "baseline_avg_exploration_ops": 5.5,
+    "neuron_avg_exploration_ops": 0.6,
+    "reduction_pct": 89.1,
+    "measured": true,
+    "note": "Counts list_dir, rg, and blind_read operations only."
+  },
+  "time_to_first_useful_file": {
+    "unit": "operations_until_first_gold_path_open",
+    "baseline_avg_op": 4.6,
+    "neuron_avg_op": 2.3,
+    "improvement_ops": 2.3,
+    "wall_clock": "UNAVAILABLE"
+  },
+  "correctness": {
+    "neuron": {
+      "correct": 19,
+      "partially_correct": 1,
+      "incorrect": 0,
+      "starting_CORRECT": 19,
+      "starting_ACCEPTABLE": 1,
+      "starting_WRONG": 0
+    },
+    "baseline": {
+      "correct": 19,
+      "partially_correct": 0,
+      "incorrect": 1
+    }
+  },
+  "file_read_reduction": {
+    "baseline_avg": 1.9,
+    "neuron_avg": 2.9,
+    "reduction_pct": -52.6
+  },
+  "token_measurements": {
+    "agent_tokens": "UNAVAILABLE",
+    "brain_compression": {
+      "avg_context_tokens": 145,
+      "avg_corpus_tokens": 4530,
+      "avg_compression_ratio": 41.21,
+      "label": "Brain compression — not measured agent token savings"
+    }
+  },
+  "failures": [],
+  "limitations": [
+    "Not a live Cursor/Claude coding-agent run — no model tool traces.",
+    "Baseline policy is a scripted rediscovery heuristic (list+rg+open), not an LLM.",
+    "Agent session tokens and LLM wall-clock latency are UNAVAILABLE without API credentials + live harness.",
+    "Brain compression must not be reported as agent token savings.",
+    "Fixture is synthetic but structurally realistic; results may differ on arbitrary private monorepos."
+  ],
+  "reproducibility": {
+    "command": "node scripts/real-agent-benchmark.mjs",
+    "requires": [
+      "built neuronai CLI (pnpm --filter neuronai build)",
+      "ripgrep (rg) on PATH"
+    ],
+    "live_agent": "Set CURSOR_API_KEY and extend harness — currently not enabled."
+  },
+  "product_impact": "STRONG",
+  "product_impact_why": "Scripted policy shows 89.1% fewer exploration ops and 100% acceptable/correct starting points. Live LLM agent traces were not run (no API key).",
+  "final_verdict": "STRONG"
+}

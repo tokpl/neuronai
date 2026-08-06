@@ -8,9 +8,14 @@ alwaysApply: false
 
 When the user asks to **review a refactor** or check architecture health:
 
-1. Call `neuron_architecture_review` with an optional `changeSummary`
-2. Optionally `neuron_architecture_scan` / `neuron_dependency_graph` / `neuron_architecture_score`
-3. Present **Issues**, **Risks**, and **Recommendations**
-4. Use `neuron_refactor_plan` for step-by-step manual plans
+1. Call `neuron_context` first with the review question and an optional change summary (mode `deep` for structural work).
+2. Prefer returned modules, files, decisions, and constraints; open those paths directly.
+3. Use `neuron_search` for related ADRs, dependency notes, and prior review outcomes.
+4. Verify against source — treat Brain output as a shortlist, not guaranteed truth.
+5. Present **Issues**, **Risks**, and **Recommendations** grounded in returned context plus your verification.
+
+After durable architecture decisions or review conclusions: call `neuron_after_task`, ask the user (**Yes** / **Edit** / **No**), then `neuron_resolve_suggestion`.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.
 
 Do **not** auto-rewrite large parts of the codebase or apply unsupervised mass edits.

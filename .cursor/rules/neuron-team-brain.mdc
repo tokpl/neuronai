@@ -8,14 +8,18 @@ alwaysApply: false
 
 When the user asks about **team standards**, **why we decided**, **onboarding**, or **shared rules**:
 
-1. Call `neuron_team_context` with the question
-2. For decision history: `neuron_team_decisions`
-3. For rules/patterns: `neuron_team_rules`
-4. For new teammates: `neuron_onboarding`
+1. Call `neuron_context` with the team or onboarding question.
+2. Prefer returned shared decisions, rules, and onboarding paths; open those files directly.
+3. Use `neuron_search` for team ADRs, coding standards, and conflict notes (e.g. REST vs GraphQL).
+4. Verify against repo docs and source — Brain is a shortlist, not guaranteed truth.
 
 **Rules**
 
 - Local-first — no automatic sharing / public cloud
 - Prefer APPROVED shared memories over drafts
-- Surface conflicts (e.g. REST vs GraphQL) with current standard
+- Surface conflicts with the current documented standard
 - Technical knowledge only — not a social network or chat
+
+After durable team standards or onboarding notes: call `neuron_after_task`, ask the user (**Yes** / **Edit** / **No**), then `neuron_resolve_suggestion`. Prefer `neuron_update` over a near-duplicate.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.

@@ -27,6 +27,9 @@ export interface CompileRecommendation {
   name: string;
   reason: string;
   related?: Array<{ path: string; name: string }>;
+  symbol?: string;
+  flow?: Array<{ label: string; path?: string }>;
+  dependencies?: Array<{ path: string; name: string }>;
 }
 
 export interface BrainCompileInput {
@@ -247,14 +250,22 @@ function render(
   const out: string[] = [`# Task`, task.trim()];
 
   if (recommendation) {
-    out.push(
-      '',
-      '## Recommended start',
-      `- ${clipLine(`${recommendation.name} → ${recommendation.path}`, 120)}`,
-      `- Because: ${clipLine(recommendation.reason, 160)}`,
-    );
+    out.push('', '## Recommended start');
+    if (recommendation.symbol) {
+      out.push(`- ${clipLine(`${recommendation.symbol} → ${recommendation.path}`, 140)}`);
+    } else {
+      out.push(`- ${clipLine(`${recommendation.name} → ${recommendation.path}`, 120)}`);
+    }
+    out.push(`- Because: ${clipLine(recommendation.reason, 160)}`);
+    if (recommendation.flow?.length) {
+      out.push('', '## Flow');
+      out.push(`- ${clipLine(recommendation.flow.map((s) => s.label).join(' → '), 200)}`);
+    }
     for (const rel of recommendation.related ?? []) {
       out.push(`- Related: ${clipLine(`${rel.name} → ${rel.path}`, 100)}`);
+    }
+    for (const dep of recommendation.dependencies ?? []) {
+      out.push(`- Depends on: ${clipLine(`${dep.name} → ${dep.path}`, 100)}`);
     }
   }
 

@@ -13,6 +13,12 @@ export interface ModificationAdvice {
   /** Short human reason. Safe for CLI / structured MCP; kept out of ranking fields. */
   reason: string;
   related: Array<{ path: string; name: string }>;
+  /** Optional verified symbol label, e.g. InvoiceService.cancelInvoice(). */
+  symbol?: string;
+  /** Verified flow steps when evidence exists. */
+  flow?: Array<{ label: string; path?: string }>;
+  /** High-confidence dependencies. */
+  dependencies?: Array<{ path: string; name: string }>;
 }
 
 /**
@@ -25,7 +31,13 @@ export function pickRecommendation(
   includedTitles: Set<string>,
   query = '',
 ): ModificationAdvice | undefined {
-  if (intent !== 'MODIFICATION' && intent !== 'LOCATION' && intent !== 'IMPLEMENTATION') {
+  if (
+    intent !== 'MODIFICATION' &&
+    intent !== 'LOCATION' &&
+    intent !== 'IMPLEMENTATION' &&
+    intent !== 'DEPENDENCY' &&
+    intent !== 'IMPACT'
+  ) {
     return undefined;
   }
 

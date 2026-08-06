@@ -1,0 +1,837 @@
+{
+  "generatedAt": "2026-08-06T16:10:05.947Z",
+  "liveAgent": "UNAVAILABLE (no CURSOR_API_KEY / ANTHROPIC_API_KEY)",
+  "sections": {
+    "architecture": [
+      {
+        "name": "no_duplicate_engines",
+        "ok": true,
+        "detail": "clean"
+      },
+      {
+        "name": "no_second_index",
+        "ok": true,
+        "detail": "clean"
+      },
+      {
+        "name": "no_cloud_embedding_remnants",
+        "ok": true,
+        "detail": "clean"
+      },
+      {
+        "name": "packed_cli_zero_workspace_runtime_deps",
+        "ok": true,
+        "detail": "none"
+      },
+      {
+        "name": "mcp_seven_tools",
+        "ok": true,
+        "detail": "registerTool count=7"
+      },
+      {
+        "name": "cursor_single_understanding_path",
+        "ok": true,
+        "detail": "rules+skill teach neuron_context first"
+      },
+      {
+        "name": "cursor_commands_no_legacy_tools",
+        "ok": true,
+        "detail": "clean"
+      }
+    ],
+    "docs": {
+      "issues": [],
+      "honestReadmeLabels": true
+    },
+    "cursorPath": {
+      "recommended": "neuron_context → open returned paths → targeted exploration",
+      "templatesOk": true
+    },
+    "priorBenchmarks": {
+      "real-agent-benchmark-report.json": {
+        "present": true,
+        "summary": "STRONG"
+      },
+      "deep-code-proof-report.json": {
+        "present": true,
+        "summary": {
+          "ok": 7,
+          "total": 7,
+          "pct": 100,
+          "symbols": 12,
+          "edges": 30,
+          "highConfidenceCalls": 2,
+          "lowConfidenceCalls": 0
+        }
+      },
+      "final-proof-report.json": {
+        "present": true,
+        "summary": {
+          "queries": 100,
+          "correct": 98,
+          "acceptable": 2,
+          "incorrect": 0,
+          "correctOrAcceptablePct": 100,
+          "locationModificationOkPct": 100,
+          "modificationOkPct": 100,
+          "negativeOkPct": 100,
+          "avgContextTokens": 153,
+          "avgRetrievalMs": 1.9,
+          "incremental": {
+            "noChangeMs": 989,
+            "fullRescanMs": 1100,
+            "noChangeReanalyzed": 0,
+            "oneFileReanalyzed": 1,
+            "oneFileMs": 1154,
+            "noChangeReanalyzedZero": true,
+            "oneFileNotFullRepo": true,
+            "noChangeMuchFasterThanFull": false
+          },
+          "renamePass": true,
+          "architectureOk": true
+        }
+      },
+      "dogfood-audit-report.json": {
+        "present": true,
+        "summary": [
+          "fixture",
+          "totals",
+          "rows",
+          "mutation",
+          "scale"
+        ]
+      }
+    },
+    "graphTrust": {
+      "stats": {
+        "bytes": 9155,
+        "symbols": 5,
+        "edges": 12,
+        "files": 5,
+        "mapEntries": 7,
+        "memories": 3,
+        "edgesByType": {
+          "IMPORTS": 2,
+          "EXPORTS": 4,
+          "CALLS": 1,
+          "DEFINED_IN": 4,
+          "ROUTE_TO": 1
+        },
+        "edgesByConfidence": {
+          "high": 11,
+          "medium": 1
+        },
+        "edgesMissingEvidence": 0
+      },
+      "edgeCounts": {
+        "IMPORTS": 2,
+        "EXPORTS": 4,
+        "CALLS": 1,
+        "DEFINED_IN": 4,
+        "ROUTE_TO": 1
+      },
+      "confidence": {
+        "high": 11,
+        "medium": 1,
+        "low": 0
+      },
+      "falseMysteryCalls": 0,
+      "dynamicImportCallsInvented": 0,
+      "missingEvidence": 0,
+      "lowCallsRetained": 0,
+      "highImports": 2,
+      "calls": 1,
+      "routeTo": 1,
+      "recallHints": {
+        "hasAlphaRun": false,
+        "hasHelper": true,
+        "hasJsEsmImport": true
+      },
+      "precisionNotes": [],
+      "rule": "Missing evidence preferred over false relationship"
+    },
+    "adversarial": {
+      "results": [
+        {
+          "query": "Where is authentication implemented?",
+          "grade": "CORRECT",
+          "intent": "LOCATION",
+          "recommendation": "src/auth/service.ts",
+          "contextTokens": 164,
+          "retrievalMs": 10
+        },
+        {
+          "query": "Where is authentication configured?",
+          "grade": "CORRECT",
+          "intent": "CONFIGURATION",
+          "recommendation": null,
+          "contextTokens": 99,
+          "retrievalMs": 5
+        },
+        {
+          "query": "Where are authentication tests?",
+          "grade": "CORRECT",
+          "intent": "LOCATION",
+          "recommendation": "tests/auth/AuthService.test.ts",
+          "contextTokens": 152,
+          "retrievalMs": 2
+        },
+        {
+          "query": "What calls PaymentService?",
+          "grade": "CORRECT",
+          "intent": "DEPENDENCY",
+          "recommendation": "src/payments/PaymentService.ts",
+          "contextTokens": 193,
+          "retrievalMs": 9
+        },
+        {
+          "query": "Who depends on BillingService?",
+          "grade": "CORRECT",
+          "intent": "DEPENDENCY",
+          "recommendation": "src/billing/service.ts",
+          "contextTokens": 210,
+          "retrievalMs": 2
+        },
+        {
+          "query": "What happens before an invoice is cancelled?",
+          "grade": "CORRECT",
+          "intent": "GENERAL_PROJECT",
+          "recommendation": null,
+          "contextTokens": 132,
+          "retrievalMs": 1
+        },
+        {
+          "query": "Where should I add validation for invoice cancellation?",
+          "grade": "CORRECT",
+          "intent": "MODIFICATION",
+          "recommendation": "src/billing/service.ts",
+          "contextTokens": 246,
+          "retrievalMs": 2
+        },
+        {
+          "query": "Which files would be affected if PaymentService changes?",
+          "grade": "CORRECT",
+          "intent": "GENERAL_PROJECT",
+          "recommendation": null,
+          "contextTokens": 134,
+          "retrievalMs": 2
+        },
+        {
+          "query": "Where is the database abstraction?",
+          "grade": "CORRECT",
+          "intent": "LOCATION",
+          "recommendation": "src/billing/repository.ts",
+          "contextTokens": 169,
+          "retrievalMs": 2
+        },
+        {
+          "query": "Where is the concrete PostgreSQL implementation?",
+          "grade": "CORRECT",
+          "intent": "LOCATION",
+          "recommendation": "src/db/postgres.ts",
+          "contextTokens": 181,
+          "retrievalMs": 2
+        },
+        {
+          "query": "Which route reaches createInvoice?",
+          "grade": "CORRECT",
+          "intent": "GENERAL_PROJECT",
+          "recommendation": null,
+          "contextTokens": 177,
+          "retrievalMs": 7
+        },
+        {
+          "query": "Where should I modify this behavior?",
+          "grade": "NO_MATCH",
+          "intent": "MODIFICATION",
+          "recommendation": null,
+          "contextTokens": 23,
+          "retrievalMs": 0
+        },
+        {
+          "query": "What rule applies to this subsystem?",
+          "grade": "NO_MATCH",
+          "intent": "CONVENTION",
+          "recommendation": null,
+          "contextTokens": 23,
+          "retrievalMs": 1
+        },
+        {
+          "query": "Where is AuthSvc implemented?",
+          "grade": "ACCEPTABLE",
+          "intent": "LOCATION",
+          "recommendation": "src/auth/service.ts",
+          "contextTokens": 149,
+          "retrievalMs": 2
+        },
+        {
+          "query": "Where are auths?",
+          "grade": "CORRECT",
+          "intent": "LOCATION",
+          "recommendation": "src/auth/service.ts",
+          "contextTokens": 146,
+          "retrievalMs": 1
+        },
+        {
+          "query": "How do I deploy this with Kubernetes?",
+          "grade": "NO_MATCH",
+          "intent": "IMPLEMENTATION",
+          "recommendation": null,
+          "contextTokens": 24,
+          "retrievalMs": 1
+        },
+        {
+          "query": "Where is the React Native mobile app?",
+          "grade": "NO_MATCH",
+          "intent": "LOCATION",
+          "recommendation": null,
+          "contextTokens": 45,
+          "retrievalMs": 0
+        }
+      ],
+      "counts": {
+        "CORRECT": 12,
+        "ACCEPTABLE": 1,
+        "WRONG": 0,
+        "NO_MATCH": 4
+      },
+      "afterRename": {
+        "recommendsOldBillingPath": false,
+        "recommendsNewPath": true,
+        "grade": "CORRECT"
+      },
+      "negWrong": 0,
+      "negativeTotal": 2
+    },
+    "realWorld": [
+      {
+        "name": "ts-node-app",
+        "root": "(temp)",
+        "initMs": 485,
+        "scanMs": 513,
+        "updateMs": 328,
+        "delta": {
+          "unchanged": 16,
+          "changed": 0,
+          "added": 0,
+          "deleted": 0,
+          "reanalyzed": 0
+        },
+        "stats": {
+          "bytes": 37019,
+          "symbols": 12,
+          "edges": 37,
+          "files": 11,
+          "mapEntries": 24,
+          "memories": 15,
+          "edgesByType": {
+            "IMPORTS": 2,
+            "EXPORTS": 10,
+            "CALLS": 2,
+            "DEFINED_IN": 12,
+            "BELONGS_TO": 11
+          },
+          "edgesByConfidence": {
+            "high": 37
+          },
+          "edgesMissingEvidence": 0
+        },
+        "sample": {
+          "retrievalMs": 9,
+          "contextTokens": 164,
+          "corpusTokens": 1728,
+          "recommendation": "src/auth/service.ts",
+          "grade": "CORRECT"
+        }
+      },
+      {
+        "name": "nextish",
+        "root": "(temp)",
+        "initMs": 486,
+        "scanMs": 402,
+        "updateMs": 313,
+        "delta": {
+          "unchanged": 9,
+          "changed": 0,
+          "added": 0,
+          "deleted": 0,
+          "reanalyzed": 0
+        },
+        "stats": {
+          "bytes": 14745,
+          "symbols": 4,
+          "edges": 10,
+          "files": 6,
+          "mapEntries": 10,
+          "memories": 9,
+          "edgesByType": {
+            "EXPORTS": 4,
+            "DEFINED_IN": 4,
+            "BELONGS_TO": 2
+          },
+          "edgesByConfidence": {
+            "high": 10
+          },
+          "edgesMissingEvidence": 0
+        },
+        "sample": {
+          "retrievalMs": 6,
+          "contextTokens": 176,
+          "corpusTokens": 702,
+          "recommendation": "app/api/auth/route.ts",
+          "grade": "CORRECT"
+        }
+      },
+      {
+        "name": "monorepo",
+        "root": "(temp)",
+        "initMs": 478,
+        "scanMs": 453,
+        "updateMs": 313,
+        "delta": {
+          "unchanged": 13,
+          "changed": 0,
+          "added": 0,
+          "deleted": 0,
+          "reanalyzed": 0
+        },
+        "stats": {
+          "bytes": 16461,
+          "symbols": 4,
+          "edges": 9,
+          "files": 5,
+          "mapEntries": 11,
+          "memories": 10,
+          "edgesByType": {
+            "EXPORTS": 4,
+            "DEFINED_IN": 4,
+            "BELONGS_TO": 1
+          },
+          "edgesByConfidence": {
+            "high": 9
+          },
+          "edgesMissingEvidence": 0
+        },
+        "sample": {
+          "retrievalMs": 5,
+          "contextTokens": 127,
+          "corpusTokens": 725,
+          "recommendation": "packages/auth/",
+          "grade": "CORRECT"
+        }
+      },
+      {
+        "name": "python",
+        "root": "(temp)",
+        "initMs": 491,
+        "scanMs": 420,
+        "updateMs": 304,
+        "delta": {
+          "unchanged": 8,
+          "changed": 0,
+          "added": 0,
+          "deleted": 0,
+          "reanalyzed": 0
+        },
+        "stats": {
+          "bytes": 8937,
+          "symbols": 0,
+          "edges": 0,
+          "files": 0,
+          "mapEntries": 7,
+          "memories": 9,
+          "edgesByType": {},
+          "edgesByConfidence": {},
+          "edgesMissingEvidence": 0
+        },
+        "sample": {
+          "retrievalMs": 4,
+          "contextTokens": 101,
+          "corpusTokens": 451,
+          "recommendation": "app/services/auth.py",
+          "grade": "CORRECT"
+        }
+      },
+      {
+        "name": "noisy",
+        "root": "(temp)",
+        "initMs": 518,
+        "scanMs": 443,
+        "updateMs": 318,
+        "delta": {
+          "unchanged": 51,
+          "changed": 0,
+          "added": 0,
+          "deleted": 0,
+          "reanalyzed": 0
+        },
+        "stats": {
+          "bytes": 45682,
+          "symbols": 14,
+          "edges": 41,
+          "files": 13,
+          "mapEntries": 31,
+          "memories": 20,
+          "edgesByType": {
+            "IMPORTS": 2,
+            "EXPORTS": 12,
+            "CALLS": 2,
+            "DEFINED_IN": 14,
+            "BELONGS_TO": 11
+          },
+          "edgesByConfidence": {
+            "high": 41
+          },
+          "edgesMissingEvidence": 0
+        },
+        "sample": {
+          "retrievalMs": 9,
+          "contextTokens": 164,
+          "corpusTokens": 2191,
+          "recommendation": "src/auth/service.ts",
+          "grade": "CORRECT"
+        }
+      },
+      {
+        "name": "unconventional",
+        "root": "(temp)",
+        "initMs": 453,
+        "scanMs": 402,
+        "updateMs": 311,
+        "delta": {
+          "unchanged": 7,
+          "changed": 0,
+          "added": 0,
+          "deleted": 0,
+          "reanalyzed": 0
+        },
+        "stats": {
+          "bytes": 5608,
+          "symbols": 3,
+          "edges": 7,
+          "files": 3,
+          "mapEntries": 3,
+          "memories": 1,
+          "edgesByType": {
+            "EXPORTS": 3,
+            "DEFINED_IN": 3,
+            "BELONGS_TO": 1
+          },
+          "edgesByConfidence": {
+            "high": 7
+          },
+          "edgesMissingEvidence": 0
+        },
+        "sample": {
+          "retrievalMs": 2,
+          "contextTokens": 23,
+          "corpusTokens": 210,
+          "recommendation": null,
+          "grade": "CORRECT"
+        }
+      },
+      {
+        "name": "this-monorepo",
+        "root": "C:\\projekty\\neuron-ai-memory",
+        "initMs": 0,
+        "scanMs": 882,
+        "updateMs": 385,
+        "delta": {
+          "unchanged": 314,
+          "changed": 0,
+          "added": 0,
+          "deleted": 0,
+          "reanalyzed": 0
+        },
+        "stats": {
+          "bytes": 789006,
+          "symbols": 396,
+          "edges": 1304,
+          "files": 120,
+          "mapEntries": 272,
+          "memories": 38,
+          "edgesByType": {
+            "IMPORTS": 172,
+            "EXPORTS": 378,
+            "ROUTE_TO": 1,
+            "CALLS": 267,
+            "EXTENDS": 8,
+            "IMPLEMENTS": 1,
+            "DEFINED_IN": 395,
+            "BELONGS_TO": 82
+          },
+          "edgesByConfidence": {
+            "high": 1304
+          },
+          "edgesMissingEvidence": 0
+        },
+        "sample": {
+          "retrievalMs": 40,
+          "contextTokens": 314,
+          "corpusTokens": 27224,
+          "recommendation": "apps/cli/src/services/project-session.ts",
+          "grade": "CORRECT"
+        }
+      }
+    ],
+    "largeRepo": [
+      {
+        "filesApprox": 1015,
+        "initMs": 609,
+        "fullScanMs": 542,
+        "noChange": {
+          "ms": 412,
+          "delta": {
+            "unchanged": 1016,
+            "changed": 0,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 0
+          }
+        },
+        "oneChange": {
+          "ms": 520,
+          "delta": {
+            "unchanged": 1015,
+            "changed": 1,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 1
+          }
+        },
+        "tenChange": {
+          "ms": 500,
+          "delta": {
+            "unchanged": 1006,
+            "changed": 10,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 10
+          }
+        },
+        "hundredChange": {
+          "ms": 533,
+          "delta": {
+            "unchanged": 916,
+            "changed": 100,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 100
+          }
+        },
+        "knowledgeBytes": 38053,
+        "symbols": 12,
+        "edges": 37
+      },
+      {
+        "filesApprox": 5015,
+        "initMs": 885,
+        "fullScanMs": 926,
+        "noChange": {
+          "ms": 740,
+          "delta": {
+            "unchanged": 5016,
+            "changed": 0,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 0
+          }
+        },
+        "oneChange": {
+          "ms": 835,
+          "delta": {
+            "unchanged": 5015,
+            "changed": 1,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 1
+          }
+        },
+        "tenChange": {
+          "ms": 855,
+          "delta": {
+            "unchanged": 5006,
+            "changed": 10,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 10
+          }
+        },
+        "hundredChange": {
+          "ms": 829,
+          "delta": {
+            "unchanged": 4916,
+            "changed": 100,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 100
+          }
+        },
+        "knowledgeBytes": 38053,
+        "symbols": 12,
+        "edges": 37
+      },
+      {
+        "filesApprox": 10015,
+        "initMs": 1324,
+        "fullScanMs": 1256,
+        "noChange": {
+          "ms": 1074,
+          "delta": {
+            "unchanged": 10016,
+            "changed": 0,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 0
+          }
+        },
+        "oneChange": {
+          "ms": 1261,
+          "delta": {
+            "unchanged": 10015,
+            "changed": 1,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 1
+          }
+        },
+        "tenChange": {
+          "ms": 1237,
+          "delta": {
+            "unchanged": 10006,
+            "changed": 10,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 10
+          }
+        },
+        "hundredChange": {
+          "ms": 1191,
+          "delta": {
+            "unchanged": 9916,
+            "changed": 100,
+            "added": 0,
+            "deleted": 0,
+            "reanalyzed": 100
+          }
+        },
+        "knowledgeBytes": 38053,
+        "symbols": 12,
+        "edges": 37
+      }
+    ],
+    "failureModes": [
+      {
+        "case": "empty_repo_init",
+        "ok": true,
+        "note": "init succeeded on empty tree"
+      },
+      {
+        "case": "no_package_json",
+        "ok": true,
+        "ms": 441
+      },
+      {
+        "case": "corrupted_knowledge_json",
+        "doctorExit": 1,
+        "contextExit": 0,
+        "rescanOk": true,
+        "userMemorySurvived": true,
+        "note": "User memories live in runtime/store.json; knowledge.json corruption should not wipe them"
+      },
+      {
+        "case": "deleted_module",
+        "updateOk": true,
+        "delta": {
+          "unchanged": 13,
+          "changed": 0,
+          "added": 0,
+          "deleted": 3,
+          "reanalyzed": 0
+        },
+        "staleMapAuth": false,
+        "staleCodeAuth": false
+      },
+      {
+        "case": "context_before_init",
+        "ok": true,
+        "friendly": true,
+        "out": "→ Run: neuron init\n✗ Neuron is not initialized.\n"
+      }
+    ],
+    "performance": {
+      "note": "Separate WALK (scan/update wall) from ANALYSIS (reanalyzed) from RETRIEVAL (metrics.retrievalMs)",
+      "initMs": 693,
+      "scanMs": 597,
+      "noChangeUpdateMs": 480,
+      "noChangeDelta": {
+        "unchanged": 2051,
+        "changed": 0,
+        "added": 0,
+        "deleted": 0,
+        "reanalyzed": 0
+      },
+      "knowledgeBytes": 46716,
+      "retrievalSamples": [
+        {
+          "q": "Where is billing implemented?",
+          "wallMs": 27,
+          "retrievalMs": 19,
+          "contextTokens": 200
+        },
+        {
+          "q": "What calls BillingService?",
+          "wallMs": 5,
+          "retrievalMs": 3,
+          "contextTokens": 209
+        },
+        {
+          "q": "Add invoice cancellation",
+          "wallMs": 3,
+          "retrievalMs": 2,
+          "contextTokens": 127
+        }
+      ]
+    },
+    "packaging": {
+      "verifyPackage": {
+        "ok": true,
+        "out": " 0.2.0@54d649e408c6) win32-x64 node-v24.18.0\nok    init + search return project knowledge\nok    context returns project locations under a token budget\nok    doctor reports a healthy install\nok    doctor probes the project map\nok    doctor probes context budget\nok    packed CLI contains current Brain retrieval symbols\nok    packed Brain fingerprint matches workspace (0.2.0@54d649e408c6)\nok    packed index.js embeds the Brain fingerprint hash\nok    remember → context retrieves stored rule\n\npackage verified: standalone install works\n(node:22196) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.\n(Use `node --trace-deprecation ...` to show where the warning was created)\n"
+      },
+      "verifyOffline": {
+        "ok": true,
+        "out": "ok    init  (no network)\nok    scan  (no network)\nok    search (no network)\nok    doctor (no network)\n\noffline verified: the full journey runs with no network\n"
+      }
+    }
+  },
+  "blockers": [],
+  "bugsFound": [],
+  "bugsFixed": [
+    "resolveImport: TypeScript ESM `.js` import specs now resolve to `.ts`/`.tsx` on disk (restores IMPORTS/CALLS)",
+    "Cursor slash-commands and mode rules no longer reference retired MCP tools; single path is neuron_context"
+  ],
+  "bugsLeft": [
+    "Live Cursor/LLM agent A/B evaluation UNAVAILABLE without API keys — scripted exploration only",
+    "Large-repo no-change update wall-clock remains walk-dominated (~1s at 10k files) even when reanalyzed=0",
+    "Python projects: map/lexical location works; knowledge.code symbols/edges remain TS/JS-oriented (0 symbols in python shape)",
+    "Workspace Cursor MCP catalog may stay stale until MCP server restart — packaged CLI exposes 7 tools including neuron_context"
+  ],
+  "verdict": "GO WITH CONDITIONS",
+  "executiveSummary": {
+    "verdict": "GO WITH CONDITIONS",
+    "liveAgent": "UNAVAILABLE (no CURSOR_API_KEY / ANTHROPIC_API_KEY)",
+    "adversarial": {
+      "CORRECT": 12,
+      "ACCEPTABLE": 1,
+      "WRONG": 0,
+      "NO_MATCH": 4
+    },
+    "graphFalseCalls": 0,
+    "packagingOk": true,
+    "scriptedRediscovery": {
+      "present": true,
+      "summary": "STRONG"
+    },
+    "blockers": []
+  }
+}

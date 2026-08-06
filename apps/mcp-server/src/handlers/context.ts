@@ -31,6 +31,9 @@ export async function handleContext(
             name: prepared.recommendation.name,
             reason: prepared.recommendation.reason,
             related: prepared.recommendation.related,
+            symbol: prepared.recommendation.symbol,
+            flow: prepared.recommendation.flow,
+            dependencies: prepared.recommendation.dependencies,
           }
         : undefined,
       relevantFiles: prepared.relevantFiles.map((f) => ({
@@ -48,6 +51,7 @@ export async function handleContext(
         why: f.why,
       })),
       relevantRules: prepared.relevantRules,
+      flow: prepared.flow,
       metrics: {
         contextTokens: eff.contextTokens,
         budgetTokens: eff.budgetTokens,
@@ -58,6 +62,8 @@ export async function handleContext(
         compressionRatio: eff.compressionRatio,
         baseline: eff.baseline,
         retrievalMs: eff.retrievalMs,
+        estimatedRediscoveryAvoided: eff.estimatedRediscoveryAvoided,
+        rediscoveryBaseline: eff.rediscoveryBaseline,
       },
     });
   } catch (error) {

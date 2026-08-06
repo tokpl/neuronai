@@ -21,6 +21,10 @@ export type {
 export { nowIso } from './types.js';
 export { buildProjectMap, type ScanMapEntry, type ScanProjectMap } from './map/builder.js';
 export { extractSymbols } from './symbols/extractor.js';
+export {
+  buildCodeIntelligence,
+  mergeCodeIntelligence,
+} from './code/intelligence.js';
 
 export {
   FileImportanceAnalyzer,

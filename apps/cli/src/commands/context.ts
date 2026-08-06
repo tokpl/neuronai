@@ -28,9 +28,16 @@ export async function runContext(query: string, cwd = process.cwd()): Promise<vo
 
   if (prepared.recommendation) {
     console.log('Recommended start:');
+    if (prepared.recommendation.symbol) {
+      console.log(`  ${prepared.recommendation.symbol}`);
+    }
     console.log(`  ${prepared.recommendation.path}`);
     if (prepared.recommendation.reason) {
       console.log(`  (${prepared.recommendation.reason})`);
+    }
+    if (prepared.recommendation.flow?.length) {
+      console.log('Flow:');
+      console.log(`  ${prepared.recommendation.flow.map((s) => s.label).join(' → ')}`);
     }
     ui.blank();
   }
@@ -85,6 +92,10 @@ export async function runContext(query: string, cwd = process.cwd()): Promise<vo
   }
   console.log('Retrieval:');
   console.log(`  ${eff.retrievalMs} ms · ${prepared.intent}`);
+  if (eff.estimatedRediscoveryAvoided && eff.estimatedRediscoveryAvoided > 0) {
+    console.log('Estimated rediscovery avoided (simulated):');
+    console.log(`  ~${formatTokens(eff.estimatedRediscoveryAvoided)}`);
+  }
 }
 
 function formatTokens(n: number): string {

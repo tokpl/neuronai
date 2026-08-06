@@ -14,6 +14,7 @@ alwaysApply: false
 
 ## Suggested rules
 
+- Cross-cutting concerns belong in middleware, not route handlers
 - Use dependency injection / service modules for business logic
 
 Load project context with `neuron_context` before inventing new patterns.

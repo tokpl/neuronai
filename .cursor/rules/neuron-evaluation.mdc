@@ -8,13 +8,17 @@ alwaysApply: false
 
 When the user asks **was that correct**, **quality report**, **benchmark**, or **memory quality**:
 
-1. Call `neuron_evaluate_answer` with task + answer (+ knownFacts when available)
-2. Call `neuron_quality_report` for dashboard metrics
-3. Call `neuron_memory_quality` for memory confidence/usage
-4. Call `neuron_benchmark` after large brain changes
+1. Call `neuron_context` with the evaluation question (include task, answer, and known facts when available).
+2. Prefer returned quality notes, benchmark baselines, and memory-health signals; verify against source and tests.
+3. Use `neuron_search` for prior evaluation results, hallucination warnings, and metric history.
+4. Call `neuron_scan` after large Brain changes when freshness of the project index matters.
 
 **Rules**
 
 - Store metrics only — never full chats, prompts, or secrets
 - No model training / RL — improve via measurement + config
 - Surface hallucination warnings (e.g. Redis claimed but missing from graph)
+
+After durable quality or benchmark conclusions: call `neuron_after_task`, ask the user (**Yes** / **Edit** / **No**), then `neuron_resolve_suggestion`.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.

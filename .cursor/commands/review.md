@@ -1,10 +1,8 @@
 # /review
 
-Code review workflow via Neuron.
+Code review with Neuron context.
 
-1. Call `neuron_run_mode` with `modeId: "code_review"` or query `/review …`
-2. Include git diff / changed files in the prompt
-3. Use suggested tools for security, performance, and architecture checks
-4. Output Issues, Risks, Suggestions
-
-Do not merge or push automatically.
+1. Call `neuron_context` with the change under review
+2. Prefer returned decisions, patterns and connected files
+3. Flag conflicts with project rules; verify against source
+4. Suggest `neuron_after_task` only for durable engineering knowledge

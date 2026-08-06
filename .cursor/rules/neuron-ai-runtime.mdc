@@ -8,10 +8,10 @@ alwaysApply: false
 
 When choosing models, checking privacy of context, or asking what runs offline:
 
-1. Call `neuron_ai_status` or `neuron_available_models`
-2. For a task, call `neuron_best_model_for_task` / `neuron_select_model`
-3. Before sending code to a cloud model, call `neuron_privacy_check`
-4. Check providers with `neuron_model_health`
+1. Call `neuron_context` with the runtime or privacy question (include task type and sensitivity when known).
+2. Prefer returned model preferences, `allowCloud` settings, and provider notes; verify against project config.
+3. Use `neuron_search` for privacy rules, local-model guidance, and prior routing decisions.
+4. Before sending code to a cloud model, confirm no secrets, `.env` values, or CRITICAL data are included.
 
 **Rules**
 
@@ -19,3 +19,7 @@ When choosing models, checking privacy of context, or asking what runs offline:
 - Never send secrets / `.env` / CRITICAL data to cloud
 - Never store API keys in the project brain
 - Neuron does not train models — it routes to existing providers
+
+After durable runtime or privacy decisions: call `neuron_after_task`, ask the user (**Yes** / **Edit** / **No**), then `neuron_resolve_suggestion`.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.

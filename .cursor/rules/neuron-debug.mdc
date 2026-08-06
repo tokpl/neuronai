@@ -8,9 +8,13 @@ alwaysApply: false
 
 When the user is debugging or fixing a **recurring** error:
 
-1. Call `neuron_debug_context` with the error / symptom
-2. Call `neuron_search_incidents` for similar past problems
-3. Prefer prior solutions/lessons when still valid
-4. After a real fix, suggest `neuron_create_incident` + resolve so the lesson is stored
+1. Call `neuron_context` with the error, symptom, or stack trace.
+2. Prefer returned incident notes, prior fixes, and relevant files; open those paths directly.
+3. Use `neuron_search` for similar past problems, root-cause write-ups, and resolution steps.
+4. Prefer prior solutions and lessons when still valid — verify against current source before applying.
+
+After a real fix worth remembering: call `neuron_after_task`, ask the user (**Yes** / **Edit** / **No**), then `neuron_resolve_suggestion`. Nothing is written until the user answers.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.
 
 Do **not** invent production access, auto-deploy, or silent incident creation.

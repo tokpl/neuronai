@@ -10,6 +10,7 @@ import type {
   ProjectHealth,
   ProjectMap,
 } from './models.js';
+import type { CodeIntelligence } from '@neuronai/types';
 import type { ProjectBrain } from './project-brain.js';
 import { brainDocs, retrieve } from './retrieval/index.js';
 
@@ -37,6 +38,20 @@ export function applyMapUpdate(brain: ProjectBrain, map: ProjectMap): void {
   brain.knowledge = {
     ...brain.knowledge,
     map: { version: 1, updatedAt: nowIso(), entries: map.entries },
+    updatedAt: nowIso(),
+  };
+}
+
+export function applyCodeUpdate(brain: ProjectBrain, code: CodeIntelligence): void {
+  brain.knowledge = {
+    ...brain.knowledge,
+    code: {
+      version: 1,
+      updatedAt: nowIso(),
+      files: code.files,
+      symbols: code.symbols,
+      edges: code.edges,
+    },
     updatedAt: nowIso(),
   };
 }

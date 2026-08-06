@@ -7,8 +7,10 @@ import {
   type RetrievalDoc,
   type RetrievalHit,
 } from './retrieval/index.js';
+import { expandConnectedSlice } from './retrieval/code-docs.js';
 import type { QueryIntent } from './retrieval/intent.js';
 import { pickRecommendation, type ModificationAdvice } from './retrieval/recommend.js';
+import type { CodeIntelligence } from '@neuronai/types';
 
 /**
  * The single path from stored knowledge to agent-facing context.
@@ -25,6 +27,8 @@ export interface PrepareContextInput {
   docs: RetrievalDoc[];
   /** Files or modules the task touches. */
   modules?: string[];
+  /** Optional structural code plane for dependency expansion. */
+  code?: CodeIntelligence;
 }
 
 /** What the agent should open, in structured form. */
@@ -62,6 +66,12 @@ export interface ContextEfficiency {
   estimatedTokensSaved: number;
   baseline: 'whole-brain-verbatim';
   retrievalMs: number;
+  /**
+   * Simulated estimate of structural rediscovery avoided (map + symbols + edges
+   * the agent would otherwise explore). Not measured agent file-read savings.
+   */
+  estimatedRediscoveryAvoided?: number;
+  rediscoveryBaseline?: 'simulated-structural-exploration';
 }
 
 export interface PreparedContext extends CompiledContext {
@@ -74,6 +84,8 @@ export interface PreparedContext extends CompiledContext {
   relevantRules: RelevantRule[];
   /** Best place to start when the task is about adding or changing code. */
   recommendation?: ModificationAdvice;
+  /** Verified flow when evidence exists. */
+  flow?: Array<{ label: string; path?: string }>;
   efficiency: ContextEfficiency;
 }
 
@@ -92,12 +104,24 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
 
   // Provisional inclusion set from ranked hits (titles the compiler may keep).
   const provisionalTitles = new Set(result.hits.map((h) => h.doc.title));
-  const recommendation = pickRecommendation(
+  const baseRecommendation = pickRecommendation(
     result.stats.intent,
     result.hits,
     provisionalTitles,
     input.task,
   );
+
+  const slice = expandConnectedSlice(input.code, baseRecommendation, result.stats.intent);
+  const recommendation: ModificationAdvice | undefined = baseRecommendation
+    ? {
+        ...baseRecommendation,
+        symbol: slice.symbol,
+        related: slice.related.length ? slice.related : baseRecommendation.related,
+        flow: slice.flow.length ? slice.flow : undefined,
+        dependencies: slice.dependencies.map((d) => ({ path: d.path, name: d.name })),
+        reason: enrichReason(baseRecommendation.reason, slice.symbol, slice.flow),
+      }
+    : undefined;
 
   const compiled = createBrainCompiler().compile({
     task: input.task,
@@ -110,6 +134,9 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
           name: recommendation.name,
           reason: recommendation.reason,
           related: recommendation.related,
+          symbol: recommendation.symbol,
+          flow: recommendation.flow,
+          dependencies: recommendation.dependencies,
         }
       : undefined,
     corpusTokens,
@@ -158,6 +185,16 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
       ? recommendation
       : undefined;
 
+  const structuralNodes =
+    (input.code?.files.length ?? 0) +
+    (input.code?.symbols.length ?? 0) +
+    (input.code?.edges.filter((e) => e.confidence === 'high').length ?? 0);
+  // Rough: each structural fact ≈ ~12 tokens if rediscovered via search/open.
+  const estimatedRediscoveryAvoided = Math.max(
+    0,
+    Math.min(structuralNodes, 40) * 12 + (slice.flow.length + slice.dependencies.length) * 25,
+  );
+
   return {
     ...compiled,
     hits: result.hits,
@@ -167,6 +204,7 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
     relevantFiles: locations.filter((h) => h.doc.location!.kind !== 'module').map(toLocation),
     relevantRules,
     recommendation: finalRecommendation,
+    flow: finalRecommendation?.flow,
     efficiency: {
       contextTokens: compiled.metrics.compiledTokens,
       budgetTokens: compiled.metrics.tokenBudget,
@@ -177,8 +215,21 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
       estimatedTokensSaved: Math.max(0, corpusTokens - compiled.metrics.compiledTokens),
       baseline: 'whole-brain-verbatim',
       retrievalMs: compiled.metrics.retrievalMs,
+      estimatedRediscoveryAvoided,
+      rediscoveryBaseline: 'simulated-structural-exploration',
     },
   };
+}
+
+function enrichReason(
+  base: string,
+  symbol?: string,
+  flow?: Array<{ label: string; path?: string }>,
+): string {
+  const parts = [base];
+  if (symbol && !base.includes(symbol)) parts.push(`structural focus ${symbol}`);
+  if (flow && flow.length > 1) parts.push('verified call/route chain available');
+  return parts.filter(Boolean).join('; ');
 }
 
 /** Strip ranking jargon so structured "why" stays human. */

@@ -1,0 +1,123 @@
+{
+  "generatedAt": "2026-08-06T15:44:22.214Z",
+  "queries": [
+    {
+      "query": "Where is billing implemented?",
+      "intent": "LOCATION",
+      "recommendation": "src/billing/routes.ts",
+      "symbol": "POST /invoices",
+      "flow": [
+        {
+          "label": "POST /invoices",
+          "path": "src/billing/routes.ts"
+        },
+        {
+          "label": "function createInvoiceHandler",
+          "path": "src/billing/routes.ts"
+        }
+      ],
+      "contextTokens": 257,
+      "retrievalMs": 15,
+      "estimatedRediscoveryAvoided": 630,
+      "verdict": "correct"
+    },
+    {
+      "query": "Where should I implement invoice cancellation?",
+      "intent": "MODIFICATION",
+      "recommendation": "src/billing/routes.ts",
+      "symbol": "POST /invoices",
+      "flow": [
+        {
+          "label": "POST /invoices",
+          "path": "src/billing/routes.ts"
+        },
+        {
+          "label": "function createInvoiceHandler",
+          "path": "src/billing/routes.ts"
+        }
+      ],
+      "contextTokens": 262,
+      "retrievalMs": 2,
+      "estimatedRediscoveryAvoided": 630,
+      "verdict": "correct"
+    },
+    {
+      "query": "What calls BillingService?",
+      "intent": "DEPENDENCY",
+      "recommendation": "src/billing/service.ts",
+      "symbol": "BillingService.cancelInvoice()",
+      "flow": null,
+      "contextTokens": 195,
+      "retrievalMs": 1,
+      "estimatedRediscoveryAvoided": 480,
+      "verdict": "correct"
+    },
+    {
+      "query": "What does BillingService depend on?",
+      "intent": "DEPENDENCY",
+      "recommendation": "src/billing/service.ts",
+      "symbol": "BillingService.cancelInvoice()",
+      "flow": null,
+      "contextTokens": 197,
+      "retrievalMs": 2,
+      "estimatedRediscoveryAvoided": 480,
+      "verdict": "acceptable"
+    },
+    {
+      "query": "What happens when POST /invoices/:id/cancel is called?",
+      "intent": "IMPLEMENTATION",
+      "recommendation": "src/billing/routes.ts",
+      "symbol": "POST /invoices/:id/cancel",
+      "flow": [
+        {
+          "label": "POST /invoices/:id/cancel",
+          "path": "src/billing/routes.ts"
+        },
+        {
+          "label": "function cancelInvoiceHandler",
+          "path": "src/billing/routes.ts"
+        }
+      ],
+      "contextTokens": 285,
+      "retrievalMs": 1,
+      "estimatedRediscoveryAvoided": 630,
+      "verdict": "correct"
+    },
+    {
+      "query": "What files would I likely need to change to modify payment processing?",
+      "intent": "IMPACT",
+      "recommendation": "src/services/stripe.ts",
+      "symbol": "StripeClient",
+      "flow": null,
+      "contextTokens": 197,
+      "retrievalMs": 2,
+      "estimatedRediscoveryAvoided": 480,
+      "verdict": "correct"
+    },
+    {
+      "query": "How does Kubernetes deployment work?",
+      "intent": "IMPLEMENTATION",
+      "recommendation": null,
+      "symbol": null,
+      "flow": null,
+      "contextTokens": 23,
+      "retrievalMs": 1,
+      "estimatedRediscoveryAvoided": 480,
+      "verdict": "correct"
+    }
+  ],
+  "summary": {
+    "ok": 7,
+    "total": 7,
+    "pct": 100,
+    "symbols": 12,
+    "edges": 30,
+    "highConfidenceCalls": 2,
+    "lowConfidenceCalls": 0
+  },
+  "trust": {
+    "everyEdgeHasEvidence": true,
+    "noLowConfidenceCalls": true,
+    "codePlanePresent": true
+  }
+}

@@ -8,9 +8,14 @@ alwaysApply: false
 
 When the user asks **why code is like this** or about past changes:
 
-1. Call `neuron_history_context` with their question
-2. Optionally `neuron_git_context` / `neuron_change_history` for a module
-3. Use `neuron_architecture_evolution` for system transitions
-4. Use `neuron_regression_check` before risky similar changes
+1. Call `neuron_context` with their question (include module, file, or symptom when known).
+2. Prefer returned memories, files, and decisions; open those paths directly.
+3. Use `neuron_search` for targeted lookups (commit themes, prior refactors, regression notes).
+4. Verify against `git log`, blame, and source — Brain is a shortlist, not guaranteed truth.
+5. Call `neuron_scan` only when the project index may be stale.
+
+After a durable lesson about **why** something was built this way: call `neuron_after_task`, ask the user (**Yes** / **Edit** / **No**), then `neuron_resolve_suggestion`. Prefer `neuron_update` over a near-duplicate memory.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.
 
 Do **not** blame people. Do **not** dump full diffs or secrets. Git is a history source, not a host Neuron replaces.

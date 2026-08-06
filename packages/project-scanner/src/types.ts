@@ -133,6 +133,8 @@ export interface ProjectScanReport {
   architecture: ArchitectureMap;
   /** Retrievable locations — modules, files, symbols, routes. */
   map: ProjectMapSnapshot;
+  /** Structural code intelligence (TS/JS deep; other langs shallow via relationships). */
+  code?: import('@neuronai/types').CodeIntelligence;
   dependencyGraph: DependencyEdge[];
   relationshipsList: CodeRelationship[];
   memories: GeneratedMemory[];

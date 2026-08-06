@@ -8,9 +8,13 @@ alwaysApply: false
 
 When the user works across multiple repos/products in one org:
 
-1. Call `neuron_workspace_info` to see org, workspace, and projects
-2. Use `neuron_project_switch` before project-specific memory/tools
-3. Use `neuron_access_check` if permissions are unclear
-4. Use `neuron_storage_status` for deployment/storage mode
+1. Call `neuron_context` with the workspace or cross-project question (name the org, product, or repo when known).
+2. Prefer returned project boundaries, shared standards, and relevant paths; open those directly.
+3. Use `neuron_search` for org-wide decisions, access notes, or storage/deployment conventions.
+4. Call `neuron_scan` when switching projects or when the index may be stale.
+
+After durable cross-project standards or boundaries: call `neuron_after_task`, ask the user (**Yes** / **Edit** / **No**), then `neuron_resolve_suggestion`.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.
 
 Do **not** invent SaaS billing, public accounts, or cross-tenant data access.

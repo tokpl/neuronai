@@ -1,8 +1,8 @@
 # /security
 
-Security review mode.
+Security review with Neuron context.
 
-1. Call `neuron_run_mode` with `modeId: "security_review"`
-2. Call `neuron_mode_context` — needs files, dependencies, security rules
-3. Use `neuron_security_check` / `neuron_security_scan` (never echo secrets)
-4. Output Threats, Severity, Recommendations
+1. Call `neuron_context` with the surface under review (auth, admin, payments, …)
+2. Prefer returned modules, rules and warnings
+3. Never echo secrets; never store credentials in memory
+4. Report findings with file paths and severity

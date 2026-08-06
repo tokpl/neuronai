@@ -1,5 +1,5 @@
 ---
-description: Keep living project docs in sync via Neuron documentation tools
+description: Keep living project docs grounded in Neuron context
 globs:
 alwaysApply: false
 ---
@@ -8,10 +8,9 @@ alwaysApply: false
 
 When the user asks to **explain the project**, update docs, or onboarding material:
 
-1. Call `neuron_project_documentation` or `neuron_explain_project`
-2. For regenerating living docs, call `neuron_generate_docs`
-3. Check health with `neuron_docs_health`
-4. For a module, call `neuron_module_docs`
-5. Prefer writing generated output under `.neuron/docs/` — do not invent a wiki/CMS publish step
+1. Call `neuron_context` with what should be documented or explained
+2. Prefer returned modules and rules; verify against source
+3. Prefer writing under existing `docs/` or `.neuron/` docs — do not invent a wiki/CMS publish step
+4. After durable doc decisions, propose remembering via `neuron_after_task`
 
-Manual docs remain in `docs/`. Neuron detects drift (e.g. README DB vs Project Brain).
+Manual docs remain in `docs/`. Treat Brain tips as a shortlist, not guaranteed truth.

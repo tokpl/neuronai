@@ -5,7 +5,7 @@
 ├── prefs.json            # init answers, privacy mode        (commit)
 ├── brain/
 │   ├── dna.json          # stack, modules, structure         (commit)
-│   ├── knowledge.json    # memories, decisions, rules, graph (commit)
+│   ├── knowledge.json    # memories, decisions, rules, graph, map, code (commit)
 │   └── health.json       # derived health score              (commit)
 ├── runtime/
 │   └── store.json        # engine store — regenerable        (ignore)

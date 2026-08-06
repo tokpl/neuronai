@@ -2,7 +2,7 @@
 
 Documentation mode.
 
-1. Call `neuron_run_mode` with `modeId: "documentation"`
-2. Use `neuron_generate_docs` / `neuron_project_documentation` as needed
-3. Prefer updating `.neuron/docs/` over inventing wiki SaaS
-4. Output technical / architecture docs and guides
+1. Call `neuron_context` with what should be documented
+2. Open only the returned paths; verify against source
+3. Prefer updating existing project docs over inventing a wiki
+4. Output technical / architecture docs and guides grounded in those files

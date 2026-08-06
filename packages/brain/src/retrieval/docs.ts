@@ -1,6 +1,7 @@
 import type { MemoryRecord } from '@neuronai/types';
 
 import type { KnowledgePlane, ProjectDna, ProjectMapEntry } from '../models.js';
+import { codeDocs } from './code-docs.js';
 import { conceptsFor } from './concepts.js';
 import type { RetrievalDoc, RetrievalKind } from './rank.js';
 
@@ -68,6 +69,11 @@ export function brainDocs(source: BrainDocSource): RetrievalDoc[] {
 
   for (const entry of knowledge.map?.entries ?? []) {
     docs.push(mapEntryDoc(entry, freshnessFrom(knowledge.map?.updatedAt)));
+  }
+
+  // Structural code entities (same lexical index — not a second retrieval engine).
+  if (knowledge.code) {
+    docs.push(...codeDocs(knowledge.code, freshnessFrom(knowledge.code.updatedAt)));
   }
 
   if (dna) {

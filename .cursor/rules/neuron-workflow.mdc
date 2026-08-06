@@ -8,9 +8,13 @@ alwaysApply: false
 
 When the user opens a project, says **continue** / **resume**, or asks what they were working on:
 
-1. Call `neuron_resume` or `neuron_resume_context`
-2. Respect `neuron_current_focus` — do not dump the entire codebase
-3. For task detail, call `neuron_task_context`
-4. Before switching owners / ending a stretch of work, call `neuron_handoff` or `neuron_session_summary`
+1. Call `neuron_context` with the resume or focus question.
+2. Prefer returned current focus, recent tasks, and relevant files; open those paths directly.
+3. Use `neuron_search` for task detail, handoff notes, or session summaries in the Brain.
+4. Respect the returned focus — do not dump the entire codebase.
+
+Before switching owners or ending a stretch of work, summarize technical state in chat; if worth remembering, use `neuron_after_task` → ask the user (**Yes** / **Edit** / **No**) → `neuron_resolve_suggestion`.
 
 Store **technical** state only. Never persist private chats, personal data, or people productivity scores.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.

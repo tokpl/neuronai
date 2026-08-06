@@ -9,6 +9,7 @@ import {
   applyHealthUpdate,
   applyKnowledgeUpdate,
   applyMapUpdate,
+  applyCodeUpdate,
   appendDecision,
   evolveHealth,
   explainBrain,
@@ -28,6 +29,16 @@ import type {
   ProjectHealth,
   ProjectMap,
 } from './models.js';
+import type { CodeIntelligence } from '@neuronai/types';
+import {
+  explainFlow,
+  explainSymbol,
+  findSymbols,
+  getDependencies,
+  getDependents,
+  getImpact,
+  getSymbol,
+} from './code/queries.js';
 import { computeBrainMetrics, explainMetric, formatBrainMetricsReport } from './metrics.js';
 import { resolveBrainPaths } from './paths.js';
 
@@ -212,6 +223,43 @@ export class ProjectBrain {
 
   getMap(): ProjectMap {
     return this.knowledge.map ?? emptyMap();
+  }
+
+  async updateCode(code: CodeIntelligence): Promise<void> {
+    applyCodeUpdate(this, code);
+    await this.save();
+  }
+
+  getCode(): CodeIntelligence | undefined {
+    return this.knowledge.code;
+  }
+
+  findSymbol(name: string) {
+    return findSymbols(this.knowledge.code, name);
+  }
+
+  getSymbol(idOrName: string) {
+    return getSymbol(this.knowledge.code, idOrName);
+  }
+
+  getDependencies(target: string) {
+    return getDependencies(this.knowledge.code, target);
+  }
+
+  getDependents(target: string) {
+    return getDependents(this.knowledge.code, target);
+  }
+
+  getImpact(target: string) {
+    return getImpact(this.knowledge.code, target);
+  }
+
+  explainCode(target: string) {
+    return explainSymbol(this.knowledge.code, target);
+  }
+
+  explainFlow(target: string) {
+    return explainFlow(this.knowledge.code, target);
   }
 
   async updateHealth(patch: Partial<ProjectHealth>): Promise<void> {

@@ -8,9 +8,13 @@ alwaysApply: false
 
 When the user adds **auth, admin, payments, secrets, or public APIs**:
 
-1. Call `neuron_security_context` with the feature request
-2. Respect active SECURITY constitution rules
-3. After significant diffs, call `neuron_check_change_security`
-4. For deeper work, call `neuron_security_review` (QUICK / DEEP / CHANGE) or `neuron_threat_model`
+1. Call `neuron_context` first with the feature request (mode `deep` for auth, payments, or public surfaces).
+2. Prefer returned SECURITY constitution rules, threat notes, and relevant files; open and verify against source.
+3. Use `neuron_search` for prior security reviews, change patterns, and threat-model notes.
+4. After significant diffs, re-check context and search for gaps before recommending merges.
+
+After durable security decisions or review outcomes: call `neuron_after_task`, ask the user (**Yes** / **Edit** / **No**), then `neuron_resolve_suggestion`. Never store secret values in memory.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.
 
 Do **not** auto-rewrite security code, delete secrets from disk without confirmation, access production, or store secret values in memory.

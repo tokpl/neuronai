@@ -20,6 +20,16 @@ export type {
   ProjectHealth,
   Provenance,
 } from './models.js';
+export type {
+  CodeEdge,
+  CodeEdgeType,
+  CodeEvidence,
+  CodeFileNode,
+  CodeIntelligence,
+  CodeSymbolKind,
+  CodeSymbolNode,
+  RelationConfidence,
+} from '@neuronai/types';
 export { resolveBrainPaths } from './paths.js';
 export { computeHealth, emptyDna, emptyHealth, emptyKnowledge, facet, nowIso } from './defaults.js';
 export { openProjectBrain, ProjectBrain, type OpenProjectBrainOptions } from './project-brain.js';
@@ -61,6 +71,22 @@ export {
   type RetrievalResult,
   type RetrievalStats,
 } from './retrieval/index.js';
+export {
+  expandConnectedSlice,
+  codeDocs,
+} from './retrieval/code-docs.js';
+export {
+  explainFlow,
+  explainSymbol,
+  findSymbols,
+  getDependencies,
+  getDependents,
+  getImpact,
+  getSymbol,
+  type CodeFlowStep,
+  type CodeImpact,
+  type CodeImpactItem,
+} from './code/queries.js';
 
 // Deduplication — one memory per piece of knowledge.
 export {

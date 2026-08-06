@@ -134,10 +134,13 @@ points. Detected from manifests and structure, each claim carrying a confidence 
 
 **Knowledge** — what the project has *decided*: architecture decisions, patterns, constraints,
 warnings. Seeded from your README, code structure and Git history, then grown as you work.
+The same plane also holds the **project map** (where things live) and **code intelligence**
+(exported symbols and verified relationships — imports, calls, routes — each with evidence and
+confidence). Neuron prefers a missing edge over a wrong one.
 
-**Retrieval** — deterministic BM25-style lexical ranking. Term matching with stemming, exact
-phrase and title boosts, and a coverage reward so a memory matching four of your five task terms
-beats one matching a single term.
+**Retrieval** — deterministic BM25-style lexical ranking over memories, map locations, and code
+symbols. When evidence exists, context expansion follows high-confidence edges so the agent gets
+a connected slice (start → related → dependency → flow), not a random file list.
 
 Relevance is a **gate**, not one term in a weighted sum. Importance and freshness are applied
 multiplicatively, so they reorder memories that already match your task but can never promote an
@@ -376,7 +379,8 @@ The scanner owns project analysis. The CLI and MCP server are adapters and build
 same way, through `createNeuronRuntime()`.
 
 More: [How it works](./docs/how-it-works.md) · [`.neuron/` folder](./docs/neuron-folder.md) ·
-[FAQ](./docs/faq.md) · [Privacy](./docs/privacy.md)
+[FAQ](./docs/faq.md) · [Privacy](./docs/privacy.md) ·
+[Production readiness](./docs/PRODUCTION_READINESS.md)
 
 ## Contributing
 

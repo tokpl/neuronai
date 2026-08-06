@@ -8,10 +8,13 @@ alwaysApply: false
 
 When the user asks to **optimize**, reduce latency, fix N+1, or improve scalability:
 
-1. Call `neuron_performance_context` with the module / symptom
-2. For data layer issues, call `neuron_database_review`
-3. For coupling / scale, call `neuron_scalability_check`
-4. After larger changes, call `neuron_performance_review`
-5. Check prior wins via `neuron_performance_history`
+1. Call `neuron_context` first with the module, symptom, or optimization goal.
+2. Prefer returned bottlenecks, prior wins, and relevant files; open those paths and **measure before changing**.
+3. Use `neuron_search` for database notes, scalability lessons, and past performance reviews.
+4. Call `neuron_scan` when the project index may be stale after structural changes.
+
+After durable performance lessons or benchmark baselines: call `neuron_after_task`, ask the user (**Yes** / **Edit** / **No**), then `neuron_resolve_suggestion`.
+
+**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.
 
 Do **not** invent production APM access, auto-deploy optimizations, or silent code rewrites.

@@ -4,6 +4,7 @@ import { basename, join } from 'node:path';
 import { createArchitectureAnalyzer } from '../architecture/analyzer.js';
 import { createCodeRelationshipAnalyzer } from '../architecture/relationships.js';
 import { createProjectBrainWriter, renderProjectReport } from '../brain/writer.js';
+import { buildCodeIntelligence } from '../code/intelligence.js';
 import { createDependencyGraphBuilder } from '../dependencies/graph.js';
 import { createDocumentationAnalyzer } from '../documentation/analyzer.js';
 import { createCodebaseScanner } from '../filesystem/scanner.js';
@@ -207,6 +208,13 @@ export class ProjectBrainBootstrap {
       manifests: stack.manifests,
     });
 
+    const allPaths = new Set(walk.files.map((f) => f.relativePath.replace(/\\/g, '/')));
+    const code = await buildCodeIntelligence(focusFiles, {
+      maxFiles: mode === 'fast' ? 120 : mode === 'update' ? Math.min(200, focusFiles.length || 1) : 250,
+      concurrency,
+      allPaths,
+    });
+
     const report: ProjectScanReport = {
       projectName,
       mode,
@@ -223,6 +231,7 @@ export class ProjectBrainBootstrap {
       stack,
       architecture,
       map,
+      code,
       dependencyGraph,
       relationshipsList,
       memories: generated,

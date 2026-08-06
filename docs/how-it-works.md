@@ -29,12 +29,16 @@ ranking scores and internal field names never reach it.
 **The scanner** reads the codebase and folds what it finds back into the brain: modules become
 DNA, relationships become the graph, generated observations become searchable memories, and a
 **project map** (modules, files, symbols, routes — always with full paths) becomes retrievable
-location knowledge. Deleted files disappear from the map on the next scan.
+location knowledge. On supported languages (TypeScript/JavaScript deep pass) it also builds
+**code intelligence** inside the same `knowledge.json` plane: exported symbols, verified
+`IMPORTS` / `CALLS` / `ROUTE_TO` edges with evidence and confidence. Missing a relationship is
+preferred over inventing one. Deleted files disappear from the map and code plane on the next scan.
 
 **Context** (`neuron context` / `neuron_context`) is the product path: intent → concepts →
-rank → dedupe → compress against a token budget → small markdown plus structured
-`relevantFiles` / `relevantModules` / `relevantRules`. Neuron tells the AI *where to look*
-and *which rules apply*, not the contents of every file.
+rank → dependency expansion (verified edges only) → compress against a token budget → small
+markdown plus structured `relevantFiles` / `relevantModules` / `relevantRules` / optional
+`flow`. Neuron tells the AI *where to start*, *how pieces connect when evidence exists*, and
+*which rules apply* — not the contents of every file.
 
 ## Principles
 

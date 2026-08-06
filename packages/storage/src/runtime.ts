@@ -18,6 +18,7 @@ import type { MemoryEngine } from '@neuronai/memory-engine';
 import { createProjectResolver, type ResolvedProject } from '@neuronai/project-analyzer';
 import {
   createProjectBrainBootstrap,
+  mergeCodeIntelligence,
   type ProjectScanReport,
   type ScanMode,
 } from '@neuronai/project-scanner';
@@ -350,6 +351,29 @@ export async function createNeuronRuntime(
       entries: mapEntries,
     });
 
+    // Structural code intelligence — merge on update so unchanged files keep verified edges.
+    if (report.code) {
+      const priorCode = brain.getCode();
+      const nextCode =
+        mode === 'update'
+          ? mergeCodeIntelligence(priorCode, report.code, {
+              deletedPaths: report.delta?.deleted ?? [],
+              replacedPaths: [...(report.delta?.added ?? []), ...(report.delta?.changed ?? [])],
+            })
+          : report.code;
+      // Drop nodes whose paths no longer exist on disk (rename safety).
+      const liveCode = {
+        ...nextCode,
+        files: nextCode.files.filter((f) => pathStillOnDisk(f.path)),
+        symbols: nextCode.symbols.filter((s) => pathStillOnDisk(s.path)),
+        edges: nextCode.edges.filter(
+          (e) =>
+            pathStillOnDisk(e.from.split('#')[0]!) && pathStillOnDisk(e.to.split('#')[0]!),
+        ),
+      };
+      await brain.updateCode(liveCode);
+    }
+
     if (report.stack.database[0]) {
       brain.dna.platforms.data = facet(report.stack.database[0], {
         confidence: 0.85,
@@ -386,7 +410,12 @@ export async function createNeuronRuntime(
     listMemories,
     corpus,
     search,
-    context: (input) => prepareContext({ ...input, docs: corpus() }),
+    context: (input) =>
+      prepareContext({
+        ...input,
+        docs: corpus(),
+        code: stack.brain.getCode(),
+      }),
     scan,
     persist,
     lastDuplicatesRemoved: 0,

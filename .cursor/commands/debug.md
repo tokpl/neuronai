@@ -1,10 +1,8 @@
 # /debug
 
-Debug with incident memory and evidence.
+Debug with Neuron context before rediscovering the tree.
 
-1. Call `neuron_run_mode` with `modeId: "debug"`
-2. Paste logs / stack traces
-3. Prefer `neuron_debug_context`, `neuron_root_cause`, `neuron_search_incidents`
-4. Output Root cause, Evidence, Fix plan
-
-Do not invent production access.
+1. Call `neuron_context` with the failing behavior
+2. Prefer returned modules, files and related rules
+3. Open those paths; reproduce narrowly
+4. After a durable lesson, use `neuron_after_task` (ask before remembering)

@@ -1,4 +1,15 @@
-import type { MemoryRecord } from '@neuronai/types';
+import type { CodeIntelligence, MemoryRecord } from '@neuronai/types';
+
+export type {
+  CodeEdge,
+  CodeEdgeType,
+  CodeEvidence,
+  CodeFileNode,
+  CodeIntelligence,
+  CodeSymbolKind,
+  CodeSymbolNode,
+  RelationConfidence,
+} from '@neuronai/types';
 
 /** Provenance for a DNA facet claim. */
 export interface Provenance {
@@ -135,6 +146,11 @@ export interface KnowledgePlane {
   rules: Array<{ id: string; title: string; body: string; critical?: boolean }>;
   graph: KnowledgeGraph;
   map?: ProjectMap;
+  /**
+   * Structural code intelligence (symbols, verified relationships, summaries).
+   * Lives in the same knowledge plane — not a second index.
+   */
+  code?: CodeIntelligence;
 }
 
 export interface ProjectHealth {

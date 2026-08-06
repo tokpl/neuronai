@@ -260,6 +260,47 @@ describe('prepareContext', () => {
     expect(prepared.recommendation?.path).toMatch(/billing/);
     expect(prepared.context).toMatch(/Recommended start/i);
     expect(prepared.context).toMatch(/src\/billing/);
+    expect(prepared.context).toMatch(/## Rules/i);
+    expect(prepared.context).toMatch(/Payment providers must be called from services/i);
     expect(prepared.efficiency.contextTokens).toBeLessThanOrEqual(500);
+  });
+
+  it('keeps matching rules when many location hits compete for the budget', () => {
+    const docs: RetrievalDoc[] = [
+      ...Array.from({ length: 12 }, (_, i) => ({
+        id: `loc-${i}`,
+        title: `PaymentSymbol${i} — src/services/payment-${i}.ts`,
+        content: `Payment service helper ${i}\nLocation: src/services/payment-${i}.ts`,
+        kind: 'location' as const,
+        location: {
+          kind: 'symbol' as const,
+          name: `PaymentSymbol${i}`,
+          path: `src/services/payment-${i}.ts`,
+          purpose: 'Payment helper',
+          concepts: ['billing', 'payment'],
+        },
+        importance: 0.7,
+        freshness: 0.9,
+        confidence: 0.9,
+      })),
+      {
+        id: 'rule-stripe',
+        title: 'Never call Stripe directly from route handlers',
+        content: 'Never call Stripe directly from route handlers. Always go through PaymentService.',
+        kind: 'rule',
+        tags: ['billing', 'stripe', 'payment'],
+        importance: 0.9,
+        freshness: 1,
+        confidence: 0.9,
+      },
+    ];
+
+    const prepared = prepareContext({
+      task: 'Add support for invoice cancellation.',
+      docs,
+    });
+
+    expect(prepared.context).toMatch(/## Rules/i);
+    expect(prepared.relevantRules.some((r) => /Stripe/i.test(r.title))).toBe(true);
   });
 });

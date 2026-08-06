@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getDependents, getImpact, getDependencies } from '../src/code/queries.js';
+import { getDependents, getImpact } from '../src/code/queries.js';
 import { expandConnectedSlice } from '../src/retrieval/code-docs.js';
 import { classifyIntent } from '../src/retrieval/intent.js';
 import type { CodeIntelligence } from '@neuronai/types';

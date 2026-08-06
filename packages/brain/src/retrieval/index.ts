@@ -19,3 +19,4 @@ export {
   type LocationRole,
 } from './roles.js';
 export { dedupeRetrievalHits } from './dedupe-hits.js';
+export { diversifyRetrievalHits } from './diversify-hits.js';

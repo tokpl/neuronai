@@ -1,0 +1,316 @@
+{
+  "generatedAt": "2026-08-06T17:17:24.027Z",
+  "LIVE_AGENT_PROOF": "UNAVAILABLE",
+  "reason": "No CURSOR_API_KEY / ANTHROPIC_API_KEY / OPENAI_API_KEY",
+  "methodology": {
+    "arms": [
+      "baseline_no_neuron",
+      "neuron_context_first"
+    ],
+    "tasks": 32,
+    "metrics": [
+      "tool_calls",
+      "file_reads",
+      "grep_calls",
+      "directory_listings",
+      "first_useful_file",
+      "first_correct_location",
+      "time_to_first_useful_action_ms",
+      "total_prompt_tokens",
+      "total_completion_tokens",
+      "context_tokens",
+      "wall_clock_ms",
+      "final_task_success",
+      "unnecessary_exploration",
+      "neuron_context_calls"
+    ],
+    "labels": {
+      "LIVE_AGENT_PROOF": "Measured from real LLM/Cursor agent tool traces",
+      "EXPLORATION_POLICY_PROOF": "Scripted exploration policy (real-agent-benchmark.mjs)",
+      "Brain_compression": "contextTokens vs corpusTokens — NOT agent token savings"
+    }
+  },
+  "environment": {
+    "CURSOR_API_KEY": false,
+    "ANTHROPIC_API_KEY": false,
+    "OPENAI_API_KEY": false,
+    "node": "v24.18.0"
+  },
+  "tasks": [
+    {
+      "id": "L1",
+      "category": "locate",
+      "prompt": "Where is authentication implemented?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "L2",
+      "category": "locate",
+      "prompt": "Where are API routes?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "L3",
+      "category": "locate",
+      "prompt": "Where is database access?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "L4",
+      "category": "locate",
+      "prompt": "Where is billing?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "L5",
+      "category": "locate",
+      "prompt": "Where are background jobs?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "M1",
+      "category": "modify",
+      "prompt": "Add invoice cancellation.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "M2",
+      "category": "modify",
+      "prompt": "Add a payment endpoint.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "M3",
+      "category": "modify",
+      "prompt": "Add authentication middleware.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "M4",
+      "category": "modify",
+      "prompt": "Change retry behavior.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "M5",
+      "category": "modify",
+      "prompt": "Add a background worker.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "M6",
+      "category": "modify",
+      "prompt": "Add validation to an existing endpoint.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "D1",
+      "category": "debug",
+      "prompt": "Fix payment failures.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "D2",
+      "category": "debug",
+      "prompt": "Fix authentication bug.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "D3",
+      "category": "debug",
+      "prompt": "Fix incorrect invoice calculation.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "D4",
+      "category": "debug",
+      "prompt": "Fix database timeout.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "D5",
+      "category": "debug",
+      "prompt": "Fix webhook handling.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "I1",
+      "category": "impact",
+      "prompt": "What breaks if PaymentService changes?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "I2",
+      "category": "impact",
+      "prompt": "Who depends on BillingService?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "I3",
+      "category": "impact",
+      "prompt": "What tests need changing for payments?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "I4",
+      "category": "impact",
+      "prompt": "What routes use PaymentService?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "R1",
+      "category": "rules",
+      "prompt": "What conventions apply when adding an endpoint?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "R2",
+      "category": "rules",
+      "prompt": "What payment rules exist?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "R3",
+      "category": "rules",
+      "prompt": "What architecture decision affects payments?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "N1",
+      "category": "negative",
+      "prompt": "Where is Terraform?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "N2",
+      "category": "negative",
+      "prompt": "Where is Kafka?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "N3",
+      "category": "negative",
+      "prompt": "Where is Kubernetes deployment?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "N4",
+      "category": "negative",
+      "prompt": "Where is GraphQL?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "N5",
+      "category": "negative",
+      "prompt": "Where is AWS Lambda?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "N6",
+      "category": "negative",
+      "prompt": "How does the React Native mobile app work?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "C1",
+      "category": "modify",
+      "prompt": "Where should I start to add refund support?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "C2",
+      "category": "modify",
+      "prompt": "Add support for cancelling invoices and follow project rules.",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "C3",
+      "category": "debug",
+      "prompt": "Why is the API returning 403 on payments?",
+      "baseline": null,
+      "neuron": null,
+      "status": "UNAVAILABLE"
+    }
+  ],
+  "aggregates": {
+    "baseline": null,
+    "neuron": null,
+    "comparison": null
+  },
+  "related": {
+    "scripted": {
+      "label": "EXPLORATION_POLICY_PROOF",
+      "product_impact": "STRONG",
+      "note": "Scripted policy — not live LLM agent traces"
+    }
+  },
+  "how_to_enable": [
+    "Set CURSOR_API_KEY or ANTHROPIC_API_KEY (or OPENAI_API_KEY) in the environment.",
+    "Implement a runner that drives a real coding agent with tool-call telemetry.",
+    "Record METRIC_FIELDS for each arm × task without inventing missing values.",
+    "Keep LIVE_AGENT_PROOF separate from EXPLORATION_POLICY_PROOF forever."
+  ],
+  "verdict": "LIVE_AGENT_PROOF = UNAVAILABLE"
+}

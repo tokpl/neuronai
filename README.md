@@ -7,7 +7,8 @@
 <p align="center"><b>A local-first Project Brain for AI coding assistants.</b></p>
 
 <p align="center">
-  Your AI relearns your project every session. NeuronAI makes it remember.
+  NeuronAI builds a local Project Brain so your AI coding agent knows where to look,
+  what depends on what, and which project rules apply — before it starts exploring.
 </p>
 
 <p align="center">
@@ -244,13 +245,26 @@ It tells you what it *could not* work out too, so you are never guessing what it
 ```
 
 Then **Cursor Settings → Tools & MCP → enable "neuron"**. Cursor keeps MCP servers off until you
-turn them on. Check the wiring any time:
+turn them on. **After upgrading NeuronAI**, toggle the server off/on (or Reload Window) so the
+tool list refreshes to the current 7 tools (`neuron_context`, …). If chat still shows
+`neuron_prepare_task` / `CallMcpTool` returns `-32602`, that is a **stale Cursor catalog**, not a
+bad `mcp.json` — reload MCP; do not rewrite config.
+
+Check the wiring any time:
 
 ```bash
 neuron cursor     # connection status and next steps
-neuron doctor     # full diagnostic, every warning has a fix
+neuron doctor     # probes stdio tool catalog; flags IDE reload as a manual gate
+node scripts/mcp-proof-stdio.mjs   # STDIO_MCP_PROOF regression (7 tools + neuron_context call)
 ```
 
+Three proofs (do not mix them):
+
+| Label | Meaning |
+| --- | --- |
+| `STDIO_MCP_PROOF` | Configured `neuron mcp` binary lists 7 tools; `neuron_context` callable |
+| `CURSOR_MCP_PROOF` | Cursor IDE chat/Task actually shows and invokes `neuron_context` |
+| `LIVE_AGENT_PROOF` | Real agent A/B with MCP path (blocked until `CURSOR_MCP_PROOF`) |
 ## A real example
 
 Ask the terminal what the project knows:
@@ -304,6 +318,17 @@ Every number is labelled **measured** (counted from disk), **derived** (computed
 values) or **estimated** (a labelled heuristic). Token counts use a chars/4 approximation and say
 so. Compression figures appear only after a real compilation has produced them — nothing is
 presented as a saving that was not measured.
+
+Keep these separate forever:
+
+| Label | Meaning |
+| --- | --- |
+| **Brain compression** (MEASURED) | Whole brain → compiled `neuron_context` |
+| **Exploration policy** (SIMULATED) | Scripted baseline vs Neuron file/grep ops |
+| **Live agent proof** | Real Cursor/LLM tool traces — currently **UNAVAILABLE** without API keys |
+
+Never call Brain compression “agent token savings.” Never call the scripted exploration harness a
+live-agent result.
 
 ## Performance
 
@@ -380,7 +405,9 @@ same way, through `createNeuronRuntime()`.
 
 More: [How it works](./docs/how-it-works.md) · [`.neuron/` folder](./docs/neuron-folder.md) ·
 [FAQ](./docs/faq.md) · [Privacy](./docs/privacy.md) ·
-[Production readiness](./docs/PRODUCTION_READINESS.md)
+[Production readiness](./docs/PRODUCTION_READINESS.md) ·
+[Daily-use product](./docs/DAILY_USE_PRODUCT.md) ·
+[P4 validation](./docs/P4_PRODUCT_VALIDATION.md)
 
 ## Contributing
 

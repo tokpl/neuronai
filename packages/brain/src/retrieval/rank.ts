@@ -183,8 +183,13 @@ function typeAffinity(query: string, doc: RetrievalDoc): number {
   if (/\b(pattern|convention|style|idiom|standard)\w*/.test(q)) {
     if (kind === 'pattern' || type === 'pattern') bonus += 0.1;
   }
-  if (/\b(rule|rules|constraint|avoid|must not|never)\b/.test(q)) {
-    if (kind === 'rule' || type === 'business_rule') bonus += 0.22;
+  if (/\b(rule|rules|constraint|avoid|must not|never|convention|should)\b/.test(q)) {
+    if (kind === 'rule' || type === 'business_rule') bonus += 0.28;
+  }
+  // Modification / feature work: keep project rules competitive with locations.
+  if (/\b(add|implement|change|fix|refactor|endpoint|payment|invoice|stripe|auth)\b/.test(q)) {
+    if (kind === 'rule' || type === 'business_rule') bonus += 0.12;
+    if (kind === 'decision' || type === 'architecture_decision') bonus += 0.1;
   }
   if (kind === 'rule') bonus += 0.05;
   return bonus;

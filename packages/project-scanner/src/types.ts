@@ -1,3 +1,5 @@
+import type { CodeIntelligence } from '@neuronai/types';
+
 export type ScanMode = 'fast' | 'deep' | 'architecture' | 'update';
 
 export type FileImportance = 'HIGH' | 'MEDIUM' | 'IGNORE' | 'SENSITIVE';
@@ -134,7 +136,7 @@ export interface ProjectScanReport {
   /** Retrievable locations — modules, files, symbols, routes. */
   map: ProjectMapSnapshot;
   /** Structural code intelligence (TS/JS deep; other langs shallow via relationships). */
-  code?: import('@neuronai/types').CodeIntelligence;
+  code?: CodeIntelligence;
   dependencyGraph: DependencyEdge[];
   relationshipsList: CodeRelationship[];
   memories: GeneratedMemory[];

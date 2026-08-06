@@ -7,7 +7,8 @@
 <p align="center"><b>A local-first Project Brain for AI coding assistants.</b></p>
 
 <p align="center">
-  Your AI relearns your project every session. NeuronAI makes it remember.
+  NeuronAI builds a local Project Brain so your AI coding agent knows where to look,
+  what depends on what, and which project rules apply — before it starts exploring.
 </p>
 
 <p align="center">
@@ -134,10 +135,13 @@ points. Detected from manifests and structure, each claim carrying a confidence 
 
 **Knowledge** — what the project has *decided*: architecture decisions, patterns, constraints,
 warnings. Seeded from your README, code structure and Git history, then grown as you work.
+The same plane also holds the **project map** (where things live) and **code intelligence**
+(exported symbols and verified relationships — imports, calls, routes — each with evidence and
+confidence). Neuron prefers a missing edge over a wrong one.
 
-**Retrieval** — deterministic BM25-style lexical ranking. Term matching with stemming, exact
-phrase and title boosts, and a coverage reward so a memory matching four of your five task terms
-beats one matching a single term.
+**Retrieval** — deterministic BM25-style lexical ranking over memories, map locations, and code
+symbols. When evidence exists, context expansion follows high-confidence edges so the agent gets
+a connected slice (start → related → dependency → flow), not a random file list.
 
 Relevance is a **gate**, not one term in a weighted sum. Importance and freshness are applied
 multiplicatively, so they reorder memories that already match your task but can never promote an
@@ -302,6 +306,17 @@ values) or **estimated** (a labelled heuristic). Token counts use a chars/4 appr
 so. Compression figures appear only after a real compilation has produced them — nothing is
 presented as a saving that was not measured.
 
+Keep these separate forever:
+
+| Label | Meaning |
+| --- | --- |
+| **Brain compression** (MEASURED) | Whole brain → compiled `neuron_context` |
+| **Exploration policy** (SIMULATED) | Scripted baseline vs Neuron file/grep ops |
+| **Live agent proof** | Real Cursor/LLM tool traces — currently **UNAVAILABLE** without API keys |
+
+Never call Brain compression “agent token savings.” Never call the scripted exploration harness a
+live-agent result.
+
 ## Performance
 
 Measured on this machine, cold, single-threaded:
@@ -376,7 +391,10 @@ The scanner owns project analysis. The CLI and MCP server are adapters and build
 same way, through `createNeuronRuntime()`.
 
 More: [How it works](https://github.com/tokpl/neuronai/blob/main/docs/how-it-works.md) · [`.neuron/` folder](https://github.com/tokpl/neuronai/blob/main/docs/neuron-folder.md) ·
-[FAQ](https://github.com/tokpl/neuronai/blob/main/docs/faq.md) · [Privacy](https://github.com/tokpl/neuronai/blob/main/docs/privacy.md)
+[FAQ](https://github.com/tokpl/neuronai/blob/main/docs/faq.md) · [Privacy](https://github.com/tokpl/neuronai/blob/main/docs/privacy.md) ·
+[Production readiness](https://github.com/tokpl/neuronai/blob/main/docs/PRODUCTION_READINESS.md) ·
+[Daily-use product](https://github.com/tokpl/neuronai/blob/main/docs/DAILY_USE_PRODUCT.md) ·
+[P4 validation](https://github.com/tokpl/neuronai/blob/main/docs/P4_PRODUCT_VALIDATION.md)
 
 ## Contributing
 

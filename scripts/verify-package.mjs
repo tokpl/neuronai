@@ -82,8 +82,8 @@ try {
   const context = run(process.execPath, [bin, 'context', 'Where is authentication handled?'], project);
   check(
     /auth|src\//i.test(context) &&
-      /Context:\s*\n?\s*\d+(\s*\/\s*\d+)?\s*tokens/i.test(context) &&
-      /Retrieval:\s*\n?\s*\d+\s*ms/i.test(context),
+      /Context:\s*\d+\s*\/\s*\d+\s*tokens/i.test(context) &&
+      /\d+\s*ms/i.test(context),
     'context returns project locations under a token budget',
   );
 

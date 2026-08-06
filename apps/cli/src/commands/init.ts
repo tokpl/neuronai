@@ -21,6 +21,7 @@ import { setupCursorIntegration, syncProjectBrainFiles } from '../services/curso
 import { applyNeuronGitignore } from '../services/gitignore.js';
 import {
   isNeuronInitialized,
+  loadMetadata,
   neuronPaths,
   saveLocalConfig,
   saveMetadata,
@@ -273,6 +274,14 @@ export async function runInit(
       scanFiles = scan.report.filesScanned;
       scanMemories = scan.memoriesStored;
       report.moduleNames = scan.report.architecture.modules;
+      const meta = await loadMetadata(cwd);
+      meta.lastAnalyzeAt = new Date().toISOString();
+      meta.memoryCount = session.listMemories().length;
+      const { readGitIdentity } = await import('../services/git-identity.js');
+      const git = readGitIdentity(cwd);
+      meta.lastScanGitHead = git.head;
+      meta.lastScanGitBranch = git.branch;
+      await saveMetadata(meta, cwd);
       progress.ok(
         scanModules > 0
           ? `Mapped ${scanModules} modules across ${scanFiles} files`
@@ -355,9 +364,11 @@ export async function runInit(
   ui.blank();
   console.log('Next:');
   ui.blank();
-  ui.info('  1. Enable it in Cursor — Settings → Tools & MCP → turn on "neuron"');
-  ui.info('  2. Ask a question now — neuron search "how does authentication work"');
-  ui.info('  3. Check everything — neuron doctor');
+  ui.info('  1. Enable MCP in Cursor — Settings → Tools & MCP → turn on "neuron"');
+  ui.info('     If you upgraded NeuronAI, toggle it off/on (or restart Cursor) so the tool list refreshes.');
+  ui.info('  2. Ask your coding agent to change something — it should call neuron_context first');
+  ui.info('  3. Or inspect locally — neuron context "where should I add …?"');
+  ui.info('  4. Check health — neuron doctor');
   ui.blank();
   ui.info('  neuron cursor    shows the Cursor connection status any time');
 }

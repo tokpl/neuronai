@@ -58,6 +58,10 @@ export interface NeuronMetadata {
   lastAnalyzeAt: string | null;
   memoryCount: number;
   version: string;
+  /** Git HEAD when the brain last learned from the codebase (optional). */
+  lastScanGitHead?: string | null;
+  /** Short branch name at last scan (optional). */
+  lastScanGitBranch?: string | null;
 }
 
 export { DEFAULT_IGNORE };

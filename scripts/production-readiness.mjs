@@ -16,7 +16,6 @@ import {
   rmSync,
   statSync,
   writeFileSync,
-  copyFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -580,7 +579,6 @@ function sectionFailureModes(bin) {
     runCli(bin, ['init', '--yes'], root);
     rmSync(join(root, 'src', 'auth'), { recursive: true, force: true });
     const upd = runCli(bin, ['scan', '--update'], root);
-    const k = knowledgeStats(root);
     const map = JSON.parse(readFileSync(join(root, '.neuron', 'brain', 'knowledge.json'), 'utf8'));
     const staleAuth = (map.map?.entries ?? []).some((e) => String(e.path).includes('src/auth/'));
     const codeStale = (map.code?.files ?? []).some((f) => f.path.includes('src/auth/'));

@@ -25,11 +25,10 @@ import {
   readdirSync,
   readFileSync,
   rmSync,
-  statSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, relative } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
@@ -357,12 +356,6 @@ function rgFiles(root, pattern) {
     .split(/\r?\n/)
     .map((l) => l.trim().replace(/^\.\//, '').replace(/\\/g, '/'))
     .filter(Boolean);
-}
-
-function readRel(root, rel) {
-  const abs = join(root, rel);
-  if (!existsSync(abs) || !statSync(abs).isFile()) return null;
-  return readFileSync(abs, 'utf8');
 }
 
 function record(ops, type, detail, path) {

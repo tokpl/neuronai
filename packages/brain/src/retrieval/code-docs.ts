@@ -18,10 +18,17 @@ export function expandConnectedSlice(
   flow: Array<{ label: string; path?: string }>;
   related: Array<{ path: string; name: string }>;
   dependencies: Array<{ path: string; name: string; confidence: string }>;
+  tests: Array<{ path: string; name: string }>;
   impactFiles: string[];
 } {
   if (!code || !recommendation) {
-    return { flow: [], related: recommendation?.related ?? [], dependencies: [], impactFiles: [] };
+    return {
+      flow: [],
+      related: recommendation?.related ?? [],
+      dependencies: [],
+      tests: [],
+      impactFiles: [],
+    };
   }
 
   const sym =
@@ -39,13 +46,12 @@ export function expandConnectedSlice(
     .slice(0, 4)
     .map((d) => ({ path: d.path, name: d.name, confidence: d.confidence }));
 
-  const relatedFromImpact = [
-    ...(impact?.dependents ?? [])
-      .filter((d) => d.confidence === 'high')
-      .slice(0, 4)
-      .map((d) => ({ path: d.path, name: d.name })),
-    ...(impact?.relatedTests ?? []).slice(0, 2).map((p) => ({ path: p, name: basename(p) })),
-  ];
+  const tests = (impact?.relatedTests ?? []).slice(0, 3).map((p) => ({ path: p, name: basename(p) }));
+
+  const relatedFromImpact = (impact?.dependents ?? [])
+    .filter((d) => d.confidence === 'high')
+    .slice(0, 4)
+    .map((d) => ({ path: d.path, name: d.name }));
 
   const related = dedupePaths([...(recommendation.related ?? []), ...relatedFromImpact]).slice(0, 6);
 
@@ -59,6 +65,7 @@ export function expandConnectedSlice(
         ...related,
       ]),
       dependencies: deps,
+      tests,
       impactFiles: impact?.relatedFiles ?? [],
     };
   }
@@ -68,6 +75,7 @@ export function expandConnectedSlice(
     flow,
     related,
     dependencies: deps,
+    tests,
     impactFiles: impact?.relatedFiles ?? [],
   };
 }

@@ -30,6 +30,7 @@ export interface CompileRecommendation {
   symbol?: string;
   flow?: Array<{ label: string; path?: string }>;
   dependencies?: Array<{ path: string; name: string }>;
+  tests?: Array<{ path: string; name: string }>;
 }
 
 export interface BrainCompileInput {
@@ -77,14 +78,14 @@ interface SectionSpec {
 
 /**
  * Display order is reading order; `priority` decides what survives a tight budget.
- * Locations come first: telling the agent *where to look* is the cheapest, highest
- * leverage thing the brain can say.
+ * Rules and decisions outrank satellite locations when the budget bites — otherwise
+ * code-location flood starves the memories that make NeuronAI distinct.
  */
 const SECTIONS: SectionSpec[] = [
-  { id: 'locations', heading: 'Where to look', priority: 1, clip: 120 },
-  { id: 'decisions', heading: 'Decisions', priority: 2, clip: 220 },
-  { id: 'constraints', heading: 'Constraints', priority: 3, clip: 180 },
   { id: 'warnings', heading: 'Warnings', priority: 0, clip: 180 },
+  { id: 'constraints', heading: 'Rules', priority: 1, clip: 180 },
+  { id: 'decisions', heading: 'Decisions', priority: 2, clip: 220 },
+  { id: 'locations', heading: 'Where to look', priority: 3, clip: 120 },
   { id: 'patterns', heading: 'Patterns', priority: 4, clip: 160 },
   { id: 'context', heading: 'Project knowledge', priority: 5, clip: 160 },
 ];
@@ -176,19 +177,13 @@ export class BrainCompiler {
       profile.mode === 'minimal' ? 5 : 10,
     );
 
-    // Greedy packing: add the most valuable line while the whole document fits.
+    // Greedy packing with kind diversity: never let locations alone fill the budget
+    // when a matching rule/decision/warning is already in the candidate set.
     const maxItems = MODE_MAX_ITEMS[profile.mode];
-    const chosen: Line[] = [];
-    for (const line of lines) {
-      if (chosen.length >= maxItems) break;
-      const candidate = [...chosen, line];
-      if (
-        estimateTokens(render(input.task, candidate, modules, input.recommendation)) <=
-        profile.tokenBudget
-      ) {
-        chosen.push(line);
-      }
-    }
+    const chosen = packWithDiversity(lines, maxItems, (candidate) =>
+      estimateTokens(render(input.task, candidate, modules, input.recommendation)) <=
+      profile.tokenBudget,
+    );
 
     let context = render(input.task, chosen, modules, input.recommendation);
     // Modules are the cheapest thing to drop if the header alone overflows.
@@ -257,15 +252,34 @@ function render(
       out.push(`- ${clipLine(`${recommendation.name} → ${recommendation.path}`, 120)}`);
     }
     out.push(`- Because: ${clipLine(recommendation.reason, 160)}`);
+
     if (recommendation.flow?.length) {
       out.push('', '## Flow');
       out.push(`- ${clipLine(recommendation.flow.map((s) => s.label).join(' → '), 200)}`);
     }
-    for (const rel of recommendation.related ?? []) {
-      out.push(`- Related: ${clipLine(`${rel.name} → ${rel.path}`, 100)}`);
+
+    const related = recommendation.related ?? [];
+    if (related.length) {
+      out.push('', '## Related');
+      for (const rel of related.slice(0, 5)) {
+        out.push(`- ${clipLine(`${rel.name} → ${rel.path}`, 100)}`);
+      }
     }
-    for (const dep of recommendation.dependencies ?? []) {
-      out.push(`- Depends on: ${clipLine(`${dep.name} → ${dep.path}`, 100)}`);
+
+    const deps = recommendation.dependencies ?? [];
+    if (deps.length) {
+      out.push('', '## Depends on');
+      for (const dep of deps.slice(0, 4)) {
+        out.push(`- ${clipLine(`${dep.name} → ${dep.path}`, 100)}`);
+      }
+    }
+
+    const tests = recommendation.tests ?? [];
+    if (tests.length) {
+      out.push('', '## Tests');
+      for (const t of tests.slice(0, 3)) {
+        out.push(`- ${clipLine(`${t.name} → ${t.path}`, 100)}`);
+      }
     }
   }
 
@@ -284,6 +298,42 @@ function render(
   }
 
   return `${out.join('\n').trim()}\n`;
+}
+
+/**
+ * Prefer one warning + one rule + one decision before flooding with locations.
+ * Remaining slots fill in section priority / score order.
+ */
+function packWithDiversity(
+  lines: Line[],
+  maxItems: number,
+  fits: (candidate: Line[]) => boolean,
+): Line[] {
+  const chosen: Line[] = [];
+  const taken = new Set<string>();
+  const keyOf = (line: Line) => `${line.section}:${line.title}`;
+
+  const tryAdd = (line: Line): boolean => {
+    if (chosen.length >= maxItems || taken.has(keyOf(line))) return false;
+    const candidate = [...chosen, line];
+    if (!fits(candidate)) return false;
+    chosen.push(line);
+    taken.add(keyOf(line));
+    return true;
+  };
+
+  const reserveOrder: Array<Line['section']> = ['warnings', 'constraints', 'decisions'];
+  for (const section of reserveOrder) {
+    const line = lines.find((l) => l.section === section);
+    if (line) tryAdd(line);
+  }
+
+  for (const line of lines) {
+    if (chosen.length >= maxItems) break;
+    tryAdd(line);
+  }
+
+  return chosen;
 }
 
 /**

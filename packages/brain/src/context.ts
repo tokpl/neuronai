@@ -3,6 +3,7 @@ import { resolvePreparationMode } from './compiler/modes.js';
 import type { ProjectMapEntry } from './models.js';
 import {
   dedupeRetrievalHits,
+  diversifyRetrievalHits,
   retrieve,
   type RetrievalDoc,
   type RetrievalHit,
@@ -93,7 +94,11 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
   const profile = resolvePreparationMode(input.mode);
 
   const raw = retrieve(input.task, input.docs, { limit: profile.retrieveLimit * 2 });
-  const hits = dedupeRetrievalHits(raw.hits).slice(0, profile.retrieveLimit);
+  const hits = diversifyRetrievalHits(
+    dedupeRetrievalHits(raw.hits),
+    raw.stats.intent,
+    profile.retrieveLimit,
+  );
   const result = { ...raw, hits };
 
   // Baseline for savings: what pasting the whole brain would cost.
@@ -119,6 +124,7 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
         related: slice.related.length ? slice.related : baseRecommendation.related,
         flow: slice.flow.length ? slice.flow : undefined,
         dependencies: slice.dependencies.map((d) => ({ path: d.path, name: d.name })),
+        tests: slice.tests.length ? slice.tests : undefined,
         reason: enrichReason(baseRecommendation.reason, slice.symbol, slice.flow),
       }
     : undefined;
@@ -137,6 +143,7 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
           symbol: recommendation.symbol,
           flow: recommendation.flow,
           dependencies: recommendation.dependencies,
+          tests: recommendation.tests,
         }
       : undefined,
     corpusTokens,

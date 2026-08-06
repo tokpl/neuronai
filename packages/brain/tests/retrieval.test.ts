@@ -236,6 +236,11 @@ describe('query intent', () => {
     expect(classifyIntent('Where should I add a payment endpoint?')).toBe('MODIFICATION');
     expect(classifyIntent('Which file should I modify for invoices?')).toBe('MODIFICATION');
     expect(classifyIntent('Add support for cancelling invoices')).toBe('MODIFICATION');
+    expect(classifyIntent('Add a new payment endpoint.')).toBe('MODIFICATION');
+    expect(classifyIntent('add billing support')).toBe('MODIFICATION');
+    expect(classifyIntent('change auth')).toBe('MODIFICATION');
+    expect(classifyIntent('refactor database access')).toBe('MODIFICATION');
+    expect(classifyIntent('fix payments')).toBe('DEBUGGING');
     expect(classifyIntent('Where is authentication implemented?')).toBe('LOCATION');
     expect(classifyIntent('What conventions should I follow?')).toBe('CONVENTION');
     expect(classifyIntent('What rule applies to payment code?')).toBe('CONVENTION');

@@ -240,14 +240,30 @@ async function checkFreshness(cwd: string): Promise<DoctorCheck> {
 
   const days = Math.floor((Date.now() - at) / 86_400_000);
   const age = days === 0 ? 'today' : days === 1 ? '1 day ago' : `${days} days ago`;
+  const ageOk = days < STALE_AFTER_DAYS;
+
+  const { readGitIdentity } = await import('../services/git-identity.js');
+  const git = readGitIdentity(cwd);
+  let gitDetail = '';
+  let gitOk = true;
+  if (git.head && meta.lastScanGitHead && git.head !== meta.lastScanGitHead) {
+    gitOk = false;
+    const from = meta.lastScanGitBranch ?? meta.lastScanGitHead.slice(0, 7);
+    const to = git.branch ?? git.head.slice(0, 7);
+    gitDetail = ` Git HEAD moved since last scan (${from} → ${to}).`;
+  } else if (git.branch && meta.lastScanGitBranch) {
+    gitDetail = ` Branch: ${git.branch}.`;
+  }
+
   return {
     name: 'Brain freshness',
-    ok: days < STALE_AFTER_DAYS,
-    detail:
-      days < STALE_AFTER_DAYS
-        ? `Last learned from the codebase ${age}`
-        : `Brain knowledge is stale. Last scan: ${age}.`,
-    fix: days < STALE_AFTER_DAYS ? undefined : 'neuron scan',
+    ok: ageOk && gitOk,
+    detail: !ageOk
+      ? `Brain knowledge is stale. Last scan: ${age}.${gitDetail}`
+      : !gitOk
+        ? `Codebase HEAD changed since last scan.${gitDetail}`
+        : `Last learned from the codebase ${age}.${gitDetail}`,
+    fix: ageOk && gitOk ? undefined : 'neuron scan --update',
   };
 }
 

@@ -24,11 +24,15 @@ interface IntentRule {
 
 // Order matters: the first match wins, so specific phrasings come first.
 const RULES: IntentRule[] = [
-  { intent: 'DEBUGGING', pattern: /\b(bug|broken|failing|fails|error|crash|regression|debug|why is .* not)\b/i },
+  {
+    intent: 'DEBUGGING',
+    pattern:
+      /\b(bug|broken|failing|fails|error|crash|regression|debug|fix\b|why is .* not|returning \d{3})\b/i,
+  },
   {
     intent: 'IMPACT',
     pattern:
-      /\b(what (files? )?(would|will|do) i (likely )?need to (change|touch|inspect)|blast radius|what (is )?affected|if i (change|modify|edit)|files? (would|will) .* change|what else should i (inspect|check|look))\b/i,
+      /\b(what (files? )?(would|will|do) i (likely )?need to (change|touch|inspect)|blast radius|what (is )?affected|if i (change|modify|edit)|what breaks if|files? (would|will) .* change|what else should i (inspect|check|look))\b/i,
   },
   {
     intent: 'DEPENDENCY',
@@ -38,7 +42,12 @@ const RULES: IntentRule[] = [
   {
     intent: 'MODIFICATION',
     pattern:
-      /\b(where should (i|we)|which file should|where (does|do|to) .* belong|where (to|do i|do we) (add|put|place|modify|change|implement)|recommended (location|file|place)|add (a |an |the )?(new )?(endpoint|route|handler|test|feature)|add support for|implement (support for )?\w+|where (do|should) (i|we) (put|add|place))\b/i,
+      /\b(where should (i|we)|which file should|where (does|do|to) .* belong|where (to|do i|do we) (add|put|place|modify|change|implement)|recommended (location|file|place)|add (a |an |the )?(new )?(\w+\s+)?(endpoint|route|handler|test|feature|job|webhook)|add support for|implement (support for )?\w+|where (do|should) (i|we) (put|add|place))\b/i,
+  },
+  // Short imperative prompts from developers talking to coding agents.
+  {
+    intent: 'MODIFICATION',
+    pattern: /^(fix|add|change|update|refactor|implement|move|rename)\b/i,
   },
   {
     intent: 'CONVENTION',

@@ -44,6 +44,9 @@ const CONCEPT_TERMS: Record<string, string[]> = {
     'charge',
     'refund',
     'webhook',
+    'cancel',
+    'cancellation',
+    'cancelled',
   ],
   database: [
     'database',

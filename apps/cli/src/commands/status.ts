@@ -70,6 +70,14 @@ export async function runStatus(cwd = process.cwd()): Promise<void> {
   ui.kv('Count', String(memoryCount));
   ui.kv('Last sync', formatRelativeTime(lastSyncAt));
   ui.kv('Last analyze', formatRelativeTime(meta.lastAnalyzeAt));
+  if (meta.lastScanGitBranch || meta.lastScanGitHead) {
+    ui.kv(
+      'Last scan git',
+      meta.lastScanGitBranch
+        ? `${meta.lastScanGitBranch} @ ${(meta.lastScanGitHead ?? '').slice(0, 7)}`
+        : (meta.lastScanGitHead ?? '').slice(0, 7),
+    );
+  }
   ui.blank();
   console.log('Storage:');
   ui.kv('Brain', `${paths.brainDir} (commit this)`);

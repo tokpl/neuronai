@@ -15,13 +15,12 @@ NeuronAI is reliable enough for real developer use **on TypeScript/JavaScript pr
 
 Conditions:
 
-1. **Live Cursor/LLM A/B agent evaluation is UNAVAILABLE** in this environment (no API keys). Exploration reduction is proven only by the **scripted** P2 policy (~89% fewer exploration ops), not by live model traces.
-2. **Python / non-TS code intelligence** is map+lexical only (`knowledge.code` symbols/edges = 0 on the Python shape). Location answers can still be CORRECT via Project Map.
-3. **Large-repo wall-clock** for no-change updates remains **walk-dominated** (~1.1s at ~10k files) even when `reanalyzed = 0`. Analysis cost is incremental; walk cost is not free.
-4. **Stale Cursor MCP catalogs** can linger until the MCP process is restarted after upgrades — a UX friction, not a Brain correctness bug.
+1. **`CURSOR_MCP_PROOF` can fail while `STDIO_MCP_PROOF` passes.** After upgrades, Cursor may keep a stale in-memory tools/list (legacy `neuron_prepare_task` / `neuron_get_context`). Invokes then return `-32602` against the live 7-tool binary. **Fix: toggle neuron MCP off/on or Reload Window** — not a ProjectBrain bug. See [`mcp-integration-report.json`](../mcp-integration-report.json) and [`docs/LIVE_AGENT_VALIDATION.md`](./LIVE_AGENT_VALIDATION.md).
+2. **Live Cursor/LLM A/B (`LIVE_AGENT_PROOF`)** remains blocked until the IDE catalog exposes callable `neuron_context`. Scripted exploration reduction is separate (`EXPLORATION_POLICY_PROOF`).
+3. **Python / non-TS code intelligence** is map+lexical only (`knowledge.code` symbols/edges = 0 on the Python shape). Location answers can still be CORRECT via Project Map.
+4. **Large-repo wall-clock** for no-change updates remains **walk-dominated** (~1.1s at ~10k files) even when `reanalyzed = 0`. Analysis cost is incremental; walk cost is not free.
 
-Release blockers from the harness: **none**.
-
+Release blockers from the Brain/packaging harness: **none**. Cursor IDE catalog refresh remains an **operator gate** after upgrades.
 ---
 
 ## 2. Real-world projects tested

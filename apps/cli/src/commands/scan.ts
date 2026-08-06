@@ -1,6 +1,7 @@
 import { join } from 'node:path';
 
-import { isNeuronInitialized } from '../services/neuron-fs.js';
+import { isNeuronInitialized, loadMetadata, saveMetadata } from '../services/neuron-fs.js';
+import { readGitIdentity } from '../services/git-identity.js';
 import { openProjectSession } from '../services/project-session.js';
 import { syncProjectBrainFiles } from '../services/cursor-setup.js';
 import { ui } from '../ui/output.js';
@@ -35,6 +36,14 @@ export async function runScan(
     await session.scan(mode);
 
   await syncProjectBrainFiles(cwd);
+
+  const meta = await loadMetadata(cwd);
+  meta.lastAnalyzeAt = new Date().toISOString();
+  const git = readGitIdentity(cwd);
+  meta.lastScanGitHead = git.head;
+  meta.lastScanGitBranch = git.branch;
+  meta.memoryCount = session.listMemories().length;
+  await saveMetadata(meta, cwd);
 
   ui.step(3, 3, 'Done');
   ui.blank();

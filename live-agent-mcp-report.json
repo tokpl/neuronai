@@ -1,0 +1,195 @@
+{
+  "generatedAt": "2026-08-06T18:05:00.000Z",
+  "title": "P0 FINAL — real Cursor MCP A/B proof",
+  "verdict": "STOPPED — MCP_PROOF FAILED after fixture bind / process restart; LIVE A/B NOT RUN",
+  "labels": {
+    "MCP_PROOF": "FAILED",
+    "LIVE_AGENT_PROOF": "NOT_RUN",
+    "TRACE_QUALITY": "N/A",
+    "REPEATABILITY": "N/A",
+    "STDIO_FIXTURE_CONTEXT": "PASS"
+  },
+  "goCriteria": {
+    "MCP_PROOF_PASS": false,
+    "neuron_context_used_by_B": false,
+    "same_task_set_A_and_B": false,
+    "B_less_broad_rediscovery": null,
+    "B_hallucinated_paths_not_worse": null,
+    "B_task_success_ge_A": null,
+    "brain_rules_followed": null,
+    "hard_tool_use_traces": false,
+    "overall_GO": false
+  },
+  "methodology": {
+    "intended": {
+      "arms": ["A_Neuron_OFF_repo_exploration_only", "B_Neuron_ON_MCP_neuron_context_first"],
+      "tasks": 20,
+      "runs": "20×A + 20×B = 40 (optional second pass = 80)",
+      "evidence": "hard Cursor tool-use traces (not self-report, not CLI neuron context as MCP substitute)",
+      "B_order": "task → Cursor → CallMcpTool(neuron_context) → targeted reads",
+      "B_violation": "list_dir / broad rg before neuron_context = rediscovery violation"
+    },
+    "whatWasAttempted": [
+      "Confirmed prior session had product 7-tool catalog including neuron_context (user reloaded MCP)",
+      "Built/enriched disposable fixture at .tmp/live-mcp-ab-fixture (auth, routes, payments, PaymentService, Stripe, invoices, db, workers, tests, noise modules)",
+      "Seeded fixture brain: Stripe/route business rule + PaymentService architecture decision",
+      "CLI neuron context on fixture returned Recommended start + rule (STDIO_FIXTURE_CONTEXT PASS)",
+      "Retargeted monorepo .cursor/mcp.json NEURON_CWD → live-mcp-ab-fixture so Cursor MCP would answer about the fixture",
+      "Killed live node … mcp process so Cursor would respawn with new NEURON_CWD"
+    ],
+    "stopConditionHit": "After process kill, GetMcpTools no longer lists project-0-neuron-ai-memory-neuron. Available servers: plugin-gitlab-GitLab, user-context7, user-playwright only. CallMcpTool(neuron_context) cannot run (tool/server not found). Per brief: STOP and report MCP_PROOF=FAILED; do not fake the benchmark."
+  },
+  "mcpSmoke": {
+    "beforeFixtureBind": {
+      "note": "Earlier in session (post user reload): catalog showed 7 product tools + neuron_context; CallMcpTool worked against monorepo brain (weak billing answer — expected, monorepo is NeuronAI not payments app)",
+      "status": "PASS_THEN"
+    },
+    "afterKillForFixtureBind": {
+      "GetMcpTools": {
+        "neuronServerPresent": false,
+        "servers": ["plugin-gitlab-GitLab", "user-context7", "user-playwright"],
+        "toolCountNeuron": 0,
+        "neuron_context_present": false
+      },
+      "CallMcpTool_neuron_context": "NOT_ATTEMPTED — server absent from catalog (equivalent to tool-not-found)",
+      "MCP_PROOF": "FAILED"
+    },
+    "fixtureStdioCli": {
+      "cwd": "c:\\projekty\\neuron-ai-memory\\.tmp\\live-mcp-ab-fixture",
+      "contextQuery": "Where is billing implemented?",
+      "recommendedStart": "POST /invoices/:id/cancel → src/api/routes/payments.ts",
+      "rulePresent": "Never call Stripe/payment provider directly from route handlers. Payment routes must use PaymentService.",
+      "decisionPresent": "All payment orchestration goes through PaymentService…",
+      "note": "CLI/stdio proof of fixture brain only — NOT counted as Cursor MCP_PROOF"
+    }
+  },
+  "mcpCatalog": {
+    "expectedProductTools": [
+      "neuron_context",
+      "neuron_search",
+      "neuron_remember",
+      "neuron_update",
+      "neuron_after_task",
+      "neuron_resolve_suggestion",
+      "neuron_scan"
+    ],
+    "cursorIdeCatalogAfterKill": {
+      "neuronTools": [],
+      "exactSeven": false,
+      "neuron_context": false
+    },
+    "configuredMcpJson": {
+      "path": "c:\\projekty\\neuron-ai-memory\\.cursor\\mcp.json",
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": ["C:\\projekty\\neuron-ai-memory\\apps\\cli\\dist\\index.js", "mcp"],
+      "env": {
+        "NEURON_CWD": "c:\\projekty\\neuron-ai-memory\\.tmp\\live-mcp-ab-fixture"
+      }
+    },
+    "liveNeuronMcpProcessAfterKill": false
+  },
+  "fixture": {
+    "path": "c:\\projekty\\neuron-ai-memory\\.tmp\\live-mcp-ab-fixture",
+    "reusedBuilder": "scripts/live-agent-validation.mjs#buildLiveFixture",
+    "enrichedWith": [
+      "src/billing-ui/BillingPage.tsx",
+      "src/billing-admin/AdminBilling.tsx",
+      "src/health.ts",
+      "src/legacy/old-payments.ts",
+      "src/api/routes/health.ts"
+    ],
+    "contains": [
+      "auth",
+      "API routes",
+      "payments/billing",
+      "PaymentService",
+      "Stripe client",
+      "invoices",
+      "database/repositories",
+      "background workers",
+      "tests",
+      "misleading modules"
+    ],
+    "rememberedRule": "Never call Stripe/payment provider directly from route handlers. Payment routes must use PaymentService.",
+    "architectureDecision": "All payment orchestration goes through PaymentService so Stripe, persistence, and retries stay consistent."
+  },
+  "tasks": {
+    "plannedCount": 20,
+    "executedA": 0,
+    "executedB": 0,
+    "list": [
+      { "id": "T01", "prompt": "Where is authentication implemented?" },
+      { "id": "T02", "prompt": "Where are API routes defined?" },
+      { "id": "T03", "prompt": "Where is billing implemented?" },
+      { "id": "T04", "prompt": "Where is the Stripe integration?" },
+      { "id": "T05", "prompt": "Where should I add a new payment endpoint?" },
+      { "id": "T06", "prompt": "Add support for cancelling invoices." },
+      { "id": "T07", "prompt": "Add a refund endpoint." },
+      { "id": "T08", "prompt": "Fix an authentication-expiry bug." },
+      { "id": "T09", "prompt": "Fix duplicate payment webhooks." },
+      { "id": "T10", "prompt": "Add retry handling to PaymentService." },
+      { "id": "T11", "prompt": "Modify database access for payments." },
+      { "id": "T12", "prompt": "Add a background payment reconciliation job." },
+      { "id": "T13", "prompt": "Where are tests for invoices?" },
+      { "id": "T14", "prompt": "What rule applies when modifying payment routes?" },
+      { "id": "T15", "prompt": "What architecture decision affects payments?" },
+      { "id": "T16", "prompt": "What calls PaymentService?" },
+      { "id": "T17", "prompt": "What depends on the Stripe client?" },
+      { "id": "T18", "prompt": "Where should invoice cancellation start?" },
+      { "id": "T19", "prompt": "Refactor payment persistence." },
+      { "id": "T20", "prompt": "How should I configure Kubernetes autoscaling? (negative)" }
+    ]
+  },
+  "rawTraceSummary": {
+    "runsCollected": 0,
+    "reason": "Benchmark not started after MCP_PROOF FAILED"
+  },
+  "metrics": {
+    "explorationToolCalls": { "A": null, "B": null, "delta": null },
+    "fileReads": { "A": null, "B": null, "delta": null },
+    "broadRediscoveryRate": { "A": null, "B": null, "delta": null },
+    "firstUsefulFile": { "A": null, "B": null, "delta": null },
+    "correctStart": { "A": null, "B": null, "delta": null },
+    "ruleAdherence": { "A": null, "B": null, "delta": null },
+    "taskSuccess": { "A": null, "B": null, "delta": null },
+    "hallucinatedPaths": { "A": null, "B": null, "delta": null },
+    "medians": null,
+    "note": "No invented metrics. Null = not measured."
+  },
+  "perTaskResults": [],
+  "failures": [
+    {
+      "id": "F1_MCP_PROCESS_NOT_RESPAWNED",
+      "severity": "critical",
+      "detail": "Killing the live neuron mcp node process removed the server from the Cursor IDE catalog. Cursor did not auto-respawn it in this chat session. GetMcpTools no longer shows project-0-neuron-ai-memory-neuron."
+    },
+    {
+      "id": "F2_FIXTURE_BIND_REQUIRES_RELOAD",
+      "severity": "blocking",
+      "detail": "To make B return fixture brain via real Cursor MCP, NEURON_CWD must point at the fixture AND the MCP process must be (re)started by Cursor. Process kill alone is insufficient without operator MCP toggle/reload."
+    },
+    {
+      "id": "F3_LIVE_AB_NOT_RUN",
+      "severity": "expected_stop",
+      "detail": "Per brief: if CallMcpTool(neuron_context) is tool-not-found / server absent → STOP. No 40 runs, no estimatedRediscoveryAvoided, no token savings claims."
+    }
+  ],
+  "limitations": [
+    "This chat cannot toggle Cursor Settings → Tools & MCP.",
+    "Task subagents historically reuse parent workspace MCP and do not load nested fixture .cursor/mcp.json (prior finding D).",
+    "Parent MCP NEURON_CWD is the only practical way to bind fixture brain for B in this harness — requires MCP restart after mcp.json change.",
+    "CLI neuron context on fixture is valid product evidence for retrieval, but is explicitly not Cursor MCP_PROOF."
+  ],
+  "operatorNextStep": {
+    "action": "In Cursor: Settings → Tools & MCP → toggle neuron OFF/ON (or Reload Window).",
+    "mcpJsonAlreadyPointsAt": "c:\\projekty\\neuron-ai-memory\\.tmp\\live-mcp-ab-fixture",
+    "thenSay": "continue P0 FINAL MCP A/B",
+    "acceptanceBeforeBenchmark": [
+      "GetMcpTools shows neuron server again",
+      "exactly 7 product tools including neuron_context",
+      "CallMcpTool(neuron_context) with billing question returns fixture paths (e.g. src/api/routes/payments.ts) and Stripe/PaymentService rule",
+      "only then launch 20×A + 20×B"
+    ]
+  },
+  "finalVerdict": "MCP_PROOF = FAILED in this continuation. LIVE_AGENT_PROOF = NOT_RUN. No PROVEN claim. Fixture + stdio context ready; waiting on Cursor MCP respawn with fixture NEURON_CWD."
+}

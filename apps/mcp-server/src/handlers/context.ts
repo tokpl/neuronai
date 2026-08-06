@@ -34,6 +34,7 @@ export async function handleContext(
             symbol: prepared.recommendation.symbol,
             flow: prepared.recommendation.flow,
             dependencies: prepared.recommendation.dependencies,
+            tests: prepared.recommendation.tests,
           }
         : undefined,
       relevantFiles: prepared.relevantFiles.map((f) => ({

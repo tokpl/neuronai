@@ -73,6 +73,10 @@ export async function analyzeAndSeedMemories(
   const meta = await loadMetadata(session.cwd);
   meta.lastAnalyzeAt = new Date().toISOString();
   meta.memoryCount = session.listMemories().length;
+  const { readGitIdentity } = await import('./git-identity.js');
+  const git = readGitIdentity(session.cwd);
+  meta.lastScanGitHead = git.head;
+  meta.lastScanGitBranch = git.branch;
   await saveMetadata(meta, session.cwd);
 
   return {

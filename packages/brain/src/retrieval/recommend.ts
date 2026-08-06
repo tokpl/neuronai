@@ -19,6 +19,8 @@ export interface ModificationAdvice {
   flow?: Array<{ label: string; path?: string }>;
   /** High-confidence dependencies. */
   dependencies?: Array<{ path: string; name: string }>;
+  /** Related tests when evidence exists. */
+  tests?: Array<{ path: string; name: string }>;
 }
 
 /**
@@ -31,12 +33,16 @@ export function pickRecommendation(
   includedTitles: Set<string>,
   query = '',
 ): ModificationAdvice | undefined {
+  // Everyday prompts ("fix payments", "change auth") are often GENERAL/DEBUGGING
+  // but still need a concrete start when locations matched.
   if (
     intent !== 'MODIFICATION' &&
     intent !== 'LOCATION' &&
     intent !== 'IMPLEMENTATION' &&
     intent !== 'DEPENDENCY' &&
-    intent !== 'IMPACT'
+    intent !== 'IMPACT' &&
+    intent !== 'DEBUGGING' &&
+    intent !== 'GENERAL_PROJECT'
   ) {
     return undefined;
   }

@@ -23,7 +23,6 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
-import { createHash } from 'node:crypto';
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), '..');
 const neuronBin = join(repo, 'apps', 'cli', 'dist', 'index.js');
@@ -832,7 +831,6 @@ if (wantPacked) {
 
 // Summaries
 const allRows = report.repos.flatMap((r) => r.rows);
-const scored = allRows.filter((r) => r.correct !== 'acceptable' || r.category !== 'negative');
 const correctN = allRows.filter((r) => r.correct === 'correct').length;
 const acceptableN = allRows.filter((r) => r.correct === 'acceptable').length;
 const incorrectN = allRows.filter((r) => r.correct === 'incorrect').length;

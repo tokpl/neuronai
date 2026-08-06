@@ -31,6 +31,11 @@
     "verify:package": "pnpm build && node ./scripts/verify-package.mjs",
     "verify:offline": "pnpm build && node ./scripts/verify-offline.mjs",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && node ./scripts/verify-package.mjs && node ./scripts/verify-offline.mjs",
+    "benchmark:scripted": "node ./scripts/real-agent-benchmark.mjs",
+    "benchmark:live": "node ./scripts/live-agent-benchmark.mjs",
+    "validate:live-agent": "node ./scripts/live-agent-validation.mjs",
+    "verify:mcp": "node ./scripts/mcp-proof-stdio.mjs && node ./scripts/mcp-init-stdio-regression.mjs && node ./scripts/mcp-integration-report.mjs",
+    "validate:p4": "node ./scripts/p4-validation.mjs",
     "readme:sync": "node ./scripts/sync-npm-readme.mjs",
     "release": "pnpm verify && pnpm --filter neuronai publish --access public --no-git-checks"
   },

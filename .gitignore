@@ -26,3 +26,6 @@ docs/internal/
 .neuron/integrations/
 # <<< neuronai
 
+
+.tmp/
+

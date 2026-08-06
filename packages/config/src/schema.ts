@@ -12,8 +12,9 @@ export const neuronConfigSchema = z.object({
     stack: z.array(z.string()).default([]),
   }),
   memory: z.object({
-    autoSave: z.boolean().default(false),
+    autoSave: z.boolean().default(true),
     importanceThreshold: z.number().min(0).max(1).default(0.45),
+    /** Max tokens of ranked memory injected into agent context (prepare_task / get_context). */
     contextMaxTokens: z.number().int().positive().default(3000),
   }),
   providers: z.object({
@@ -39,7 +40,7 @@ export const defaultNeuronConfig: NeuronConfig = {
     stack: [],
   },
   memory: {
-    autoSave: false,
+    autoSave: true,
     importanceThreshold: 0.45,
     contextMaxTokens: 3000,
   },

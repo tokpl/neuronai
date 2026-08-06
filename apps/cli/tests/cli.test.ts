@@ -94,18 +94,27 @@ describe('cli commands', () => {
     const root = await makeTemp();
     await writeFixture(root, 'nextjs');
 
-    await runInit(root);
+    await runInit(root, { yes: true });
 
     expect(await isNeuronInitialized(root)).toBe(true);
     const paths = neuronPaths(root);
     const config = JSON.parse(await readFile(paths.config, 'utf8')) as {
       project: { name: string };
       integrations: { cursor: boolean };
+      privacy?: { telemetry?: boolean; localOnly?: boolean; mode?: string };
+      memory?: { autoSave?: boolean };
     };
     expect(config.project.name).toBe('demo-next');
     expect(config.integrations.cursor).toBe(true);
     expect(config.privacy?.telemetry).toBe(false);
     expect(config.privacy?.localOnly).toBe(true);
+    expect(config.privacy?.mode).toBe('suggest');
+    expect(config.memory?.autoSave).toBe(true);
+
+    const gitignore = await readFile(join(root, '.gitignore'), 'utf8');
+    expect(gitignore).toMatch(/\.neuron\/cache\//);
+    expect(gitignore).toMatch(/# >>> neuronai/);
+    expect(gitignore).not.toMatch(/^\.neuron\/$/m);
 
     const brain = JSON.parse(await readFile(paths.brain, 'utf8')) as { name: string };
     expect(brain.name).toBe('demo-next');
@@ -124,21 +133,21 @@ describe('cli commands', () => {
   it('init node fixture works', async () => {
     const root = await makeTemp();
     await writeFixture(root, 'node');
-    await runInit(root);
+    await runInit(root, { yes: true });
     expect(await isNeuronInitialized(root)).toBe(true);
   });
 
   it('init empty folder still initializes', async () => {
     const root = await makeTemp();
     await writeFixture(root, 'empty');
-    await runInit(root, { skipAnalyze: false });
+    await runInit(root, { skipAnalyze: false, yes: true });
     expect(await isNeuronInitialized(root)).toBe(true);
   });
 
   it('status and doctor run after init', async () => {
     const root = await makeTemp();
     await writeFixture(root, 'node');
-    await runInit(root);
+    await runInit(root, { yes: true });
 
     await runStatus(root);
     process.exitCode = 0;
@@ -149,14 +158,14 @@ describe('cli commands', () => {
   it('search finds seeded memories', async () => {
     const root = await makeTemp();
     await writeFixture(root, 'nextjs');
-    await runInit(root);
+    await runInit(root, { yes: true });
     await runSearch('Next.js', root);
   });
 
   it('cursor setup writes commands and validates mcp', async () => {
     const root = await makeTemp();
     await writeFixture(root, 'node');
-    await runInit(root);
+    await runInit(root, { yes: true });
 
     const { runCursorSetup } = await import('../src/commands/cursor-setup.js');
     const { runCursorDoctor } = await import('../src/commands/cursor-doctor.js');
@@ -176,7 +185,7 @@ describe('cli commands', () => {
   it('doctor checks after init', async () => {
     const root = await makeTemp();
     await writeFixture(root, 'nextjs');
-    await runInit(root);
+    await runInit(root, { yes: true });
 
     const checks = await runDoctorChecks(root);
     expect(checks.some((c) => c.name === 'Node version' && c.ok)).toBe(true);
@@ -187,10 +196,20 @@ describe('cli commands', () => {
   it('reset --force removes .neuron', async () => {
     const root = await makeTemp();
     await writeFixture(root, 'node');
-    await runInit(root, { skipAnalyze: true });
+    await runInit(root, { skipAnalyze: true, yes: true });
     expect(await isNeuronInitialized(root)).toBe(true);
     await runReset(root, { force: true });
     expect(await isNeuronInitialized(root)).toBe(false);
+  });
+
+  it('init --yes can ignore entire .neuron via local-only preset override', async () => {
+    const root = await makeTemp();
+    await writeFixture(root, 'node');
+    const { applyNeuronGitignore } = await import('../src/services/gitignore.js');
+    await applyNeuronGitignore(root, 'all-local');
+    const gitignore = await readFile(join(root, '.gitignore'), 'utf8');
+    expect(gitignore).toMatch(/^\.neuron\/$/m);
+    expect(gitignore).toMatch(/neuron\.config\.json/);
   });
 
   it('ConfigValidator catches invalid settings', () => {

@@ -50,7 +50,7 @@ export function registerPrompts(server: McpServer, runtime: NeuronRuntime): void
               'After finishing the implementation, review whether Neuron should remember something.',
               `Summary of work: ${summary}`,
               '1. Call neuron_after_task or neuron_review_memory with the summary',
-              '2. Prefer Cursor AskQuestion (Save / Edit / Ignore); if unavailable, ask the user to type the word',
+              '2. Prefer Cursor AskQuestion (Yes — remember it / rephrase / No — skip); if unavailable, ask “Should I remember this for the project?” (Yes / No / Yes + rephrased text)',
               '3. Call neuron_resolve_suggestion with that action (or neuron_save_decision / neuron_store_memory)',
               '4. Avoid duplicates - search first',
             ].join('\n'),

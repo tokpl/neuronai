@@ -20,12 +20,16 @@ Commit the JSON files above so teammates get project knowledge on `git pull`.
 
 ## Do not commit
 
+Ephemeral paths (usually added by `neuron init` into `.gitignore`):
+
 ```gitignore
 .neuron/cache/
 .neuron/runtime/
 .neuron/indexes/
 .neuron/logs/
 ```
+
+`neuron init` asks how to update `.gitignore` (recommended ephemeral-only, also ignore `neuron.config.json`, local-only entire `.neuron/`, or skip).
 
 ## Migration
 

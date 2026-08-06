@@ -7,6 +7,28 @@ import { resolveProjectId } from './get-context.js';
 
 export type ResolveSuggestionAction = 'save' | 'edit' | 'ignore';
 
+const ACTION_ALIASES: Record<string, ResolveSuggestionAction> = {
+  save: 'save',
+  yes: 'save',
+  y: 'save',
+  remember: 'save',
+  edit: 'edit',
+  rephrase: 'edit',
+  ignore: 'ignore',
+  no: 'ignore',
+  n: 'ignore',
+  skip: 'ignore',
+};
+
+export function normalizeResolveAction(raw: string): ResolveSuggestionAction {
+  const key = raw.trim().toLowerCase();
+  const mapped = ACTION_ALIASES[key];
+  if (!mapped) {
+    throw new ValidationError(`Unknown suggestion action: ${raw}`, { action: raw });
+  }
+  return mapped;
+}
+
 function clearPending(runtime: NeuronRuntime): void {
   runtime.pendingSuggestion = null;
 }
@@ -44,7 +66,7 @@ export async function handleResolveSuggestion(
   runtime: NeuronRuntime,
   args: {
     projectId?: string;
-    action: ResolveSuggestionAction;
+    action: string;
     title?: string;
     content?: string;
     type?: MemoryType;
@@ -53,7 +75,7 @@ export async function handleResolveSuggestion(
   try {
     runtime.auth.assertAuthorized(process.env['NEURON_API_KEY']);
     const projectId = resolveProjectId(runtime, args.projectId);
-    const action = args.action;
+    const action = normalizeResolveAction(args.action);
 
     if (action === 'ignore') {
       const hadPending = Boolean(runtime.pendingSuggestion);

@@ -8,13 +8,17 @@ import { ui } from '../ui/output.js';
  */
 export async function runCursorInit(
   cwd = process.cwd(),
-  options: { force?: boolean; skipAnalyze?: boolean } = {},
+  options: { force?: boolean; skipAnalyze?: boolean; yes?: boolean } = {},
 ): Promise<void> {
   ui.title('Neuron init cursor');
   ui.blank();
 
   if (!(await isNeuronInitialized(cwd)) || options.force) {
-    await runInit(cwd, { force: options.force, skipAnalyze: options.skipAnalyze });
+    await runInit(cwd, {
+      force: options.force,
+      skipAnalyze: options.skipAnalyze,
+      yes: options.yes,
+    });
   } else {
     ui.success('Neuron already initialized - refreshing Cursor wiring…');
     const cursor = await setupCursorIntegration(cwd, { force: true });

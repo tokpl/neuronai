@@ -31,4 +31,4 @@ Code follows existing patterns.
 
 Agent: “Czy ta zmiana powinna zostać zapamiętana?”
 
-Tools: `neuron_after_task` → Cursor AskQuestion (Save / Edit / Ignore) or typed reply → `neuron_resolve_suggestion`
+Tools: `neuron_after_task` → AskQuestion (**Yes — remember it** / rephrase / **No — skip**) or plain Yes/No → `neuron_resolve_suggestion`

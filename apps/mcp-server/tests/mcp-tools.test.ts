@@ -131,6 +131,9 @@ describe('mcp tool handlers', () => {
     expect(body.howToRespond).toMatch(/neuron_resolve_suggestion/);
     expect(body.userInstruction).toMatch(/AskQuestion/i);
     expect(body.askQuestion?.options?.length).toBe(3);
+    expect(body.askQuestion?.options?.map((o) => o.label).join(' ')).toMatch(
+      /remember|skip|rephrase/i,
+    );
     expect(runtime.pendingSuggestion).not.toBeNull();
 
     const ignored = await handleResolveSuggestion(runtime, { action: 'ignore' });
@@ -159,7 +162,7 @@ describe('mcp tool handlers', () => {
     runtime.pendingSuggestion = {
       ...runtime.pendingSuggestion!,
       title: unique,
-      draftContent: `User-facing Save/Edit/Ignore instructions for Cursor chat (${unique}).`,
+      draftContent: `User-facing remember Yes/No instructions for Cursor chat (${unique}).`,
     };
 
     const saved = await handleResolveSuggestion(runtime, { action: 'save' });

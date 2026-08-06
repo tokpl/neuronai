@@ -38,10 +38,10 @@ Ask:
 
 Then:
 
-- Prefer `neuron_after_task` (suggest mode)
-- **Prefer Cursor `AskQuestion`** when available: one single-select with **Save** / **Edit first** / **Ignore** (use `askQuestion` from the tool result)
-- If `AskQuestion` is unavailable, tell the user in plain language to reply **Save**, **Edit** (plus changes), or **Ignore**
-- When they choose/reply, call `neuron_resolve_suggestion` with `action: "save" | "edit" | "ignore"` (for edit, pass `title` / `content`)
+- Prefer `neuron_after_task` (ask-before-remember mode)
+- **Prefer Cursor `AskQuestion`** when available: use `askQuestion` from the tool result (**Yes — remember it** / **Yes — but let me rephrase** / **No — skip**)
+- If `AskQuestion` is unavailable, ask in plain language: *Should I remember this for the project?* — user replies **Yes**, **No**, or **Yes** plus a rephrased version
+- When they answer, call `neuron_resolve_suggestion` with `action: "save" | "edit" | "ignore"` (Yes→save, No→ignore; for rephrase use edit + `title` / `content`)
 - Do **not** show MCP tool names or JSON to the user; those are for you only
 - Or `neuron_review_memory` → `neuron_save_decision` / `neuron_store_memory`
 - Updates: `neuron_update_memory` (versioned — never silent overwrite)

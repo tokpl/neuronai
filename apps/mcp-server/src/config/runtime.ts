@@ -34,7 +34,7 @@ import type { MemoryType } from '@neuronai/types';
 
 import { createAuthProvider, type AuthProvider } from '../middleware/auth.js';
 
-/** Last suggest-mode draft from neuron_after_task, awaiting Save / Edit / Ignore. */
+/** Last ask-before-remember draft from neuron_after_task, awaiting Yes / No / rephrase. */
 export interface PendingMemorySuggestion {
   type: MemoryType;
   title: string;

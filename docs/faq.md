@@ -11,6 +11,12 @@ No. NeuronAI provides knowledge; Cursor's model answers.
 **How does the team share memory?**  
 Commit `.neuron/*.json`. `git pull` is Team Brain.
 
+**What does `memory.autoSave` mean?**  
+`true` means Neuron is allowed to offer (or auto-write) durable knowledge. With the default *ask* mode it still asks *“Should I remember this?”* before writing. Set `privacy.mode` to `automatic` for silent high-confidence saves, or `manual` to never offer.
+
+**What is `contextMaxTokens`?**  
+How much ranked project memory (in tokens) Neuron may inject into one agent turn (`prepare_task` / `get_context`). Default **3000**. Higher = more memory in context, lower = leaner prompts. Optional — omit it and the default applies.
+
 **Is NeuronAI an AI agent?**  
 No. Local project memory for Cursor (Neuron - AI Memory).
 

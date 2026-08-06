@@ -24,7 +24,7 @@ export const neuronLocalConfigSchema = z.object({
     stack: z.array(z.string()).default([]),
   }),
   memory: z.object({
-    autoSave: z.boolean().default(false),
+    autoSave: z.boolean().default(true),
     threshold: z.number().min(0).max(1).default(0.45),
   }),
   privacy: z

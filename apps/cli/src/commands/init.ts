@@ -17,6 +17,7 @@ import {
 } from '../templates/first-run.js';
 import { CLI_VERSION, ensureNeuronLayout, pathExists } from '../services/neuron-fs.js';
 import { setupCursorIntegration, syncProjectBrainFiles } from '../services/cursor-setup.js';
+import { applyNeuronGitignore } from '../services/gitignore.js';
 import {
   ensureIntegrationStubs,
   isNeuronInitialized,
@@ -27,6 +28,8 @@ import {
 import { analyzeAndSeedMemories, openProjectSession } from '../services/project-session.js';
 import { ui } from '../ui/output.js';
 import { createFileStorageProvider } from '@neuronai/storage';
+
+import { askInitPreferences } from './init-preferences.js';
 
 function pickFramework(stack: string[], frameworks: string[]): string {
   const fromFw = frameworks[0];
@@ -62,7 +65,7 @@ function architectureConfidence(input: {
 
 export async function runInit(
   cwd = process.cwd(),
-  options: { force?: boolean; skipAnalyze?: boolean } = {},
+  options: { force?: boolean; skipAnalyze?: boolean; yes?: boolean } = {},
 ): Promise<void> {
   const paths = neuronPaths(cwd);
 
@@ -85,7 +88,7 @@ export async function runInit(
   }
   ui.blank();
 
-  const progress = new ProgressUI(7);
+  const progress = new ProgressUI(8);
   const report: NeuronInitReport = {
     projectName: 'unknown',
     framework: 'unknown',
@@ -133,6 +136,9 @@ export async function runInit(
     progress.ok(`Found database layer (${database})`);
   }
 
+  // 4. Preferences (interactive unless --yes / non-TTY / CI)
+  progress.start('Preferences…');
+  const prefs = await askInitPreferences({ useDefaults: options.yes === true });
   const localConfig: NeuronLocalConfig = {
     schemaVersion: 1,
     project: {
@@ -142,11 +148,11 @@ export async function runInit(
       stack: project.stack,
     },
     memory: {
-      autoSave: false,
+      autoSave: prefs.memory.autoSave,
       threshold: 0.45,
     },
     privacy: {
-      mode: 'suggest',
+      mode: prefs.memory.privacyMode,
       localOnly: true,
       telemetry: false,
     },
@@ -203,9 +209,9 @@ export async function runInit(
       stack: project.stack,
     },
     memory: {
-      ...defaultNeuronConfig.memory,
       autoSave: localConfig.memory.autoSave,
       importanceThreshold: localConfig.memory.threshold,
+      // contextMaxTokens uses schema default (how much memory is injected per agent turn)
     },
   };
   await writeFile(
@@ -215,7 +221,23 @@ export async function runInit(
   );
   await ensureIntegrationStubs(cwd);
 
-  // 4. Initial scan
+  const gitignore = await applyNeuronGitignore(cwd, prefs.gitignore);
+  const saveLabel =
+    prefs.memory.privacyMode === 'automatic'
+      ? 'Remember automatically (high-confidence knowledge is saved without asking)'
+      : prefs.memory.privacyMode === 'manual'
+        ? 'Only when you ask'
+        : 'Ask before remembering (“Should I remember this?”)';
+  progress.ok(`Save mode: ${saveLabel}`);
+  if (gitignore.applied) {
+    progress.ok(`.gitignore updated (${prefs.gitignore})`);
+  } else if (prefs.gitignore === 'skip') {
+    progress.warn('.gitignore left unchanged');
+  } else {
+    progress.ok('.gitignore already up to date');
+  }
+
+  // 5. Initial scan
   progress.start('Initial scan…');
   let stored = 0;
   let candidates = 0;
@@ -261,12 +283,12 @@ export async function runInit(
   report.filesAnalyzed = scanFiles;
   report.memoriesCreated = stored + scanMemories;
 
-  // 5. Brain creation
+  // 6. Brain creation
   progress.start('Brain creation…');
   await syncProjectBrainFiles(cwd);
   progress.ok('Project brain files written (.neuron/*.json)');
 
-  // 6. Cursor integration
+  // 7. Cursor integration
   progress.start('Cursor integration…');
   const cursorAlready = await pathExists(join(paths.root, '.cursor'));
   if (!cursorAlready) {
@@ -288,7 +310,7 @@ export async function runInit(
     });
   }
 
-  // 7. Ready
+  // 8. Ready
   progress.start('Ready');
   report.architectureConfidence = architectureConfidence({
     modules: report.modules,
@@ -313,6 +335,13 @@ export async function runInit(
     `Stack: ${framework}${database !== 'none detected' ? ` · ${database}` : ''}`,
     `Memories seeded: ${report.memoriesCreated}` +
       (candidates ? ` (${candidates} candidates, ${skipped} skipped)` : ''),
+    `Save mode: ${
+      prefs.memory.privacyMode === 'automatic'
+        ? 'automatic'
+        : prefs.memory.privacyMode === 'manual'
+          ? 'manual'
+          : 'ask before remembering'
+    }`,
     `Privacy: local-only · telemetry OFF`,
     `Cursor MCP: ${cursor.mcpPath}`,
   ]);

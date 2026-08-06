@@ -83,7 +83,18 @@ export const afterTaskSchema = {
 
 export const resolveSuggestionSchema = {
   projectId: projectIdSchema,
-  action: z.enum(['save', 'edit', 'ignore']),
+  action: z.enum([
+    'save',
+    'edit',
+    'ignore',
+    'yes',
+    'y',
+    'remember',
+    'no',
+    'n',
+    'skip',
+    'rephrase',
+  ]),
   title: z.string().min(1).optional(),
   content: z.string().min(1).optional(),
   type: z

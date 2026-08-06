@@ -43,9 +43,9 @@ export async function handleAfterTask(
       privacyMode: runtime.privacyMode,
       pending: Boolean(runtime.pendingSuggestion),
       userInstruction:
-        'Prefer Cursor AskQuestion with askQuestion.options (Save / Edit first / Ignore). If AskQuestion is unavailable, tell the user in plain language to reply Save, Edit, or Ignore. Do not show MCP tool names to the user.',
+        'Prefer Cursor AskQuestion with askQuestion.options (Yes — remember it / Yes — but let me rephrase / No — skip). If AskQuestion is unavailable, ask the user in plain language whether they want this remembered for the project; they can reply Yes, No, or Yes with a rephrased version. Do not show MCP tool names to the user.',
       howToRespond:
-        'After the user picks or types Save/Edit/Ignore, call neuron_resolve_suggestion with that action.',
+        'After the user answers, call neuron_resolve_suggestion with action save | edit | ignore (Yes→save, No→ignore, rephrase→edit with title/content).',
     });
   } catch (error) {
     return failResult(error);

@@ -24,6 +24,7 @@ Usage:
 
 Getting started:
   neuron init              Create .neuron/ + scan + wire Cursor MCP
+  neuron init --yes        Same, with recommended defaults (no prompts)
   neuron status            Project + memory status
   neuron doctor            Diagnose local setup
 
@@ -53,7 +54,8 @@ export function createCli() {
     .command('init', 'Create .neuron/, scan the project, and wire Cursor MCP')
     .option('--force', 'Overwrite existing Neuron config')
     .option('--skip-analyze', 'Skip first project scan')
-    .action(async (options: { force?: boolean; skipAnalyze?: boolean }) => {
+    .option('--yes, -y', 'Accept recommended defaults (non-interactive)')
+    .action(async (options: { force?: boolean; skipAnalyze?: boolean; yes?: boolean }) => {
       await runInit(process.cwd(), options);
     });
 
@@ -61,7 +63,8 @@ export function createCli() {
     .command('init cursor', 'Bootstrap Neuron + Cursor (rules, skills, MCP)')
     .option('--force', 'Reinitialize and overwrite Cursor templates')
     .option('--skip-analyze', 'Skip first project scan')
-    .action(async (options: { force?: boolean; skipAnalyze?: boolean }) => {
+    .option('--yes, -y', 'Accept recommended defaults (non-interactive)')
+    .action(async (options: { force?: boolean; skipAnalyze?: boolean; yes?: boolean }) => {
       await runCursorInit(process.cwd(), options);
     });
 
@@ -122,7 +125,8 @@ export function createCli() {
     .command('cursor init', 'Alias for: neuron init cursor')
     .option('--force', 'Reinitialize and overwrite Cursor templates')
     .option('--skip-analyze', 'Skip first project scan')
-    .action(async (options: { force?: boolean; skipAnalyze?: boolean }) => {
+    .option('--yes, -y', 'Accept recommended defaults (non-interactive)')
+    .action(async (options: { force?: boolean; skipAnalyze?: boolean; yes?: boolean }) => {
       await runCursorInit(process.cwd(), options);
     });
 

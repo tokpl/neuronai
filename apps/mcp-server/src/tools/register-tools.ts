@@ -145,7 +145,7 @@ export function registerTools(server: McpServer, runtime: NeuronRuntime): void {
     'neuron_after_task',
     {
       description:
-        'After coding: suggest saving knowledge. Prefer Cursor AskQuestion (askQuestion field); fallback typed Save/Edit/Ignore; then neuron_resolve_suggestion.',
+        'After coding: if something is worth keeping, ask the user whether to remember it for the project (AskQuestion Yes/No/rephrase, or plain Yes/No). Then neuron_resolve_suggestion.',
       inputSchema: afterTaskSchema,
     },
     async (args) => handleAfterTask(runtime, args),
@@ -155,7 +155,7 @@ export function registerTools(server: McpServer, runtime: NeuronRuntime): void {
     'neuron_resolve_suggestion',
     {
       description:
-        'Apply the user chat reply to the last neuron_after_task suggestion: action save | edit | ignore. For edit, pass title/content overrides.',
+        'Apply the user answer to the last neuron_after_task suggestion: action save|yes / ignore|no / edit|rephrase. For edit, pass title/content overrides.',
       inputSchema: resolveSuggestionSchema,
     },
     async (args) => handleResolveSuggestion(runtime, args),

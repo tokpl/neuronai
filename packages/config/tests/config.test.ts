@@ -5,7 +5,7 @@ import { defaultNeuronConfig, validateConfig } from '../src/index.js';
 describe('validateConfig', () => {
   it('accepts the default config shape', () => {
     const config = validateConfig(defaultNeuronConfig);
-    expect(config.memory.autoSave).toBe(false);
+    expect(config.memory.autoSave).toBe(true);
     expect(config.server.mode).toBe('local');
   });
 

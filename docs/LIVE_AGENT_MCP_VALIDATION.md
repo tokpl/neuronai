@@ -27,6 +27,14 @@
 - Evidence = subagent JSONL `tool_use` (not self-report, not CLI `neuron context`)  
 - Token/latency: **UNAVAILABLE**
 
+### Critical caveats (valid evidence ≠ unlimited claims)
+
+- B was **instructed** to call `neuron_context` first → 20/20 adoption proves MCP + protocol compliance, not organic discovery.
+- Sample = **one repo**, **n=20** tasks → measured exploration reduction, not universal productivity.
+- Do **not** cite scripted ~89% `EXPLORATION_POLICY_PROOF` as this live MCP result.
+- Honest live deltas: explore median **−41.2%** (8.5→5); reads median **−30.4%** (11.5→8).
+- See [`FINAL_RELEASE_AUDIT.md`](FINAL_RELEASE_AUDIT.md) for release verdict.
+
 ## A/B metrics (hard traces)
 
 | Metric | A | B | Δ (B−A median) |

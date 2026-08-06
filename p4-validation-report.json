@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-08-06T17:17:21.618Z",
+  "generatedAt": "2026-08-06T18:17:14.916Z",
   "LIVE_AGENT_PROOF": "UNAVAILABLE",
   "EXPLORATION_POLICY_PROOF": "STRONG",
   "sections": {
     "liveAgent": {
-      "generatedAt": "2026-08-06T17:17:24.027Z",
+      "generatedAt": "2026-08-06T18:17:18.543Z",
       "LIVE_AGENT_PROOF": "UNAVAILABLE",
       "reason": "No CURSOR_API_KEY / ANTHROPIC_API_KEY / OPENAI_API_KEY",
       "methodology": {
@@ -320,7 +320,7 @@
       "verdict": "LIVE_AGENT_PROOF = UNAVAILABLE"
     },
     "dailyUse": {
-      "generatedAt": "2026-08-06T17:17:28.636Z",
+      "generatedAt": "2026-08-06T18:17:23.928Z",
       "LIVE_AGENT_PROOF": "UNAVAILABLE",
       "EXPLORATION_POLICY_PROOF": "see real-agent-benchmark-report.json",
       "counts": {
@@ -380,7 +380,7 @@
           "grade": "CORRECT"
         }
       ],
-      "avgRetrievalMs": 2.4375,
+      "avgRetrievalMs": 2.09375,
       "avgTokens": 184.28125,
       "results": [
         {
@@ -394,7 +394,7 @@
           "related": 2,
           "rules": 1,
           "tokens": 269,
-          "retrievalMs": 21,
+          "retrievalMs": 19,
           "markdownHead": "# Task\nAdd support for invoice cancellation.\n\n## Recommended start\n- POST /invoices/:id/cancel → src/api/routes/payments.ts\n- Because: HTTP POST /invoices/:id/cancel; existing route surface\n\n## Related\n- PaymentService.cancelInvoice → src/services/payment-service.ts\n- InvoiceService → src/billing/invoice-service.ts\n\n## Depends on\n- payment-service.ts → src/services/payment-service.ts\n- auth.ts → src/middleware/auth.ts\n- createPayment → src/services/payment-service.ts\n- cancelInvoice → src/services/payment-service.ts\n\n## Rules"
         },
         {
@@ -408,7 +408,7 @@
           "related": 1,
           "rules": 0,
           "tokens": 143,
-          "retrievalMs": 5,
+          "retrievalMs": 1,
           "markdownHead": "# Task\nFix the authentication bug.\n\n## Recommended start\n- AuthService.login() → src/auth/service.ts\n- Because: AuthService.login(); defines AuthService.login\n\n## Related\n- AuthService → src/auth/service.ts\n\n## Where to look\n- auth → src/auth/ — Authentication / authorization\n- AuthService.login → src/auth/service.ts — AuthService.login()\n- AuthService → src/auth/service.ts — Exported symbol\n- service.ts → src/auth/service.ts — Service / business logic\n- AuthService.verify → src/auth/service.ts — AuthService.verify()\n- auth.ts → src/middleware/auth.ts — Middleware\n"
         },
         {
@@ -436,7 +436,7 @@
           "related": 2,
           "rules": 1,
           "tokens": 282,
-          "retrievalMs": 2,
+          "retrievalMs": 1,
           "markdownHead": "# Task\nWhy is this API returning 403?\n\n## Recommended start\n- POST /payments → src/api/routes/payments.ts\n- Because: HTTP route handler; belongs to the api module; existing route surface; structural focus POST /payments\n\n## Related\n- POST /invoices/:id/cancel → src/api/routes/payments.ts\n- toHttpError → src/middleware/errors.ts\n\n## Depends on\n- payment-service.ts → src/services/payment-service.ts\n- auth.ts → src/middleware/auth.ts\n- createPayment → src/services/payment-service.ts\n- cancelInvoice → src/services/payment-service.ts\n\n## Rules"
         },
         {
@@ -464,7 +464,7 @@
           "related": 2,
           "rules": 0,
           "tokens": 180,
-          "retrievalMs": 3,
+          "retrievalMs": 4,
           "markdownHead": "# Task\nHow does authentication flow through this project?\n\n## Recommended start\n- AuthService.login() → src/auth/service.ts\n- Because: AuthService.login(); defines AuthService.login\n\n## Related\n- AuthService → src/auth/service.ts\n- auth → src/auth/\n\n## Decisions\n- Project uses modular architecture — Detected modules: auth, billing, config, db, middleware, services, workers, api. Prefer keeping boundaries between modules.\n\n## Where to look\n- auth → src/auth/ — Authentication / authorization\n- AuthService.login → src/auth/service.ts — AuthService.login()\n- services → src/services/ — Project module: services"
         },
         {
@@ -506,7 +506,7 @@
           "related": 2,
           "rules": 0,
           "tokens": 217,
-          "retrievalMs": 2,
+          "retrievalMs": 1,
           "markdownHead": "# Task\nWho depends on BillingService?\n\n## Recommended start\n- InvoiceService → src/billing/invoice-service.ts\n- Because: class InvoiceService; defines InvoiceService\n\n## Related\n- invoice-service.ts → src/billing/invoice-service.ts\n- PaymentService.cancelInvoice → src/services/payment-service.ts\n\n## Depends on\n- payment-service.ts → src/services/payment-service.ts\n\n## Where to look\n- InvoiceService → src/billing/invoice-service.ts — class InvoiceService\n- invoice-service.ts → src/billing/invoice-service.ts — Service / business logic\n- InvoiceService.createInvoice → src/billing/invoice-service.ts — InvoiceService.createInvoice()"
         },
         {
@@ -520,7 +520,7 @@
           "related": 4,
           "rules": 0,
           "tokens": 276,
-          "retrievalMs": 2,
+          "retrievalMs": 3,
           "markdownHead": "# Task\nWhat breaks if I change PaymentService?\n\n## Recommended start\n- PaymentService.cancelInvoice() → src/services/payment-service.ts\n- Because: PaymentService.cancelInvoice(); defines PaymentService.cancelInvoice\n\n## Related\n- payments.ts → src/api/routes/payments.ts\n- invoice-service.ts → src/billing/invoice-service.ts\n- PaymentService → src/services/payment-service.ts\n- PaymentRepository.markCancelled → src/db/payment-repository.ts\n\n## Depends on\n- stripe.ts → src/services/stripe.ts\n- payment-repository.ts → src/db/payment-repository.ts\n\n## Where to look"
         },
         {
@@ -534,7 +534,7 @@
           "related": 2,
           "rules": 0,
           "tokens": 208,
-          "retrievalMs": 3,
+          "retrievalMs": 2,
           "markdownHead": "# Task\nWhere is the database transaction boundary?\n\n## Recommended start\n- PaymentRepository → src/db/payment-repository.ts\n- Because: Exported symbol; belongs to the db module; defines PaymentRepository\n\n## Related\n- payment-repository.ts → src/db/payment-repository.ts\n- payment-service.ts → src/services/payment-service.ts\n\n## Decisions\n- Project uses modular architecture — Detected modules: auth, billing, config, db, middleware, services, workers, api. Prefer keeping boundaries between modules.\n\n## Where to look\n- PaymentRepository → src/db/payment-repository.ts — Exported symbol\n- payment-repository.ts → src/db/payment-repository.ts — Repository / data access\n- DbClient → src/db/client.ts — class DbClient"
         },
         {
@@ -548,7 +548,7 @@
           "related": 2,
           "rules": 0,
           "tokens": 191,
-          "retrievalMs": 2,
+          "retrievalMs": 1,
           "markdownHead": "# Task\nWhere should I modify database access?\n\n## Recommended start\n- PaymentRepository → src/db/payment-repository.ts\n- Because: Repository / data access; belongs to the db module; structural focus PaymentRepository\n\n## Related\n- PaymentRepository → src/db/payment-repository.ts\n- payment-service.ts → src/services/payment-service.ts\n\n## Where to look\n- payment-repository.ts → src/db/payment-repository.ts — Repository / data access\n- db → src/db/ — Data access\n- PaymentRepository → src/db/payment-repository.ts — Exported symbol\n- DbClient → src/db/client.ts — class DbClient\n- PaymentRepository.save → src/db/payment-repository.ts — PaymentRepository.save()\n- PaymentRepository.markCancelled → src/db/payment-repository.ts — PaymentRepository.markCancelled()"
         },
         {
@@ -577,7 +577,7 @@
           "rules": 0,
           "tokens": 233,
           "retrievalMs": 1,
-          "markdownHead": "# Task\nWhere should a new background job live?\n\n## Recommended start\n- registerJobs() → src/workers/jobs.ts\n- Because: function registerJobs; defines registerJobs; structural focus registerJobs()\n\n## Related\n- jobs.ts → src/workers/jobs.ts\n\n## Where to look\n- registerJobs → src/workers/jobs.ts — function registerJobs\n\n## Project knowledge\n- Source lives under src/\n- Repositories / data access live in: src/db/payment-repository.ts — Repositories / data access detected in 1 file(s): src/db/payment-repository.ts.\n- API routes and endpoints live in: src/api/routes/payments.ts — API routes and endpoints detected in 1 file(s): src/api/routes/payments.ts.\n- billing module — The billing module lives under paths such as src/billing/invoice-service.ts. Module purpose inferred from path and naming."
+          "markdownHead": "# Task\nWhere should a new background job live?\n\n## Recommended start\n- registerJobs() → src/workers/jobs.ts\n- Because: function registerJobs; defines registerJobs; structural focus registerJobs()\n\n## Related\n- jobs.ts → src/workers/jobs.ts\n\n## Where to look\n- registerJobs → src/workers/jobs.ts — function registerJobs\n\n## Project knowledge\n- Source lives under src/\n- Repositories / data access live in: src/db/payment-repository.ts — Repositories / data access detected in 1 file(s): src/db/payment-repository.ts.\n- API routes and endpoints live in: src/api/routes/payments.ts — API routes and endpoints detected in 1 file(s): src/api/routes/payments.ts.\n- api module — The api module lives under paths such as src/api/routes/payments.ts. Module purpose inferred from path and naming."
         },
         {
           "q": "How are background jobs registered?",
@@ -604,7 +604,7 @@
           "related": 2,
           "rules": 0,
           "tokens": 208,
-          "retrievalMs": 3,
+          "retrievalMs": 1,
           "markdownHead": "# Task\nWhere are tests for billing?\n\n## Recommended start\n- payment-service.test.ts → tests/payments/payment-service.test.ts\n- Because: Service / business logic\n\n## Related\n- POST /invoices/:id/cancel → src/api/routes/payments.ts\n- InvoiceService → src/billing/invoice-service.ts\n\n## Where to look\n- payment-service.test.ts → tests/payments/payment-service.test.ts — Service / business logic\n- InvoiceService → src/billing/invoice-service.ts — class InvoiceService\n- invoice-service.ts → src/billing/invoice-service.ts — Service / business logic\n- InvoiceService.createInvoice → src/billing/invoice-service.ts — InvoiceService.createInvoice()\n- POST /invoices/:id/cancel → src/api/routes/payments.ts — HTTP POST /invoices/:id/cancel\n- PaymentService.cancelInvoice → src/services/payment-service.ts — PaymentService.cancelInvoice()"
         },
         {
@@ -618,7 +618,7 @@
           "related": 0,
           "rules": 3,
           "tokens": 189,
-          "retrievalMs": 1,
+          "retrievalMs": 2,
           "markdownHead": "# Task\nWhat conventions should I follow when adding an endpoint?\n\n## Rules\n- Cross-cutting concerns belong in middleware, not route handlers. Middleware files detected in the codebase. (convention inferred from the codebase — review before treating as bind…\n- Never call Stripe directly from route handlers. Always go through PaymentService.\n- Use dependency injection / service modules for business logic. Detected multiple *Service files - consistent DI/service pattern. (convention inferred from the codebase — review be…\n\n## Where to look\n- payments.ts → src/api/routes/payments.ts — API routes / endpoints\n- POST /payments → src/api/routes/payments.ts — HTTP route handler\n- POST /invoices/:id/cancel → src/api/routes/payments.ts — HTTP route handler\n"
         },
         {
@@ -632,7 +632,7 @@
           "related": 0,
           "rules": 1,
           "tokens": 145,
-          "retrievalMs": 3,
+          "retrievalMs": 1,
           "markdownHead": "# Task\nWhat rule applies to Stripe calls?\n\n## Rules\n- Never call Stripe directly from route handlers. Always go through PaymentService.\n\n## Where to look\n- POST /invoices/:id/cancel → src/api/routes/payments.ts — HTTP POST /invoices/:id/cancel\n- PaymentService.cancelInvoice → src/services/payment-service.ts — PaymentService.cancelInvoice()\n- stripe.ts → src/services/stripe.ts — Service / business logic\n- PaymentRepository.markCancelled → src/db/payment-repository.ts — PaymentRepository.markCancelled()\n- StripeClient.refund → src/services/stripe.ts — StripeClient.refund()\n"
         },
         {
@@ -646,7 +646,7 @@
           "related": 0,
           "rules": 0,
           "tokens": 179,
-          "retrievalMs": 3,
+          "retrievalMs": 2,
           "markdownHead": "# Task\nWhat architecture decision affects payments?\n\n## Decisions\n- Decision — Payments must go through PaymentService so refunds and persistence stay consistent.\n- Project uses modular architecture — Detected modules: auth, billing, config, db, middleware, services, workers, api. Prefer keeping boundaries between modules.\n\n## Where to look\n- POST /invoices/:id/cancel → src/api/routes/payments.ts — HTTP POST /invoices/:id/cancel\n- PaymentService.cancelInvoice → src/services/payment-service.ts — PaymentService.cancelInvoice()\n- PaymentRepository.markCancelled → src/db/payment-repository.ts — PaymentRepository.markCancelled()\n- cancelInvoiceHandler → src/api/routes/payments.ts — function cancelInvoiceHandler\n"
         },
         {
@@ -688,7 +688,7 @@
           "related": 0,
           "rules": 0,
           "tokens": 26,
-          "retrievalMs": 0,
+          "retrievalMs": 1,
           "markdownHead": "# Task\nWhere should I start implementing this feature?\n\nNo stored project knowledge matched this task.\n"
         },
         {
@@ -702,7 +702,7 @@
           "related": 2,
           "rules": 0,
           "tokens": 264,
-          "retrievalMs": 2,
+          "retrievalMs": 1,
           "markdownHead": "# Task\nfix payments\n\n## Recommended start\n- POST /invoices/:id/cancel → src/api/routes/payments.ts\n- Because: HTTP POST /invoices/:id/cancel; existing route surface\n\n## Related\n- PaymentRepository.markCancelled → src/db/payment-repository.ts\n- PaymentService.cancelInvoice → src/services/payment-service.ts\n\n## Depends on\n- payment-service.ts → src/services/payment-service.ts\n- auth.ts → src/middleware/auth.ts\n- createPayment → src/services/payment-service.ts\n- cancelInvoice → src/services/payment-service.ts\n\n## Where to look"
         },
         {
@@ -730,7 +730,7 @@
           "related": 1,
           "rules": 0,
           "tokens": 172,
-          "retrievalMs": 1,
+          "retrievalMs": 2,
           "markdownHead": "# Task\nchange auth\n\n## Recommended start\n- AuthService.login() → src/auth/service.ts\n- Because: AuthService.login(); defines AuthService.login\n\n## Related\n- AuthService → src/auth/service.ts\n\n## Decisions\n- Project uses modular architecture — Detected modules: auth, billing, config, db, middleware, services, workers, api. Prefer keeping boundaries between modules.\n\n## Where to look\n- AuthService.login → src/auth/service.ts — AuthService.login()\n- auth → src/auth/ — Authentication / authorization\n- AuthService → src/auth/service.ts — class AuthService\n- service.ts → src/auth/service.ts — Service / business logic"
         },
         {
@@ -772,7 +772,7 @@
           "related": 3,
           "rules": 1,
           "tokens": 282,
-          "retrievalMs": 1,
+          "retrievalMs": 2,
           "markdownHead": "# Task\nadd webhook support\n\n## Recommended start\n- POST /invoices/:id/cancel → src/api/routes/payments.ts\n- Because: HTTP POST /invoices/:id/cancel; existing route surface\n\n## Related\n- PaymentRepository.markCancelled → src/db/payment-repository.ts\n- PaymentService.cancelInvoice → src/services/payment-service.ts\n- InvoiceService → src/billing/invoice-service.ts\n\n## Depends on\n- payment-service.ts → src/services/payment-service.ts\n- auth.ts → src/middleware/auth.ts\n- createPayment → src/services/payment-service.ts\n- cancelInvoice → src/services/payment-service.ts\n"
         },
         {
@@ -828,7 +828,7 @@
           "related": 0,
           "rules": 0,
           "tokens": 19,
-          "retrievalMs": 1,
+          "retrievalMs": 0,
           "markdownHead": "# Task\nWhere is GraphQL?\n\nNo stored project knowledge matched this task.\n"
         }
       ]
@@ -855,9 +855,9 @@
     },
     "contextQuality": {
       "sample": {
-        "ms": 23,
+        "ms": 22,
         "tokens": 272,
-        "retrievalMs": 14,
+        "retrievalMs": 13,
         "hasStart": true,
         "hasRelated": true,
         "hasDeps": true,

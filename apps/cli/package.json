@@ -1,6 +1,6 @@
 {
   "name": "neuronai",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "NeuronAI - CLI for Neuron - AI Memory (local-first Cursor project memory)",
   "license": "AGPL-3.0",
   "type": "module",
@@ -30,7 +30,8 @@
   ],
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",

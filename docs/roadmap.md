@@ -1,7 +1,10 @@
 # Roadmap
 
-- **Now:** local brain + Cursor MCP
-- **Next:** better scan + retrieval (still local)
-- **Later:** optional extras only if they help Cursor understand the project
+- **Now:** free local brain + Cursor MCP + team brain via Git
+- **Next:** optional Neuron Cloud Console (browse memory online, orgs)
+- **Soon:** optional Cloud Sync & shared brains
+- **Later:** optional hosted extras (SSO, audit, private regions) — local OSS stays free
+
+Cloud is convenience on top, not a replacement for local-first.
 
 https://github.com/tokpl/neuronai

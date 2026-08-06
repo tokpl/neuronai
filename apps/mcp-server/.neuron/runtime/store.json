@@ -17,11 +17,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 32,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 33,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:29:08.173Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "f8c7e7f3-1f4e-465c-84cd-701db7ef582a",
@@ -36,11 +36,11 @@
       "status": "active",
       "version": 1,
       "tags": [],
-      "usageCount": 30,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 31,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:29:08.179Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "8395565a-535c-4ccd-b8dc-5372abbb2d3d",
@@ -58,11 +58,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 30,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 31,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:35:55.946Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "ce5c1b20-ada8-48ca-989a-392ff998282b",
@@ -99,11 +99,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 28,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 29,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:46:24.198Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "d119754b-c0de-40df-85ee-f58da7ddda98",
@@ -121,11 +121,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 27,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 28,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:46:33.481Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "f30bbd05-ce50-45ef-880c-b4d0c694a81c",
@@ -143,11 +143,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 26,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 27,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:46:54.875Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "2c1af2a3-6cd5-472d-af9d-530a08a4662c",
@@ -165,11 +165,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 26,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 27,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:47:26.430Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "f4423458-65f7-43af-b0ab-7b0e5c48c8e6",
@@ -187,11 +187,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 25,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 26,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T17:54:59.342Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "1a32fb84-ba6c-4be9-9aa5-6cb242c25c7d",
@@ -209,11 +209,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 24,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 25,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:06:43.296Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "ef391eb1-1a35-4ccf-9d61-6a3d4ed886cf",
@@ -231,11 +231,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 23,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 24,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:10:47.241Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "29b06c9e-0584-4026-9afc-6a2a89212ee5",
@@ -253,11 +253,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 22,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 23,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:16:09.658Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "1f7d8295-ae1b-4c5e-b3e2-e978bf87fd84",
@@ -275,11 +275,11 @@
         "decision",
         "has-alternatives"
       ],
-      "usageCount": 21,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 22,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T18:24:10.255Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "104a978e-4671-4dcd-8ad9-c1b5172c5aa9",
@@ -627,11 +627,11 @@
         "user-confirmed",
         "after-task"
       ],
-      "usageCount": 5,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 6,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T23:17:46.465Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "527015a6-51c2-40fa-891e-eb831580a359",
@@ -715,11 +715,11 @@
         "user-confirmed",
         "after-task"
       ],
-      "usageCount": 2,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 3,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T23:19:49.803Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "de903dba-78f2-409d-ab00-f5c61bf5f0e2",
@@ -759,11 +759,11 @@
         "user-confirmed",
         "after-task"
       ],
-      "usageCount": 1,
-      "lastUsedAt": "2026-08-05T23:20:57.927Z",
+      "usageCount": 2,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
       "embeddingId": null,
       "createdAt": "2026-08-05T23:20:46.180Z",
-      "updatedAt": "2026-08-05T23:20:57.927Z"
+      "updatedAt": "2026-08-06T00:06:19.197Z"
     },
     {
       "id": "96fee988-7a69-43a1-884a-b70be35e29d5",
@@ -803,11 +803,55 @@
         "user-confirmed",
         "after-task"
       ],
+      "usageCount": 1,
+      "lastUsedAt": "2026-08-06T00:06:19.197Z",
+      "embeddingId": null,
+      "createdAt": "2026-08-05T23:20:57.956Z",
+      "updatedAt": "2026-08-06T00:06:19.197Z"
+    },
+    {
+      "id": "3f39de4d-c5b1-48bd-a5bc-9cf3cb25ead7",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "architecture_decision",
+      "title": "Use RBAC",
+      "content": "Problem: Need scalable permissions\nDecision: Use RBAC with hierarchy\nReason: Easier role management",
+      "importanceScore": 0.945,
+      "confidenceScore": 0.7,
+      "freshnessScore": 1,
+      "source": "agent",
+      "status": "active",
+      "version": 2,
+      "tags": [
+        "decision",
+        "has-alternatives"
+      ],
       "usageCount": 0,
       "lastUsedAt": null,
       "embeddingId": null,
-      "createdAt": "2026-08-05T23:20:57.956Z",
-      "updatedAt": "2026-08-05T23:20:57.956Z"
+      "createdAt": "2026-08-06T00:06:19.191Z",
+      "updatedAt": "2026-08-06T00:06:19.201Z"
+    },
+    {
+      "id": "afb82d3b-3f0a-442f-95a3-82ce5e8fa38b",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "type": "architecture_decision",
+      "title": "ux-reply-flow-1785974779232",
+      "content": "User-facing Save/Edit/Ignore instructions for Cursor chat (ux-reply-flow-1785974779232).",
+      "importanceScore": 1,
+      "confidenceScore": 1,
+      "freshnessScore": 1,
+      "source": "agent",
+      "status": "active",
+      "version": 1,
+      "tags": [
+        "user-confirmed",
+        "after-task"
+      ],
+      "usageCount": 0,
+      "lastUsedAt": null,
+      "embeddingId": null,
+      "createdAt": "2026-08-06T00:06:19.234Z",
+      "updatedAt": "2026-08-06T00:06:19.234Z"
     }
   ],
   "versions": [
@@ -1489,6 +1533,36 @@
       "content": "User-facing Save/Edit/Ignore instructions for Cursor chat (ux-reply-flow-1785972057955).",
       "reason": "initial version",
       "createdAt": "2026-08-05T23:20:57.956Z",
+      "createdBy": "agent"
+    },
+    {
+      "id": "850ce238-83dc-43e8-acde-fe51578a2309",
+      "memoryId": "3f39de4d-c5b1-48bd-a5bc-9cf3cb25ead7",
+      "version": 1,
+      "title": "Use RBAC",
+      "content": "Problem: Need scalable permissions\nDecision: Use RBAC\nReason: Easier role management\nAlternatives: Hardcoded permissions; ACL",
+      "reason": "initial version",
+      "createdAt": "2026-08-06T00:06:19.191Z",
+      "createdBy": "agent"
+    },
+    {
+      "id": "51cc8e7c-8cc1-4dd6-b17e-236fb44c7994",
+      "memoryId": "3f39de4d-c5b1-48bd-a5bc-9cf3cb25ead7",
+      "version": 2,
+      "title": "Use RBAC",
+      "content": "Problem: Need scalable permissions\nDecision: Use RBAC with hierarchy\nReason: Easier role management",
+      "reason": "Clarify role hierarchy",
+      "createdAt": "2026-08-06T00:06:19.201Z",
+      "createdBy": "agent"
+    },
+    {
+      "id": "7323a672-2862-49fa-b425-e7111adad6ba",
+      "memoryId": "afb82d3b-3f0a-442f-95a3-82ce5e8fa38b",
+      "version": 1,
+      "title": "ux-reply-flow-1785974779232",
+      "content": "User-facing Save/Edit/Ignore instructions for Cursor chat (ux-reply-flow-1785974779232).",
+      "reason": "initial version",
+      "createdAt": "2026-08-06T00:06:19.234Z",
       "createdBy": "agent"
     }
   ],
@@ -2973,6 +3047,86 @@
       ],
       "model": "mock-embeddings",
       "contentHash": "d5acd99c"
+    },
+    {
+      "memoryId": "3f39de4d-c5b1-48bd-a5bc-9cf3cb25ead7",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "vector": [
+        0.05270941019979327,
+        0.1597500586055273,
+        0.10541882039958654,
+        0.09487693835962788,
+        0.19218661872847695,
+        0.06973860426434186,
+        0.12082618645798765,
+        0.10785156240880776,
+        0.3016600091434322,
+        0.19786301674999318,
+        0.2197576948329842,
+        0.15001909056864235,
+        0.04541118417212959,
+        0.27733258905121994,
+        0.27003436302355627,
+        0.17596833866700212,
+        0.02027285007684356,
+        0.1792119946792971,
+        0.2270559208606479,
+        0.16137188661167476,
+        0.18732113471003453,
+        0.1467754345563474,
+        0.11920435845184015,
+        0.14515360655019993,
+        0.2659797930081875,
+        0.12244801446413513,
+        0.09082236834425915,
+        0.05838580822130947,
+        0.3130128051864646,
+        0.16948102664241219,
+        0.1394772085286837,
+        0.2327323188821641
+      ],
+      "model": "mock-embeddings",
+      "contentHash": "1913ff7e"
+    },
+    {
+      "memoryId": "afb82d3b-3f0a-442f-95a3-82ce5e8fa38b",
+      "projectId": "86bc7caf-f1fd-4489-a719-569a3a9f4d13",
+      "vector": [
+        0.1556808893912423,
+        0.1235449259847932,
+        0.09355136013877405,
+        0.15496675687109898,
+        0.20209950320055764,
+        0.11354707070278681,
+        0.2263800088854303,
+        0.18067552759625827,
+        0.20424190076098758,
+        0.08426763737691097,
+        0.12283079346464988,
+        0.2156680210832806,
+        0.3499249348702235,
+        0.2935084657789018,
+        0.11497533574307343,
+        0.19281578043869457,
+        0.17639073247539838,
+        0.17424833491496844,
+        0.13639931134737285,
+        0.03927728860788223,
+        0.0699849869740447,
+        0.1828179251566882,
+        0.1078340105416403,
+        0.17710486499554168,
+        0.2628007674127393,
+        0.15282435931066907,
+        0.19210164791855128,
+        0.12568732354522313,
+        0.15996568451210216,
+        0.14496890158909262,
+        0.19210164791855128,
+        0.17067767231425188
+      ],
+      "model": "mock-embeddings",
+      "contentHash": "423080ef"
     }
   ]
 }

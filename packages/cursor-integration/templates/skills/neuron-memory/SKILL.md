@@ -3,12 +3,15 @@ name: neuron-memory
 description: >-
   Use Neuron project memory for context, decisions and reviews in Cursor.
   Apply when starting features, refactoring, answering architecture questions,
-  or after an important coding outcome.
+  after an important coding outcome, or whenever durable project knowledge was
+  just established — proactively call neuron_after_task; do not wait for the user
+  to ask to remember.
 ---
 
 # Neuron project memory (Cursor)
 
 Neuron tells you **where to look** and **what rules apply** before you rediscover the project.
+It also must **capture** durable decisions so the next session does not rediscover them.
 
 ## Before exploring the repo
 
@@ -17,6 +20,7 @@ Neuron tells you **where to look** and **what rules apply** before you rediscove
 3. Open those files.
 4. Broad-search the tree only if context is empty or clearly incomplete.
 5. Verify Brain tips against source — Neuron accelerates; the code is authority.
+6. Note `afterCoding` in the result — you owe a `neuron_after_task` call when work becomes durable.
 
 ## Tools
 
@@ -30,15 +34,21 @@ Neuron tells you **where to look** and **what rules apply** before you rediscove
 | Apply the user's Yes / Edit / No answer | `neuron_resolve_suggestion` |
 | Rebuild the brain from the codebase | `neuron_scan` |
 
-## After coding
+## After coding (required)
+
+After durable work — before saying done / zaimplementowane / wdrożone:
 
 `neuron_after_task` → **AskQuestion** with `question` (title / prompt / options) when available →
 `neuron_resolve_suggestion`.
+
+Do **not** wait for the user to ask. Propose remembering yourself.
 
 `question.prompt` already shows the proposed durable memory before the confirmation line.
 Never ask for confirmation before that text is visible. Never paste Yes/Edit/No as markdown when
 AskQuestion is available. Edit rewrites the proposed memory text, not the code.
 If AskQuestion is missing, fall back to showing `question.prompt` in chat.
+
+Skip only trivial edits (typo / rename / comment).
 
 ## Context budget
 

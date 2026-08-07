@@ -17,4 +17,4 @@ Before switching owners or ending a stretch of work, summarize technical state i
 
 Store **technical** state only. Never persist private chats, personal data, or people productivity scores.
 
-**Available MCP tools only:** euron_context, euron_search, euron_remember, euron_update, euron_after_task, euron_resolve_suggestion, euron_scan. Do **not** invent other MCP tools.
+**Available MCP tools only:** neuron_context, neuron_search, neuron_remember, neuron_update, neuron_after_task, neuron_resolve_suggestion, neuron_scan. Do **not** invent other MCP tools.

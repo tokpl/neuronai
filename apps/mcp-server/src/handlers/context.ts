@@ -1,5 +1,6 @@
 import type { McpRuntime } from '../config/runtime.js';
 import { failResult, okResult } from '../middleware/errors.js';
+import { AFTER_CODING_REMINDER } from './after-coding-reminder.js';
 
 /**
  * The only context tool. Retrieval ranks, the compiler compresses, and the
@@ -7,6 +8,7 @@ import { failResult, okResult } from '../middleware/errors.js';
  *
  * Structured fields (files, modules, rules, metrics) help the host UI; the
  * `context` string is what should go into the model prompt.
+ * `afterCoding` reminds the agent to close the remember loop after durable work.
  */
 export async function handleContext(
   runtime: McpRuntime,
@@ -25,6 +27,7 @@ export async function handleContext(
       context: prepared.context,
       mode: prepared.mode,
       intent: prepared.intent,
+      afterCoding: AFTER_CODING_REMINDER,
       recommendation: prepared.recommendation
         ? {
             path: prepared.recommendation.path,

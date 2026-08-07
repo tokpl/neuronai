@@ -39,7 +39,7 @@ export function registerTools(server: McpServer, runtime: McpRuntime): void {
     'neuron_context',
     {
       description:
-        'Before exploring the repository: return where to look (modules, files, symbols), rules and memories for this coding task. Call first; then open only the returned paths.',
+        'Before exploring the repository: return where to look (modules, files, symbols), rules and memories. Call first. After durable coding, you MUST call neuron_after_task (see afterCoding in the result) before ending.',
       inputSchema: contextSchema,
     },
     async (args) => handleContext(runtime, args),

@@ -7,6 +7,9 @@ alwaysApply: true
 
 NeuronAI provides **project-aware context** so you do not rediscover the repository on every task.
 
+Remembering durable decisions is a **core product loop**, not an optional courtesy. If you ship
+architecture and never call `neuron_after_task`, the next session rediscovers the same work.
+
 ## Before coding (required)
 
 Before broad repository exploration (listing trees, grepping for modules, hunting entrypoints):
@@ -16,6 +19,7 @@ Before broad repository exploration (listing trees, grepping for modules, huntin
 3. Open those paths directly.
 4. Search the repository only when Brain context is missing or insufficient.
 5. Treat Brain suggestions as a shortlist, not guaranteed truth — verify against source files.
+6. Honor `afterCoding` in the tool result — you will close that loop when work becomes durable.
 
 For a quick lookup rather than a full task, use `neuron_search`.
 
@@ -24,9 +28,19 @@ For a quick lookup rather than a full task, use `neuron_search`.
 Follow the decisions and constraints that came back. Do not invent a second architecture when
 Neuron already documents one.
 
-## After coding
+## After coding (required)
 
-Call `neuron_after_task` with a short summary of what changed.
+Call `neuron_after_task` with a short summary of what changed **before you end the turn** whenever
+any of these is true:
+
+- You finished implementing a feature, refactor, migration, or accepted plan
+- You chose/replaced a library, canonical component, ownership boundary, or sync/policy rule
+- You established durable UX or domain rules (numbering schemes, pan-in-select, etc.)
+- You are about to say the work is done / zaimplementowane / wdrożone
+
+Do **not** wait for the user to ask “should we remember this?”. Propose it yourself.
+
+Skip only for truly trivial edits (typo, rename, comment-only).
 
 If `suggest` is true:
 
@@ -55,7 +69,8 @@ Edit means rewrite the proposed memory text, not the implementation.
 Then call `neuron_resolve_suggestion` with `action: "save" | "edit" | "ignore"`. For an edit, pass
 the corrected `title` and `content`.
 
-Nothing is written to memory until the user answers. If there is no durable knowledge, do not invent one.
+Nothing is written to memory until the user answers. If there is no durable knowledge, do not invent one —
+but still call `neuron_after_task` so Neuron can decide (`suggest: false` is fine).
 
 ## Rules
 

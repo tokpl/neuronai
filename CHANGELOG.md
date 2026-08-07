@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.2.1
+
+Ask-before-remember UX and proactive Project Brain capture for Cursor agents.
+
+### Remember confirmation
+
+- Proposed durable memory is shown **before** Yes / Edit / No (`question.prompt` embeds the draft)
+- Drafts are synthesized as concise project knowledge (decision / canonical / replaces / why), not changelogs or file lists
+- AskQuestion-first presentation: `question.title` is `🧠 Project Brain`; MCP returns `present.prefer: "AskQuestion"`
+- Edit rewrites the proposed memory text, not the implementation
+
+### Proactive after-coding
+
+- Cursor rules mark **After coding (required)** with explicit triggers (done / zaimplementowane / ADR / new ownership)
+- `neuron_context` returns `afterCoding` so agents close the remember loop without waiting for the user to ask
+- Fixed a `euron_*` typo in the workflow rule that could break tool naming
+
+After upgrading: **reload Cursor MCP** so the IDE picks up the new tool descriptions and templates.
+
 ## 0.2.0
 
 Retrieval rewrite plus a productization pass. **`neuronai` is now a single self-contained

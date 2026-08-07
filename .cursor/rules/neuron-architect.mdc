@@ -11,7 +11,8 @@ For **major** work (new systems/modules, payments, marketplace, auth migrations,
 1. Call `neuron_context` with the design question **before** writing code (mode `deep`)
 2. Prefer returned decisions, modules and constraints as the evidence base
 3. Implement following existing architecture; do not invent a second one
-4. After coding, call `neuron_after_task` and ask before remembering durable ADRs
+4. After coding, **required**: call `neuron_after_task` and ask before remembering durable ADRs.
+   Do not end a major feature turn without closing the remember loop.
 
 **Do not** run full architect analysis for:
 

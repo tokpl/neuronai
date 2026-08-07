@@ -70,6 +70,7 @@ describe('neuron_context', () => {
     );
 
     expect(Object.keys(result).sort()).toEqual([
+      'afterCoding',
       'context',
       'intent',
       'metrics',
@@ -83,6 +84,9 @@ describe('neuron_context', () => {
     expect(result['markdown']).toBeUndefined();
     expect(result['decisions']).toBeUndefined();
     expect(result['recommendations']).toBeUndefined();
+    const afterCoding = result['afterCoding'] as { required: boolean; tool: string };
+    expect(afterCoding.required).toBe(true);
+    expect(afterCoding.tool).toBe('neuron_after_task');
   });
 
   it('mentions each relevant memory once', async () => {

@@ -6,8 +6,9 @@ import { fileURLToPath } from 'node:url';
  * Set the release version.
  *
  * Only `neuronai` is published — the workspace libraries are private and get
- * bundled into it — so this touches the CLI manifest, the root manifest and the
- * version constants that the CLI and MCP server report at runtime.
+ * bundled into it — so this touches every package.json plus MCP VERSION.
+ * CLI runtime version is generated from apps/cli/package.json during `pnpm build`
+ * (see scripts/bundle.mjs) — no separate CLI_VERSION constant to patch.
  */
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const rootPkgPath = join(root, 'package.json');
@@ -15,7 +16,7 @@ const rootPkg = JSON.parse(readFileSync(rootPkgPath, 'utf8'));
 
 const version = process.argv[2] ?? rootPkg.version;
 if (!/^\d+\.\d+\.\d+(-[\w.]+)?$/.test(version)) {
-  console.error(`Invalid version "${version}". Usage: pnpm prepare:npm <version>   e.g. 0.2.0`);
+  console.error(`Invalid version "${version}". Usage: pnpm prepare:npm <version>   e.g. 0.2.2`);
   process.exit(1);
 }
 
@@ -32,20 +33,34 @@ function patchConstant(filePath, exportName) {
   }
 }
 
-const cliPkgPath = join(root, 'apps', 'cli', 'package.json');
-const cliPkg = JSON.parse(readFileSync(cliPkgPath, 'utf8'));
-cliPkg.version = version;
-cliPkg.license = 'AGPL-3.0';
-writeFileSync(cliPkgPath, `${JSON.stringify(cliPkg, null, 2)}\n`);
-console.log(`updated  ${cliPkg.name} ${version}`);
+function patchPackageJson(filePath) {
+  if (!existsSync(filePath)) return;
+  const pkg = JSON.parse(readFileSync(filePath, 'utf8'));
+  pkg.version = version;
+  writeFileSync(filePath, `${JSON.stringify(pkg, null, 2)}\n`);
+  console.log(`updated  ${pkg.name ?? filePath} ${version}`);
+}
+
+const packageJsons = [
+  join(root, 'package.json'),
+  join(root, 'apps', 'cli', 'package.json'),
+  join(root, 'apps', 'mcp-server', 'package.json'),
+  join(root, 'packages', 'agent-workflow', 'package.json'),
+  join(root, 'packages', 'brain', 'package.json'),
+  join(root, 'packages', 'config', 'package.json'),
+  join(root, 'packages', 'cursor-integration', 'package.json'),
+  join(root, 'packages', 'memory-engine', 'package.json'),
+  join(root, 'packages', 'project-analyzer', 'package.json'),
+  join(root, 'packages', 'project-scanner', 'package.json'),
+  join(root, 'packages', 'storage', 'package.json'),
+  join(root, 'packages', 'types', 'package.json'),
+];
+
+for (const file of packageJsons) patchPackageJson(file);
 
 copyFileSync(join(root, 'LICENSE'), join(root, 'apps', 'cli', 'LICENSE'));
 
-rootPkg.version = version;
-writeFileSync(rootPkgPath, `${JSON.stringify(rootPkg, null, 2)}\n`);
-console.log(`updated  ${rootPkg.name} ${version}`);
-
-patchConstant(join(root, 'apps/cli/src/services/neuron-fs.ts'), 'CLI_VERSION');
 patchConstant(join(root, 'apps/mcp-server/src/health.ts'), 'VERSION');
 
-console.log('\nNext: pnpm release');
+console.log('\nNext: pnpm build && pnpm release');
+console.log('Note: CLI -v comes from apps/cli/package.json via bundle.mjs');

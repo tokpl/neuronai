@@ -9,9 +9,11 @@ import {
   type NeuronMetadata,
   validateLocalConfig,
 } from '../config/local-config.js';
+import { CLI_VERSION } from '../cli-version.generated.js';
+
+export { CLI_VERSION };
 
 export const NEURON_DIR = '.neuron';
-export const CLI_VERSION = '0.2.0';
 
 export function neuronPaths(cwd = process.cwd()) {
   const root = resolve(cwd);

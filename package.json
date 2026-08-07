@@ -2,7 +2,7 @@
   "name": "neuronai-monorepo",
   "private": true,
   "type": "module",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "NeuronAI monorepo - Neuron - AI Memory (local-first Cursor project memory)",
   "license": "AGPL-3.0",
   "repository": {
@@ -37,6 +37,7 @@
     "verify:mcp": "node ./scripts/mcp-proof-stdio.mjs && node ./scripts/mcp-init-stdio-regression.mjs && node ./scripts/mcp-integration-report.mjs",
     "validate:p4": "node ./scripts/p4-validation.mjs",
     "readme:sync": "node ./scripts/sync-npm-readme.mjs",
+    "prepare:npm": "node ./scripts/prepare-npm-packages.mjs",
     "release": "pnpm verify && pnpm --filter neuronai publish --access public --no-git-checks"
   },
   "devDependencies": {

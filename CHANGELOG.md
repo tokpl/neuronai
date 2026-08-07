@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2
+
+- Fix: `neuron -v` now reports the real package version (was stuck on `0.2.0` because
+  `CLI_VERSION` was hardcoded and not updated with `package.json`)
+- CLI version is generated from `apps/cli/package.json` at bundle time so it cannot drift again
+- `pnpm prepare:npm <version>` bumps all workspace manifests + MCP `VERSION`
+
 ## 0.2.1
 
 Ask-before-remember UX and proactive Project Brain capture for Cursor agents.

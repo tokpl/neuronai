@@ -1,14 +1,16 @@
 import type { McpRuntime } from '../config/runtime.js';
 import { failResult, okResult } from '../middleware/errors.js';
 import { AFTER_CODING_REMINDER } from './after-coding-reminder.js';
+import { CONTEXT_PRESENT } from './context-present.js';
 
 /**
  * The only context tool. Retrieval ranks, the compiler compresses, and the
  * agent receives one markdown document — no briefing/markdown/plan twins.
  *
- * Structured fields (files, modules, rules, metrics) help the host UI; the
- * `context` string is what should go into the model prompt.
+ * Structured fields (files, modules, rules, metrics, contribution) help the host;
+ * the `context` string is what should go into the model prompt.
  * `afterCoding` reminds the agent to close the remember loop after durable work.
+ * `contribution` + `present.footer` tell the agent what to show at end of reply.
  */
 export async function handleContext(
   runtime: McpRuntime,
@@ -22,12 +24,30 @@ export async function handleContext(
     });
 
     const eff = prepared.efficiency;
+    const contrib = prepared.contribution;
 
     return okResult({
       context: prepared.context,
       mode: prepared.mode,
       intent: prepared.intent,
       afterCoding: AFTER_CODING_REMINDER,
+      contribution: {
+        summary: contrib.summary,
+        lines: contrib.lines,
+        brainCompressionTokens: contrib.brainCompressionTokens,
+        contextTokens: contrib.contextTokens,
+        budgetTokens: contrib.budgetTokens,
+        memoriesUsed: contrib.memoriesUsed,
+        memoriesSkipped: contrib.memoriesSkipped,
+        memoriesInBrain: contrib.memoriesInBrain,
+        pathsSuggested: contrib.pathsSuggested,
+        rulesApplied: contrib.rulesApplied,
+        compressionRatio: contrib.compressionRatio,
+        recommendationPath: contrib.recommendationPath,
+        rediscoveryTokensSimulated: contrib.rediscoveryTokensSimulated,
+        label: contrib.label,
+      },
+      present: CONTEXT_PRESENT,
       recommendation: prepared.recommendation
         ? {
             path: prepared.recommendation.path,

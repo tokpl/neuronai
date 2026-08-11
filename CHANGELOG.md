@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.2.3
+
+Ask-before-remember confirmation UX plus a required end-of-reply **Neuron contribution** footer.
+
+### Contribution footer (Cursor + CLI)
+
+- Every `neuron_context` result includes `contribution.summary` + `present.footer`
+- Agents must append the seedling footer after using context (memories used, paths/rules, compact ratio, rank time)
+- CLI `neuron context` prints the same contribution lines
+- Honest framing: tokens of context saved — not Cursor bill / agent file-read claims
+
+### Remember confirmation (from 0.2.1+)
+
+- Proposed durable memory before Yes / Edit / No
+- AskQuestion-first presentation (`🧠 Project Brain`)
+- Proactive after-coding via `afterCoding` on `neuron_context`
+
 ## 0.2.2
 
 - Fix: `neuron -v` now reports the real package version (was stuck on `0.2.0` because

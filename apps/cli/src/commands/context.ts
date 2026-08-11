@@ -16,7 +16,6 @@ export async function runContext(query: string, cwd = process.cwd()): Promise<vo
 
   const session = await openProjectSession(cwd);
   const prepared = session.context({ task: query });
-  const eff = prepared.efficiency;
 
   ui.title('Project Brain');
   console.log('────────────────────────');
@@ -26,22 +25,8 @@ export async function runContext(query: string, cwd = process.cwd()): Promise<vo
   console.log(prepared.context.trimEnd());
   ui.blank();
   console.log('────────────────────────');
-  console.log(
-    `Context: ${eff.contextTokens} / ${eff.budgetTokens} tokens · ${eff.retrievalMs} ms · ${prepared.intent}`,
-  );
-  if (eff.estimatedTokensSaved > 0) {
-    console.log(
-      `Brain compression: ~${formatTokens(eff.estimatedTokensSaved)} vs whole-brain paste`,
-    );
+  // Same contribution block Cursor agents append (lines = richer CLI view).
+  for (const line of prepared.contribution.lines) {
+    console.log(line);
   }
-  if (eff.estimatedRediscoveryAvoided && eff.estimatedRediscoveryAvoided > 0) {
-    console.log(
-      `Estimated rediscovery avoided (simulated): ~${formatTokens(eff.estimatedRediscoveryAvoided)}`,
-    );
-  }
-}
-
-function formatTokens(n: number): string {
-  if (n >= 1000) return `${(n / 1000).toFixed(n >= 10_000 ? 0 : 1).replace(/\.0$/, '')}k tokens`;
-  return `${n} tokens`;
 }

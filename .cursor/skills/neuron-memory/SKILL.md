@@ -21,6 +21,7 @@ It also must **capture** durable decisions so the next session does not rediscov
 4. Broad-search the tree only if context is empty or clearly incomplete.
 5. Verify Brain tips against source — Neuron accelerates; the code is authority.
 6. Note `afterCoding` in the result — you owe a `neuron_after_task` call when work becomes durable.
+7. Note `contribution` — append `contribution.summary` once at the end of your user-visible reply.
 
 ## Tools
 
@@ -33,6 +34,12 @@ It also must **capture** durable decisions so the next session does not rediscov
 | Propose what to remember after coding | `neuron_after_task` |
 | Apply the user's Yes / Edit / No answer | `neuron_resolve_suggestion` |
 | Rebuild the brain from the codebase | `neuron_scan` |
+
+## End of reply (when you used neuron_context)
+
+**Required** after any `neuron_context` call: append `contribution.summary` once
+(keep 🌱 + line break). Never invent numbers; never dump raw metrics JSON;
+never call it Cursor bill savings — it is Project Brain context compression.
 
 ## After coding (required)
 

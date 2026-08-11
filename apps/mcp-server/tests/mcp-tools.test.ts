@@ -72,10 +72,12 @@ describe('neuron_context', () => {
     expect(Object.keys(result).sort()).toEqual([
       'afterCoding',
       'context',
+      'contribution',
       'intent',
       'metrics',
       'mode',
       'ok',
+      'present',
       'relevantFiles',
       'relevantModules',
       'relevantRules',
@@ -87,6 +89,22 @@ describe('neuron_context', () => {
     const afterCoding = result['afterCoding'] as { required: boolean; tool: string };
     expect(afterCoding.required).toBe(true);
     expect(afterCoding.tool).toBe('neuron_after_task');
+    const contribution = result['contribution'] as {
+      summary: string;
+      label: string;
+      brainCompressionTokens: number;
+    };
+    expect(contribution.label).toBe('brain-compression');
+    expect(contribution.summary).toMatch(/^🌱 Neuron ·/);
+    expect(contribution.summary).toMatch(/saved ~/);
+    expect(contribution.summary).toMatch(/Used \d+ memor/);
+    expect(contribution.summary).toMatch(/Ranked this context in \d+ ms/);
+    expect(contribution.summary).not.toMatch(/skipped/i);
+    expect(contribution.brainCompressionTokens).toBeGreaterThan(0);
+    expect(contribution.memoriesUsed).toBeGreaterThan(0);
+    const present = result['present'] as { footer: { instruction: string } };
+    expect(present.footer.instruction).toMatch(/REQUIRED every time/);
+    expect(present.footer.instruction).toMatch(/contribution\.summary/);
   });
 
   it('mentions each relevant memory once', async () => {

@@ -128,4 +128,10 @@ export {
   type RelevantLocation,
   type RelevantRule,
 } from './context.js';
+export {
+  buildContextContribution,
+  formatContributionTokens,
+  CONTRIBUTION_EMOJI,
+  type ContextContribution,
+} from './contribution.js';
 export type { ModificationAdvice } from './retrieval/recommend.js';

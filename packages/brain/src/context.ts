@@ -1,5 +1,6 @@
 import { createBrainCompiler, estimateTokens, type CompiledContext } from './compiler/index.js';
 import { resolvePreparationMode } from './compiler/modes.js';
+import { buildContextContribution, type ContextContribution } from './contribution.js';
 import type { ProjectMapEntry } from './models.js';
 import {
   dedupeRetrievalHits,
@@ -88,6 +89,8 @@ export interface PreparedContext extends CompiledContext {
   /** Verified flow when evidence exists. */
   flow?: Array<{ label: string; path?: string }>;
   efficiency: ContextEfficiency;
+  /** Ready-to-print contribution footer for CLI / Cursor agents. */
+  contribution: ContextContribution;
 }
 
 export function prepareContext(input: PrepareContextInput): PreparedContext {
@@ -202,29 +205,45 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
     Math.min(structuralNodes, 40) * 12 + (slice.flow.length + slice.dependencies.length) * 25,
   );
 
+  const relevantModules = locations
+    .filter((h) => h.doc.location!.kind === 'module')
+    .map(toLocation);
+  const relevantFiles = locations
+    .filter((h) => h.doc.location!.kind !== 'module')
+    .map(toLocation);
+
+  const efficiency: ContextEfficiency = {
+    contextTokens: compiled.metrics.compiledTokens,
+    budgetTokens: compiled.metrics.tokenBudget,
+    corpusTokens: compiled.metrics.rawCorpusTokens,
+    itemsSelected: compiled.metrics.selected,
+    itemsDiscarded: compiled.metrics.discarded,
+    compressionRatio: compiled.metrics.compressionRatio,
+    estimatedTokensSaved: Math.max(0, corpusTokens - compiled.metrics.compiledTokens),
+    baseline: 'whole-brain-verbatim',
+    retrievalMs: compiled.metrics.retrievalMs,
+    estimatedRediscoveryAvoided,
+    rediscoveryBaseline: 'simulated-structural-exploration',
+  };
+
   return {
     ...compiled,
     hits: result.hits,
     intent: result.stats.intent,
     concepts: result.stats.concepts,
-    relevantModules: locations.filter((h) => h.doc.location!.kind === 'module').map(toLocation),
-    relevantFiles: locations.filter((h) => h.doc.location!.kind !== 'module').map(toLocation),
+    relevantModules,
+    relevantFiles,
     relevantRules,
     recommendation: finalRecommendation,
     flow: finalRecommendation?.flow,
-    efficiency: {
-      contextTokens: compiled.metrics.compiledTokens,
-      budgetTokens: compiled.metrics.tokenBudget,
-      corpusTokens: compiled.metrics.rawCorpusTokens,
-      itemsSelected: compiled.metrics.selected,
-      itemsDiscarded: compiled.metrics.discarded,
-      compressionRatio: compiled.metrics.compressionRatio,
-      estimatedTokensSaved: Math.max(0, corpusTokens - compiled.metrics.compiledTokens),
-      baseline: 'whole-brain-verbatim',
-      retrievalMs: compiled.metrics.retrievalMs,
-      estimatedRediscoveryAvoided,
-      rediscoveryBaseline: 'simulated-structural-exploration',
-    },
+    efficiency,
+    contribution: buildContextContribution({
+      efficiency,
+      relevantFiles,
+      relevantModules,
+      relevantRules,
+      recommendationPath: finalRecommendation?.path,
+    }),
   };
 }
 

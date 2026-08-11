@@ -2,7 +2,7 @@
   "name": "neuronai-monorepo",
   "private": true,
   "type": "module",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "NeuronAI monorepo - Neuron - AI Memory (local-first Cursor project memory)",
   "license": "AGPL-3.0",
   "repository": {

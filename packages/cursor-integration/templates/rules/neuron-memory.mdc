@@ -20,6 +20,7 @@ Before broad repository exploration (listing trees, grepping for modules, huntin
 4. Search the repository only when Brain context is missing or insufficient.
 5. Treat Brain suggestions as a shortlist, not guaranteed truth — verify against source files.
 6. Honor `afterCoding` in the tool result — you will close that loop when work becomes durable.
+7. Honor `contribution` / `present.footer` — you will append the summary at the end of your reply.
 
 For a quick lookup rather than a full task, use `neuron_search`.
 
@@ -27,6 +28,25 @@ For a quick lookup rather than a full task, use `neuron_search`.
 
 Follow the decisions and constraints that came back. Do not invent a second architecture when
 Neuron already documents one.
+
+## End of reply (when you used neuron_context)
+
+**Required every time** you called `neuron_context` this turn: append
+`contribution.summary` **exactly once** at the end of the user-visible reply.
+Keep the 🌱 emoji and the line break. Do not invent numbers. Do not dump raw JSON.
+
+This reports **tokens of context saved** by Project Brain compression —
+Graft-like “saved context”, not Cursor / agent bill savings.
+
+Example:
+
+```
+🌱 Neuron · saved ~800 tokens of context
+Used 6 memories from Project Brain
+Pointed the agent to 3 file/module paths and 1 project rule
+Context is ~5.4× more compact than the full Project Brain
+Ranked this context in 26 ms
+```
 
 ## After coding (required)
 

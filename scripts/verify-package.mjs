@@ -82,8 +82,9 @@ try {
   const context = run(process.execPath, [bin, 'context', 'Where is authentication handled?'], project);
   check(
     /auth|src\//i.test(context) &&
-      /Context:\s*\d+\s*\/\s*\d+\s*tokens/i.test(context) &&
-      /\d+\s*ms/i.test(context),
+      (/Saved ~[\d.k]+ tokens of context/i.test(context) ||
+        /\d+\s*\/\s*\d+\s*token budget/i.test(context)) &&
+      /Ranked this context in \d+\s*ms/i.test(context),
     'context returns project locations under a token budget',
   );
 

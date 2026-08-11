@@ -48,6 +48,30 @@ The response shape:
   "relevantModules": [{ "name": "auth", "path": "src/auth/", "purpose": "Authentication / authorization" }],
   "relevantRules": [{ "title": "…", "detail": "…" }],
   "flow": [{ "label": "POST /invoices/:id/cancel" }, { "label": "BillingService.cancelInvoice()" }],
+  "contribution": {
+    "summary": "🌱 Neuron · saved ~1.2k tokens of context\nUsed 5 memories from Project Brain\nPointed the agent to 1 file/module path\nContext is ~5.4× more compact than the full Project Brain\nRanked this context in 4 ms",
+    "lines": [
+      "🌱 Neuron helped this turn",
+      "Saved ~1.2k tokens of context",
+      "Used 5 memories from Project Brain",
+      "Pointed the agent to 1 file/module path",
+      "Context is ~5.4× more compact than the full Project Brain (126 / 500 token budget)",
+      "Ranked this context in 4 ms"
+    ],
+    "brainCompressionTokens": 1180,
+    "memoriesUsed": 5,
+    "memoriesSkipped": 12,
+    "memoriesInBrain": 17,
+    "pathsSuggested": 1,
+    "rulesApplied": 0,
+    "compressionRatio": 14.3,
+    "label": "brain-compression"
+  },
+  "present": {
+    "footer": {
+      "instruction": "REQUIRED every time this turn used neuron_context: append contribution.summary…"
+    }
+  },
   "metrics": {
     "contextTokens": 126,
     "budgetTokens": 500,
@@ -63,6 +87,10 @@ The response shape:
   }
 }
 ```
+
+`contribution.summary` is **required** at the end of the user-visible reply whenever the agent
+called `neuron_context` (see `present.footer`). It reports tokens of context saved by Project Brain
+compression — not Cursor bill savings.
 
 `estimatedTokensSaved` is vs pasting the whole brain. `estimatedRediscoveryAvoided` is a **simulated**
 estimate of structural exploration the agent might otherwise do — not measured agent file-read

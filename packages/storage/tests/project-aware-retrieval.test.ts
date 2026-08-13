@@ -177,7 +177,8 @@ describe('project-aware retrieval', () => {
     expect(prepared.recommendation?.path).toMatch(/billing|payment|api\/routes/i);
     expect(prepared.context).toMatch(/Recommended start|src\//i);
     expect(prepared.efficiency.contextTokens).toBeLessThanOrEqual(500);
-    expect(prepared.efficiency.corpusTokens).toBeGreaterThan(prepared.efficiency.contextTokens);
+    expect(prepared.efficiency.baseline).toBe('matched-knowledge-verbatim');
+    expect(prepared.efficiency.corpusTokens).toBeGreaterThan(0);
     // Must not dump unrelated modules as if listing the whole tree.
     expect(prepared.context).not.toMatch(/src\/auth\/middleware/i);
   }, 60_000);

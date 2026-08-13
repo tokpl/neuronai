@@ -41,14 +41,19 @@ It also must **capture** durable decisions so the next session does not rediscov
 (keep 🌱 + line break). Never invent numbers; never dump raw metrics JSON;
 never call it Cursor bill savings — it is Project Brain context compression.
 
+**Autosave / `neuron_after_task` never cancels this footer.** If a memory was already
+saved (`persisted`), only skip the Yes/Edit/No survey — still print `contribution.summary`.
+
 ## After coding (required)
 
 After durable work — before saying done / zaimplementowane / wdrożone:
 
-`neuron_after_task` → **AskQuestion** with `question` (title / prompt / options) when available →
-`neuron_resolve_suggestion`.
+`neuron_after_task` → follow `present` from the result:
+- `persisted` set → brief “Saved to Project Brain: …” (no AskQuestion)
+- else → **AskQuestion** with `question` → `neuron_resolve_suggestion`
 
 Do **not** wait for the user to ask. Propose remembering yourself.
+Never drop `contribution.summary` because of autosave.
 
 `question.prompt` already shows the proposed durable memory before the confirmation line.
 Never ask for confirmation before that text is visible. Never paste Yes/Edit/No as markdown when

@@ -78,7 +78,7 @@ const EXPLANATIONS: Record<string, string> = {
   discarded: 'candidates − selected (measured).',
   duplicatesRemoved: 'Memories collapsed because they carried the same knowledge (measured).',
   compiledTokens: 'estimateTokens(context) using chars/4 — a heuristic, not a billed count.',
-  rawCorpusTokens: 'estimateTokens of every candidate pasted verbatim — the no-Neuron baseline.',
+  rawCorpusTokens: 'estimateTokens of matched knowledge docs (not map/code locations).',
   compressionRatio: 'rawCorpusTokens / compiledTokens (derived). Higher means more filtering.',
   retrievalMs: 'Wall-clock ms spent ranking memories (measured).',
   compileMs: 'Wall-clock ms spent building the context (measured).',

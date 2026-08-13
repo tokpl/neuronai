@@ -158,7 +158,7 @@ for (const q of [
     corpusTokens: corpus ? Number(corpus[1]) : null,
     estimatedAvoided: saved?.[1]?.trim() ?? null,
     retrievalLatencyMs: ret ? Number(ret[1]) : latency,
-    baseline: 'whole-brain-verbatim',
+    baseline: 'matched-knowledge-verbatim',
   });
 }
 

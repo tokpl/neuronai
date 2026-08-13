@@ -9,6 +9,7 @@ export const CONTEXT_PRESENT = {
       'exactly once at the end of your user-visible reply (keep the 🌱 and the line break).',
       'Do not skip it. Do not invent numbers. Do not dump raw metrics JSON.',
       'Wording means Project Brain compressed context savings — not Cursor bill savings.',
+      'Autosave / neuron_after_task never replaces or cancels this footer.',
     ].join(' '),
   },
 } as const;

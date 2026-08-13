@@ -49,13 +49,13 @@ The response shape:
   "relevantRules": [{ "title": "…", "detail": "…" }],
   "flow": [{ "label": "POST /invoices/:id/cancel" }, { "label": "BillingService.cancelInvoice()" }],
   "contribution": {
-    "summary": "🌱 Neuron · saved ~1.2k tokens of context\nUsed 5 memories from Project Brain\nPointed the agent to 1 file/module path\nContext is ~5.4× more compact than the full Project Brain\nRanked this context in 4 ms",
+    "summary": "🌱 Neuron · saved ~1.2k tokens of context\nUsed 5 memories from Project Brain\nPointed the agent to 1 file/module path\nContext is ~5.4× more compact than matched Project Brain knowledge\nRanked this context in 4 ms",
     "lines": [
       "🌱 Neuron helped this turn",
       "Saved ~1.2k tokens of context",
       "Used 5 memories from Project Brain",
       "Pointed the agent to 1 file/module path",
-      "Context is ~5.4× more compact than the full Project Brain (126 / 500 token budget)",
+      "Context is ~5.4× more compact than matched Project Brain knowledge (126 / 500 token budget)",
       "Ranked this context in 4 ms"
     ],
     "brainCompressionTokens": 1180,
@@ -80,7 +80,7 @@ The response shape:
     "itemsDiscarded": 12,
     "estimatedTokensSaved": 1180,
     "compressionRatio": 14.3,
-    "baseline": "whole-brain-verbatim",
+    "baseline": "matched-knowledge-verbatim",
     "retrievalMs": 4,
     "estimatedRediscoveryAvoided": 240,
     "rediscoveryBaseline": "simulated-structural-exploration"
@@ -92,16 +92,17 @@ The response shape:
 called `neuron_context` (see `present.footer`). It reports tokens of context saved by Project Brain
 compression — not Cursor bill savings.
 
-`estimatedTokensSaved` is vs pasting the whole brain. `estimatedRediscoveryAvoided` is a **simulated**
-estimate of structural exploration the agent might otherwise do — not measured agent file-read
-savings.
+`estimatedTokensSaved` is vs pasting the **matched knowledge** docs (memories / decisions / rules
+that passed the relevance gate). Structural map/code location docs are excluded from that baseline —
+otherwise scanned repos report a near-constant ~20–30k “savings” on every question.
+`estimatedRediscoveryAvoided` is a **simulated** estimate of structural exploration the agent might
+otherwise do — not measured agent file-read savings.
 
 `context` is the only field that should enter the model prompt. Call this **before** exploring the
 repository; open the returned paths next. Ranking scores and memory ids never appear in `context`.
 
-`estimatedTokensSaved` is honest: whole-brain verbatim size minus the compiled context
-(`baseline: "whole-brain-verbatim"`). It is not a measurement of tokens the agent would have
-spent reading source files.
+`estimatedTokensSaved` uses `baseline: "matched-knowledge-verbatim"`. It is not a measurement of
+tokens the agent would have spent reading source files.
 
 If nothing in the brain matches the task, the context says so rather than returning
 high-importance memories about unrelated topics.
@@ -112,14 +113,17 @@ CLI equivalent for debugging:
 neuron context "Where are API routes?"
 ```
 
-## Ask before remembering
+## Ask before remembering (and autosave)
 
 1. Agent calls `neuron_after_task` with a summary or diff
-2. If there is something worth keeping, the response carries a `draft` and a `question`
-3. Agent asks the user with Cursor `AskQuestion` (**Yes** / **Edit** / **No**), or in plain words
-4. Agent calls `neuron_resolve_suggestion` with `action: "save" | "edit" | "ignore"`
+2. If there is something worth keeping, the response carries a `draft` and `present`
+3. **Suggest** privacy (default): `question` is set → AskQuestion (**Yes** / **Edit** / **No**), then
+   `neuron_resolve_suggestion`. Nothing is written until that step.
+4. **Automatic** privacy: `persisted` is set, `question` is null → brief “Saved to Project Brain: …”
+   (no survey). Follow `present.prefer: "notice"`.
 
-Nothing is written to memory before step 4.
+In both cases, if the turn also used `neuron_context`, the agent still appends
+`contribution.summary` at the end of the reply. Autosave never replaces that footer.
 
 ## Resources
 

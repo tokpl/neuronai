@@ -15,8 +15,10 @@ export const AFTER_CODING_REMINDER = {
   ],
   instruction: [
     'REQUIRED after durable work: call neuron_after_task with a short summary before ending.',
-    'If suggest=true, present question via AskQuestion (or question.prompt), then neuron_resolve_suggestion.',
+    'Follow present from the result: if persisted is set, briefly note what was saved (no AskQuestion);',
+    'if question is present, use AskQuestion (or question.prompt) then neuron_resolve_suggestion.',
     'Do not skip remembering just because the user did not ask — Project Brain is how the next session knows.',
+    'Autosave never cancels contribution.summary — still append that footer after neuron_context.',
     'Skip only for truly trivial edits (typo, rename, comment).',
   ].join(' '),
 };

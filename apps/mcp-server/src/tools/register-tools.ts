@@ -76,7 +76,7 @@ export function registerTools(server: McpServer, runtime: McpRuntime): void {
     'neuron_after_task',
     {
       description:
-        'After coding, propose durable knowledge. If suggest=true: when AskQuestion is available, call it with question.title/prompt/options (prompt already shows the proposed memory). Do not paste Yes/Edit/No as chat markdown. Then neuron_resolve_suggestion. Nothing is saved until they answer.',
+        'After coding, propose or autosave durable knowledge. Follow present: if persisted is set, briefly say what was saved (no AskQuestion); if question is set, AskQuestion with title/prompt/options then neuron_resolve_suggestion. Autosave never cancels contribution.summary after neuron_context.',
       inputSchema: afterTaskSchema,
     },
     async (args) => handleAfterTask(runtime, args),

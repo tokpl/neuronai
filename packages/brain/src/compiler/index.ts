@@ -46,8 +46,9 @@ export interface BrainCompileInput {
   /** Retrieval telemetry, folded into the compiled metrics. */
   retrieval?: Pick<RetrievalStats, 'candidates' | 'matched' | 'durationMs'>;
   /**
-   * Estimated tokens of the entire corpus — the "paste everything" baseline the
-   * compression ratio is measured against. Falls back to the matched hits.
+   * Estimated tokens of matched knowledge docs (memories/decisions/rules) —
+   * the compression baseline. Structural map/code location docs are excluded so
+   * scanned repos do not report a near-constant ~20–30k "savings".
    */
   corpusTokens?: number;
 }

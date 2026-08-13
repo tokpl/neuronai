@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.2.4
+
+Honest contribution metrics — stop near-constant ~20–30k “token savings” on scanned repos.
+
+### Metrics
+
+- `estimatedTokensSaved` baseline is **matched knowledge** only (`matched-knowledge-verbatim`)
+- Map/code location docs (up to ~800 symbol entries) are **excluded** from the savings corpus
+- Footer “memories used” counts packed knowledge, not location index rows; rules stay separate
+- Compact ratio wording: vs matched Project Brain knowledge
+- `retrievalMs` unchanged (real ranking wall-clock)
+
+### Also
+
+- Autosave (`persisted`) uses `present.prefer: "notice"` and never cancels the contribution footer
+- Docs/FAQ clarify privacy mode vs contribution footer
+
+After upgrading: **reload Cursor MCP** so agents pick up the new baseline and footer copy.
+
 ## 0.2.3
 
 Ask-before-remember confirmation UX plus a required end-of-reply **Neuron contribution** footer.

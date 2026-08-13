@@ -16,15 +16,15 @@ export interface ContextContribution {
   brainCompressionTokens: number;
   contextTokens: number;
   budgetTokens: number;
-  /** Memories packed into this context (itemsSelected). */
+  /** Knowledge items packed (excludes map/code locations; rules counted separately). */
   memoriesUsed: number;
-  /** Memories left out of the pack (itemsDiscarded) — structured only, not in summary. */
+  /** Matched knowledge left out of the pack — structured only, not in summary. */
   memoriesSkipped: number;
-  /** corpus memories ≈ used + skipped. */
+  /** Matched knowledge docs this turn (used + skipped + rules in pack). */
   memoriesInBrain: number;
   pathsSuggested: number;
   rulesApplied: number;
-  /** Rounded compression ratio vs whole-brain paste (e.g. 5.4). */
+  /** Rounded compression ratio vs matched knowledge paste (e.g. 5.4). */
   compressionRatio: number;
   recommendationPath?: string;
   /** Present only when simulated rediscovery estimate is > 0. */
@@ -51,6 +51,9 @@ function formatRatio(n: number): string {
 /**
  * Build the UX contract for “what Neuron contributed this turn”.
  * Every number in the user-facing text carries a plain-language gloss.
+ *
+ * Prefer explicit knowledge counts from prepareContext — never derive "memories"
+ * from compiler itemsSelected (that includes map/code locations).
  */
 export function buildContextContribution(input: {
   efficiency: ContextEfficiency;
@@ -58,13 +61,23 @@ export function buildContextContribution(input: {
   relevantModules: RelevantLocation[];
   relevantRules: RelevantRule[];
   recommendationPath?: string;
+  /** Packed non-rule knowledge items. Falls back to itemsSelected only for unit tests. */
+  memoriesUsed?: number;
+  memoriesSkipped?: number;
+  memoriesInBrain?: number;
 }): ContextContribution {
   const eff = input.efficiency;
   const pathsSuggested = input.relevantFiles.length + input.relevantModules.length;
   const rulesApplied = input.relevantRules.length;
-  const memoriesUsed = Math.max(0, eff.itemsSelected);
-  const memoriesSkipped = Math.max(0, eff.itemsDiscarded);
-  const memoriesInBrain = memoriesUsed + memoriesSkipped;
+  const memoriesUsed = Math.max(
+    0,
+    input.memoriesUsed ?? Math.max(0, eff.itemsSelected - rulesApplied),
+  );
+  const memoriesSkipped = Math.max(0, input.memoriesSkipped ?? eff.itemsDiscarded);
+  const memoriesInBrain = Math.max(
+    0,
+    input.memoriesInBrain ?? memoriesUsed + rulesApplied + memoriesSkipped,
+  );
   const brainCompressionTokens = Math.max(0, eff.estimatedTokensSaved);
   const compressionRatio = eff.compressionRatio > 0 ? eff.compressionRatio : 1;
   const rediscovery =
@@ -92,7 +105,7 @@ export function buildContextContribution(input: {
 
   if (compressionRatio >= 1.2) {
     summaryLines.push(
-      `Context is ~${formatRatio(compressionRatio)} more compact than the full Project Brain`,
+      `Context is ~${formatRatio(compressionRatio)} more compact than matched Project Brain knowledge`,
     );
   }
 
@@ -127,7 +140,7 @@ export function buildContextContribution(input: {
   }
   if (compressionRatio >= 1.2) {
     lines.push(
-      `Context is ~${formatRatio(compressionRatio)} more compact than the full Project Brain (${eff.contextTokens} / ${eff.budgetTokens} token budget)`,
+      `Context is ~${formatRatio(compressionRatio)} more compact than matched Project Brain knowledge (${eff.contextTokens} / ${eff.budgetTokens} token budget)`,
     );
   } else {
     lines.push(`Packed into ${eff.contextTokens} / ${eff.budgetTokens} token budget`);

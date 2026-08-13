@@ -1,8 +1,8 @@
 import type { McpRuntime } from '../config/runtime.js';
 import { failResult, okResult } from '../middleware/errors.js';
 
-/** Instruct the host agent how to present the confirmation UI. */
-export const AFTER_TASK_PRESENT = {
+/** Ask-before-remember: user must confirm (privacy suggest / default). */
+export const AFTER_TASK_PRESENT_ASK = {
   prefer: 'AskQuestion' as const,
   instruction: [
     'When the Cursor AskQuestion tool is available, call it ONCE with:',
@@ -11,16 +11,27 @@ export const AFTER_TASK_PRESENT = {
     'Do NOT paste Yes/Edit/No as a markdown list in chat when AskQuestion is available.',
     'If AskQuestion is unavailable, show question.prompt (or draft.content + the confirmation question) as plain text.',
     'Then call neuron_resolve_suggestion with the user answer (save | edit | ignore).',
+    'Separately: if this turn used neuron_context, still append contribution.summary at the end of the reply — autosave / after_task never replaces that footer.',
+  ].join(' '),
+};
+
+/** Already written (privacy automatic). No Yes/Edit/No — still keep the contribution footer. */
+export const AFTER_TASK_PRESENT_SAVED = {
+  prefer: 'notice' as const,
+  instruction: [
+    'This draft was already saved (privacy automatic / autosave).',
+    'Do NOT ask Yes/Edit/No and do NOT call AskQuestion for this suggestion.',
+    'Briefly tell the user what was saved (draft.title), e.g. “Saved to Project Brain: …”.',
+    'If this turn used neuron_context, you MUST still append contribution.summary at the end of the reply.',
+    'Autosave never cancels the Neuron contribution footer.',
   ].join(' '),
 };
 
 /**
- * Ask before remembering. Returns a draft and the question to put to the user;
- * nothing is written until neuron_resolve_suggestion.
+ * Ask before remembering (suggest mode), or report an autosaved draft (automatic).
  *
- * `question.prompt` already embeds the proposed durable memory *before* the
- * confirmation line — agents must show that text (or `draft.content`) before Yes/Edit/No.
- * Prefer Cursor AskQuestion using `question` (see `present`).
+ * `question.prompt` embeds the proposed durable memory *before* the confirmation line
+ * when the user must confirm. When `persisted` is set, `question` is null — no survey.
  */
 export async function handleAfterTask(
   runtime: McpRuntime,
@@ -43,14 +54,18 @@ export async function handleAfterTask(
       });
     }
 
-    runtime.pendingSuggestion = {
-      type: result.suggestion.type,
-      title: result.suggestion.title,
-      draftContent: result.suggestion.draftContent,
-      reason: result.suggestion.reason,
-      confidence: result.suggestion.confidence,
-      task: args.task,
-    };
+    const alreadySaved = Boolean(result.persisted);
+
+    runtime.pendingSuggestion = alreadySaved
+      ? null
+      : {
+          type: result.suggestion.type,
+          title: result.suggestion.title,
+          draftContent: result.suggestion.draftContent,
+          reason: result.suggestion.reason,
+          confidence: result.suggestion.confidence,
+          task: args.task,
+        };
 
     return okResult({
       suggest: true,
@@ -61,8 +76,9 @@ export async function handleAfterTask(
         content: result.suggestion.draftContent,
         reason: result.suggestion.reason,
       },
-      question: result.askQuestion,
-      present: AFTER_TASK_PRESENT,
+      // No confirmation UI when already written — avoids agents inventing “autosave = skip Neuron”.
+      question: alreadySaved ? null : result.askQuestion,
+      present: alreadySaved ? AFTER_TASK_PRESENT_SAVED : AFTER_TASK_PRESENT_ASK,
     });
   } catch (error) {
     return failResult(error);

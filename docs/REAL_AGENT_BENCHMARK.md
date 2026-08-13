@@ -155,7 +155,7 @@ Brain compression (avg, from neuron_context):
   context tokens:  ~145
   corpus tokens:   ~4530
   compression:     ~41×
-  baseline label:  whole-brain-verbatim
+  baseline label:  matched-knowledge-verbatim
 
 → Brain compression — not measured agent token savings.
 ```

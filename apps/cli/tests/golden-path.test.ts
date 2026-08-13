@@ -153,8 +153,12 @@ describe('golden path: init → scan → search → context', () => {
     // --- compiled context is small, relevant and clean --------------------
     const context = session.context({ task: 'add rate limiting to the billing webhook' });
     expect(context.metrics.compiledTokens).toBeLessThanOrEqual(500);
-    expect(context.efficiency.estimatedTokensSaved).toBeGreaterThan(0);
-    expect(context.efficiency.baseline).toBe('whole-brain-verbatim');
+    expect(context.efficiency.baseline).toBe('matched-knowledge-verbatim');
+    // Matched knowledge only — must not look like a constant ~20–30k location-index "save".
+    expect(context.efficiency.corpusTokens).toBeLessThan(8_000);
+    expect(context.efficiency.estimatedTokensSaved).toBe(
+      Math.max(0, context.efficiency.corpusTokens - context.efficiency.contextTokens),
+    );
     expect(context.context).toMatch(/billing|stripe|webhook/i);
     expect(context.context).not.toMatch(/importanceScore|taskRelevance|rankingScore/);
     expect(context.context).not.toMatch(/[0-9a-f]{8}-[0-9a-f]{4}-/);

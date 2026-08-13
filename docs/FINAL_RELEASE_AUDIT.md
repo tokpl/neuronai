@@ -186,7 +186,7 @@ No release-blocking security defect found in this pass.
 
 | Claim type | Status |
 | --- | --- |
-| README Brain compression vs whole-brain paste | **OK** — not sold as agent token bill savings |
+| README Brain compression vs matched-knowledge paste | **OK** — not sold as agent token bill savings; excludes map/code index |
 | Scripted ~89% exploration | Labeled `EXPLORATION_POLICY_PROOF` — **must not** be called live-agent |
 | Live MCP −41% explore median / −30% reads median | **OK** to cite with n=20, one repo, protocol-prompted B |
 | Graft replacement | **Not claimed** in README (good) |

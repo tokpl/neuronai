@@ -35,6 +35,10 @@ Neuron already documents one.
 `contribution.summary` **exactly once** at the end of the user-visible reply.
 Keep the 🌱 emoji and the line break. Do not invent numbers. Do not dump raw JSON.
 
+This is **independent of remembering / autosave / privacy mode**. Even if
+`neuron_after_task` already saved a memory (`persisted`), or you only wrote a short
+“Saved to Project Brain: …” line — you still append `contribution.summary` last.
+
 This reports **tokens of context saved** by Project Brain compression —
 Graft-like “saved context”, not Cursor / agent bill savings.
 
@@ -44,7 +48,7 @@ Example:
 🌱 Neuron · saved ~800 tokens of context
 Used 6 memories from Project Brain
 Pointed the agent to 3 file/module paths and 1 project rule
-Context is ~5.4× more compact than the full Project Brain
+Context is ~5.4× more compact than matched Project Brain knowledge
 Ranked this context in 26 ms
 ```
 
@@ -62,17 +66,20 @@ Do **not** wait for the user to ask “should we remember this?”. Propose it y
 
 Skip only for truly trivial edits (typo, rename, comment-only).
 
-If `suggest` is true:
+Follow `present` from the tool result:
 
-1. **Prefer Cursor `AskQuestion`** when that tool is available. Call it once with the returned
-   `question` payload (`title`, `prompt`, `options`). Follow `present.instruction` from the tool result.
-2. `question.prompt` already contains the **proposed durable memory** and then the confirmation
-   question — never ask Yes/Edit/No without that proposed text visible.
-3. Do **not** restate the options as a markdown list in chat when `AskQuestion` is available.
-4. If `AskQuestion` is unavailable, show `question.prompt` (or `draft.content` + the confirmation
-   line) as plain text.
+- If `persisted` is set (privacy **automatic** / autosave): do **not** ask Yes/Edit/No.
+  Briefly say what was saved (`draft.title`). Still append `contribution.summary` if you used
+  `neuron_context`.
+- If `suggest` is true and `question` is present (privacy **suggest**):
 
-Typical `question.prompt` shape:
+  1. **Prefer Cursor `AskQuestion`** when available (`question.title` / `prompt` / `options`).
+  2. `question.prompt` already contains the **proposed durable memory** then the confirmation.
+  3. Do **not** restate options as a markdown list when `AskQuestion` is available.
+  4. If `AskQuestion` is unavailable, show `question.prompt` as plain text.
+  5. Then `neuron_resolve_suggestion` with `save` | `edit` | `ignore`.
+
+Typical `question.prompt` shape (suggest mode only):
 
 ```
 🧠 Architecture decision to remember
@@ -86,11 +93,8 @@ Options: **Yes — save this** / **Edit — change the proposed memory** / **No 
 
 Edit means rewrite the proposed memory text, not the implementation.
 
-Then call `neuron_resolve_suggestion` with `action: "save" | "edit" | "ignore"`. For an edit, pass
-the corrected `title` and `content`.
-
-Nothing is written to memory until the user answers. If there is no durable knowledge, do not invent one —
-but still call `neuron_after_task` so Neuron can decide (`suggest: false` is fine).
+If there is no durable knowledge, do not invent one — but still call `neuron_after_task`
+(`suggest: false` is fine). Always keep the contribution footer when `neuron_context` was used.
 
 ## Rules
 

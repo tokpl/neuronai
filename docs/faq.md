@@ -19,10 +19,11 @@ whatever agent you use.
 Commit `.neuron/brain/` and `prefs.json`. Teammates get the same decisions and conventions on
 `git pull`. Choose the `all-local` preset during `neuron init` to keep it to yourself.
 
-**What does `memory.autoSave` mean?**
-Whether agents may propose memories. With the default `suggest` privacy mode Neuron always
-confirms with **Yes / Edit / No** before writing. Set `privacy.mode` to `automatic` for silent
-high-confidence saves, or `manual` to never propose.
+**What does `memory.autoSave` / privacy mode mean?**
+Whether agents may propose or silently store memories. With the default `suggest` privacy mode
+Neuron confirms with **Yes / Edit / No** before writing. Set `privacy.mode` to `automatic` for
+silent high-confidence saves (brief “Saved to Project Brain: …” — no survey), or `manual` to never
+propose. **None of these modes cancel the Neuron contribution footer** after `neuron_context`.
 
 **How big is the context Neuron sends?**
 500 tokens by default, 1200 in `standard`, 3500 in `deep`. These are hard budgets, not targets —

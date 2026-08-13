@@ -461,7 +461,7 @@ async function runNeuron(root, task, client) {
     compressionRatio: body.metrics?.compressionRatio ?? null,
     retrievalMs: body.metrics?.retrievalMs ?? null,
     estimatedTokensSaved: body.metrics?.estimatedTokensSaved ?? null,
-    baseline: body.metrics?.baseline ?? 'whole-brain-verbatim',
+    baseline: body.metrics?.baseline ?? 'matched-knowledge-verbatim',
     recommendation: body.recommendation ?? null,
     intent: body.intent ?? null,
   };

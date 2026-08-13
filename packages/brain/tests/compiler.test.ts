@@ -195,9 +195,12 @@ describe('prepareContext', () => {
     expect(prepared.metrics.compiledTokens).toBeLessThanOrEqual(500);
     expect(prepared.efficiency.contextTokens).toBe(prepared.metrics.compiledTokens);
     expect(prepared.efficiency.budgetTokens).toBe(500);
-    expect(prepared.efficiency.corpusTokens).toBeGreaterThan(prepared.efficiency.contextTokens);
-    expect(prepared.efficiency.baseline).toBe('whole-brain-verbatim');
-    expect(prepared.efficiency.estimatedTokensSaved).toBeGreaterThan(0);
+    // Matched knowledge only (one short decision) — can be smaller than the packed prompt.
+    expect(prepared.efficiency.baseline).toBe('matched-knowledge-verbatim');
+    expect(prepared.efficiency.corpusTokens).toBeGreaterThan(0);
+    expect(prepared.efficiency.estimatedTokensSaved).toBe(
+      Math.max(0, prepared.efficiency.corpusTokens - prepared.efficiency.contextTokens),
+    );
     expect(prepared.intent).toBeTruthy();
   });
 
@@ -302,5 +305,88 @@ describe('prepareContext', () => {
 
     expect(prepared.context).toMatch(/## Rules/i);
     expect(prepared.relevantRules.some((r) => /Stripe/i.test(r.title))).toBe(true);
+  });
+
+  it('does not inflate token savings with a huge map/code location index', () => {
+    const knowledge: RetrievalDoc = {
+      id: 'k1',
+      title: 'Invoice cancellation uses PaymentService.cancel',
+      content:
+        'Invoice cancellation must call PaymentService.cancel — never the Stripe SDK from routes.',
+      kind: 'decision',
+      tags: ['billing', 'invoice', 'payment'],
+      importance: 0.9,
+      freshness: 1,
+      confidence: 0.95,
+    };
+    const locationFlood: RetrievalDoc[] = Array.from({ length: 400 }, (_, i) => ({
+      id: `code:symbol:flood-${i}`,
+      title: `Helper${i} — src/lib/helper-${i}.ts`,
+      content: `Utility helper ${i}\nKind: function\nLocation: src/lib/helper-${i}.ts`,
+      kind: 'location' as const,
+      location: {
+        kind: 'symbol' as const,
+        name: `Helper${i}`,
+        path: `src/lib/helper-${i}.ts`,
+        purpose: `Utility helper ${i}`,
+        concepts: ['util'],
+      },
+      importance: 0.5,
+      freshness: 0.9,
+      confidence: 0.9,
+    }));
+
+    const prepared = prepareContext({
+      task: 'How should invoice cancellation call payment?',
+      docs: [knowledge, ...locationFlood],
+    });
+
+    // Old whole-brain baseline would be ~tens of thousands from the location flood.
+    expect(prepared.efficiency.baseline).toBe('matched-knowledge-verbatim');
+    expect(prepared.efficiency.corpusTokens).toBeLessThan(500);
+    expect(prepared.efficiency.estimatedTokensSaved).toBeLessThan(500);
+    expect(prepared.contribution.brainCompressionTokens).toBeLessThan(500);
+    // "memories" must not equal selected locations from the flood.
+    expect(prepared.contribution.memoriesUsed).toBeLessThanOrEqual(3);
+    expect(prepared.contribution.memoriesInBrain).toBeLessThanOrEqual(3);
+    expect(prepared.efficiency.retrievalMs).toBeGreaterThanOrEqual(0);
+    expect(prepared.contribution.summary).toMatch(/Ranked this context in \d+ ms/);
+  });
+
+  it('reports different knowledge savings when match sets differ', () => {
+    const narrow: RetrievalDoc = {
+      id: 'narrow',
+      title: 'Rate limiting in MCP middleware',
+      content: 'Apply rate limiting once in the MCP server middleware.',
+      kind: 'decision',
+      tags: ['mcp', 'rate'],
+      importance: 0.8,
+      freshness: 1,
+      confidence: 0.9,
+    };
+    const broadExtras: RetrievalDoc[] = Array.from({ length: 8 }, (_, i) => ({
+      id: `auth-${i}`,
+      title: `Auth decision ${i}: JWT refresh rotation policy detail ${i}`,
+      content: `Authentication JWT refresh token rotation policy paragraph ${i}. `.repeat(40),
+      kind: 'decision' as const,
+      tags: ['auth', 'jwt', 'security'],
+      importance: 0.7,
+      freshness: 1,
+      confidence: 0.9,
+    }));
+
+    const docs = [narrow, ...broadExtras];
+    const rate = prepareContext({
+      task: 'add rate limiting to the MCP server tool handlers',
+      docs,
+    });
+    const auth = prepareContext({
+      task: 'refactor JWT refresh token rotation for authentication security',
+      mode: 'deep',
+      docs,
+    });
+
+    // Broad auth query matches more long knowledge docs → higher corpus / savings ceiling.
+    expect(auth.efficiency.corpusTokens).toBeGreaterThan(rate.efficiency.corpusTokens);
   });
 });

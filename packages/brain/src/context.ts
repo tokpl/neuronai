@@ -61,12 +61,13 @@ export interface ContextEfficiency {
   itemsDiscarded: number;
   compressionRatio: number;
   /**
-   * Tokens the agent did not have to spend. Baseline is explicit: everything the
-   * brain could have said about this project, pasted verbatim, minus what was
-   * actually sent. It is not a measurement of the agent's own file reading.
+   * Tokens of *matched knowledge* not packed into the compiled context.
+   * Baseline is memories/decisions/rules/dna that passed the relevance gate —
+   * not the structural map/code index (those can be hundreds of docs and would
+   * make savings look like a constant ~brain-scan size). Not agent file-read savings.
    */
   estimatedTokensSaved: number;
-  baseline: 'whole-brain-verbatim';
+  baseline: 'matched-knowledge-verbatim';
   retrievalMs: number;
   /**
    * Simulated estimate of structural rediscovery avoided (map + symbols + edges
@@ -104,12 +105,6 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
   );
   const result = { ...raw, hits };
 
-  // Baseline for savings: what pasting the whole brain would cost.
-  const corpusTokens = input.docs.reduce(
-    (sum, doc) => sum + estimateTokens(`${doc.title}\n${doc.content}`),
-    0,
-  );
-
   // Provisional inclusion set from ranked hits (titles the compiler may keep).
   const provisionalTitles = new Set(result.hits.map((h) => h.doc.title));
   const baseRecommendation = pickRecommendation(
@@ -131,6 +126,12 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
         reason: enrichReason(baseRecommendation.reason, slice.symbol, slice.flow),
       }
     : undefined;
+
+  // Savings baseline: matched *knowledge* only. Map/code location docs are for
+  // retrieval + pointers — counting them made footers stick at ~20–30k on scanned repos.
+  const corpusTokens = result.hits
+    .filter((hit) => isKnowledgeDoc(hit.doc))
+    .reduce((sum, hit) => sum + estimateTokens(`${hit.doc.title}\n${hit.doc.content}`), 0);
 
   const compiled = createBrainCompiler().compile({
     task: input.task,
@@ -212,6 +213,12 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
     .filter((h) => h.doc.location!.kind !== 'module')
     .map(toLocation);
 
+  // Contribution counts: knowledge only — never treat map/code locations as "memories".
+  const matchedKnowledge = result.hits.filter((h) => isKnowledgeDoc(h.doc));
+  const selectedKnowledge = matchedKnowledge.filter((h) => included.has(h.doc.title));
+  const memoriesUsed = selectedKnowledge.filter((h) => h.doc.kind !== 'rule').length;
+  const memoriesSkipped = Math.max(0, matchedKnowledge.length - selectedKnowledge.length);
+
   const efficiency: ContextEfficiency = {
     contextTokens: compiled.metrics.compiledTokens,
     budgetTokens: compiled.metrics.tokenBudget,
@@ -219,8 +226,9 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
     itemsSelected: compiled.metrics.selected,
     itemsDiscarded: compiled.metrics.discarded,
     compressionRatio: compiled.metrics.compressionRatio,
+    // corpus is matched knowledge only; location-heavy packs cannot invent negative knowledge savings.
     estimatedTokensSaved: Math.max(0, corpusTokens - compiled.metrics.compiledTokens),
-    baseline: 'whole-brain-verbatim',
+    baseline: 'matched-knowledge-verbatim',
     retrievalMs: compiled.metrics.retrievalMs,
     estimatedRediscoveryAvoided,
     rediscoveryBaseline: 'simulated-structural-exploration',
@@ -243,8 +251,16 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
       relevantModules,
       relevantRules,
       recommendationPath: finalRecommendation?.path,
+      memoriesUsed,
+      memoriesSkipped,
+      memoriesInBrain: matchedKnowledge.length,
     }),
   };
+}
+
+/** Knowledge plane for compression metrics — excludes map/code location docs. */
+function isKnowledgeDoc(doc: RetrievalDoc): boolean {
+  return doc.kind !== 'location';
 }
 
 function enrichReason(

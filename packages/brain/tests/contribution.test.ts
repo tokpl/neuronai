@@ -15,7 +15,7 @@ const baseEfficiency = (over: Partial<ContextEfficiency> = {}): ContextEfficienc
   itemsDiscarded: 10,
   compressionRatio: 3.27,
   estimatedTokensSaved: 814,
-  baseline: 'whole-brain-verbatim',
+  baseline: 'matched-knowledge-verbatim',
   retrievalMs: 26,
   estimatedRediscoveryAvoided: 0,
   rediscoveryBaseline: 'simulated-structural-exploration',
@@ -26,6 +26,9 @@ describe('buildContextContribution', () => {
   it('explains tokens, memories, paths, size, and ranking time in plain language', () => {
     const contribution = buildContextContribution({
       efficiency: baseEfficiency(),
+      memoriesUsed: 12,
+      memoriesSkipped: 10,
+      memoriesInBrain: 22,
       relevantFiles: [
         {
           name: 'context.ts',
@@ -58,7 +61,7 @@ describe('buildContextContribution', () => {
     expect(contribution.summary).not.toMatch(/skipped/i);
     expect(contribution.summary).toMatch(/Pointed the agent to 2 file\/module paths and 1 project rule/);
     expect(contribution.summary).toMatch(
-      /Context is ~3\.3× more compact than the full Project Brain/,
+      /Context is ~3\.3× more compact than matched Project Brain knowledge/,
     );
     expect(contribution.summary).toMatch(/Ranked this context in 26 ms/);
     expect(contribution.lines.some((l) => l.startsWith('Best start:'))).toBe(true);

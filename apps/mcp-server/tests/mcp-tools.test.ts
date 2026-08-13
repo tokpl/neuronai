@@ -100,8 +100,9 @@ describe('neuron_context', () => {
     expect(contribution.summary).toMatch(/Used \d+ memor/);
     expect(contribution.summary).toMatch(/Ranked this context in \d+ ms/);
     expect(contribution.summary).not.toMatch(/skipped/i);
-    expect(contribution.brainCompressionTokens).toBeGreaterThan(0);
+    expect(contribution.brainCompressionTokens).toBeGreaterThanOrEqual(0);
     expect(contribution.memoriesUsed).toBeGreaterThan(0);
+    expect(contribution.summary).toMatch(/matched Project Brain knowledge|Packed into|saved ~/);
     const present = result['present'] as { footer: { instruction: string } };
     expect(present.footer.instruction).toMatch(/REQUIRED every time/);
     expect(present.footer.instruction).toMatch(/contribution\.summary/);
@@ -228,13 +229,44 @@ describe('ask before remembering', () => {
     const present = proposal['present'] as { prefer: string; instruction: string };
     expect(present.prefer).toBe('AskQuestion');
     expect(present.instruction).toMatch(/AskQuestion/);
+    expect(present.instruction).toMatch(/contribution\.summary/);
     // Nothing stored yet.
     expect(runtime.neuron.listMemories()).toHaveLength(0);
+    expect(proposal['persisted']).toBeNull();
 
     const saved = body(await handleResolveSuggestion(runtime, { action: 'save' }));
     expect(saved['status']).toBe('stored');
     expect(runtime.neuron.listMemories()).toHaveLength(1);
     expect(runtime.pendingSuggestion).toBeNull();
+  });
+
+  it('autosaves in automatic privacy without AskQuestion but keeps a notice present', async () => {
+    const prev = process.env['NEURON_PRIVACY_MODE'];
+    process.env['NEURON_PRIVACY_MODE'] = 'automatic';
+    try {
+      const runtime = await newRuntime();
+      const proposal = body(
+        await handleAfterTask(runtime, {
+          task: 'refactor auth',
+          diff: authDiff,
+          commitMessage: 'refactor authentication architecture',
+        }),
+      );
+
+      expect(proposal['suggest']).toBe(true);
+      expect(proposal['persisted']).toEqual(expect.objectContaining({ id: expect.any(String) }));
+      expect(proposal['question']).toBeNull();
+      const present = proposal['present'] as { prefer: string; instruction: string };
+      expect(present.prefer).toBe('notice');
+      expect(present.instruction).toMatch(/already saved/i);
+      expect(present.instruction).toMatch(/contribution\.summary/);
+      expect(present.instruction).toMatch(/Do NOT call AskQuestion/i);
+      expect(runtime.pendingSuggestion).toBeNull();
+      expect(runtime.neuron.listMemories().length).toBeGreaterThanOrEqual(1);
+    } finally {
+      if (prev === undefined) delete process.env['NEURON_PRIVACY_MODE'];
+      else process.env['NEURON_PRIVACY_MODE'] = prev;
+    }
   });
 
   it('writes nothing when the user declines', async () => {

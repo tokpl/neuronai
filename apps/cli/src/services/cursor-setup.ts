@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 
 import {
   installCursorIntegration,
+  installAntigravityIntegration,
   runCursorDoctorChecks,
 } from '@neuronai/cursor-integration';
 
@@ -21,6 +22,14 @@ export async function setupCursorIntegration(
 ) {
   const root = resolve(cwd);
   return installCursorIntegration(root, options);
+}
+
+export async function setupAntigravityIntegration(
+  cwd = process.cwd(),
+  options: { force?: boolean } = {},
+) {
+  const root = resolve(cwd);
+  return installAntigravityIntegration(root, options);
 }
 
 export async function diagnoseCursor(cwd = process.cwd()) {

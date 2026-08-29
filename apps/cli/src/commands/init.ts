@@ -17,7 +17,7 @@ import {
   type NeuronInitReport,
 } from '../templates/first-run.js';
 import { CLI_VERSION, pathExists } from '../services/neuron-fs.js';
-import { setupCursorIntegration, syncProjectBrainFiles } from '../services/cursor-setup.js';
+import { setupCursorIntegration, setupAntigravityIntegration, syncProjectBrainFiles } from '../services/cursor-setup.js';
 import { applyNeuronGitignore } from '../services/gitignore.js';
 import {
   isNeuronInitialized,
@@ -178,7 +178,8 @@ export async function runInit(
       ignore: [...DEFAULT_IGNORE],
     },
     integrations: {
-      cursor: true,
+      cursor: prefs.ide === 'cursor' || prefs.ide === 'both',
+      antigravity: prefs.ide === 'antigravity' || prefs.ide === 'both',
     },
   };
 
@@ -307,26 +308,49 @@ export async function runInit(
   await syncProjectBrainFiles(cwd);
   progress.ok('Project Brain written (.neuron/brain/ + prefs.json)');
 
-  // 7. Cursor integration
-  progress.start('Cursor integration…');
-  const cursorAlready = await pathExists(join(paths.root, '.cursor'));
-  if (!cursorAlready) {
-    progress.warn('Cursor folder not found yet - creating .cursor/ for MCP');
+  // 7. IDE Integration
+  progress.start('IDE integration…');
+  report.mcpConfigured = false;
+  report.cursorRules = false;
+
+  if (localConfig.integrations.cursor) {
+    const cursorAlready = await pathExists(join(paths.root, '.cursor'));
+    if (!cursorAlready) {
+      progress.warn('Cursor folder not found yet - creating .cursor/ for MCP');
+    }
+    const cursor = await setupCursorIntegration(cwd, { force: options.force });
+    report.mcpConfigured = cursor.mcpValid;
+    report.cursorRules = cursor.mcpValid;
+    if (cursor.mcpValid) {
+      progress.ok('Created Cursor rules + MCP (.cursor/)');
+    } else {
+      throw new NeuronCliError({
+        title: 'Neuron cannot finish Cursor setup because:',
+        reason: cursor.mcpErrors.length
+          ? cursor.mcpErrors.join('; ')
+          : 'Invalid mcp.json after write',
+        solution: 'Re-run Cursor setup and verify MCP configuration.',
+        commands: ['neuron cursor setup --force', 'neuron cursor doctor'],
+      });
+    }
   }
-  const cursor = await setupCursorIntegration(cwd, { force: options.force });
-  report.mcpConfigured = cursor.mcpValid;
-  report.cursorRules = cursor.mcpValid;
-  if (cursor.mcpValid) {
-    progress.ok('Created Cursor rules + MCP (.cursor/)');
-  } else {
-    throw new NeuronCliError({
-      title: 'Neuron cannot finish Cursor setup because:',
-      reason: cursor.mcpErrors.length
-        ? cursor.mcpErrors.join('; ')
-        : 'Invalid mcp.json after write',
-      solution: 'Re-run Cursor setup and verify MCP configuration.',
-      commands: ['neuron cursor setup --force', 'neuron cursor doctor'],
-    });
+
+  if (localConfig.integrations.antigravity) {
+    const antigravity = await setupAntigravityIntegration(cwd, { force: options.force });
+    report.mcpConfigured = report.mcpConfigured || antigravity.mcpConfigured;
+    if (antigravity.mcpConfigured) {
+      progress.ok('Created Antigravity IDE rules + MCP (~/.gemini/config/mcp_config.json)');
+    } else {
+      throw new NeuronCliError({
+        title: 'Neuron cannot finish Antigravity IDE setup because:',
+        reason: 'Failed to write MCP configuration to ~/.gemini/config/mcp_config.json',
+        solution: 'Check file permissions for ~/.gemini/config/mcp_config.json',
+      });
+    }
+  }
+
+  if (!localConfig.integrations.cursor && !localConfig.integrations.antigravity) {
+    progress.ok('Skipped IDE integration as per preference');
   }
 
   // 8. Ready
@@ -364,11 +388,18 @@ export async function runInit(
   ui.blank();
   console.log('Next:');
   ui.blank();
-  ui.info('  1. Enable MCP in Cursor — Settings → Tools & MCP → turn on "neuron"');
-  ui.info('     If you upgraded NeuronAI, toggle it off/on (or restart Cursor) so the tool list refreshes.');
+  ui.info('  1. Enable MCP in your IDE');
+  if (localConfig.integrations.cursor) {
+    ui.info('     - Cursor: Settings → Tools & MCP → turn on "neuron" (toggle off/on if upgraded)');
+  }
+  if (localConfig.integrations.antigravity) {
+    ui.info('     - Antigravity: Settings → Customizations → Installed MCP Servers → Click Refresh');
+  }
   ui.info('  2. Ask your coding agent to change something — it should call neuron_context first');
   ui.info('  3. Or inspect locally — neuron context "where should I add …?"');
   ui.info('  4. Check health — neuron doctor');
-  ui.blank();
-  ui.info('  neuron cursor    shows the Cursor connection status any time');
+  if (localConfig.integrations.cursor) {
+    ui.blank();
+    ui.info('  neuron cursor    shows the Cursor connection status any time');
+  }
 }

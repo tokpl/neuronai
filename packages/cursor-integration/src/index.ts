@@ -7,6 +7,7 @@ export {
   type NeuronMcpEntry,
 } from './mcp-config.js';
 export { installCursorIntegration, type CursorInstallResult } from './install.js';
+export { installAntigravityIntegration, type AntigravityInstallResult } from './antigravity.js';
 export { writeProjectBrainFiles, type ProjectBrainInput } from './project-brain.js';
 export {
   runCursorDoctorChecks,

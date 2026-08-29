@@ -7,13 +7,47 @@ export type MemorySavePreference = {
   privacyMode: NeuronLocalConfig['privacy']['mode'];
 };
 
+export type IdeIntegrationPreference = 'cursor' | 'antigravity' | 'both' | 'none';
+
 export async function askInitPreferences(options: {
   useDefaults?: boolean;
 }): Promise<{
   memory: MemorySavePreference;
   gitignore: GitIgnorePreset;
+  ide: IdeIntegrationPreference;
 }> {
   const useDefaults = options.useDefaults === true;
+
+  const ide = await askChoice({
+    title: 'Which IDE are you configuring Neuron for?',
+    detail: [
+      'Neuron can configure MCP and specific rules for your editor automatically.',
+    ],
+    choices: [
+      {
+        value: 'cursor',
+        label: 'Cursor',
+        hint: 'configure .cursor/mcp.json and rules',
+      },
+      {
+        value: 'antigravity',
+        label: 'Antigravity IDE',
+        hint: 'configure ~/.gemini/config/mcp_config.json and .antigravity/rules',
+      },
+      {
+        value: 'both',
+        label: 'Both',
+        hint: 'configure for both environments',
+      },
+      {
+        value: 'none',
+        label: 'None',
+        hint: 'skip IDE configuration',
+      },
+    ],
+    defaultValue: 'cursor',
+    useDefaults,
+  });
 
   const memoryChoice = await askChoice({
     title: 'How should Neuron remember project knowledge?',
@@ -82,5 +116,5 @@ export async function askInitPreferences(options: {
     useDefaults,
   });
 
-  return { memory, gitignore };
+  return { memory, gitignore, ide: ide as IdeIntegrationPreference };
 }

@@ -43,6 +43,7 @@ export const neuronLocalConfigSchema = z.object({
     .default({ depth: 'fast', ignore: [...DEFAULT_IGNORE] }),
   integrations: z.object({
     cursor: z.boolean().default(true),
+    antigravity: z.boolean().default(false),
   }),
 });
 

@@ -1,6 +1,6 @@
 {
   "name": "neuronai",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Local-first Project Brain for AI coding assistants. Zero cloud, zero API keys, zero database.",
   "license": "AGPL-3.0",
   "type": "module",

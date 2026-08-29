@@ -1,6 +1,6 @@
 {
   "name": "@neuronai/mcp-server",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "NeuronAI / mcp-server - package for Neuron - AI Memory",
   "license": "AGPL-3.0",
   "type": "module",

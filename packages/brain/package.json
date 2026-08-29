@@ -1,6 +1,6 @@
 {
   "name": "@neuronai/brain",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "NeuronAI / brain - package for Neuron - AI Memory",
   "license": "AGPL-3.0",
   "type": "module",

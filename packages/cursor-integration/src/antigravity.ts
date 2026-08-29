@@ -27,14 +27,14 @@ async function pathExists(path: string): Promise<boolean> {
 function templateDir(): string {
   const here = dirname(fileURLToPath(import.meta.url));
   const candidates = [
+    join(here, 'templates'),
     join(here, '..', 'templates'),
     join(here, '..', '..', 'templates'),
-    join(here, '..', '..', '..', 'templates'),
   ];
   for (const candidate of candidates) {
     if (existsSync(candidate)) return candidate;
   }
-  return candidates[0]!;
+  return candidates[1]!;
 }
 
 async function loadTemplate(...parts: string[]): Promise<string> {

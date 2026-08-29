@@ -60,10 +60,10 @@ the code it describes.
 
 ---
 
-## See it in Cursor
+## See it in Cursor & Antigravity IDE
 
 Neuron does **not** replace the coding assistant. It removes repetitive project rediscovery.
-Cursor is told (via the generated rule) to call `neuron_context` **before** broad repository
+Your IDE is told (via generated rules for Cursor or Antigravity) to call `neuron_context` **before** broad repository
 exploration, then open the returned paths.
 
 <p align="center">
@@ -152,33 +152,34 @@ neuron init
 Node.js 22+. Or: `npx neuronai init`. One package, one dependency (`@modelcontextprotocol/sdk`).
 
 <p align="center">
-  <img src="./docs/assets/quickstart.png" alt="Quick start: install, neuron init, enable Cursor MCP" width="920" />
+  <img src="./docs/assets/quickstart.png" alt="Quick start: install, neuron init, enable MCP" width="920" />
 </p>
 
 <p align="center">
-  <img src="./docs/assets/cursor-workflow.png" alt="Developer workflow: install → init → open Cursor → ask with project context" width="920" />
+  <img src="./docs/assets/cursor-workflow.png" alt="Developer workflow: install → init → open IDE → ask with project context" width="920" />
 </p>
 
-Init detects the project, writes the brain, and wires Cursor. Real output sketch:
+Init detects the project, writes the brain, and wires your selected IDE. Real output sketch:
 
 ```text
 [5/8] Initial scan…
 ✓ Mapped 5 modules across 15 files
 ✓ Learned 21 things about this project
-[7/8] Cursor integration…
+[7/8] IDE integration…
 ✓ Created Cursor rules + MCP (.cursor/)
+✓ Created Antigravity IDE rules + MCP (~/.gemini/config/mcp_config.json)
 ```
 
-### Connect Cursor
+### Connect your IDE
 
-`neuron init` writes `.cursor/mcp.json` and agent rules. Then **Settings → Tools & MCP → enable
-"neuron"**. After upgrading NeuronAI, toggle the server off/on (or Reload Window) so the tool
-list refreshes to the current **7 tools**. If chat still shows `neuron_prepare_task` or
-`CallMcpTool` returns `-32602`, that is a **stale Cursor catalog** — reload MCP; do not rewrite
-config.
+During `neuron init` you can select which IDE to configure:
+- **Cursor**: Writes `.cursor/mcp.json` and agent rules. Then **Settings → Tools & MCP → enable "neuron"**.
+- **Antigravity IDE**: Writes `~/.gemini/config/mcp_config.json` and project rules (`.antigravity/rules/`). Then open **Settings → Customizations → Installed MCP Servers → Click Refresh**.
+
+After upgrading NeuronAI, reload your IDE's MCP tool list so it refreshes to the current **7 tools**.
 
 ```bash
-neuron cursor     # connection status
+neuron cursor     # Cursor connection status
 neuron doctor     # stdio catalog + IDE reload guidance
 ```
 
@@ -268,7 +269,7 @@ live-agent result. Details: [`docs/FINAL_RELEASE_AUDIT.md`](./docs/FINAL_RELEASE
 
 | Command | What it does |
 | --- | --- |
-| `neuron init` | Detect the project, build the brain, wire Cursor |
+| `neuron init` | Detect the project, build the brain, wire Cursor / Antigravity IDE |
 | `neuron scan` | Re-learn from the codebase (`--deep`, `--update`) |
 | `neuron search <query>` | Search what the project knows |
 | `neuron context <task>` | Show compact context for a task |
@@ -276,8 +277,8 @@ live-agent result. Details: [`docs/FINAL_RELEASE_AUDIT.md`](./docs/FINAL_RELEASE
 | `neuron brain` | Metrics: measured, derived, estimated |
 | `neuron status` | Project and memory overview |
 | `neuron cursor` | Cursor connection status |
-| `neuron doctor` | Diagnose brain, storage and Cursor setup |
-| `neuron mcp` | MCP server (Cursor calls this) |
+| `neuron doctor` | Diagnose brain, storage and IDE setup |
+| `neuron mcp` | MCP server (Your IDE calls this) |
 
 ---
 

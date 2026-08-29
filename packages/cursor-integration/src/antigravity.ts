@@ -81,8 +81,8 @@ export async function installAntigravityIntegration(
   await writeFile(mcpConfigPath, JSON.stringify(mcpConfig, null, 2) + '\n', 'utf8');
   mcpConfigured = true;
 
-  // 2. Configure Rules and Skills in .antigravity folder
-  const antigravityDir = join(projectRoot, '.antigravity');
+  // 2. Configure Rules and Skills in .agents folder
+  const antigravityDir = join(projectRoot, '.agents');
   const rulesDir = join(antigravityDir, 'rules');
   const skillsDir = join(antigravityDir, 'skills', 'neuron-memory');
 

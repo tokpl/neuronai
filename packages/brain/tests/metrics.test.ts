@@ -10,8 +10,10 @@ import {
   emptyDna,
   emptyHealth,
   emptyKnowledge,
+  explainCompressionMetric,
   openProjectBrain,
 } from '../src/index.js';
+import { buildCompressionMetrics } from '../src/compiler/metrics.js';
 
 const temps: string[] = [];
 
@@ -19,6 +21,79 @@ afterEach(async () => {
   for (const dir of temps.splice(0)) {
     await rm(dir, { recursive: true, force: true });
   }
+});
+
+describe('buildCompressionMetrics', () => {
+  it('computes compression metrics correctly', () => {
+    const metrics = buildCompressionMetrics({
+      mode: 'minimal',
+      tokenBudget: 1000,
+      candidates: 100,
+      relevant: 50,
+      selected: 10,
+      duplicatesRemoved: 5,
+      compiledTokens: 500,
+      rawCorpusTokens: 2500,
+      retrievalMs: 15,
+      compileMs: 25,
+    });
+
+    expect(metrics.mode).toBe('minimal');
+    expect(metrics.tokenBudget).toBe(1000);
+    expect(metrics.candidates).toBe(100);
+    expect(metrics.relevant).toBe(50);
+    expect(metrics.selected).toBe(10);
+    expect(metrics.discarded).toBe(90); // 100 - 10
+    expect(metrics.duplicatesRemoved).toBe(5);
+    expect(metrics.compiledTokens).toBe(500);
+    expect(metrics.rawCorpusTokens).toBe(2500);
+    expect(metrics.compressionRatio).toBe(5); // 2500 / 500
+    expect(metrics.retrievalMs).toBe(15);
+    expect(metrics.compileMs).toBe(25);
+    expect(metrics.kindNotes.compressionRatio).toBe('derived');
+  });
+
+  it('handles edge cases in compression metrics', () => {
+    const metrics = buildCompressionMetrics({
+      mode: 'complete',
+      tokenBudget: 1000,
+      candidates: 5,
+      relevant: 5,
+      selected: 10, // selected > candidates
+      duplicatesRemoved: 0,
+      compiledTokens: 0, // 0 tokens, should not divide by zero
+      rawCorpusTokens: 1000,
+      retrievalMs: 5,
+      compileMs: 10,
+    });
+
+    expect(metrics.discarded).toBe(0); // Math.max(0, 5 - 10)
+    expect(metrics.compressionRatio).toBe(1000); // 1000 / Math.max(1, 0)
+  });
+
+  it('explains compression metrics', () => {
+    const metrics = buildCompressionMetrics({
+      mode: 'minimal',
+      tokenBudget: 1000,
+      candidates: 100,
+      relevant: 50,
+      selected: 10,
+      duplicatesRemoved: 5,
+      compiledTokens: 500,
+      rawCorpusTokens: 2500,
+      retrievalMs: 15,
+      compileMs: 25,
+    });
+
+    const explanation = explainCompressionMetric(metrics, 'compressionRatio');
+    expect(explanation).toContain('compressionRatio: 5');
+    expect(explanation).toContain('Kind: derived');
+    expect(explanation).toContain('rawCorpusTokens / compiledTokens (derived)');
+
+    const unknownExplanation = explainCompressionMetric(metrics, 'unknownKey');
+    expect(unknownExplanation).toContain('unknownKey: undefined');
+    expect(unknownExplanation).toContain('No explanation registered for this key.');
+  });
 });
 
 describe('Brain learning classify + metrics', () => {

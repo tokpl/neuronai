@@ -4,7 +4,7 @@ import { join } from 'node:path';
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { openProjectBrain } from '../src/index.js';
+import { ProjectBrain, openProjectBrain } from '../src/index.js';
 
 const temps: string[] = [];
 
@@ -15,6 +15,33 @@ afterEach(async () => {
 });
 
 describe('ProjectBrain', () => {
+  it('exposes ProjectBrain class that can be initialized via open()', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'neuron-brain-class-'));
+    temps.push(root);
+
+    const brain = await ProjectBrain.open(root, {
+      seed: { projectId: 'p-class', name: 'class-test', stack: ['typescript'] },
+    });
+
+    expect(brain).toBeInstanceOf(ProjectBrain);
+    expect(brain.dna.identity.name?.value).toBe('class-test');
+
+    // Test saving and loading
+    brain.dna.identity.summary = { value: 'Updated summary' };
+    await brain.save();
+
+    const loadedBrain = await ProjectBrain.open(root);
+    expect(loadedBrain.dna.identity.summary?.value).toBe('Updated summary');
+
+    // Test update methods
+    await loadedBrain.updateDNA({ ...loadedBrain.dna, identity: { ...loadedBrain.dna.identity, name: { value: 'renamed' } } });
+    expect(loadedBrain.dna.identity.name?.value).toBe('renamed');
+
+    await loadedBrain.updateKnowledge({ rules: [{ id: 'r1', title: 'test rule', body: 'body', type: 'rule' }] });
+    expect(loadedBrain.knowledge.rules).toHaveLength(1);
+    expect(loadedBrain.knowledge.rules[0].title).toBe('test rule');
+  });
+
   it('creates brain/ layout and status', async () => {
     const root = await mkdtemp(join(tmpdir(), 'neuron-brain-'));
     temps.push(root);

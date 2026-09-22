@@ -1,4 +1,6 @@
 import { execFile } from 'node:child_process';
+import { stat } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { promisify } from 'node:util';
 
 import type { GitInsight } from '../types.js';
@@ -21,10 +23,16 @@ export class GitAnalyzer {
     };
 
     try {
+      const safeRoot = resolve(root);
+      const stats = await stat(safeRoot);
+      if (!stats.isDirectory()) {
+        return empty;
+      }
+
       const { stdout: logOut } = await execFileAsync(
         'git',
         ['log', '-n', '40', '--pretty=format:%s|||%an'],
-        { cwd: root, windowsHide: true, maxBuffer: 2_000_000 },
+        { cwd: safeRoot, windowsHide: true, maxBuffer: 2_000_000 },
       );
       const lines = logOut.split(/\r?\n/).filter(Boolean);
       const authors = new Set<string>();
@@ -45,7 +53,7 @@ export class GitAnalyzer {
       let branches: string[] = [];
       try {
         const { stdout: br } = await execFileAsync('git', ['branch', '--format=%(refname:short)'], {
-          cwd: root,
+          cwd: safeRoot,
           windowsHide: true,
         });
         branches = br.split(/\r?\n/).filter(Boolean).slice(0, 30);

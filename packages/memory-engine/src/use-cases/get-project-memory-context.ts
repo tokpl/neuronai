@@ -40,6 +40,7 @@ export class GetProjectMemoryContext {
     const selected: MemoryRecord[] = [];
     let tokens = 0;
     const warnings: string[] = [];
+    const updatePromises: Promise<void>[] = [];
 
     for (const memory of ranked) {
       if (selected.length >= limit) break;
@@ -52,8 +53,10 @@ export class GetProjectMemoryContext {
       selected.push(record);
       tokens += cost;
       memory.markUsed();
-      await this.memories.update(memory);
+      updatePromises.push(this.memories.update(memory));
     }
+
+    await Promise.all(updatePromises);
 
     return {
       memories: selected,

@@ -11,6 +11,7 @@ import {
   emptyHealth,
   emptyKnowledge,
   explainCompressionMetric,
+  explainMetric,
   openProjectBrain,
 } from '../src/index.js';
 import { buildCompressionMetrics } from '../src/compiler/metrics.js';
@@ -274,5 +275,55 @@ describe('Brain learning classify + metrics', () => {
     expect(snapshot.byKey['knowledge_entries']?.value).toBe(0);
     expect(snapshot.byKey['architecture_confidence']?.value).toBe(0);
     expect(snapshot.byKey['knowledge_confidence']?.value).toBe(0);
+  });
+});
+
+describe('relativeAge and explainMetric specific coverage', () => {
+  it('covers all relativeAge branches via last_evolution', () => {
+    const base = {
+      dna: emptyDna({ projectId: 'p-test', name: 'demo' }),
+      knowledge: emptyKnowledge(),
+      health: emptyHealth(),
+    };
+
+    const now = Date.now();
+    const tenSecondsAgo = new Date(now - 10_000).toISOString();
+    const oneMinuteAgo = new Date(now - 60_000).toISOString();
+    const twoHoursAgo = new Date(now - 2 * 60 * 60_000).toISOString();
+    const threeDaysAgo = new Date(now - 3 * 24 * 60 * 60_000).toISOString();
+    const invalidDate = 'not-a-date';
+
+    const testAge = (iso?: string | null) => {
+      const snap = computeBrainMetrics({
+        ...base,
+        // @ts-ignore
+        knowledge: { ...base.knowledge, updatedAt: iso },
+      });
+      return snap.byKey['last_evolution']?.display;
+    };
+
+    expect(testAge(tenSecondsAgo)).toBe('just now');
+    expect(testAge(oneMinuteAgo)).toBe('1m ago');
+    expect(testAge(twoHoursAgo)).toBe('2h ago');
+    expect(testAge(threeDaysAgo)).toBe('3d ago');
+    expect(testAge(invalidDate)).toBe('unknown');
+    // Testing undefined falls back to `health.updatedAt` which might be recently created
+    // So we test explicitly with a future date for unknown
+    // Test future date (negative relative age)
+    expect(testAge(new Date(now + 60_000).toISOString())).toBe('unknown');
+    // Test invalid date string
+    expect(testAge('invalid-date')).toBe('unknown');
+  });
+
+  it('explainMetric handles unknown keys', () => {
+    const base = {
+      dna: emptyDna({ projectId: 'p-test', name: 'demo' }),
+      knowledge: emptyKnowledge(),
+      health: emptyHealth(),
+    };
+    const snap = computeBrainMetrics(base);
+    const explanation = explainMetric(snap, 'does_not_exist');
+    expect(explanation).toMatch(/Unknown metric "does_not_exist"/);
+    expect(explanation).toMatch(/Available:/);
   });
 });

@@ -15,6 +15,12 @@ afterEach(async () => {
 });
 
 describe('ProjectBrain', () => {
+  it('is explicitly exported as a class', () => {
+    expect(ProjectBrain).toBeDefined();
+    expect(typeof ProjectBrain).toBe('function');
+    expect(typeof ProjectBrain.open).toBe('function');
+  });
+
   it('exposes ProjectBrain class that can be initialized via open()', async () => {
     const root = await mkdtemp(join(tmpdir(), 'neuron-brain-class-'));
     temps.push(root);
@@ -154,5 +160,101 @@ describe('ProjectBrain', () => {
     expect(brain.knowledge.memory).toHaveLength(1);
     expect(brain.knowledge.decisions).toHaveLength(1);
     expect(brain.status().knowledgeUpdated).toBe(true);
+  });
+
+  it('supports auxiliary methods like updateMap, updateCode, metrics, and health', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'neuron-brain-aux-'));
+    temps.push(root);
+    const brain = await openProjectBrain(root, {
+      seed: { projectId: 'p2', name: 'aux-test', stack: ['node'] },
+    });
+
+    // Code & Map Updates
+    await brain.updateMap({
+      version: 1,
+      updatedAt: new Date().toISOString(),
+      entries: [
+        { kind: 'file', name: 'src/index.ts', path: 'src/index.ts' }
+      ]
+    });
+    expect(brain.getMap().entries[0].name).toBe('src/index.ts');
+
+    await brain.updateCode({
+      files: [{ id: 'f1', path: 'src/index.ts', symbols: [] }],
+      symbols: [],
+      relations: [],
+    });
+    expect(brain.getCode()?.files).toHaveLength(1);
+
+    // Health
+    // Ensure that evolve recalculates health notes from current dna and knowledge
+    await brain.evolve();
+    expect(brain.health.score).toBeGreaterThanOrEqual(0);
+
+    // Note: updateHealth calls this.save() which recalculates health from dna/knowledge
+    // so any overridden properties like notes get overwritten. We can test it by
+    // setting something that affects the computed health or mock computeHealth.
+    // However, updating dna metadata affects health score:
+    await brain.updateDNA({ ...brain.dna, meta: { ...brain.dna.meta, overallConfidence: 0.5 } });
+    await brain.evolve();
+    expect(brain.health.notes).toContain('DNA present');
+
+    // Metrics
+    const metrics = brain.metrics();
+    expect(metrics).toBeDefined();
+    expect(brain.formatMetricsReport()).toContain('Project Brain');
+    expect(brain.explainMetric('dnaCompleteness')).toBeTruthy();
+
+    // Explain & Query
+    const explanation = brain.explain();
+    expect(explanation).toContain('Project Brain health');
+
+    // Test that the recordDecision method works
+    await brain.recordDecision({
+        id: 'd10',
+        projectId: 'p2',
+        type: 'architecture_decision',
+        title: 'Use TypeScript',
+        content: 'Type safety',
+        status: 'active',
+        importanceScore: 0.9,
+        confidence: 0.9,
+        source: 'manual',
+        tags: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+    });
+    expect(brain.knowledge.decisions).toHaveLength(1);
+    expect(brain.knowledge.decisions[0].title).toBe('Use TypeScript');
+
+    // Test seedIdentity
+    await brain.seedIdentity({ projectId: 'new-id', name: 'new-name' });
+    expect(brain.dna.identity.projectId?.value).toBe('new-id');
+
+    // Test preferences saving
+    await brain.savePrefs({ mode: 'test' });
+    expect(brain.prefs?.mode).toBe('test');
+
+    // Test getGraph
+    const graph = brain.getGraph();
+    expect(graph.nodes).toBeDefined();
+    expect(graph.edges).toBeDefined();
+
+    await brain.updateGraph({ nodes: [{ id: 'n1', label: 'test' }], edges: [] });
+    expect(brain.getGraph().nodes).toHaveLength(1);
+
+    // Test query
+    const results = brain.query('TypeScript');
+    expect(results).toBeDefined();
+    expect(Array.isArray(results)).toBe(true);
+
+    // Test code queries
+    expect(brain.findSymbol('test')).toEqual([]);
+    expect(brain.getSymbol('test')).toBeUndefined();
+    expect(brain.getDependencies('test')).toEqual([]);
+    expect(brain.getDependents('test')).toEqual([]);
+    expect(brain.getImpact('test')).toBeUndefined();
+    expect(brain.explainCode('test')).toBeUndefined();
+    expect(brain.explainFlow('test')).toEqual([]);
   });
 });

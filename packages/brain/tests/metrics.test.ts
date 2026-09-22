@@ -71,6 +71,41 @@ describe('buildCompressionMetrics', () => {
     expect(metrics.compressionRatio).toBe(1000); // 1000 / Math.max(1, 0)
   });
 
+  it('rounds compressionRatio to two decimal places', () => {
+    const metrics = buildCompressionMetrics({
+      mode: 'minimal',
+      tokenBudget: 1000,
+      candidates: 10,
+      relevant: 10,
+      selected: 10,
+      duplicatesRemoved: 0,
+      compiledTokens: 300,
+      rawCorpusTokens: 1000, // 1000 / 300 = 3.333333...
+      retrievalMs: 10,
+      compileMs: 10,
+    });
+
+    expect(metrics.compressionRatio).toBe(3.33);
+  });
+
+  it('handles all zero metrics gracefully', () => {
+    const metrics = buildCompressionMetrics({
+      mode: 'minimal',
+      tokenBudget: 0,
+      candidates: 0,
+      relevant: 0,
+      selected: 0,
+      duplicatesRemoved: 0,
+      compiledTokens: 0,
+      rawCorpusTokens: 0,
+      retrievalMs: 0,
+      compileMs: 0,
+    });
+
+    expect(metrics.compressionRatio).toBe(0); // 0 / Math.max(1, 0)
+    expect(metrics.discarded).toBe(0);
+  });
+
   it('explains compression metrics', () => {
     const metrics = buildCompressionMetrics({
       mode: 'minimal',

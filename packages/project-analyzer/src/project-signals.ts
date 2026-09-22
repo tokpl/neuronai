@@ -1,5 +1,5 @@
 import { access, readdir, readFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 
 /**
  * Broader project signals for intelligence (docs, schema, git, config).
@@ -22,7 +22,11 @@ async function exists(path: string): Promise<boolean> {
   }
 }
 
-async function listMatches(root: string, pred: (name: string) => boolean, max = 40): Promise<string[]> {
+async function listMatches(
+  root: string,
+  pred: (name: string) => boolean,
+  max = 40,
+): Promise<string[]> {
   const out: string[] = [];
   async function walk(dir: string, depth: number): Promise<void> {
     if (depth > 4 || out.length >= max) return;
@@ -45,30 +49,34 @@ async function listMatches(root: string, pred: (name: string) => boolean, max = 
 }
 
 export async function collectProjectSignals(rootPath: string): Promise<ProjectSignals> {
-  const documentation = await listMatches(rootPath, (n) =>
-    /\.(md|mdx|rst|adoc)$/i.test(n) || n.toLowerCase() === 'readme',
+  const documentation = await listMatches(
+    rootPath,
+    (n) => /\.(md|mdx|rst|adoc)$/i.test(n) || n.toLowerCase() === 'readme',
   );
-  const schemaFiles = await listMatches(rootPath, (n) =>
-    /schema\.prisma|migration|\.sql$/i.test(n) || n === 'drizzle.config.ts',
+  const schemaFiles = await listMatches(
+    rootPath,
+    (n) => /schema\.prisma|migration|\.sql$/i.test(n) || n === 'drizzle.config.ts',
   );
-  const configFiles = await listMatches(rootPath, (n) =>
-    /^(tsconfig|jsconfig|webpack|vite\.config|next\.config|neuron\.config)/i.test(n) ||
-    n.endsWith('.config.js') ||
-    n.endsWith('.config.ts'),
+  const configFiles = await listMatches(
+    rootPath,
+    (n) =>
+      /^(tsconfig|jsconfig|webpack|vite\.config|next\.config|neuron\.config)/i.test(n) ||
+      n.endsWith('.config.js') ||
+      n.endsWith('.config.ts'),
   );
 
-  const hasGit = await exists(join(rootPath, '.git'));
+  const safeRoot = resolve(rootPath);
+  const hasGit = await exists(join(safeRoot, '.git'));
   const recentCommitSubjects: string[] = [];
   if (hasGit) {
     try {
       const { execFile } = await import('node:child_process');
       const { promisify } = await import('node:util');
       const execFileAsync = promisify(execFile);
-      const { stdout } = await execFileAsync(
-        'git',
-        ['log', '-5', '--pretty=%s'],
-        { cwd: rootPath, windowsHide: true },
-      );
+      const { stdout } = await execFileAsync('git', ['log', '-5', '--pretty=%s'], {
+        cwd: safeRoot,
+        windowsHide: true,
+      });
       recentCommitSubjects.push(
         ...stdout
           .split(/\r?\n/)

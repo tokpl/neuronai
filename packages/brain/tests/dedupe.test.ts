@@ -69,6 +69,30 @@ describe('contentFingerprint', () => {
     // normalizeText('  Crash in \n\t index.js!!  ') -> 'crash in index js'
     expect(contentFingerprint(record)).toBe('issue::bug::crash in index js');
   });
+
+  it('keeps numbers and replaces non-ascii characters with spaces', () => {
+    const record = {
+      type: 'Note',
+      title: 'Zażółć gęślą jaźń 123',
+      content: 'Привет, мир! 456 \u00A9 \uD83D\uDE00'
+    };
+    // The type field is left unchanged.
+    // The non-ascii letters get replaced by spaces, then multiple spaces get collapsed.
+    // 'Zażółć gęślą jaźń 123' -> 'za  g   la ja   123' (approx depending on specific replacements)
+    // Actually, `[^a-z0-9\s]` replaces anything that is not lowercase letter, number, or whitespace.
+    // So 'Zażółć gęślą jaźń 123' -> 'za     g   l  ja    123' -> 'za g l ja 123'
+    // 'Привет, мир! 456 \u00A9 \uD83D\uDE00' -> spaces and numbers: ' 456 ' -> '456'
+    expect(contentFingerprint(record)).toBe('Note::za g l ja 123::456');
+  });
+
+  it('does not normalize the type field', () => {
+    const record = {
+      type: '  MIXED_Type \n',
+      title: 'Title',
+      content: 'Content'
+    };
+    expect(contentFingerprint(record)).toBe('  MIXED_Type \n::title::content');
+  });
 });
 
 describe('content deduplication', () => {

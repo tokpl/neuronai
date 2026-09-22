@@ -32,6 +32,9 @@ importers:
       prettier:
         specifier: ^3.5.3
         version: 3.9.6
+      tsx:
+        specifier: ^4.19.3
+        version: 4.23.8
       turbo:
         specifier: ^2.4.4
         version: 2.10.8
@@ -1060,6 +1063,7 @@ packages:
   eslint@9.39.5:
     resolution: {integrity: sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'

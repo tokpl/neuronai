@@ -195,4 +195,84 @@ describe('Brain learning classify + metrics', () => {
     expect(withSample.byKey['compression_ratio']?.display).toBe('10×');
     expect(withSample.byKey['last_duplicates_removed']?.value).toBe(3);
   });
+
+  it('computes core metrics accurately with a populated input', () => {
+    const dna = emptyDna({ projectId: 'p2', name: 'demo-core' });
+    dna.meta.overallConfidence = 0.8; // 80% DNA confidence
+    dna.structure.modules = { value: ['mod-a', 'mod-b'], confidence: 0.9 }; // 2 modules
+
+    const knowledge = emptyKnowledge();
+    knowledge.decisions.push({
+      id: 'd1',
+      projectId: 'p2',
+      type: 'architecture_decision',
+      title: 'Decide DB',
+      content: 'PostgreSQL',
+      status: 'active',
+      importanceScore: 0.9,
+      confidenceScore: 0.9, // Used for decision confidence calculation
+      freshnessScore: 1,
+      source: 'manual',
+      tags: [],
+      version: 1,
+      usageCount: 0,
+      lastUsedAt: null,
+      embeddingId: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    // Add multiple rules and memory entries to increase knowledge entries
+    knowledge.rules.push({ id: 'r1', content: 'Rule 1' } as any);
+    knowledge.memory.push({ id: 'm1', content: 'Memory 1' } as any);
+    knowledge.graph.nodes = [{ id: 'node1' }, { id: 'node2' }, { id: 'node3' }] as any; // 3 nodes
+    knowledge.graph.edges = [{ source: 'node1', target: 'node2' }] as any; // 1 relationship
+
+    const health = emptyHealth();
+    health.architectureHealthy = true;
+    health.knowledgeFresh = true;
+    health.score = 85;
+
+    const snapshot = computeBrainMetrics({ dna, knowledge, health });
+
+    expect(snapshot.byKey['modules_understood']?.value).toBe(2);
+    expect(snapshot.byKey['files_understood']?.value).toBe(3);
+    expect(snapshot.byKey['relationships']?.value).toBe(1);
+    expect(snapshot.byKey['knowledge_entries']?.value).toBe(3); // 1 decision + 1 rule + 1 memory
+    expect(snapshot.byKey['health']?.value).toBe(85);
+
+    // dnaConfidence: 0.8 * 100 = 80
+    expect(snapshot.byKey['dna_confidence']?.value).toBe(80);
+
+    // architectureConfidence: 45% of dnaConfidence (80) + 40% of decisionConfidence (90) + 15 (architectureHealthy)
+    // = 36 + 36 + 15 = 87
+    expect(snapshot.byKey['architecture_confidence']?.value).toBe(87);
+
+    // knowledgeConfidence: capped at 100
+    // knowledgeFresh (25) + min(50, entries*2 = 6) + dnaConfidence*0.25 (20) = 25 + 6 + 20 = 51
+    expect(snapshot.byKey['knowledge_confidence']?.value).toBe(51);
+  });
+
+  it('handles empty states and undefined graph features gracefully', () => {
+    const dna = emptyDna({ projectId: 'p3', name: 'demo-empty' });
+    dna.structure.modules = { value: [], confidence: 0 }; // empty modules facet
+
+    const knowledge = emptyKnowledge();
+    // Simulate undefined nodes and edges (might happen in a truly empty/fresh initialization)
+    knowledge.graph.nodes = undefined as any;
+    knowledge.graph.edges = undefined as any;
+
+    const health = emptyHealth();
+    // Setting architectureHealthy to false since emptyHealth sets it to true by default,
+    // which adds +15 to the architectureConfidence.
+    health.architectureHealthy = false;
+
+    const snapshot = computeBrainMetrics({ dna, knowledge, health });
+
+    expect(snapshot.byKey['modules_understood']?.value).toBe(0);
+    expect(snapshot.byKey['files_understood']?.value).toBe(0);
+    expect(snapshot.byKey['relationships']?.value).toBe(0);
+    expect(snapshot.byKey['knowledge_entries']?.value).toBe(0);
+    expect(snapshot.byKey['architecture_confidence']?.value).toBe(0);
+    expect(snapshot.byKey['knowledge_confidence']?.value).toBe(0);
+  });
 });

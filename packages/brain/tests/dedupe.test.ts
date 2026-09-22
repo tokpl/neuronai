@@ -46,6 +46,31 @@ function decision(id: string, overrides: Partial<MemoryRecord> = {}): MemoryReco
   } as MemoryRecord;
 }
 
+describe('contentFingerprint', () => {
+  it('formats the fingerprint with type, normalized title, and normalized content', () => {
+    const record = { type: 'decision', title: 'Use RBAC', content: 'Use RBAC with hierarchy.' };
+    // 'Use RBAC' -> 'use rbac'
+    // 'Use RBAC with hierarchy.' -> 'use rbac with hierarchy'
+    expect(contentFingerprint(record)).toBe('decision::use rbac::use rbac with hierarchy');
+  });
+
+  it('handles empty strings', () => {
+    const record = { type: 'note', title: '', content: '' };
+    expect(contentFingerprint(record)).toBe('note::::');
+  });
+
+  it('strips special characters completely or replaces them with spaces and trims', () => {
+    const record = {
+      type: 'issue',
+      title: '  @#$ BUG!  ',
+      content: '  Crash in \n\t index.js!!  '
+    };
+    // normalizeText('  @#$ BUG!  ') -> 'bug'
+    // normalizeText('  Crash in \n\t index.js!!  ') -> 'crash in index js'
+    expect(contentFingerprint(record)).toBe('issue::bug::crash in index js');
+  });
+});
+
 describe('content deduplication', () => {
   it('treats formatting differences as the same knowledge', () => {
     const a = { type: 'decision', title: 'Use RBAC', content: 'Use RBAC with hierarchy.' };

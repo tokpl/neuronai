@@ -55,8 +55,7 @@ export async function buildCodeIntelligence(
   const candidates = files
     .filter(
       (f) =>
-        f.importance === 'HIGH' &&
-        (f.language === 'typescript' || f.language === 'javascript'),
+        f.importance === 'HIGH' && (f.language === 'typescript' || f.language === 'javascript'),
     )
     .slice(0, options.maxFiles ?? MAX_FILES);
 
@@ -85,242 +84,272 @@ export async function buildCodeIntelligence(
   return linkParses(parses);
 }
 
+interface LinkContext {
+  files: CodeFileNode[];
+  symbols: CodeSymbolNode[];
+  edges: CodeEdge[];
+  exportIndex: Map<string, CodeSymbolNode[]>; // path → exported symbols
+  byId: Map<string, CodeSymbolNode>;
+}
+
 function linkParses(parses: FileParse[]): CodeIntelligence {
-  const files: CodeFileNode[] = [];
-  const symbols: CodeSymbolNode[] = [];
-  const edges: CodeEdge[] = [];
-  const exportIndex = new Map<string, CodeSymbolNode[]>(); // path → exported symbols
-  const byId = new Map<string, CodeSymbolNode>();
+  const ctx: LinkContext = {
+    files: [],
+    symbols: [],
+    edges: [],
+    exportIndex: new Map(),
+    byId: new Map(),
+  };
 
   for (const p of parses) {
-    const resolvedImports = [
-      ...new Set(p.imports.map((i) => i.resolved).filter((x): x is string => Boolean(x))),
-    ];
-    files.push({
-      path: p.path,
-      role: p.role,
-      imports: resolvedImports,
-      exports: p.exports,
-      concepts: conceptsFrom(p.path, p.exports.join(' ')),
-      summary: summarizeFile(p),
-    });
-
-    for (const sym of p.symbols) {
-      symbols.push(sym);
-      byId.set(sym.id, sym);
-      if (sym.exported) {
-        const list = exportIndex.get(p.path) ?? [];
-        list.push(sym);
-        exportIndex.set(p.path, list);
-      }
-      edges.push({
-        from: sym.id,
-        to: p.path,
-        type: 'DEFINED_IN',
-        confidence: 'high',
-        evidence: { kind: 'structure', detail: `${sym.name} is defined in ${p.path}` },
-      });
-      if (p.role) {
-        edges.push({
-          from: sym.id,
-          to: p.path,
-          type: 'BELONGS_TO',
-          confidence: 'high',
-          evidence: { kind: 'structure', detail: `file role ${p.role}` },
-        });
-      }
-    }
-
-    for (const target of resolvedImports) {
-      edges.push({
-        from: p.path,
-        to: target,
-        type: 'IMPORTS',
-        confidence: 'high',
-        evidence: {
-          kind: 'import',
-          detail: `${p.path} imports ${target}`,
-        },
-      });
-    }
-
-    for (const name of p.exports) {
-      const id = symbolId(p.path, name);
-      edges.push({
-        from: p.path,
-        to: id,
-        type: 'EXPORTS',
-        confidence: 'high',
-        evidence: { kind: 'export', detail: `${p.path} exports ${name}` },
-      });
-    }
+    processDefinitionsAndImports(p, ctx);
   }
 
   // CALLS — only when the callee resolves uniquely through a local import.
   for (const p of parses) {
     const importByBinding = new Map(p.imports.map((i) => [i.binding, i]));
-
-    for (const call of p.memberCalls) {
-      let binding = call.binding;
-      const alias = p.instanceAliases.find((a) => a.local === binding);
-      if (alias) binding = alias.classBinding;
-      const imp = importByBinding.get(binding);
-      if (!imp?.resolved) continue;
-      const targets = (exportIndex.get(imp.resolved) ?? []).filter(
-        (s) =>
-          s.name === call.member ||
-          (imp.isDefault && s.kind === 'class' && call.member.length > 0) ||
-          (s.kind === 'class' && s.name === call.binding),
-      );
-
-      // Prefer Class.method when Class was default-imported and method exists on that class
-      let callee: CodeSymbolNode | undefined;
-      if (imp.isDefault || imp.isNamespace) {
-        const classes = (exportIndex.get(imp.resolved) ?? []).filter((s) => s.kind === 'class');
-        if (classes.length === 1) {
-          const methodId = symbolId(imp.resolved, call.member, classes[0]!.name);
-          callee = byId.get(methodId);
-          // Also accept top-level exported function with that name in the module
-          if (!callee) {
-            const fns = (exportIndex.get(imp.resolved) ?? []).filter(
-              (s) => s.name === call.member && !s.parent,
-            );
-            if (fns.length === 1) callee = fns[0];
-          }
-        } else {
-          const fns = (exportIndex.get(imp.resolved) ?? []).filter(
-            (s) => s.name === call.member && !s.parent,
-          );
-          if (fns.length === 1) callee = fns[0];
-        }
-      } else if (imp.importedName) {
-        // import { BillingService as BS } → BS.createInvoice(
-        const classSym = (exportIndex.get(imp.resolved) ?? []).find(
-          (s) => s.name === imp.importedName && s.kind === 'class',
-        );
-        if (classSym) {
-          callee = byId.get(symbolId(imp.resolved, call.member, classSym.name));
-        }
-        if (!callee && targets.length === 1) callee = targets[0];
-      }
-
-      if (!callee) continue;
-      edges.push({
-        from: p.path,
-        to: callee.id,
-        type: 'CALLS',
-        confidence: confidenceForCall(imp),
-        evidence: { kind: 'call', detail: call.detail },
-      });
-    }
-
-    for (const call of p.directCalls) {
-      const imp = importByBinding.get(call.binding);
-      if (!imp?.resolved || !imp.importedName) continue;
-      const matches = (exportIndex.get(imp.resolved) ?? []).filter(
-        (s) => s.name === imp.importedName && !s.parent,
-      );
-      if (matches.length !== 1) continue;
-      edges.push({
-        from: p.path,
-        to: matches[0]!.id,
-        type: 'CALLS',
-        confidence: 'high',
-        evidence: { kind: 'call', detail: call.detail },
-      });
-    }
-
-    // ROUTE_TO — only when handler binding maps to a same-file symbol or a verified CALLS target.
-    for (const route of p.routes) {
-      const routeSymId = symbolId(p.path, `${route.method} ${route.routePath}`);
-      if (!byId.has(routeSymId)) {
-        const routeSym: CodeSymbolNode = {
-          id: routeSymId,
-          name: `${route.method} ${route.routePath}`,
-          kind: 'route',
-          path: p.path,
-          role: 'route',
-          exported: true,
-          concepts: conceptsFrom(route.routePath, route.method),
-          summary: `HTTP ${route.method} ${route.routePath}`,
-        };
-        symbols.push(routeSym);
-        byId.set(routeSymId, routeSym);
-      }
-
-      if (!route.handler) continue;
-      const local = p.symbols.find((s) => s.name === route.handler && !s.parent);
-      if (local) {
-        edges.push({
-          from: routeSymId,
-          to: local.id,
-          type: 'ROUTE_TO',
-          confidence: 'high',
-          evidence: {
-            kind: 'route',
-            detail: `${route.method} ${route.routePath} → ${route.handler}`,
-          },
-        });
-        continue;
-      }
-
-      // handler is an imported binding used as Express middleware reference
-      const imp = importByBinding.get(route.handler);
-      if (imp?.resolved && imp.importedName) {
-        const matches = (exportIndex.get(imp.resolved) ?? []).filter(
-          (s) => s.name === imp.importedName && !s.parent,
-        );
-        if (matches.length === 1) {
-          edges.push({
-            from: routeSymId,
-            to: matches[0]!.id,
-            type: 'ROUTE_TO',
-            confidence: 'medium',
-            evidence: {
-              kind: 'route',
-              detail: `${route.method} ${route.routePath} handler ${route.handler} from ${imp.resolved}`,
-            },
-          });
-        }
-      }
-    }
-
-    for (const ex of p.extendsOf) {
-      const child = byId.get(symbolId(p.path, ex.name));
-      if (!child) continue;
-      const base = resolveImportedSymbol(p, ex.base, exportIndex);
-      if (!base) continue;
-      edges.push({
-        from: child.id,
-        to: base.id,
-        type: 'EXTENDS',
-        confidence: 'high',
-        evidence: { kind: 'extends', detail: `${ex.name} extends ${ex.base}` },
-      });
-    }
-
-    for (const im of p.implementsOf) {
-      const child = byId.get(symbolId(p.path, im.name));
-      if (!child) continue;
-      const iface = resolveImportedSymbol(p, im.iface, exportIndex);
-      if (!iface) continue;
-      edges.push({
-        from: child.id,
-        to: iface.id,
-        type: 'IMPLEMENTS',
-        confidence: 'high',
-        evidence: { kind: 'implements', detail: `${im.name} implements ${im.iface}` },
-      });
-    }
+    processCalls(p, importByBinding, ctx);
+    processRoutes(p, importByBinding, ctx);
+    processInheritance(p, ctx);
   }
 
   return {
     version: 1,
     updatedAt: new Date().toISOString(),
-    files: files.slice(0, MAX_FILES),
-    symbols: prioritizeSymbols(symbols).slice(0, MAX_SYMBOLS),
-    edges: prioritizeEdges(edges).slice(0, MAX_EDGES),
+    files: ctx.files.slice(0, MAX_FILES),
+    symbols: prioritizeSymbols(ctx.symbols).slice(0, MAX_SYMBOLS),
+    edges: prioritizeEdges(ctx.edges).slice(0, MAX_EDGES),
   };
+}
+
+function processDefinitionsAndImports(p: FileParse, ctx: LinkContext): void {
+  const resolvedImports = [
+    ...new Set(p.imports.map((i) => i.resolved).filter((x): x is string => Boolean(x))),
+  ];
+  ctx.files.push({
+    path: p.path,
+    role: p.role,
+    imports: resolvedImports,
+    exports: p.exports,
+    concepts: conceptsFrom(p.path, p.exports.join(' ')),
+    summary: summarizeFile(p),
+  });
+
+  for (const sym of p.symbols) {
+    ctx.symbols.push(sym);
+    ctx.byId.set(sym.id, sym);
+    if (sym.exported) {
+      const list = ctx.exportIndex.get(p.path) ?? [];
+      list.push(sym);
+      ctx.exportIndex.set(p.path, list);
+    }
+    ctx.edges.push({
+      from: sym.id,
+      to: p.path,
+      type: 'DEFINED_IN',
+      confidence: 'high',
+      evidence: { kind: 'structure', detail: `${sym.name} is defined in ${p.path}` },
+    });
+    if (p.role) {
+      ctx.edges.push({
+        from: sym.id,
+        to: p.path,
+        type: 'BELONGS_TO',
+        confidence: 'high',
+        evidence: { kind: 'structure', detail: `file role ${p.role}` },
+      });
+    }
+  }
+
+  for (const target of resolvedImports) {
+    ctx.edges.push({
+      from: p.path,
+      to: target,
+      type: 'IMPORTS',
+      confidence: 'high',
+      evidence: {
+        kind: 'import',
+        detail: `${p.path} imports ${target}`,
+      },
+    });
+  }
+
+  for (const name of p.exports) {
+    const id = symbolId(p.path, name);
+    ctx.edges.push({
+      from: p.path,
+      to: id,
+      type: 'EXPORTS',
+      confidence: 'high',
+      evidence: { kind: 'export', detail: `${p.path} exports ${name}` },
+    });
+  }
+}
+
+function processCalls(
+  p: FileParse,
+  importByBinding: Map<string, LocalImport>,
+  ctx: LinkContext,
+): void {
+  for (const call of p.memberCalls) {
+    let binding = call.binding;
+    const alias = p.instanceAliases.find((a) => a.local === binding);
+    if (alias) binding = alias.classBinding;
+    const imp = importByBinding.get(binding);
+    if (!imp?.resolved) continue;
+    const targets = (ctx.exportIndex.get(imp.resolved) ?? []).filter(
+      (s) =>
+        s.name === call.member ||
+        (imp.isDefault && s.kind === 'class' && call.member.length > 0) ||
+        (s.kind === 'class' && s.name === call.binding),
+    );
+
+    // Prefer Class.method when Class was default-imported and method exists on that class
+    let callee: CodeSymbolNode | undefined;
+    if (imp.isDefault || imp.isNamespace) {
+      const classes = (ctx.exportIndex.get(imp.resolved) ?? []).filter((s) => s.kind === 'class');
+      if (classes.length === 1) {
+        const methodId = symbolId(imp.resolved, call.member, classes[0]!.name);
+        callee = ctx.byId.get(methodId);
+        // Also accept top-level exported function with that name in the module
+        if (!callee) {
+          const fns = (ctx.exportIndex.get(imp.resolved) ?? []).filter(
+            (s) => s.name === call.member && !s.parent,
+          );
+          if (fns.length === 1) callee = fns[0];
+        }
+      } else {
+        const fns = (ctx.exportIndex.get(imp.resolved) ?? []).filter(
+          (s) => s.name === call.member && !s.parent,
+        );
+        if (fns.length === 1) callee = fns[0];
+      }
+    } else if (imp.importedName) {
+      // import { BillingService as BS } → BS.createInvoice(
+      const classSym = (ctx.exportIndex.get(imp.resolved) ?? []).find(
+        (s) => s.name === imp.importedName && s.kind === 'class',
+      );
+      if (classSym) {
+        callee = ctx.byId.get(symbolId(imp.resolved, call.member, classSym.name));
+      }
+      if (!callee && targets.length === 1) callee = targets[0];
+    }
+
+    if (!callee) continue;
+    ctx.edges.push({
+      from: p.path,
+      to: callee.id,
+      type: 'CALLS',
+      confidence: confidenceForCall(imp),
+      evidence: { kind: 'call', detail: call.detail },
+    });
+  }
+
+  for (const call of p.directCalls) {
+    const imp = importByBinding.get(call.binding);
+    if (!imp?.resolved || !imp.importedName) continue;
+    const matches = (ctx.exportIndex.get(imp.resolved) ?? []).filter(
+      (s) => s.name === imp.importedName && !s.parent,
+    );
+    if (matches.length !== 1) continue;
+    ctx.edges.push({
+      from: p.path,
+      to: matches[0]!.id,
+      type: 'CALLS',
+      confidence: 'high',
+      evidence: { kind: 'call', detail: call.detail },
+    });
+  }
+}
+
+function processRoutes(
+  p: FileParse,
+  importByBinding: Map<string, LocalImport>,
+  ctx: LinkContext,
+): void {
+  for (const route of p.routes) {
+    const routeSymId = symbolId(p.path, `${route.method} ${route.routePath}`);
+    if (!ctx.byId.has(routeSymId)) {
+      const routeSym: CodeSymbolNode = {
+        id: routeSymId,
+        name: `${route.method} ${route.routePath}`,
+        kind: 'route',
+        path: p.path,
+        role: 'route',
+        exported: true,
+        concepts: conceptsFrom(route.routePath, route.method),
+        summary: `HTTP ${route.method} ${route.routePath}`,
+      };
+      ctx.symbols.push(routeSym);
+      ctx.byId.set(routeSymId, routeSym);
+    }
+
+    if (!route.handler) continue;
+    const local = p.symbols.find((s) => s.name === route.handler && !s.parent);
+    if (local) {
+      ctx.edges.push({
+        from: routeSymId,
+        to: local.id,
+        type: 'ROUTE_TO',
+        confidence: 'high',
+        evidence: {
+          kind: 'route',
+          detail: `${route.method} ${route.routePath} → ${route.handler}`,
+        },
+      });
+      continue;
+    }
+
+    // handler is an imported binding used as Express middleware reference
+    const imp = importByBinding.get(route.handler);
+    if (imp?.resolved && imp.importedName) {
+      const matches = (ctx.exportIndex.get(imp.resolved) ?? []).filter(
+        (s) => s.name === imp.importedName && !s.parent,
+      );
+      if (matches.length === 1) {
+        ctx.edges.push({
+          from: routeSymId,
+          to: matches[0]!.id,
+          type: 'ROUTE_TO',
+          confidence: 'medium',
+          evidence: {
+            kind: 'route',
+            detail: `${route.method} ${route.routePath} handler ${route.handler} from ${imp.resolved}`,
+          },
+        });
+      }
+    }
+  }
+}
+
+function processInheritance(p: FileParse, ctx: LinkContext): void {
+  for (const ex of p.extendsOf) {
+    const child = ctx.byId.get(symbolId(p.path, ex.name));
+    if (!child) continue;
+    const base = resolveImportedSymbol(p, ex.base, ctx.exportIndex);
+    if (!base) continue;
+    ctx.edges.push({
+      from: child.id,
+      to: base.id,
+      type: 'EXTENDS',
+      confidence: 'high',
+      evidence: { kind: 'extends', detail: `${ex.name} extends ${ex.base}` },
+    });
+  }
+
+  for (const im of p.implementsOf) {
+    const child = ctx.byId.get(symbolId(p.path, im.name));
+    if (!child) continue;
+    const iface = resolveImportedSymbol(p, im.iface, ctx.exportIndex);
+    if (!iface) continue;
+    ctx.edges.push({
+      from: child.id,
+      to: iface.id,
+      type: 'IMPLEMENTS',
+      confidence: 'high',
+      evidence: { kind: 'implements', detail: `${im.name} implements ${im.iface}` },
+    });
+  }
 }
 
 function confidenceForCall(imp: LocalImport): RelationConfidence {
@@ -370,10 +399,7 @@ function parseFile(path: string, text: string, pathIndex: Set<string>): FilePars
 
   // Class methods: only inside exported classes we already found (heuristic block scan)
   for (const cls of [...symbols.filter((s) => s.kind === 'class')]) {
-    const classRe = new RegExp(
-      `export\\s+class\\s+${cls.name}\\b[^{]*\\{([\\s\\S]*?)\\n\\}`,
-      'm',
-    );
+    const classRe = new RegExp(`export\\s+class\\s+${cls.name}\\b[^{]*\\{([\\s\\S]*?)\\n\\}`, 'm');
     const block = classRe.exec(text);
     if (!block?.[1]) continue;
     for (const mm of block[1].matchAll(
@@ -431,7 +457,8 @@ function parseFile(path: string, text: string, pathIndex: Set<string>): FilePars
   for (const m of text.matchAll(/\b([A-Za-z_][\w]*)\.([a-zA-Z_][\w]*)\s*\(/g)) {
     const binding = m[1]!;
     const member = m[2]!;
-    if (/^(Math|console|JSON|Object|Array|Promise|Buffer|process|Error|this)$/.test(binding)) continue;
+    if (/^(Math|console|JSON|Object|Array|Promise|Buffer|process|Error|this)$/.test(binding))
+      continue;
     // Only attribute member calls to known local import bindings / instances.
     if (!importBindings.has(binding)) continue;
     memberCalls.push({
@@ -463,7 +490,10 @@ function parseFile(path: string, text: string, pathIndex: Set<string>): FilePars
   }
   const implementsOf: FileParse['implementsOf'] = [];
   for (const m of text.matchAll(/export\s+class\s+(\w+)[^{]*\bimplements\s+([\w,\s]+)/g)) {
-    for (const iface of m[2]!.split(',').map((s) => s.trim()).filter(Boolean)) {
+    for (const iface of m[2]!
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)) {
       implementsOf.push({ name: m[1]!, iface });
     }
   }
@@ -488,9 +518,7 @@ function parseImports(fromPath: string, text: string, pathIndex: Set<string>): L
   const fromDir = dirname(fromPath);
 
   // import X from './y'
-  for (const m of text.matchAll(
-    /import\s+(\w+)\s+from\s+['"](\.\.?\/[^'"]+)['"]/g,
-  )) {
+  for (const m of text.matchAll(/import\s+(\w+)\s+from\s+['"](\.\.?\/[^'"]+)['"]/g)) {
     out.push({
       binding: m[1]!,
       resolved: resolveImport(fromDir, m[2]!, pathIndex),
@@ -499,9 +527,7 @@ function parseImports(fromPath: string, text: string, pathIndex: Set<string>): L
   }
 
   // import * as X from './y'
-  for (const m of text.matchAll(
-    /import\s+\*\s+as\s+(\w+)\s+from\s+['"](\.\.?\/[^'"]+)['"]/g,
-  )) {
+  for (const m of text.matchAll(/import\s+\*\s+as\s+(\w+)\s+from\s+['"](\.\.?\/[^'"]+)['"]/g)) {
     out.push({
       binding: m[1]!,
       resolved: resolveImport(fromDir, m[2]!, pathIndex),
@@ -510,9 +536,7 @@ function parseImports(fromPath: string, text: string, pathIndex: Set<string>): L
   }
 
   // import { A, B as C } from './y'
-  for (const m of text.matchAll(
-    /import\s+\{([^}]+)\}\s+from\s+['"](\.\.?\/[^'"]+)['"]/g,
-  )) {
+  for (const m of text.matchAll(/import\s+\{([^}]+)\}\s+from\s+['"](\.\.?\/[^'"]+)['"]/g)) {
     const resolved = resolveImport(fromDir, m[2]!, pathIndex);
     for (const part of m[1]!.split(',')) {
       const bit = part.trim();
@@ -535,11 +559,7 @@ function parseImports(fromPath: string, text: string, pathIndex: Set<string>): L
   return out.filter((i) => i.resolved);
 }
 
-function resolveImport(
-  fromDir: string,
-  spec: string,
-  pathIndex: Set<string>,
-): string | null {
+function resolveImport(fromDir: string, spec: string, pathIndex: Set<string>): string | null {
   const cleaned = spec.replace(/\\/g, '/');
   const base = norm(join(fromDir, cleaned).replace(/\\/g, '/'));
   // TypeScript ESM / NodeNext: `import './a.js'` resolves to `a.ts` on disk.
@@ -656,7 +676,9 @@ function prioritizeEdges(edges: CodeEdge[]): CodeEdge[] {
   };
   // Drop low-confidence CALLS entirely — trust over completeness.
   const filtered = edges.filter(
-    (e) => !(e.type === 'CALLS' && e.confidence === 'low') && !(e.type === 'ROUTE_TO' && e.confidence === 'low'),
+    (e) =>
+      !(e.type === 'CALLS' && e.confidence === 'low') &&
+      !(e.type === 'ROUTE_TO' && e.confidence === 'low'),
   );
   return [...filtered].sort(
     (a, b) =>
@@ -690,17 +712,11 @@ export function mergeCodeIntelligence(
   };
 
   const base = prior ?? emptyCodeIntelligence();
-  const files = [
-    ...base.files.filter((f) => !pathGone(f.path)),
-    ...next.files,
-  ];
+  const files = [...base.files.filter((f) => !pathGone(f.path)), ...next.files];
   const fileMap = new Map<string, CodeFileNode>();
   for (const f of files) fileMap.set(f.path, f);
 
-  const symbols = [
-    ...base.symbols.filter((s) => !pathGone(s.path)),
-    ...next.symbols,
-  ];
+  const symbols = [...base.symbols.filter((s) => !pathGone(s.path)), ...next.symbols];
   const symMap = new Map<string, CodeSymbolNode>();
   for (const s of symbols) symMap.set(s.id, s);
 

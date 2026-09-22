@@ -396,12 +396,19 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
   const commands = ['neuron-context.md', 'neuron-save.md', 'neuron-explain.md'];
   let cmdOk = 0;
   let cmdLegacy = false;
-  for (const c of commands) {
+
+  const commandPromises = commands.map(async (c) => {
     const p = join(cursorDir, 'commands', c);
-    if (!(await exists(p))) continue;
-    cmdOk += 1;
+    if (!(await exists(p))) return { exists: false, legacy: false };
     const body = await readFile(p, 'utf8');
-    if (LEGACY_TOOL_MARKERS.some((m) => body.includes(m))) cmdLegacy = true;
+    const legacy = LEGACY_TOOL_MARKERS.some((m) => body.includes(m));
+    return { exists: true, legacy };
+  });
+
+  const commandResults = await Promise.all(commandPromises);
+  for (const r of commandResults) {
+    if (r.exists) cmdOk += 1;
+    if (r.legacy) cmdLegacy = true;
   }
   checks.push({
     name: 'Cursor commands',

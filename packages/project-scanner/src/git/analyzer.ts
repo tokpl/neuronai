@@ -22,8 +22,21 @@ export class GitAnalyzer {
       potentialDecisions: [],
     };
 
+    if (!root || typeof root !== 'string' || root.includes('\0') || root.includes('..')) {
+      return empty;
+    }
+
     try {
       const safeRoot = resolve(root);
+
+      // Explicitly prevent execution outside of a true git repository by verifying
+      // the .git directory exists at the root. This prevents git from automatically
+      // searching parent directories and executing in an unintended context.
+      const gitDirStats = await stat(resolve(safeRoot, '.git')).catch(() => null);
+      if (!gitDirStats) {
+        return empty;
+      }
+
       const stats = await stat(safeRoot);
       if (!stats.isDirectory()) {
         return empty;

@@ -102,8 +102,26 @@ describe('buildContextContribution', () => {
 });
 
 describe('formatContributionTokens', () => {
-  it('formats thousands compactly', () => {
+  it('formats numbers less than 1000 exactly', () => {
+    expect(formatContributionTokens(0)).toBe('0');
     expect(formatContributionTokens(800)).toBe('800');
+    expect(formatContributionTokens(999)).toBe('999');
+    expect(formatContributionTokens(-500)).toBe('-500');
+  });
+
+  it('formats thousands with up to one decimal place when under 10k', () => {
+    expect(formatContributionTokens(1000)).toBe('1k');
+    expect(formatContributionTokens(1049)).toBe('1k');
+    expect(formatContributionTokens(1050)).toBe('1.1k');
     expect(formatContributionTokens(1180)).toBe('1.2k');
+    expect(formatContributionTokens(1999)).toBe('2k');
+    expect(formatContributionTokens(9999)).toBe('10k');
+  });
+
+  it('formats ten-thousands and above with no decimal places', () => {
+    expect(formatContributionTokens(10000)).toBe('10k');
+    expect(formatContributionTokens(10499)).toBe('10k');
+    expect(formatContributionTokens(10500)).toBe('11k');
+    expect(formatContributionTokens(123456)).toBe('123k');
   });
 });

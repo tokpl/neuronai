@@ -99,6 +99,48 @@ describe('buildContextContribution', () => {
       /~480 fewer tokens of structural rediscovery \(simulated\)/,
     );
   });
+
+  it('handles fallback logic for memory counts when not provided', () => {
+    const contribution = buildContextContribution({
+      efficiency: baseEfficiency({
+        itemsSelected: 5,
+        itemsDiscarded: 3,
+      }),
+      relevantFiles: [],
+      relevantModules: [],
+      relevantRules: [{ title: 'Test Rule', detail: 'testing' }],
+    });
+    // memoriesUsed = max(0, 5 - 1 rule) = 4
+    expect(contribution.memoriesUsed).toBe(4);
+    // memoriesSkipped = max(0, 3) = 3
+    expect(contribution.memoriesSkipped).toBe(3);
+    // memoriesInBrain = max(0, 4 + 1 + 3) = 8
+    expect(contribution.memoriesInBrain).toBe(8);
+  });
+
+  it('handles non-finite and negative compression ratios correctly', () => {
+    const contributionInfinite = buildContextContribution({
+      efficiency: baseEfficiency({ compressionRatio: Infinity }),
+      relevantFiles: [],
+      relevantModules: [],
+      relevantRules: [],
+    });
+    // For infinity, compressionRatio is Infinity, which is >= 1.2, so formatRatio is called.
+    // formatRatio returns '1×' for Infinity.
+    expect(contributionInfinite.lines.join('\n')).toMatch(/1×/);
+    expect(contributionInfinite.compressionRatio).toBe(Infinity);
+
+    const contributionNegative = buildContextContribution({
+      efficiency: baseEfficiency({ compressionRatio: -5 }),
+      relevantFiles: [],
+      relevantModules: [],
+      relevantRules: [],
+    });
+    // In buildContextContribution, negative compression ratio defaults to 1.
+    // 1 < 1.2, so it falls into the else branch 'Packed into...'
+    expect(contributionNegative.lines.join('\n')).toMatch(/Packed into/);
+    expect(contributionNegative.compressionRatio).toBe(1);
+  });
 });
 
 describe('formatContributionTokens', () => {
@@ -123,5 +165,11 @@ describe('formatContributionTokens', () => {
     expect(formatContributionTokens(10499)).toBe('10k');
     expect(formatContributionTokens(10500)).toBe('11k');
     expect(formatContributionTokens(123456)).toBe('123k');
+  });
+
+  it('handles floating point numbers correctly', () => {
+    expect(formatContributionTokens(1000.5)).toBe('1k');
+    expect(formatContributionTokens(1500.5)).toBe('1.5k');
+    expect(formatContributionTokens(10500.5)).toBe('11k');
   });
 });

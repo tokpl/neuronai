@@ -29,6 +29,16 @@ export class GitAnalyzer {
         return empty;
       }
 
+      // SECURITY: Prevent Git directory traversal attacks.
+      // If we execute `git` in a directory without a `.git` structure, git will automatically
+      // traverse up the tree to find one. If a user provides an arbitrary or nested path,
+      // they could leak history/branches from an unintended parent repository.
+      try {
+        await stat(resolve(safeRoot, '.git'));
+      } catch {
+        return empty;
+      }
+
       const { stdout: logOut } = await execFileAsync(
         'git',
         ['log', '-n', '40', '--pretty=format:%s|||%an'],

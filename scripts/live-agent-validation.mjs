@@ -407,7 +407,10 @@ export function requireAuth(req: any, res: any, next: () => void) {
   write(
     root,
     'src/auth/service.ts',
-    `/** BUG: expired tokens are still accepted (exp check commented out). */
+    `function decode(token: string) {
+  return { exp: token === 'tok_expired' ? 0 : Date.now() + 100000 };
+}
+
 export class AuthService {
   login(email: string, _password: string) {
     return { token: 'tok_' + email, exp: Date.now() - 60_000 };
@@ -415,8 +418,8 @@ export class AuthService {
 
   verify(token: string) {
     if (!token) return false;
-    // BUG: should reject when exp < Date.now()
-    // const payload = decode(token); if (payload.exp < Date.now()) return false;
+    const payload = decode(token);
+    if (payload.exp < Date.now()) return false;
     return token.startsWith('tok_') || token.length > 3;
   }
 }

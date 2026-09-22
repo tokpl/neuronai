@@ -388,15 +388,18 @@ async function checkStaleMapPaths(cwd: string): Promise<DoctorCheck> {
       };
     }
 
-    let missing = 0;
-    for (const entry of entries.slice(0, 80)) {
-      const relative = entry.path.replace(/[/\\]+$/, '');
-      try {
-        await access(join(cwd, relative));
-      } catch {
-        missing += 1;
-      }
-    }
+    const results = await Promise.all(
+      entries.slice(0, 80).map(async (entry) => {
+        const relative = entry.path.replace(/[/\\]+$/, '');
+        try {
+          await access(join(cwd, relative));
+          return true;
+        } catch {
+          return false;
+        }
+      }),
+    );
+    const missing = results.filter((exists) => !exists).length;
 
     const ratio = missing / Math.min(entries.length, 80);
     const ok = ratio < 0.25;

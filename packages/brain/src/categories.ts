@@ -101,7 +101,8 @@ export function classifyKnowledge(signals: ClassifySignals): {
   label: string;
   memoryType: MemoryType;
 } {
-  const text = `${signals.title ?? ''} ${signals.content ?? ''} ${signals.task ?? ''}`.toLowerCase();
+  const text =
+    `${signals.title ?? ''} ${signals.content ?? ''} ${signals.task ?? ''}`.toLowerCase();
 
   // Prefer explicit type from workflow rules when present
   if (signals.memoryType) {

@@ -8,10 +8,7 @@ import { detectProjectStack, type StackDetection } from './detect-stack.js';
 
 export type { StackDetection } from './detect-stack.js';
 export { detectProjectStack } from './detect-stack.js';
-export {
-  collectProjectSignals,
-  type ProjectSignals,
-} from './project-signals.js';
+export { collectProjectSignals, type ProjectSignals } from './project-signals.js';
 
 export interface ResolvedProject {
   rootPath: string;

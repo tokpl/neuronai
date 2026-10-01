@@ -179,7 +179,8 @@ export class ProjectBrainBootstrap {
     // the highest-leverage knowledge for "where is X?".
     // On update, only touch focusFiles so unchanged files are not re-read.
     const symbolHints = await extractSymbols(focusFiles, {
-      maxFiles: mode === 'fast' ? 80 : mode === 'update' ? Math.min(200, focusFiles.length || 1) : 200,
+      maxFiles:
+        mode === 'fast' ? 80 : mode === 'update' ? Math.min(200, focusFiles.length || 1) : 200,
       concurrency,
     });
     const relationshipsForMap = [...relationshipsList, ...symbolHints];
@@ -210,7 +211,8 @@ export class ProjectBrainBootstrap {
 
     const allPaths = new Set(walk.files.map((f) => f.relativePath.replace(/\\/g, '/')));
     const code = await buildCodeIntelligence(focusFiles, {
-      maxFiles: mode === 'fast' ? 120 : mode === 'update' ? Math.min(200, focusFiles.length || 1) : 250,
+      maxFiles:
+        mode === 'fast' ? 120 : mode === 'update' ? Math.min(200, focusFiles.length || 1) : 250,
       concurrency,
       allPaths,
     });

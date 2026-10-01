@@ -111,7 +111,9 @@ export async function probeConfiguredMcp(
     const timer = setTimeout(() => {
       finish({
         tools: [],
-        error: err.trim() ? `MCP probe timed out: ${err.trim().slice(0, 200)}` : 'MCP probe timed out',
+        error: err.trim()
+          ? `MCP probe timed out: ${err.trim().slice(0, 200)}`
+          : 'MCP probe timed out',
       });
     }, 12_000);
 
@@ -244,7 +246,8 @@ function buildMcpStatus(input: {
     actionDetail = 'Run: neuron cursor setup --force';
   } else if (!freshOk || legacy.length > 0 || missing.length > 0 || !contextOk) {
     action = 'FIX_BINARY';
-    actionDetail = 'Rebuild/reinstall neuronai, then: neuron cursor setup --force && neuron cursor doctor';
+    actionDetail =
+      'Rebuild/reinstall neuronai, then: neuron cursor setup --force && neuron cursor doctor';
   }
 
   return {
@@ -474,7 +477,9 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
         (LEGACY_TOOL_MARKERS as readonly string[]).includes(t),
       );
       const catalogOk =
-        missing.length === 0 && legacy.length === 0 && probe.tools.length === EXPECTED_MCP_TOOLS.length;
+        missing.length === 0 &&
+        legacy.length === 0 &&
+        probe.tools.length === EXPECTED_MCP_TOOLS.length;
       checks.push({
         name: 'Fresh stdio process',
         ok: true,

@@ -7,7 +7,10 @@
 const HINTS: Array<{ concept: string; pattern: RegExp }> = [
   { concept: 'auth', pattern: /\b(auth|jwt|oauth|session|login|password|permission)\b/i },
   { concept: 'billing', pattern: /\b(billing|payment|stripe|invoice|checkout|subscription)\b/i },
-  { concept: 'database', pattern: /\b(database|db|prisma|drizzle|mongo|postgres|repository|schema|migration)\b/i },
+  {
+    concept: 'database',
+    pattern: /\b(database|db|prisma|drizzle|mongo|postgres|repository|schema|migration)\b/i,
+  },
   { concept: 'api', pattern: /\b(api|route|router|endpoint|controller|handler|middleware)\b/i },
   { concept: 'testing', pattern: /\b(test|spec|vitest|jest|playwright)\b/i },
   { concept: 'configuration', pattern: /\b(config|env|setting|dotenv)\b/i },

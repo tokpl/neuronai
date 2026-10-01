@@ -156,9 +156,7 @@ describe('WorkflowRules + MemorySuggestionEngine', () => {
     expect(suggestion.prompt.askQuestion!.title).toBe('🧠 Project Brain');
     expect(suggestion.prompt.askQuestion!.prompt).toContain(suggestion.draftContent);
     expect(suggestion.prompt.askQuestion!.prompt.startsWith('🧠')).toBe(true);
-    expect(
-      suggestion.prompt.askQuestion!.prompt.indexOf(suggestion.draftContent),
-    ).toBeLessThan(
+    expect(suggestion.prompt.askQuestion!.prompt.indexOf(suggestion.draftContent)).toBeLessThan(
       suggestion.prompt.askQuestion!.prompt.indexOf(
         'Should I remember this architecture decision for the project?',
       ),

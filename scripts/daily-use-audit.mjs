@@ -4,12 +4,7 @@
  * Labels LIVE_AGENT_PROOF = UNAVAILABLE; this measures Brain context quality only.
  */
 import { spawnSync } from 'node:child_process';
-import {
-  mkdirSync,
-  mkdtempSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -172,28 +167,69 @@ test('login', () => { expect(new AuthService().login('a','b')).toBeTruthy(); });
 }
 
 const QUERIES = [
-  { q: 'Add support for invoice cancellation.', expect: [/payment|invoice|cancel/i], wantRec: true, wantRule: true },
+  {
+    q: 'Add support for invoice cancellation.',
+    expect: [/payment|invoice|cancel/i],
+    wantRec: true,
+    wantRule: true,
+  },
   { q: 'Fix the authentication bug.', expect: [/auth/i], soft: true },
   { q: 'Add a new payment endpoint.', expect: [/payment|route/i], wantRec: true },
   { q: 'Why is this API returning 403?', expect: [/auth|middleware|403|forbidden/i], soft: true },
-  { q: 'Where should I put this validation?', expect: [/payment|middleware|route|service/i], soft: true },
+  {
+    q: 'Where should I put this validation?',
+    expect: [/payment|middleware|route|service/i],
+    soft: true,
+  },
   { q: 'How does authentication flow through this project?', expect: [/auth/i] },
   { q: 'What happens when an invoice is created?', expect: [/invoice|payment/i], soft: true },
   { q: 'What calls PaymentService?', expect: [/payment|invoice|route/i] },
   { q: 'Who depends on BillingService?', expect: [/billing|invoice|payment/i], soft: true },
   { q: 'What breaks if I change PaymentService?', expect: [/payment/i] },
-  { q: 'Where is the database transaction boundary?', expect: [/db|transaction|client/i], soft: true },
-  { q: 'Where should I modify database access?', expect: [/db|repository|payment-repository/i], soft: true },
-  { q: 'Where are API errors converted into HTTP responses?', expect: [/error|middleware/i], soft: true },
+  {
+    q: 'Where is the database transaction boundary?',
+    expect: [/db|transaction|client/i],
+    soft: true,
+  },
+  {
+    q: 'Where should I modify database access?',
+    expect: [/db|repository|payment-repository/i],
+    soft: true,
+  },
+  {
+    q: 'Where are API errors converted into HTTP responses?',
+    expect: [/error|middleware/i],
+    soft: true,
+  },
   { q: 'Where should a new background job live?', expect: [/worker|job/i], soft: true },
   { q: 'How are background jobs registered?', expect: [/worker|job|register/i], soft: true },
   { q: 'Where are tests for billing?', expect: [/test|payment/i], soft: true },
-  { q: 'What conventions should I follow when adding an endpoint?', expect: [/route|payment|rule|stripe/i], soft: true },
+  {
+    q: 'What conventions should I follow when adding an endpoint?',
+    expect: [/route|payment|rule|stripe/i],
+    soft: true,
+  },
   { q: 'What rule applies to Stripe calls?', expect: [/stripe|rule/i], wantRule: true },
-  { q: 'What architecture decision affects payments?', expect: [/payment|stripe|decision/i], soft: true },
-  { q: 'Which files would I likely need to change for this feature?', expect: [/payment/i], soft: true },
-  { q: 'What is the path from an API route to the database?', expect: [/payment|route|repository/i], soft: true },
-  { q: 'Where should I start implementing this feature?', expect: [/payment|invoice/i], soft: true },
+  {
+    q: 'What architecture decision affects payments?',
+    expect: [/payment|stripe|decision/i],
+    soft: true,
+  },
+  {
+    q: 'Which files would I likely need to change for this feature?',
+    expect: [/payment/i],
+    soft: true,
+  },
+  {
+    q: 'What is the path from an API route to the database?',
+    expect: [/payment|route|repository/i],
+    soft: true,
+  },
+  {
+    q: 'Where should I start implementing this feature?',
+    expect: [/payment|invoice/i],
+    soft: true,
+  },
   // vague
   { q: 'fix payments', expect: [/payment/i], soft: true, wantRec: true },
   { q: 'add billing support', expect: [/billing|payment|invoice/i], soft: true, wantRec: true },
@@ -225,10 +261,13 @@ function grade(spec, body) {
     return 'CORRECT';
   }
 
-  const hitExpect = (spec.expect ?? []).some((re) => re.test(ctx + rec + JSON.stringify(body.relevantFiles)));
+  const hitExpect = (spec.expect ?? []).some((re) =>
+    re.test(ctx + rec + JSON.stringify(body.relevantFiles)),
+  );
   if (hitExpect && (!spec.wantRec || body.recommendation)) return 'CORRECT';
   if (hitExpect) return 'ACCEPTABLE';
-  if (spec.soft && (body.relevantFiles?.length || body.recommendation || !empty)) return 'ACCEPTABLE';
+  if (spec.soft && (body.relevantFiles?.length || body.recommendation || !empty))
+    return 'ACCEPTABLE';
   if (empty) return 'NO_MATCH';
   return 'WRONG';
 }

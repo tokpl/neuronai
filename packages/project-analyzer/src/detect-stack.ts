@@ -231,7 +231,7 @@ export async function detectProjectStack(root: string): Promise<StackDetection> 
   if (hasDep(deps, 'ioredis') || hasDep(deps, 'redis')) databases.add('redis');
 
   // Structure
-  if (await exists(join(root, 'apps')) && (await exists(join(root, 'packages')))) {
+  if ((await exists(join(root, 'apps'))) && (await exists(join(root, 'packages')))) {
     structureNotes.push('Architecture contains apps/packages structure');
   }
   if (await exists(join(root, 'src'))) {

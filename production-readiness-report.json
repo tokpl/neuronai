@@ -93,13 +93,7 @@
       },
       "dogfood-audit-report.json": {
         "present": true,
-        "summary": [
-          "fixture",
-          "totals",
-          "rows",
-          "mutation",
-          "scale"
-        ]
+        "summary": ["fixture", "totals", "rows", "mutation", "scale"]
       }
     },
     "graphTrust": {

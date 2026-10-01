@@ -8,10 +8,7 @@
       "LIVE_AGENT_PROOF": "UNAVAILABLE",
       "reason": "No CURSOR_API_KEY / ANTHROPIC_API_KEY / OPENAI_API_KEY",
       "methodology": {
-        "arms": [
-          "baseline_no_neuron",
-          "neuron_context_first"
-        ],
+        "arms": ["baseline_no_neuron", "neuron_context_first"],
         "tasks": 32,
         "metrics": [
           "tool_calls",

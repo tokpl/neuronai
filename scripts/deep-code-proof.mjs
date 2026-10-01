@@ -4,13 +4,7 @@
  * estimatedRediscoveryAvoided is simulated — not measured agent file-read savings.
  */
 import { spawnSync } from 'node:child_process';
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -156,7 +150,10 @@ const queries = [
   { q: 'Where should I implement invoice cancellation?', expect: /cancel|billing|invoice/i },
   { q: 'What calls BillingService?', expect: /routes|billingservice|call|depend/i },
   { q: 'What does BillingService depend on?', soft: true },
-  { q: 'What happens when POST /invoices/:id/cancel is called?', expect: /cancel|billing|route|invoice/i },
+  {
+    q: 'What happens when POST /invoices/:id/cancel is called?',
+    expect: /cancel|billing|route|invoice/i,
+  },
   {
     q: 'What files would I likely need to change to modify payment processing?',
     expect: /billing|stripe|route|invoice/i,
@@ -185,7 +182,9 @@ const rows = await withMcp(root, async (client) => {
   return out;
 });
 
-const knowledge = JSON.parse(readFileSync(join(root, '.neuron', 'brain', 'knowledge.json'), 'utf8'));
+const knowledge = JSON.parse(
+  readFileSync(join(root, '.neuron', 'brain', 'knowledge.json'), 'utf8'),
+);
 const code = knowledge.code;
 const highCalls = (code?.edges ?? []).filter((e) => e.type === 'CALLS' && e.confidence === 'high');
 const lowCalls = (code?.edges ?? []).filter((e) => e.type === 'CALLS' && e.confidence === 'low');
@@ -215,7 +214,11 @@ console.log('\n', JSON.stringify(report.summary));
 console.log('trust', report.trust);
 rmSync(root, { recursive: true, force: true });
 
-if (report.summary.pct < 85 || !report.trust.everyEdgeHasEvidence || !report.trust.noLowConfidenceCalls) {
+if (
+  report.summary.pct < 85 ||
+  !report.trust.everyEdgeHasEvidence ||
+  !report.trust.noLowConfidenceCalls
+) {
   process.exitCode = 1;
 } else {
   console.log('DEEP_CODE_PROOF_OK');

@@ -130,9 +130,7 @@ export function mapEntryDoc(entry: ProjectMapEntry, freshness = 0.8): RetrievalD
   return {
     id: `map:${entry.kind}:${entry.path}:${entry.name}`,
     title: `${label} — ${entry.path}`,
-    content: [entry.purpose, `Location: ${entry.path}`, searchablePath]
-      .filter(Boolean)
-      .join('\n'),
+    content: [entry.purpose, `Location: ${entry.path}`, searchablePath].filter(Boolean).join('\n'),
     kind: 'location',
     tags: [...concepts, ...(entry.module ? [entry.module] : []), entry.kind],
     importance: entry.kind === 'module' ? 0.75 : 0.6,

@@ -21,17 +21,9 @@
           "query": "Where is authentication implemented?",
           "intent": "LOCATION",
           "topResult": "src/auth/service.ts",
-          "relevantFiles": [
-            "src/auth/jwt.ts",
-            "src/auth/service.ts",
-            "src/auth/service.ts"
-          ],
-          "relevantModules": [
-            "src/auth/"
-          ],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "relevantFiles": ["src/auth/jwt.ts", "src/auth/service.ts", "src/auth/service.ts"],
+          "relevantModules": ["src/auth/"],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "src/auth/service.ts",
           "contextTokens": 187,
           "corpusTokens": 2422,
@@ -53,9 +45,7 @@
             "src/api/routes/users.ts"
           ],
           "relevantModules": [],
-          "rules": [
-            "Cross-cutting concerns belong in middleware, not route handlers"
-          ],
+          "rules": ["Cross-cutting concerns belong in middleware, not route handlers"],
           "recommendation": "src/api/routes/index.ts",
           "contextTokens": 204,
           "corpusTokens": 2422,
@@ -76,9 +66,7 @@
             "src/billing/service.ts",
             "src/services/payment-service.ts"
           ],
-          "relevantModules": [
-            "src/billing/"
-          ],
+          "relevantModules": ["src/billing/"],
           "rules": [],
           "recommendation": "src/billing/routes.ts",
           "contextTokens": 179,
@@ -99,12 +87,8 @@
             "src/db/client.ts",
             "src/db/schema.ts"
           ],
-          "relevantModules": [
-            "src/db/"
-          ],
-          "rules": [
-            "Database access must stay inside repositories"
-          ],
+          "relevantModules": ["src/db/"],
+          "rules": ["Database access must stay inside repositories"],
           "recommendation": "src/repositories/user-repository.ts",
           "contextTokens": 167,
           "corpusTokens": 2422,
@@ -118,10 +102,7 @@
           "query": "Where are background jobs?",
           "intent": "LOCATION",
           "topResult": "src/workers/email-job.ts",
-          "relevantFiles": [
-            "src/workers/email-job.ts",
-            "src/workers/billing-job.ts"
-          ],
+          "relevantFiles": ["src/workers/email-job.ts", "src/workers/billing-job.ts"],
           "relevantModules": [],
           "rules": [],
           "recommendation": "src/workers/email-job.ts",
@@ -142,12 +123,8 @@
             "src/auth/jwt.ts",
             "src/auth/service.ts"
           ],
-          "relevantModules": [
-            "src/auth/"
-          ],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "relevantModules": ["src/auth/"],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "tests/auth/AuthService.test.ts",
           "contextTokens": 187,
           "corpusTokens": 2422,
@@ -169,9 +146,7 @@
             "src/services/payment-service.ts"
           ],
           "relevantModules": [],
-          "rules": [
-            "Never call Stripe directly from route handlers"
-          ],
+          "rules": ["Never call Stripe directly from route handlers"],
           "recommendation": "src/services/stripe.ts",
           "contextTokens": 188,
           "corpusTokens": 2422,
@@ -216,9 +191,7 @@
             "src/services/payment-service.ts",
             "src/services/stripe.ts"
           ],
-          "relevantModules": [
-            "src/billing/"
-          ],
+          "relevantModules": ["src/billing/"],
           "rules": [],
           "recommendation": "src/services/payment-service.ts",
           "contextTokens": 193,
@@ -234,9 +207,7 @@
           "intent": "MODIFICATION",
           "topResult": "src/auth/",
           "relevantFiles": [],
-          "relevantModules": [
-            "src/auth/"
-          ],
+          "relevantModules": ["src/auth/"],
           "rules": [
             "Cross-cutting concerns belong in middleware, not route handlers",
             "Authentication uses the AuthService abstraction",
@@ -255,10 +226,7 @@
           "query": "Where should I add a new background job?",
           "intent": "MODIFICATION",
           "topResult": "src/workers/email-job.ts",
-          "relevantFiles": [
-            "src/workers/email-job.ts",
-            "src/workers/billing-job.ts"
-          ],
+          "relevantFiles": ["src/workers/email-job.ts", "src/workers/billing-job.ts"],
           "relevantModules": [],
           "rules": [],
           "recommendation": "src/workers/email-job.ts",
@@ -280,12 +248,8 @@
             "src/db/schema.ts",
             "src/db/client.ts"
           ],
-          "relevantModules": [
-            "src/db/"
-          ],
-          "rules": [
-            "Database access must stay inside repositories"
-          ],
+          "relevantModules": ["src/db/"],
+          "rules": ["Database access must stay inside repositories"],
           "recommendation": "src/repositories/user-repository.ts",
           "contextTokens": 170,
           "corpusTokens": 2422,
@@ -304,9 +268,7 @@
             "src/services/payment-service.ts",
             "src/services/stripe.ts"
           ],
-          "relevantModules": [
-            "src/billing/"
-          ],
+          "relevantModules": ["src/billing/"],
           "rules": [
             "Never call Stripe directly from route handlers",
             "All billing mutations go through BillingService"
@@ -344,16 +306,9 @@
           "query": "How does this project handle authentication?",
           "intent": "IMPLEMENTATION",
           "topResult": "src/auth/",
-          "relevantFiles": [
-            "src/auth/jwt.ts"
-          ],
-          "relevantModules": [
-            "src/auth/",
-            "src/services/"
-          ],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "relevantFiles": ["src/auth/jwt.ts"],
+          "relevantModules": ["src/auth/", "src/services/"],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "src/auth/",
           "contextTokens": 201,
           "corpusTokens": 2422,
@@ -374,9 +329,7 @@
             "src/billing/routes.ts",
             "src/services/stripe.ts"
           ],
-          "relevantModules": [
-            "src/billing/"
-          ],
+          "relevantModules": ["src/billing/"],
           "rules": [],
           "recommendation": null,
           "contextTokens": 113,
@@ -444,9 +397,7 @@
             "src/services/payment-service.ts",
             "src/services/stripe.ts"
           ],
-          "relevantModules": [
-            "src/billing/"
-          ],
+          "relevantModules": ["src/billing/"],
           "rules": [],
           "recommendation": "src/billing/invoices.ts",
           "contextTokens": 188,
@@ -468,9 +419,7 @@
             "src/api/routes/index.ts",
             "src/api/routes/users.ts"
           ],
-          "relevantModules": [
-            "src/auth/"
-          ],
+          "relevantModules": ["src/auth/"],
           "rules": [],
           "recommendation": "src/billing/routes.ts",
           "contextTokens": 167,
@@ -493,9 +442,7 @@
             "src/services/payment-service.ts"
           ],
           "relevantModules": [],
-          "rules": [
-            "Never call Stripe directly from route handlers"
-          ],
+          "rules": ["Never call Stripe directly from route handlers"],
           "recommendation": "src/services/stripe.ts",
           "contextTokens": 179,
           "corpusTokens": 2422,
@@ -594,12 +541,8 @@
             "packages/auth/src/middleware.ts",
             "packages/auth/src/middleware.ts"
           ],
-          "relevantModules": [
-            "packages/auth/"
-          ],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "relevantModules": ["packages/auth/"],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "packages/auth/src/service.ts",
           "contextTokens": 186,
           "corpusTokens": 1782,
@@ -613,10 +556,7 @@
           "query": "Where are API routes defined?",
           "intent": "LOCATION",
           "topResult": "apps/api/src/routes/billing.ts",
-          "relevantFiles": [
-            "apps/api/src/routes/billing.ts",
-            "apps/api/src/routes/billing.ts"
-          ],
+          "relevantFiles": ["apps/api/src/routes/billing.ts", "apps/api/src/routes/billing.ts"],
           "relevantModules": [],
           "rules": [
             "Cross-cutting concerns belong in middleware, not route handlers",
@@ -642,9 +582,7 @@
             "packages/billing/src/invoices.ts",
             "packages/billing/src/stripe.ts"
           ],
-          "relevantModules": [
-            "packages/billing/"
-          ],
+          "relevantModules": ["packages/billing/"],
           "rules": [],
           "recommendation": "packages/billing/src/PaymentService.ts",
           "contextTokens": 206,
@@ -664,12 +602,8 @@
             "packages/database/src/schema.ts",
             "packages/database/src/client.ts"
           ],
-          "relevantModules": [
-            "packages/database/"
-          ],
-          "rules": [
-            "Database access must stay inside repositories"
-          ],
+          "relevantModules": ["packages/database/"],
+          "rules": ["Database access must stay inside repositories"],
           "recommendation": "packages/database/src/schema.ts",
           "contextTokens": 212,
           "corpusTokens": 1782,
@@ -683,9 +617,7 @@
           "query": "Where are background jobs?",
           "intent": "LOCATION",
           "topResult": "apps/api/src/workers/jobs.ts",
-          "relevantFiles": [
-            "apps/api/src/workers/jobs.ts"
-          ],
+          "relevantFiles": ["apps/api/src/workers/jobs.ts"],
           "relevantModules": [],
           "rules": [],
           "recommendation": "apps/api/src/workers/jobs.ts",
@@ -707,12 +639,8 @@
             "packages/auth/src/middleware.ts",
             "packages/auth/src/middleware.ts"
           ],
-          "relevantModules": [
-            "packages/auth/"
-          ],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "relevantModules": ["packages/auth/"],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "packages/auth/src/service.ts",
           "contextTokens": 185,
           "corpusTokens": 1782,
@@ -732,12 +660,8 @@
             "packages/billing/src/PaymentService.ts",
             "packages/billing/src/invoices.ts"
           ],
-          "relevantModules": [
-            "packages/billing/"
-          ],
-          "rules": [
-            "Never call Stripe directly from route handlers"
-          ],
+          "relevantModules": ["packages/billing/"],
+          "rules": ["Never call Stripe directly from route handlers"],
           "recommendation": "packages/billing/src/PaymentService.ts",
           "contextTokens": 206,
           "corpusTokens": 1782,
@@ -779,9 +703,7 @@
             "packages/billing/src/PaymentService.ts",
             "packages/billing/src/PaymentService.ts"
           ],
-          "relevantModules": [
-            "packages/billing/"
-          ],
+          "relevantModules": ["packages/billing/"],
           "rules": [
             "Never call Stripe directly from route handlers",
             "All billing mutations go through BillingService"
@@ -800,9 +722,7 @@
           "intent": "MODIFICATION",
           "topResult": "packages/auth/",
           "relevantFiles": [],
-          "relevantModules": [
-            "packages/auth/"
-          ],
+          "relevantModules": ["packages/auth/"],
           "rules": [
             "Cross-cutting concerns belong in middleware, not route handlers",
             "Authentication uses the AuthService abstraction",
@@ -821,9 +741,7 @@
           "query": "Where should I add a new background job?",
           "intent": "MODIFICATION",
           "topResult": "apps/api/src/workers/jobs.ts",
-          "relevantFiles": [
-            "apps/api/src/workers/jobs.ts"
-          ],
+          "relevantFiles": ["apps/api/src/workers/jobs.ts"],
           "relevantModules": [],
           "rules": [],
           "recommendation": "apps/api/src/workers/jobs.ts",
@@ -844,12 +762,8 @@
             "packages/database/src/schema.ts",
             "packages/database/src/client.ts"
           ],
-          "relevantModules": [
-            "packages/database/"
-          ],
-          "rules": [
-            "Database access must stay inside repositories"
-          ],
+          "relevantModules": ["packages/database/"],
+          "rules": ["Database access must stay inside repositories"],
           "recommendation": "packages/database/src/schema.ts",
           "contextTokens": 215,
           "corpusTokens": 1782,
@@ -868,9 +782,7 @@
             "packages/billing/src/PaymentService.ts",
             "packages/billing/src/invoices.ts"
           ],
-          "relevantModules": [
-            "packages/billing/"
-          ],
+          "relevantModules": ["packages/billing/"],
           "rules": [
             "Never call Stripe directly from route handlers",
             "All billing mutations go through BillingService"
@@ -908,13 +820,8 @@
           "intent": "IMPLEMENTATION",
           "topResult": "packages/auth/",
           "relevantFiles": [],
-          "relevantModules": [
-            "packages/auth/",
-            "apps/web/"
-          ],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "relevantModules": ["packages/auth/", "apps/web/"],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "packages/auth/",
           "contextTokens": 210,
           "corpusTokens": 1782,
@@ -934,9 +841,7 @@
             "apps/api/src/routes/billing.ts",
             "packages/billing/src/invoices.ts"
           ],
-          "relevantModules": [
-            "packages/billing/"
-          ],
+          "relevantModules": ["packages/billing/"],
           "rules": [],
           "recommendation": null,
           "contextTokens": 143,
@@ -957,12 +862,8 @@
             "packages/billing/src/service.ts",
             "packages/billing/src/invoices.ts"
           ],
-          "relevantModules": [
-            "packages/billing/"
-          ],
-          "rules": [
-            "All billing mutations go through BillingService"
-          ],
+          "relevantModules": ["packages/billing/"],
+          "rules": ["All billing mutations go through BillingService"],
           "recommendation": "packages/billing/src/service.ts",
           "contextTokens": 186,
           "corpusTokens": 1782,
@@ -982,9 +883,7 @@
             "packages/auth/src/service.ts",
             "packages/auth/src/service.ts"
           ],
-          "relevantModules": [
-            "packages/billing/"
-          ],
+          "relevantModules": ["packages/billing/"],
           "rules": [],
           "recommendation": "packages/billing/src/PaymentService.ts",
           "contextTokens": 233,
@@ -1006,9 +905,7 @@
             "packages/billing/src/stripe.ts",
             "apps/api/src/routes/billing.ts"
           ],
-          "relevantModules": [
-            "packages/billing/"
-          ],
+          "relevantModules": ["packages/billing/"],
           "rules": [],
           "recommendation": "packages/billing/src/invoices.ts",
           "contextTokens": 204,
@@ -1030,9 +927,7 @@
             "packages/auth/src/service.ts",
             "packages/auth/src/service.ts"
           ],
-          "relevantModules": [
-            "packages/auth/"
-          ],
+          "relevantModules": ["packages/auth/"],
           "rules": [],
           "recommendation": "packages/auth/src/middleware.ts",
           "contextTokens": 190,
@@ -1054,9 +949,7 @@
             "packages/billing/src/PaymentService.ts",
             "packages/billing/src/invoices.ts"
           ],
-          "relevantModules": [
-            "packages/billing/"
-          ],
+          "relevantModules": ["packages/billing/"],
           "rules": [],
           "recommendation": "packages/database/src/client.ts",
           "contextTokens": 206,
@@ -1156,9 +1049,7 @@
             "app/middleware/auth.py"
           ],
           "relevantModules": [],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "app/api/auth_routes.py",
           "contextTokens": 176,
           "corpusTokens": 1392,
@@ -1172,10 +1063,7 @@
           "query": "Where are API routes defined?",
           "intent": "LOCATION",
           "topResult": "app/api/routes.py",
-          "relevantFiles": [
-            "app/api/routes.py",
-            "app/api/billing_routes.py"
-          ],
+          "relevantFiles": ["app/api/routes.py", "app/api/billing_routes.py"],
           "relevantModules": [],
           "rules": [
             "Cross-cutting concerns belong in middleware, not route handlers",
@@ -1201,9 +1089,7 @@
             "app/services/stripe_client.py"
           ],
           "relevantModules": [],
-          "rules": [
-            "All billing mutations go through BillingService"
-          ],
+          "rules": ["All billing mutations go through BillingService"],
           "recommendation": "app/api/billing_routes.py",
           "contextTokens": 236,
           "corpusTokens": 1392,
@@ -1219,9 +1105,7 @@
           "topResult": null,
           "relevantFiles": [],
           "relevantModules": [],
-          "rules": [
-            "Database access must stay inside repositories"
-          ],
+          "rules": ["Database access must stay inside repositories"],
           "recommendation": null,
           "contextTokens": 71,
           "corpusTokens": 1392,
@@ -1257,9 +1141,7 @@
             "app/middleware/auth.py"
           ],
           "relevantModules": [],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "app/api/auth_routes.py",
           "contextTokens": 176,
           "corpusTokens": 1392,
@@ -1280,9 +1162,7 @@
             "app/services/billing_service.py"
           ],
           "relevantModules": [],
-          "rules": [
-            "Never call Stripe directly from route handlers"
-          ],
+          "rules": ["Never call Stripe directly from route handlers"],
           "recommendation": "app/services/stripe_client.py",
           "contextTokens": 238,
           "corpusTokens": 1392,
@@ -1343,12 +1223,8 @@
           "query": "Where should I add authentication middleware?",
           "intent": "MODIFICATION",
           "topResult": "app/api/auth_routes.py",
-          "relevantFiles": [
-            "app/api/auth_routes.py"
-          ],
-          "relevantModules": [
-            "app/middleware/"
-          ],
+          "relevantFiles": ["app/api/auth_routes.py"],
+          "relevantModules": ["app/middleware/"],
           "rules": [
             "Cross-cutting concerns belong in middleware, not route handlers",
             "Authentication uses the AuthService abstraction"
@@ -1384,9 +1260,7 @@
           "topResult": null,
           "relevantFiles": [],
           "relevantModules": [],
-          "rules": [
-            "Database access must stay inside repositories"
-          ],
+          "rules": ["Database access must stay inside repositories"],
           "recommendation": null,
           "contextTokens": 74,
           "corpusTokens": 1392,
@@ -1443,14 +1317,8 @@
           "intent": "IMPLEMENTATION",
           "topResult": "app/services/",
           "relevantFiles": [],
-          "relevantModules": [
-            "app/models/",
-            "app/services/",
-            "app/workers/"
-          ],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "relevantModules": ["app/models/", "app/services/", "app/workers/"],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "app/services/",
           "contextTokens": 197,
           "corpusTokens": 1392,
@@ -1471,9 +1339,7 @@
             "app/services/stripe_client.py"
           ],
           "relevantModules": [],
-          "rules": [
-            "All billing mutations go through BillingService"
-          ],
+          "rules": ["All billing mutations go through BillingService"],
           "recommendation": null,
           "contextTokens": 152,
           "corpusTokens": 1392,
@@ -1494,9 +1360,7 @@
             "app/api/billing_routes.py"
           ],
           "relevantModules": [],
-          "rules": [
-            "All billing mutations go through BillingService"
-          ],
+          "rules": ["All billing mutations go through BillingService"],
           "recommendation": "app/services/billing_service.py",
           "contextTokens": 236,
           "corpusTokens": 1392,
@@ -1516,12 +1380,8 @@
             "app/services/billing_service.py",
             "app/services/auth_service.py"
           ],
-          "relevantModules": [
-            "app/services/"
-          ],
-          "rules": [
-            "All billing mutations go through BillingService"
-          ],
+          "relevantModules": ["app/services/"],
+          "rules": ["All billing mutations go through BillingService"],
           "recommendation": "app/services/payment_service.py",
           "contextTokens": 204,
           "corpusTokens": 1392,
@@ -1542,9 +1402,7 @@
             "app/services/billing_service.py"
           ],
           "relevantModules": [],
-          "rules": [
-            "Never call Stripe directly from route handlers"
-          ],
+          "rules": ["Never call Stripe directly from route handlers"],
           "recommendation": "app/services/payment_service.py",
           "contextTokens": 236,
           "corpusTokens": 1392,
@@ -1564,9 +1422,7 @@
             "app/api/billing_routes.py",
             "app/services/auth_service.py"
           ],
-          "relevantModules": [
-            "app/middleware/"
-          ],
+          "relevantModules": ["app/middleware/"],
           "rules": [],
           "recommendation": "app/api/auth_routes.py",
           "contextTokens": 200,
@@ -1588,9 +1444,7 @@
             "app/services/billing_service.py"
           ],
           "relevantModules": [],
-          "rules": [
-            "Never call Stripe directly from route handlers"
-          ],
+          "rules": ["Never call Stripe directly from route handlers"],
           "recommendation": "app/services/stripe_client.py",
           "contextTokens": 237,
           "corpusTokens": 1392,
@@ -1690,9 +1544,7 @@
             "src/core/auth/middleware.ts"
           ],
           "relevantModules": [],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "src/core/auth/service.ts",
           "contextTokens": 209,
           "corpusTokens": 2211,
@@ -1713,9 +1565,7 @@
             "src/features/billing/routes.ts"
           ],
           "relevantModules": [],
-          "rules": [
-            "Cross-cutting concerns belong in middleware, not route handlers"
-          ],
+          "rules": ["Cross-cutting concerns belong in middleware, not route handlers"],
           "recommendation": "src/api/routes.ts",
           "contextTokens": 241,
           "corpusTokens": 2211,
@@ -1758,9 +1608,7 @@
             "src/core/db/repository.ts"
           ],
           "relevantModules": [],
-          "rules": [
-            "Database access must stay inside repositories"
-          ],
+          "rules": ["Database access must stay inside repositories"],
           "recommendation": "src/core/db/repository.ts",
           "contextTokens": 184,
           "corpusTokens": 2211,
@@ -1774,9 +1622,7 @@
           "query": "Where are background jobs?",
           "intent": "LOCATION",
           "topResult": "src/workers/jobs.ts",
-          "relevantFiles": [
-            "src/workers/jobs.ts"
-          ],
+          "relevantFiles": ["src/workers/jobs.ts"],
           "relevantModules": [],
           "rules": [],
           "recommendation": "src/workers/jobs.ts",
@@ -1799,9 +1645,7 @@
             "src/core/auth/middleware.ts"
           ],
           "relevantModules": [],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "src/core/auth/service.ts",
           "contextTokens": 209,
           "corpusTokens": 2211,
@@ -1823,9 +1667,7 @@
             "src/features/billing/routes.ts"
           ],
           "relevantModules": [],
-          "rules": [
-            "Never call Stripe directly from route handlers"
-          ],
+          "rules": ["Never call Stripe directly from route handlers"],
           "recommendation": "src/features/payments/PaymentService.ts",
           "contextTokens": 211,
           "corpusTokens": 2211,
@@ -1887,9 +1729,7 @@
           "query": "Where should I add authentication middleware?",
           "intent": "MODIFICATION",
           "topResult": "src/api/routes.ts",
-          "relevantFiles": [
-            "src/api/routes.ts"
-          ],
+          "relevantFiles": ["src/api/routes.ts"],
           "relevantModules": [],
           "rules": [
             "Cross-cutting concerns belong in middleware, not route handlers",
@@ -1909,9 +1749,7 @@
           "query": "Where should I add a new background job?",
           "intent": "MODIFICATION",
           "topResult": "src/workers/jobs.ts",
-          "relevantFiles": [
-            "src/workers/jobs.ts"
-          ],
+          "relevantFiles": ["src/workers/jobs.ts"],
           "relevantModules": [],
           "rules": [],
           "recommendation": "src/workers/jobs.ts",
@@ -1994,16 +1832,9 @@
           "query": "How does this project handle authentication?",
           "intent": "IMPLEMENTATION",
           "topResult": "src/core/auth/service.ts",
-          "relevantFiles": [
-            "src/core/auth/service.ts",
-            "src/core/auth/service.ts"
-          ],
-          "relevantModules": [
-            "src/admin/"
-          ],
-          "rules": [
-            "Authentication uses the AuthService abstraction"
-          ],
+          "relevantFiles": ["src/core/auth/service.ts", "src/core/auth/service.ts"],
+          "relevantModules": ["src/admin/"],
+          "rules": ["Authentication uses the AuthService abstraction"],
           "recommendation": "src/core/auth/service.ts",
           "contextTokens": 218,
           "corpusTokens": 2211,
@@ -2141,9 +1972,7 @@
             "src/features/billing/invoices.ts"
           ],
           "relevantModules": [],
-          "rules": [
-            "Never call Stripe directly from route handlers"
-          ],
+          "rules": ["Never call Stripe directly from route handlers"],
           "recommendation": "src/core/db/client.ts",
           "contextTokens": 205,
           "corpusTokens": 2211,

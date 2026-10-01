@@ -144,7 +144,9 @@ export class InitialMemoryGenerator {
         title: 'Cross-cutting concerns use middleware',
         content: `Middleware detected in: ${(input.architecture.middleware ?? [])
           .slice(0, 8)
-          .join(', ')}. Prefer middleware for auth, rate limiting and other cross-cutting concerns.`,
+          .join(
+            ', ',
+          )}. Prefer middleware for auth, rate limiting and other cross-cutting concerns.`,
         type: 'pattern',
         confidence: 0.86,
         source: 'Code pattern detection',
@@ -285,9 +287,7 @@ function extractPathMentions(text: string): string[] {
     /(?:^|[\s("`'])((?:src|apps|packages|lib|tests?|docs)\/[A-Za-z0-9_./-]+)/g,
   );
   if (!matches) return [];
-  return unique(
-    matches.map((m) => m.replace(/^[\s("`']+/, '').replace(/\\/g, '/')),
-  );
+  return unique(matches.map((m) => m.replace(/^[\s("`']+/, '').replace(/\\/g, '/')));
 }
 
 function words(text: string): Set<string> {

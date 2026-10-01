@@ -5,8 +5,7 @@ import type { MemoryRecord } from '@neuronai/types';
  * User-authored memories are never touched here.
  */
 
-const PATH_MENTION =
-  /(?:^|[\s("`'])((?:src|apps|packages|lib|tests?|docs)\/[A-Za-z0-9_./-]+)/g;
+const PATH_MENTION = /(?:^|[\s("`'])((?:src|apps|packages|lib|tests?|docs)\/[A-Za-z0-9_./-]+)/g;
 
 export function isScanDerived(memory: MemoryRecord): boolean {
   return memory.tags.includes('scan') || memory.source === 'git';

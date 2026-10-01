@@ -71,10 +71,7 @@ export {
   type RetrievalResult,
   type RetrievalStats,
 } from './retrieval/index.js';
-export {
-  expandConnectedSlice,
-  codeDocs,
-} from './retrieval/code-docs.js';
+export { expandConnectedSlice, codeDocs } from './retrieval/code-docs.js';
 export {
   explainFlow,
   explainSymbol,

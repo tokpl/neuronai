@@ -32,42 +32,145 @@ export const LIVE_AGENT_TASKS = [
   // Locate
   { id: 'L1', category: 'locate', prompt: 'Where is authentication implemented?', gold: [/auth/i] },
   { id: 'L2', category: 'locate', prompt: 'Where are API routes?', gold: [/route|api/i] },
-  { id: 'L3', category: 'locate', prompt: 'Where is database access?', gold: [/db|repository|database/i] },
+  {
+    id: 'L3',
+    category: 'locate',
+    prompt: 'Where is database access?',
+    gold: [/db|repository|database/i],
+  },
   { id: 'L4', category: 'locate', prompt: 'Where is billing?', gold: [/billing|payment|invoice/i] },
   { id: 'L5', category: 'locate', prompt: 'Where are background jobs?', gold: [/worker|job/i] },
   // Modify
-  { id: 'M1', category: 'modify', prompt: 'Add invoice cancellation.', gold: [/invoice|payment|cancel/i] },
+  {
+    id: 'M1',
+    category: 'modify',
+    prompt: 'Add invoice cancellation.',
+    gold: [/invoice|payment|cancel/i],
+  },
   { id: 'M2', category: 'modify', prompt: 'Add a payment endpoint.', gold: [/payment|route/i] },
-  { id: 'M3', category: 'modify', prompt: 'Add authentication middleware.', gold: [/auth|middleware/i] },
-  { id: 'M4', category: 'modify', prompt: 'Change retry behavior.', gold: [/retry|payment|db|worker/i], soft: true },
+  {
+    id: 'M3',
+    category: 'modify',
+    prompt: 'Add authentication middleware.',
+    gold: [/auth|middleware/i],
+  },
+  {
+    id: 'M4',
+    category: 'modify',
+    prompt: 'Change retry behavior.',
+    gold: [/retry|payment|db|worker/i],
+    soft: true,
+  },
   { id: 'M5', category: 'modify', prompt: 'Add a background worker.', gold: [/worker|job/i] },
-  { id: 'M6', category: 'modify', prompt: 'Add validation to an existing endpoint.', gold: [/route|payment|valid/i], soft: true },
+  {
+    id: 'M6',
+    category: 'modify',
+    prompt: 'Add validation to an existing endpoint.',
+    gold: [/route|payment|valid/i],
+    soft: true,
+  },
   // Debug
   { id: 'D1', category: 'debug', prompt: 'Fix payment failures.', gold: [/payment/i] },
   { id: 'D2', category: 'debug', prompt: 'Fix authentication bug.', gold: [/auth/i] },
-  { id: 'D3', category: 'debug', prompt: 'Fix incorrect invoice calculation.', gold: [/invoice|billing|payment/i] },
-  { id: 'D4', category: 'debug', prompt: 'Fix database timeout.', gold: [/db|repository|client/i], soft: true },
-  { id: 'D5', category: 'debug', prompt: 'Fix webhook handling.', gold: [/webhook|payment|stripe/i], soft: true },
+  {
+    id: 'D3',
+    category: 'debug',
+    prompt: 'Fix incorrect invoice calculation.',
+    gold: [/invoice|billing|payment/i],
+  },
+  {
+    id: 'D4',
+    category: 'debug',
+    prompt: 'Fix database timeout.',
+    gold: [/db|repository|client/i],
+    soft: true,
+  },
+  {
+    id: 'D5',
+    category: 'debug',
+    prompt: 'Fix webhook handling.',
+    gold: [/webhook|payment|stripe/i],
+    soft: true,
+  },
   // Impact
-  { id: 'I1', category: 'impact', prompt: 'What breaks if PaymentService changes?', gold: [/payment/i] },
-  { id: 'I2', category: 'impact', prompt: 'Who depends on BillingService?', gold: [/billing|invoice|payment/i], soft: true },
-  { id: 'I3', category: 'impact', prompt: 'What tests need changing for payments?', gold: [/test|payment/i] },
-  { id: 'I4', category: 'impact', prompt: 'What routes use PaymentService?', gold: [/route|payment/i] },
+  {
+    id: 'I1',
+    category: 'impact',
+    prompt: 'What breaks if PaymentService changes?',
+    gold: [/payment/i],
+  },
+  {
+    id: 'I2',
+    category: 'impact',
+    prompt: 'Who depends on BillingService?',
+    gold: [/billing|invoice|payment/i],
+    soft: true,
+  },
+  {
+    id: 'I3',
+    category: 'impact',
+    prompt: 'What tests need changing for payments?',
+    gold: [/test|payment/i],
+  },
+  {
+    id: 'I4',
+    category: 'impact',
+    prompt: 'What routes use PaymentService?',
+    gold: [/route|payment/i],
+  },
   // Rules
-  { id: 'R1', category: 'rules', prompt: 'What conventions apply when adding an endpoint?', gold: [/rule|convention|route|stripe/i], soft: true },
-  { id: 'R2', category: 'rules', prompt: 'What payment rules exist?', gold: [/stripe|payment|rule/i] },
-  { id: 'R3', category: 'rules', prompt: 'What architecture decision affects payments?', gold: [/payment|decision/i] },
+  {
+    id: 'R1',
+    category: 'rules',
+    prompt: 'What conventions apply when adding an endpoint?',
+    gold: [/rule|convention|route|stripe/i],
+    soft: true,
+  },
+  {
+    id: 'R2',
+    category: 'rules',
+    prompt: 'What payment rules exist?',
+    gold: [/stripe|payment|rule/i],
+  },
+  {
+    id: 'R3',
+    category: 'rules',
+    prompt: 'What architecture decision affects payments?',
+    gold: [/payment|decision/i],
+  },
   // Negative
   { id: 'N1', category: 'negative', prompt: 'Where is Terraform?', negative: true },
   { id: 'N2', category: 'negative', prompt: 'Where is Kafka?', negative: true },
   { id: 'N3', category: 'negative', prompt: 'Where is Kubernetes deployment?', negative: true },
   { id: 'N4', category: 'negative', prompt: 'Where is GraphQL?', negative: true },
   { id: 'N5', category: 'negative', prompt: 'Where is AWS Lambda?', negative: true },
-  { id: 'N6', category: 'negative', prompt: 'How does the React Native mobile app work?', negative: true },
+  {
+    id: 'N6',
+    category: 'negative',
+    prompt: 'How does the React Native mobile app work?',
+    negative: true,
+  },
   // Combined
-  { id: 'C1', category: 'modify', prompt: 'Where should I start to add refund support?', gold: [/payment|stripe|refund/i], soft: true },
-  { id: 'C2', category: 'modify', prompt: 'Add support for cancelling invoices and follow project rules.', gold: [/invoice|payment|cancel|stripe/i] },
-  { id: 'C3', category: 'debug', prompt: 'Why is the API returning 403 on payments?', gold: [/auth|middleware|403/i], soft: true },
+  {
+    id: 'C1',
+    category: 'modify',
+    prompt: 'Where should I start to add refund support?',
+    gold: [/payment|stripe|refund/i],
+    soft: true,
+  },
+  {
+    id: 'C2',
+    category: 'modify',
+    prompt: 'Add support for cancelling invoices and follow project rules.',
+    gold: [/invoice|payment|cancel|stripe/i],
+  },
+  {
+    id: 'C3',
+    category: 'debug',
+    prompt: 'Why is the API returning 403 on payments?',
+    gold: [/auth|middleware|403/i],
+    soft: true,
+  },
 ];
 
 /**
@@ -93,9 +196,7 @@ export const METRIC_FIELDS = [
 
 function credentialsPresent() {
   return Boolean(
-    process.env.CURSOR_API_KEY ||
-      process.env.ANTHROPIC_API_KEY ||
-      process.env.OPENAI_API_KEY,
+    process.env.CURSOR_API_KEY || process.env.ANTHROPIC_API_KEY || process.env.OPENAI_API_KEY,
   );
 }
 

@@ -63,7 +63,7 @@ describe('contentFingerprint', () => {
     const record = {
       type: 'issue',
       title: '  @#$ BUG!  ',
-      content: '  Crash in \n\t index.js!!  '
+      content: '  Crash in \n\t index.js!!  ',
     };
     // normalizeText('  @#$ BUG!  ') -> 'bug'
     // normalizeText('  Crash in \n\t index.js!!  ') -> 'crash in index js'
@@ -74,7 +74,7 @@ describe('contentFingerprint', () => {
     const record = {
       type: 'Note',
       title: 'Zażółć gęślą jaźń 123',
-      content: 'Привет, мир! 456 \u00A9 \uD83D\uDE00'
+      content: 'Привет, мир! 456 \u00A9 \uD83D\uDE00',
     };
     // The type field is left unchanged.
     // The non-ascii letters get replaced by spaces, then multiple spaces get collapsed.
@@ -89,7 +89,7 @@ describe('contentFingerprint', () => {
     const record = {
       type: '  MIXED_Type \n',
       title: 'Title',
-      content: 'Content'
+      content: 'Content',
     };
     expect(contentFingerprint(record)).toBe('  MIXED_Type \n::title::content');
   });

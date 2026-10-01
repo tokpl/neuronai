@@ -34,7 +34,8 @@ export interface CodeChangeAnalysis {
 const SCHEMA_RE =
   /migration|schema\.prisma|drizzle\/|sequelize|alembic|flyway|\.sql$|create.?table|alter.?table/i;
 const AUTH_RE = /auth|permission|rbac|oauth|jwt|session/i;
-const DEP_FILES = /(^|\/)(package\.json|pnpm-lock\.yaml|yarn\.lock|package-lock\.json|composer\.json|requirements\.txt|Cargo\.toml|go\.mod)$/i;
+const DEP_FILES =
+  /(^|\/)(package\.json|pnpm-lock\.yaml|yarn\.lock|package-lock\.json|composer\.json|requirements\.txt|Cargo\.toml|go\.mod)$/i;
 const ARCH_HINT_RE = /architecture|refactor|rewrite|migrate|replace|redesign/i;
 
 function moduleFromPath(path: string): string {
@@ -124,11 +125,7 @@ function impactFrom(analysis: {
  * Analyze a git diff (and optional commit message) without calling an LLM.
  */
 export class CodeChangeAnalyzer {
-  analyze(input: {
-    diff?: string;
-    files?: string[];
-    message?: string;
-  }): CodeChangeAnalysis {
+  analyze(input: { diff?: string; files?: string[]; message?: string }): CodeChangeAnalysis {
     const fromDiff = input.diff ? parseDiffPaths(input.diff) : [];
     const fromList = (input.files ?? []).map((path) => ({
       path,
@@ -147,8 +144,10 @@ export class CodeChangeAnalyzer {
 
     const hasSchemaChange = SCHEMA_RE.test(blob);
     const hasAuthChange = AUTH_RE.test(blob);
-    const hasDependencyChange = paths.some((p) => DEP_FILES.test(p)) || /"dependencies"/i.test(input.diff ?? '');
-    const hasArchitectureHint = ARCH_HINT_RE.test(input.message ?? '') || /architecture/i.test(blob);
+    const hasDependencyChange =
+      paths.some((p) => DEP_FILES.test(p)) || /"dependencies"/i.test(input.diff ?? '');
+    const hasArchitectureHint =
+      ARCH_HINT_RE.test(input.message ?? '') || /architecture/i.test(blob);
 
     if (hasSchemaChange) signals.push('schema');
     if (hasAuthChange) signals.push('auth');
@@ -165,7 +164,8 @@ export class CodeChangeAnalyzer {
     else if (hasDependencyChange) summary = 'Project dependencies changed';
     else if (changeKind === 'refactor') summary = 'Refactor / architecture-oriented change';
     else if (modules.length === 1) summary = `Changes concentrated in ${modules[0]}`;
-    else if (modules.length > 1) summary = `Cross-module change (${modules.slice(0, 3).join(', ')})`;
+    else if (modules.length > 1)
+      summary = `Cross-module change (${modules.slice(0, 3).join(', ')})`;
 
     const base = {
       filesChanged,

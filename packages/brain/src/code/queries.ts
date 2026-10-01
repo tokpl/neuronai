@@ -35,7 +35,11 @@ export interface CodeFlowStep {
  */
 function usable(edge: CodeEdge, forImpact = false): boolean {
   if (edge.confidence === 'low') return false;
-  if (forImpact && edge.confidence === 'medium' && (edge.type === 'CALLS' || edge.type === 'ROUTE_TO')) {
+  if (
+    forImpact &&
+    edge.confidence === 'medium' &&
+    (edge.type === 'CALLS' || edge.type === 'ROUTE_TO')
+  ) {
     // Medium call/route edges are OK for "related" but listed as medium.
     return true;
   }
@@ -47,7 +51,10 @@ export function findSymbols(code: CodeIntelligence | undefined, name: string): C
   const q = name.trim().toLowerCase();
   if (!q) return [];
   return code.symbols.filter(
-    (s) => s.name.toLowerCase() === q || s.id.toLowerCase().endsWith(`#${q}`) || s.id.toLowerCase().endsWith(`.${q}`),
+    (s) =>
+      s.name.toLowerCase() === q ||
+      s.id.toLowerCase().endsWith(`#${q}`) ||
+      s.id.toLowerCase().endsWith(`.${q}`),
   );
 }
 
@@ -72,7 +79,12 @@ export function getDependencies(
   if (!node) return [];
   const keys = new Set([node.id, node.path]);
   return code.edges
-    .filter((e) => keys.has(e.from) && usable(e) && ['IMPORTS', 'CALLS', 'EXTENDS', 'IMPLEMENTS', 'ROUTE_TO'].includes(e.type))
+    .filter(
+      (e) =>
+        keys.has(e.from) &&
+        usable(e) &&
+        ['IMPORTS', 'CALLS', 'EXTENDS', 'IMPLEMENTS', 'ROUTE_TO'].includes(e.type),
+    )
     .map((e) => toItem(code, e, 'to'))
     .filter((x): x is CodeImpactItem => Boolean(x));
 }
@@ -93,12 +105,20 @@ export function getDependents(
     }
   }
   return code.edges
-    .filter((e) => keys.has(e.to) && usable(e) && ['IMPORTS', 'CALLS', 'EXTENDS', 'IMPLEMENTS', 'ROUTE_TO', 'EXPORTS'].includes(e.type))
+    .filter(
+      (e) =>
+        keys.has(e.to) &&
+        usable(e) &&
+        ['IMPORTS', 'CALLS', 'EXTENDS', 'IMPLEMENTS', 'ROUTE_TO', 'EXPORTS'].includes(e.type),
+    )
     .map((e) => toItem(code, e, 'from'))
     .filter((x): x is CodeImpactItem => Boolean(x));
 }
 
-export function getImpact(code: CodeIntelligence | undefined, target: string): CodeImpact | undefined {
+export function getImpact(
+  code: CodeIntelligence | undefined,
+  target: string,
+): CodeImpact | undefined {
   if (!code) return undefined;
   const node = resolveTarget(code, target);
   if (!node) return undefined;
@@ -122,11 +142,7 @@ export function getImpact(code: CodeIntelligence | undefined, target: string): C
   }
 
   const relatedFiles = [
-    ...new Set([
-      node.path,
-      ...dependencies.map((d) => d.path),
-      ...dependents.map((d) => d.path),
-    ]),
+    ...new Set([node.path, ...dependencies.map((d) => d.path), ...dependents.map((d) => d.path)]),
   ];
 
   const relatedTests = relatedFiles.filter(
@@ -149,17 +165,12 @@ export function getImpact(code: CodeIntelligence | undefined, target: string): C
 /**
  * Reconstruct a short flow from a route/symbol when verified ROUTE_TO / CALLS exist.
  */
-export function explainFlow(
-  code: CodeIntelligence | undefined,
-  target: string,
-): CodeFlowStep[] {
+export function explainFlow(code: CodeIntelligence | undefined, target: string): CodeFlowStep[] {
   if (!code) return [];
   const node = resolveTarget(code, target);
   if (!node) return [];
 
-  const steps: CodeFlowStep[] = [
-    { label: node.name, path: node.path, confidence: 'high' },
-  ];
+  const steps: CodeFlowStep[] = [{ label: node.name, path: node.path, confidence: 'high' }];
   let current = node.id;
   const seen = new Set([current]);
 
@@ -186,18 +197,26 @@ export function explainFlow(
   return steps.length > 1 ? steps : [];
 }
 
-export function explainSymbol(code: CodeIntelligence | undefined, target: string): string | undefined {
+export function explainSymbol(
+  code: CodeIntelligence | undefined,
+  target: string,
+): string | undefined {
   if (!code) return undefined;
   const node = getSymbol(code, target) ?? code.files.find((f) => f.path === target);
   if (!node) return undefined;
   const path = 'path' in node ? node.path : target;
-  const name = 'name' in node && typeof (node as CodeSymbolNode).name === 'string'
-    ? (node as CodeSymbolNode).name
-    : basename(path);
+  const name =
+    'name' in node && typeof (node as CodeSymbolNode).name === 'string'
+      ? (node as CodeSymbolNode).name
+      : basename(path);
   const id = 'id' in node ? (node as CodeSymbolNode).id : path;
   const file = code.files.find((f) => f.path === path);
-  const deps = getDependencies(code, id).filter((d) => d.confidence === 'high').slice(0, 5);
-  const usedBy = getDependents(code, id).filter((d) => d.confidence === 'high').slice(0, 5);
+  const deps = getDependencies(code, id)
+    .filter((d) => d.confidence === 'high')
+    .slice(0, 5);
+  const usedBy = getDependents(code, id)
+    .filter((d) => d.confidence === 'high')
+    .slice(0, 5);
   const sym = node as CodeSymbolNode;
   const lines = [
     sym.summary ?? (`kind` in sym ? `${sym.kind} ${name}` : file?.summary) ?? name,

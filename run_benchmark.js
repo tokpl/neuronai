@@ -11,6 +11,8 @@ async function main() {
     const end = performance.now();
     times.push(end - start);
   }
-  console.log(`Average: ${times.reduce((a, b) => a + b) / times.length}ms (runs: ${times.map(t => t.toFixed(2)).join(', ')})`);
+  console.log(
+    `Average: ${times.reduce((a, b) => a + b) / times.length}ms (runs: ${times.map((t) => t.toFixed(2)).join(', ')})`,
+  );
 }
 main().catch(console.error);

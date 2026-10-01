@@ -289,7 +289,8 @@ describe('prepareContext', () => {
       {
         id: 'rule-stripe',
         title: 'Never call Stripe directly from route handlers',
-        content: 'Never call Stripe directly from route handlers. Always go through PaymentService.',
+        content:
+          'Never call Stripe directly from route handlers. Always go through PaymentService.',
         kind: 'rule',
         tags: ['billing', 'stripe', 'payment'],
         importance: 0.9,

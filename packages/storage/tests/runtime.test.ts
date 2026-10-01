@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -102,7 +102,9 @@ describe('NeuronRuntime (single construction path)', () => {
       decisions: unknown[];
     };
     expect(knowledge.decisions).toHaveLength(2);
-    await expect(readFile(`${runtime.brain.paths.knowledge}.tmp`, 'utf8')).rejects.toThrow();
+    const files = await readdir(runtime.brain.paths.brainDir);
+    const tmpFiles = files.filter((f) => f.includes('.tmp'));
+    expect(tmpFiles).toHaveLength(0);
   });
 
   it('does not create the retired goals and active planes', async () => {

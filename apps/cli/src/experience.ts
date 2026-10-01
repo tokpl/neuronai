@@ -15,9 +15,5 @@ export { NeuronCliError, printNeuronError, isNeuronCliError } from './diagnostic
 export { NeuronUpdater, runUpdate as runSchemaUpdate } from './diagnostics/updater.js';
 export { runDoctorChecks } from './diagnostics/doctor-checks.js';
 export type { DoctorCheck } from './diagnostics/doctor-checks.js';
-export {
-  FIRST_RUN_WELCOME,
-  PRIVACY_BANNER,
-  formatNeuronReport,
-} from './templates/first-run.js';
+export { FIRST_RUN_WELCOME, PRIVACY_BANNER, formatNeuronReport } from './templates/first-run.js';
 export type { NeuronInitReport } from './templates/first-run.js';

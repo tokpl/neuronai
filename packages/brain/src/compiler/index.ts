@@ -181,9 +181,12 @@ export class BrainCompiler {
     // Greedy packing with kind diversity: never let locations alone fill the budget
     // when a matching rule/decision/warning is already in the candidate set.
     const maxItems = MODE_MAX_ITEMS[profile.mode];
-    const chosen = packWithDiversity(lines, maxItems, (candidate) =>
-      estimateTokens(render(input.task, candidate, modules, input.recommendation)) <=
-      profile.tokenBudget,
+    const chosen = packWithDiversity(
+      lines,
+      maxItems,
+      (candidate) =>
+        estimateTokens(render(input.task, candidate, modules, input.recommendation)) <=
+        profile.tokenBudget,
     );
 
     let context = render(input.task, chosen, modules, input.recommendation);

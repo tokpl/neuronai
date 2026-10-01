@@ -6,13 +6,7 @@
  * Does NOT mock MCP. Does NOT claim CURSOR_MCP / IDE catalog.
  */
 import { spawnSync } from 'node:child_process';
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -58,7 +52,11 @@ async function main() {
 
   const root = mkdtempSync(join(tmpdir(), 'neuron-mcp-init-'));
   try {
-    write(root, 'package.json', JSON.stringify({ name: 'mcp-init-reg', type: 'module', private: true }));
+    write(
+      root,
+      'package.json',
+      JSON.stringify({ name: 'mcp-init-reg', type: 'module', private: true }),
+    );
     write(
       root,
       'src/services/payment-service.ts',
@@ -97,7 +95,9 @@ async function main() {
     }
     if (neuron.env?.NEURON_CWD !== root && neuron.env?.NEURON_CWD !== root.replace(/\//g, '\\')) {
       // Windows path normalize
-      const a = String(neuron.env?.NEURON_CWD ?? '').replace(/\\/g, '/').toLowerCase();
+      const a = String(neuron.env?.NEURON_CWD ?? '')
+        .replace(/\\/g, '/')
+        .toLowerCase();
       const b = root.replace(/\\/g, '/').toLowerCase();
       if (a !== b) {
         console.error('FAIL: NEURON_CWD mismatch', neuron.env?.NEURON_CWD, root);
@@ -145,11 +145,18 @@ async function main() {
       (body.relevantRules ?? []).length > 0;
 
     if (!hasPath) {
-      console.error('FAIL: neuron_context returned no project path', body.recommendation, body.relevantFiles);
+      console.error(
+        'FAIL: neuron_context returned no project path',
+        body.recommendation,
+        body.relevantFiles,
+      );
       process.exit(1);
     }
     if (!hasRule) {
-      console.error('FAIL: remembered Stripe/PaymentService rule not present in context', body.relevantRules);
+      console.error(
+        'FAIL: remembered Stripe/PaymentService rule not present in context',
+        body.relevantRules,
+      );
       process.exit(1);
     }
 

@@ -167,9 +167,7 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
     }
   }
 
-  const locations = result.hits.filter(
-    (hit) => hit.doc.location && included.has(hit.doc.title),
-  );
+  const locations = result.hits.filter((hit) => hit.doc.location && included.has(hit.doc.title));
 
   const toLocation = (hit: RetrievalHit): RelevantLocation => ({
     name: hit.doc.location!.name,
@@ -191,8 +189,7 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
   }
 
   const finalRecommendation =
-    recommendation &&
-    (compiled.context.includes(recommendation.path) || included.size > 0)
+    recommendation && (compiled.context.includes(recommendation.path) || included.size > 0)
       ? recommendation
       : undefined;
 
@@ -209,9 +206,7 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
   const relevantModules = locations
     .filter((h) => h.doc.location!.kind === 'module')
     .map(toLocation);
-  const relevantFiles = locations
-    .filter((h) => h.doc.location!.kind !== 'module')
-    .map(toLocation);
+  const relevantFiles = locations.filter((h) => h.doc.location!.kind !== 'module').map(toLocation);
 
   // Contribution counts: knowledge only — never treat map/code locations as "memories".
   const matchedKnowledge = result.hits.filter((h) => isKnowledgeDoc(h.doc));

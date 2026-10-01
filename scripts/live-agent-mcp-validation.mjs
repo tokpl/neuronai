@@ -69,7 +69,8 @@ function status() {
     fixturePath: fixture,
     fixtureBrainPresent: fixtureOk,
     mcpJsonCwd: cwd,
-    mcpJsonPointsAtFixture: cwd === fixture || cwd?.replace(/\\/g, '/') === fixture.replace(/\\/g, '/'),
+    mcpJsonPointsAtFixture:
+      cwd === fixture || cwd?.replace(/\\/g, '/') === fixture.replace(/\\/g, '/'),
     STDIO_FIXTURE_CONTEXT: cliContextOk ? 'PASS' : 'FAIL',
     MCP_PROOF: 'MANUAL — run GetMcpTools + CallMcpTool(neuron_context) in Cursor chat',
     LIVE_AGENT_PROOF: 'NOT_RUN_UNTIL_MCP_PROOF_PASS',

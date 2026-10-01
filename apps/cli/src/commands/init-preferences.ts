@@ -9,9 +9,7 @@ export type MemorySavePreference = {
 
 export type IdeIntegrationPreference = 'cursor' | 'antigravity' | 'both' | 'none';
 
-export async function askInitPreferences(options: {
-  useDefaults?: boolean;
-}): Promise<{
+export async function askInitPreferences(options: { useDefaults?: boolean }): Promise<{
   memory: MemorySavePreference;
   gitignore: GitIgnorePreset;
   ide: IdeIntegrationPreference;
@@ -20,9 +18,7 @@ export async function askInitPreferences(options: {
 
   const ide = await askChoice({
     title: 'Which IDE are you configuring Neuron for?',
-    detail: [
-      'Neuron can configure MCP and specific rules for your editor automatically.',
-    ],
+    detail: ['Neuron can configure MCP and specific rules for your editor automatically.'],
     choices: [
       {
         value: 'cursor',

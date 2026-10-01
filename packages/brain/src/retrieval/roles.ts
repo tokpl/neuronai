@@ -91,10 +91,7 @@ export function locationRole(loc: ProjectMapEntry): LocationRole {
   if (/\b(client|adapter|stripe|sdk)\b/.test(blob) && !/service/.test(blob)) return 'adapter';
   if (/\bservice\b/.test(blob) || /service\.[tj]sx?$/.test(path)) return 'service';
   if (/config|env\.[tj]s$|dotenv/.test(blob) || purpose.includes('configuration')) return 'config';
-  if (
-    purpose.includes('entrypoint') ||
-    /(^|\/)(main|server|app)\.[tj]sx?$/.test(path)
-  ) {
+  if (purpose.includes('entrypoint') || /(^|\/)(main|server|app)\.[tj]sx?$/.test(path)) {
     return 'entrypoint';
   }
   if (loc.kind === 'module') return 'core_module';

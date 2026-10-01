@@ -910,10 +910,7 @@
   ],
   "reproducibility": {
     "command": "node scripts/real-agent-benchmark.mjs",
-    "requires": [
-      "built neuronai CLI (pnpm --filter neuronai build)",
-      "ripgrep (rg) on PATH"
-    ],
+    "requires": ["built neuronai CLI (pnpm --filter neuronai build)", "ripgrep (rg) on PATH"],
     "live_agent": "Set CURSOR_API_KEY and extend harness — currently not enabled."
   },
   "product_impact": "STRONG",

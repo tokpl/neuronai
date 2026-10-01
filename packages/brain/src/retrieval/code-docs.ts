@@ -34,7 +34,10 @@ export function expandConnectedSlice(
   const sym =
     getSymbol(code, recommendation.name) ??
     code.symbols.find(
-      (s) => s.path === recommendation.path && s.exported && (s.kind === 'class' || s.kind === 'function'),
+      (s) =>
+        s.path === recommendation.path &&
+        s.exported &&
+        (s.kind === 'class' || s.kind === 'function'),
     );
 
   const target = sym?.id ?? recommendation.path;
@@ -42,18 +45,25 @@ export function expandConnectedSlice(
   const flow = explainFlow(code, target).map((s) => ({ label: s.label, path: s.path }));
 
   const deps = (impact?.dependencies ?? [])
-    .filter((d) => d.confidence === 'high' || (d.confidence === 'medium' && d.relation === 'IMPORTS'))
+    .filter(
+      (d) => d.confidence === 'high' || (d.confidence === 'medium' && d.relation === 'IMPORTS'),
+    )
     .slice(0, 4)
     .map((d) => ({ path: d.path, name: d.name, confidence: d.confidence }));
 
-  const tests = (impact?.relatedTests ?? []).slice(0, 3).map((p) => ({ path: p, name: basename(p) }));
+  const tests = (impact?.relatedTests ?? [])
+    .slice(0, 3)
+    .map((p) => ({ path: p, name: basename(p) }));
 
   const relatedFromImpact = (impact?.dependents ?? [])
     .filter((d) => d.confidence === 'high')
     .slice(0, 4)
     .map((d) => ({ path: d.path, name: d.name }));
 
-  const related = dedupePaths([...(recommendation.related ?? []), ...relatedFromImpact]).slice(0, 6);
+  const related = dedupePaths([...(recommendation.related ?? []), ...relatedFromImpact]).slice(
+    0,
+    6,
+  );
 
   // For IMPACT / DEPENDENCY intents, surface dependents as the primary related set
   if (intent === 'IMPACT' || intent === 'DEPENDENCY') {
@@ -127,7 +137,9 @@ function formatSymbol(sym: CodeSymbolNode): string {
   return sym.name;
 }
 
-function dedupePaths(items: Array<{ path: string; name: string }>): Array<{ path: string; name: string }> {
+function dedupePaths(
+  items: Array<{ path: string; name: string }>,
+): Array<{ path: string; name: string }> {
   const seen = new Set<string>();
   const out: Array<{ path: string; name: string }> = [];
   for (const item of items) {

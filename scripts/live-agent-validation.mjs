@@ -22,14 +22,7 @@
  * Optional: @cursor/sdk (CURSOR_SDK_PATH or node_modules) for SDK MCP binding.
  */
 import { spawnSync } from 'node:child_process';
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  rmSync,
-  writeFileSync,
-  cpSync,
-} from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync, cpSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -59,30 +52,157 @@ const PLACEHOLDER_KEYS = new Set([
  */
 export const LIVE_TASKS = [
   // Modification — 8
-  { id: 'M01', category: 'modify', prompt: 'Add support for cancelling invoices.', useful: ['src/api/routes/payments.ts', 'src/billing/invoice-service.ts', 'src/services/payment-service.ts'] },
-  { id: 'M02', category: 'modify', prompt: 'Add a refund endpoint.', useful: ['src/api/routes/payments.ts', 'src/services/payment-service.ts'], rulesTest: true },
-  { id: 'M03', category: 'modify', prompt: 'Add a background job that retries failed Stripe payments.', useful: ['src/workers/jobs.ts', 'src/services/payment-service.ts', 'src/workers/payment-retry-worker.ts'] },
-  { id: 'M04', category: 'modify', prompt: 'Add validation for invoice cancellation.', useful: ['src/api/routes/payments.ts', 'src/billing/invoice-service.ts'] },
-  { id: 'M05', category: 'modify', prompt: 'Add authentication middleware to payment routes that lack it.', useful: ['src/middleware/auth.ts', 'src/api/routes/payments.ts'] },
-  { id: 'M06', category: 'modify', prompt: 'Change the payment flow so all charges go through PaymentService.', useful: ['src/api/routes/payments.ts', 'src/services/payment-service.ts'], rulesTest: true },
-  { id: 'M07', category: 'modify', prompt: 'Add Stripe webhook signature verification handling.', useful: ['src/api/routes/webhooks.ts', 'src/services/stripe.ts'] },
-  { id: 'M08', category: 'modify', prompt: "Refactor database access so payment routes don't talk directly to repositories.", useful: ['src/api/routes/payments.ts', 'src/services/payment-service.ts', 'src/db/payment-repository.ts'] },
+  {
+    id: 'M01',
+    category: 'modify',
+    prompt: 'Add support for cancelling invoices.',
+    useful: [
+      'src/api/routes/payments.ts',
+      'src/billing/invoice-service.ts',
+      'src/services/payment-service.ts',
+    ],
+  },
+  {
+    id: 'M02',
+    category: 'modify',
+    prompt: 'Add a refund endpoint.',
+    useful: ['src/api/routes/payments.ts', 'src/services/payment-service.ts'],
+    rulesTest: true,
+  },
+  {
+    id: 'M03',
+    category: 'modify',
+    prompt: 'Add a background job that retries failed Stripe payments.',
+    useful: [
+      'src/workers/jobs.ts',
+      'src/services/payment-service.ts',
+      'src/workers/payment-retry-worker.ts',
+    ],
+  },
+  {
+    id: 'M04',
+    category: 'modify',
+    prompt: 'Add validation for invoice cancellation.',
+    useful: ['src/api/routes/payments.ts', 'src/billing/invoice-service.ts'],
+  },
+  {
+    id: 'M05',
+    category: 'modify',
+    prompt: 'Add authentication middleware to payment routes that lack it.',
+    useful: ['src/middleware/auth.ts', 'src/api/routes/payments.ts'],
+  },
+  {
+    id: 'M06',
+    category: 'modify',
+    prompt: 'Change the payment flow so all charges go through PaymentService.',
+    useful: ['src/api/routes/payments.ts', 'src/services/payment-service.ts'],
+    rulesTest: true,
+  },
+  {
+    id: 'M07',
+    category: 'modify',
+    prompt: 'Add Stripe webhook signature verification handling.',
+    useful: ['src/api/routes/webhooks.ts', 'src/services/stripe.ts'],
+  },
+  {
+    id: 'M08',
+    category: 'modify',
+    prompt: "Refactor database access so payment routes don't talk directly to repositories.",
+    useful: [
+      'src/api/routes/payments.ts',
+      'src/services/payment-service.ts',
+      'src/db/payment-repository.ts',
+    ],
+  },
   // Debugging — 4
-  { id: 'D01', category: 'debug', prompt: 'Fix the authentication bug where expired tokens are accepted.', useful: ['src/auth/service.ts', 'src/middleware/auth.ts', 'tests/auth/auth.test.ts'] },
-  { id: 'D02', category: 'debug', prompt: 'Investigate why payment webhooks are duplicated and fix it.', useful: ['src/api/routes/webhooks.ts', 'src/workers/jobs.ts'] },
-  { id: 'D03', category: 'debug', prompt: 'Fix the failing authentication tests.', useful: ['tests/auth/auth.test.ts', 'src/auth/service.ts'] },
-  { id: 'D04', category: 'debug', prompt: 'Fix failed payment retry so PaymentService.retryFailed works.', useful: ['src/services/payment-service.ts', 'src/services/stripe.ts'] },
+  {
+    id: 'D01',
+    category: 'debug',
+    prompt: 'Fix the authentication bug where expired tokens are accepted.',
+    useful: ['src/auth/service.ts', 'src/middleware/auth.ts', 'tests/auth/auth.test.ts'],
+  },
+  {
+    id: 'D02',
+    category: 'debug',
+    prompt: 'Investigate why payment webhooks are duplicated and fix it.',
+    useful: ['src/api/routes/webhooks.ts', 'src/workers/jobs.ts'],
+  },
+  {
+    id: 'D03',
+    category: 'debug',
+    prompt: 'Fix the failing authentication tests.',
+    useful: ['tests/auth/auth.test.ts', 'src/auth/service.ts'],
+  },
+  {
+    id: 'D04',
+    category: 'debug',
+    prompt: 'Fix failed payment retry so PaymentService.retryFailed works.',
+    useful: ['src/services/payment-service.ts', 'src/services/stripe.ts'],
+  },
   // Dependency / impact — 4
-  { id: 'I01', category: 'impact', prompt: 'Change PaymentService so failed payments are retried.', useful: ['src/services/payment-service.ts', 'src/services/stripe.ts', 'src/db/payment-repository.ts', 'src/workers/jobs.ts'] },
-  { id: 'I02', category: 'impact', prompt: 'Change the Stripe integration client used by payments.', useful: ['src/services/stripe.ts', 'src/services/payment-service.ts'] },
-  { id: 'I03', category: 'impact', prompt: 'Change the invoice/payment repository persistence API.', useful: ['src/db/payment-repository.ts', 'src/billing/invoice-service.ts', 'src/services/payment-service.ts'] },
-  { id: 'I04', category: 'impact', prompt: 'Change auth middleware behavior for forbidden responses.', useful: ['src/middleware/auth.ts', 'src/auth/service.ts'] },
+  {
+    id: 'I01',
+    category: 'impact',
+    prompt: 'Change PaymentService so failed payments are retried.',
+    useful: [
+      'src/services/payment-service.ts',
+      'src/services/stripe.ts',
+      'src/db/payment-repository.ts',
+      'src/workers/jobs.ts',
+    ],
+  },
+  {
+    id: 'I02',
+    category: 'impact',
+    prompt: 'Change the Stripe integration client used by payments.',
+    useful: ['src/services/stripe.ts', 'src/services/payment-service.ts'],
+  },
+  {
+    id: 'I03',
+    category: 'impact',
+    prompt: 'Change the invoice/payment repository persistence API.',
+    useful: [
+      'src/db/payment-repository.ts',
+      'src/billing/invoice-service.ts',
+      'src/services/payment-service.ts',
+    ],
+  },
+  {
+    id: 'I04',
+    category: 'impact',
+    prompt: 'Change auth middleware behavior for forbidden responses.',
+    useful: ['src/middleware/auth.ts', 'src/auth/service.ts'],
+  },
   // Rules / architecture — 2
-  { id: 'R01', category: 'rules', prompt: 'Modify the payment refund flow while respecting the Stripe route rule.', useful: ['src/api/routes/payments.ts', 'src/services/payment-service.ts'], rulesTest: true },
-  { id: 'R02', category: 'rules', prompt: 'Add a payment capture endpoint while respecting architecture decisions.', useful: ['src/api/routes/payments.ts', 'src/services/payment-service.ts'], rulesTest: true },
+  {
+    id: 'R01',
+    category: 'rules',
+    prompt: 'Modify the payment refund flow while respecting the Stripe route rule.',
+    useful: ['src/api/routes/payments.ts', 'src/services/payment-service.ts'],
+    rulesTest: true,
+  },
+  {
+    id: 'R02',
+    category: 'rules',
+    prompt: 'Add a payment capture endpoint while respecting architecture decisions.',
+    useful: ['src/api/routes/payments.ts', 'src/services/payment-service.ts'],
+    rulesTest: true,
+  },
   // Negative — 2
-  { id: 'N01', category: 'negative', prompt: 'How should I configure Kubernetes autoscaling?', negative: true, useful: [] },
-  { id: 'N02', category: 'negative', prompt: 'Where is the Terraform module for this service?', negative: true, useful: [] },
+  {
+    id: 'N01',
+    category: 'negative',
+    prompt: 'How should I configure Kubernetes autoscaling?',
+    negative: true,
+    useful: [],
+  },
+  {
+    id: 'N02',
+    category: 'negative',
+    prompt: 'Where is the Terraform module for this service?',
+    negative: true,
+    useful: [],
+  },
 ];
 
 function parseArgs(argv) {
@@ -104,10 +224,20 @@ function envKeyStatus(name) {
   const lower = trimmed.toLowerCase();
   if (!trimmed) return { present: false, usable: false, reason: 'empty', length: 0 };
   if (PLACEHOLDER_KEYS.has(lower)) {
-    return { present: true, usable: false, reason: `placeholder:${trimmed}`, length: trimmed.length };
+    return {
+      present: true,
+      usable: false,
+      reason: `placeholder:${trimmed}`,
+      length: trimmed.length,
+    };
   }
   if (trimmed.length < 20) {
-    return { present: true, usable: false, reason: 'too_short_likely_placeholder', length: trimmed.length };
+    return {
+      present: true,
+      usable: false,
+      reason: 'too_short_likely_placeholder',
+      length: trimmed.length,
+    };
   }
   return { present: true, usable: true, reason: 'looks_set', length: trimmed.length };
 }
@@ -139,8 +269,9 @@ function probeCursorCli() {
   });
   const helpText = `${help.stdout || ''}\n${help.stderr || ''}`;
   const agentText = `${agentHelp.stdout || ''}\n${agentHelp.stderr || ''}`;
-  const looksLikeIdeHelp =
-    /Force to open a new window|Compare two files with each other/i.test(agentText);
+  const looksLikeIdeHelp = /Force to open a new window|Compare two files with each other/i.test(
+    agentText,
+  );
   return {
     available: true,
     path,
@@ -213,7 +344,11 @@ function write(root, rel, body = '') {
 
 /** Realistic TS API fixture: similar names, Stripe flow, auth bug, noise, workers. */
 export function buildLiveFixture(root) {
-  write(root, 'package.json', JSON.stringify({ name: 'acme-payments-api', type: 'module', private: true }, null, 2));
+  write(
+    root,
+    'package.json',
+    JSON.stringify({ name: 'acme-payments-api', type: 'module', private: true }, null, 2),
+  );
   write(
     root,
     'README.md',
@@ -480,7 +615,11 @@ export function registerJobs(queue: { add: Function }) {
 `,
   );
 
-  write(root, 'src/config/env.ts', `export const config = { stripeKey: process.env.STRIPE_KEY ?? '' };\n`);
+  write(
+    root,
+    'src/config/env.ts',
+    `export const config = { stripeKey: process.env.STRIPE_KEY ?? '' };\n`,
+  );
 
   // Noise
   write(root, 'src/noise/legacy-admin-ui.ts', `export const legacy = true;\n`);
@@ -602,7 +741,10 @@ function scoreRun({ task, arm, sequence, usage, wallMs, status, error, neuronMet
           filesBeforeUseful = opened.length - 1;
         } else if (!hit && useful.length && !task.negative) {
           // Count as wrong/noise only among reads before first useful, or clearly off-domain noise
-          if (!firstUseful && /noise|legacy|admin-ui|old-billing|misc-utils|payments\/README/i.test(p)) {
+          if (
+            !firstUseful &&
+            /noise|legacy|admin-ui|old-billing|misc-utils|payments\/README/i.test(p)
+          ) {
             wrongPaths += 1;
           } else if (!firstUseful) {
             wrongPaths += 1;
@@ -639,14 +781,14 @@ function scoreRun({ task, arm, sequence, usage, wallMs, status, error, neuronMet
     else if (neuronFirst && rediscoveryAfterNeuron) trust = 'partial_rediscovery';
     else trust = 'partial';
   } else {
-    trust = /list_dir|grep/.test(String(firstTool)) ? 'baseline_explore_first' : 'baseline_other_first';
+    trust = /list_dir|grep/.test(String(firstTool))
+      ? 'baseline_explore_first'
+      : 'baseline_other_first';
   }
 
   let taskSuccess = null;
   if (task.negative) {
-    const claimedK8s = sequence.some(
-      (s) => s.path && /kubernetes|autoscaling/i.test(s.path),
-    );
+    const claimedK8s = sequence.some((s) => s.path && /kubernetes|autoscaling/i.test(s.path));
     taskSuccess = !claimedK8s;
   } else if (status === 'finished') {
     taskSuccess = Boolean(firstUseful) || edits > 0;
@@ -779,9 +921,7 @@ async function runOneAgent({ Agent, fixtureRoot, task, arm, model, apiKey }) {
       if (kind === 'neuron' && event.status === 'completed' && event.result) {
         try {
           const text =
-            typeof event.result === 'string'
-              ? event.result
-              : JSON.stringify(event.result);
+            typeof event.result === 'string' ? event.result : JSON.stringify(event.result);
           const parsed = JSON.parse(text.includes('{') ? text.slice(text.indexOf('{')) : text);
           neuronMeta = {
             recommendedStart: parsed.recommendation?.path ?? null,
@@ -867,9 +1007,7 @@ function median(nums) {
 
 function aggregateArm(runs) {
   const successRate =
-    runs.length === 0
-      ? null
-      : runs.filter((r) => r.task_success).length / runs.length;
+    runs.length === 0 ? null : runs.filter((r) => r.task_success).length / runs.length;
   return {
     n: runs.length,
     exploration_calls_mean: mean(runs.map((r) => r.exploration_calls)),
@@ -886,9 +1024,7 @@ function aggregateArm(runs) {
     total_tokens_mean: mean(runs.map((r) => r.total_tokens)),
     latency_ms_mean: mean(runs.map((r) => r.latency_ms)),
     neuron_context_first_rate:
-      runs.length === 0
-        ? null
-        : runs.filter((r) => r.neuron_context_first).length / runs.length,
+      runs.length === 0 ? null : runs.filter((r) => r.neuron_context_first).length / runs.length,
     trusted_targeted_rate:
       runs.length === 0
         ? null
@@ -984,9 +1120,9 @@ ${report.verdict_rationale}
 
 | Mechanism | Result |
 | --- | --- |
-| \`CURSOR_API_KEY\` | ${report.access?.keys?.CURSOR_API_KEY?.usable ? 'usable' : report.access?.keys?.CURSOR_API_KEY?.reason ?? 'missing'} |
-| \`ANTHROPIC_API_KEY\` | ${report.access?.keys?.ANTHROPIC_API_KEY?.usable ? 'usable' : report.access?.keys?.ANTHROPIC_API_KEY?.reason ?? 'missing'} |
-| \`OPENAI_API_KEY\` | ${report.access?.keys?.OPENAI_API_KEY?.usable ? 'usable' : report.access?.keys?.OPENAI_API_KEY?.reason ?? 'missing'} |
+| \`CURSOR_API_KEY\` | ${report.access?.keys?.CURSOR_API_KEY?.usable ? 'usable' : (report.access?.keys?.CURSOR_API_KEY?.reason ?? 'missing')} |
+| \`ANTHROPIC_API_KEY\` | ${report.access?.keys?.ANTHROPIC_API_KEY?.usable ? 'usable' : (report.access?.keys?.ANTHROPIC_API_KEY?.reason ?? 'missing')} |
+| \`OPENAI_API_KEY\` | ${report.access?.keys?.OPENAI_API_KEY?.usable ? 'usable' : (report.access?.keys?.OPENAI_API_KEY?.reason ?? 'missing')} |
 | \`cursor\` CLI | ${report.access?.cursorCli?.available ? 'found' : 'missing'} |
 | \`cursor agent\` headless | ${report.access?.cursorCli?.agentSubcommand ? 'maybe' : 'not usable as headless runner'} |
 | \`@cursor/sdk\` import | ${report.access?.sdk?.packageResolvable ? 'yes' : 'no'} |
@@ -1077,9 +1213,7 @@ async function main() {
     );
   }
   if (!cursorCli.agentSubcommand) {
-    blockers.push(
-      `cursor agent CLI is not a measurable headless runner here (${cursorCli.note}).`,
-    );
+    blockers.push(`cursor agent CLI is not a measurable headless runner here (${cursorCli.note}).`);
   }
   if (!sdk.packageResolvable) {
     blockers.push(
@@ -1148,7 +1282,9 @@ async function main() {
 
   const fixtureRoot = mkdtempSync(join(tmpdir(), 'neuron-live-fixture-'));
   buildLiveFixture(fixtureRoot);
-  const brain = existsSync(bin) ? seedNeuronBrain(fixtureRoot) : { initOk: false, rememberOk: false, initErr: 'CLI not built' };
+  const brain = existsSync(bin)
+    ? seedNeuronBrain(fixtureRoot)
+    : { initOk: false, rememberOk: false, initErr: 'CLI not built' };
   report.fixture = {
     path: fixtureRoot,
     brain,
@@ -1217,7 +1353,10 @@ async function main() {
       baseline: aggB,
       neuron: aggN,
       comparison: {
-        exploration_median_delta: delta(aggB.exploration_calls_median, aggN.exploration_calls_median),
+        exploration_median_delta: delta(
+          aggB.exploration_calls_median,
+          aggN.exploration_calls_median,
+        ),
         success_delta: delta(aggB.task_success_rate, aggN.task_success_rate),
       },
     };
@@ -1276,9 +1415,7 @@ async function main() {
   for (const b of blockers.slice(0, 5)) console.log(`blocker: ${b}`);
 }
 
-const isDirectRun =
-  process.argv[1] &&
-  fileURLToPath(import.meta.url) === resolve(process.argv[1]);
+const isDirectRun = process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
 
 if (isDirectRun) {
   main().catch((e) => {

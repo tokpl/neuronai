@@ -4,11 +4,7 @@ import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import {
-  createProjectResolver,
-  detectProjectStack,
-  projectIdFromSlug,
-} from '../src/index.js';
+import { createProjectResolver, detectProjectStack, projectIdFromSlug } from '../src/index.js';
 
 describe('FilesystemProjectResolver', () => {
   it('resolves the current workspace', async () => {

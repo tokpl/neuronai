@@ -11,7 +11,10 @@ export async function extractSymbols(
   options: { maxFiles?: number; concurrency?: number } = {},
 ): Promise<CodeRelationship[]> {
   const candidates = files
-    .filter((f) => f.importance === 'HIGH' && (f.language === 'typescript' || f.language === 'javascript'))
+    .filter(
+      (f) =>
+        f.importance === 'HIGH' && (f.language === 'typescript' || f.language === 'javascript'),
+    )
     .slice(0, options.maxFiles ?? 200);
 
   const out: CodeRelationship[] = [];
@@ -42,7 +45,9 @@ export async function extractSymbols(
 function fromSource(fromFile: string, text: string): CodeRelationship[] {
   const out: CodeRelationship[] = [];
 
-  for (const m of text.matchAll(/export\s+(?:async\s+)?(?:function|class|const|let|type|interface)\s+(\w+)/g)) {
+  for (const m of text.matchAll(
+    /export\s+(?:async\s+)?(?:function|class|const|let|type|interface)\s+(\w+)/g,
+  )) {
     out.push({ fromFile, toModule: m[1]!, kind: 'export' });
   }
 

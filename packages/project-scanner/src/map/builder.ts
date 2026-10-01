@@ -40,10 +40,9 @@ export function buildProjectMap(input: {
     const key = `${entry.kind}:${entry.path}:${entry.name}`;
     if (seen.has(key)) return;
     seen.add(key);
-    const concepts =
-      entry.concepts?.length
-        ? entry.concepts
-        : conceptsFromText(entry.name, entry.path, entry.purpose, entry.module);
+    const concepts = entry.concepts?.length
+      ? entry.concepts
+      : conceptsFromText(entry.name, entry.path, entry.purpose, entry.module);
     entries.push({ ...entry, concepts: concepts.length ? concepts : undefined });
   };
 

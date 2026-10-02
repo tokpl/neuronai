@@ -258,10 +258,28 @@ describe('Brain learning classify + metrics', () => {
       updatedAt: new Date().toISOString(),
     });
     // Add multiple rules and memory entries to increase knowledge entries
-    knowledge.rules.push({ id: 'r1', content: 'Rule 1' } as any);
-    knowledge.memory.push({ id: 'm1', content: 'Memory 1' } as any);
-    knowledge.graph.nodes = [{ id: 'node1' }, { id: 'node2' }, { id: 'node3' }] as any; // 3 nodes
-    knowledge.graph.edges = [{ source: 'node1', target: 'node2' }] as any; // 1 relationship
+    knowledge.rules.push({ id: 'r1', title: 'Rule 1', body: 'Rule 1' });
+    knowledge.memory.push({
+      id: 'm1',
+      projectId: 'p2',
+      type: 'knowledge',
+      title: 'Memory 1',
+      content: 'Memory 1',
+      status: 'active',
+      importanceScore: 0.5,
+      confidenceScore: 0.5,
+      freshnessScore: 1,
+      source: 'manual',
+      tags: [],
+      version: 1,
+      usageCount: 0,
+      lastUsedAt: null,
+      embeddingId: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    knowledge.graph.nodes = [{ id: 'node1' }, { id: 'node2' }, { id: 'node3' }];
+    knowledge.graph.edges = [{ source: 'node1', target: 'node2' }];
 
     const health = emptyHealth();
     health.architectureHealthy = true;
@@ -294,8 +312,7 @@ describe('Brain learning classify + metrics', () => {
 
     const knowledge = emptyKnowledge();
     // Simulate undefined nodes and edges (might happen in a truly empty/fresh initialization)
-    knowledge.graph.nodes = undefined as any;
-    knowledge.graph.edges = undefined as any;
+    knowledge.graph = { nodes: undefined, edges: undefined } as unknown as typeof knowledge.graph;
 
     const health = emptyHealth();
     // Setting architectureHealthy to false since emptyHealth sets it to true by default,
@@ -331,7 +348,7 @@ describe('relativeAge and explainMetric specific coverage', () => {
     const testAge = (iso?: string | null) => {
       const snap = computeBrainMetrics({
         ...base,
-        // @ts-ignore
+        // @ts-expect-error — exercise relativeAge with invalid / null updatedAt
         knowledge: { ...base.knowledge, updatedAt: iso },
       });
       return snap.byKey['last_evolution']?.display;

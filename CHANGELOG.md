@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.2.7
+
+Fix MCP crash on concurrent brain writes (Cursor multi-window / multi-project).
+
+### MCP / storage
+
+- Atomic JSON writes use unique temp files (`*.tmp.<uuid>`) instead of a shared `*.tmp`
+- Prevents `Unexpected non-whitespace character after JSON` when two Neuron processes
+  write `knowledge.json` / store at the same time
+- Also includes recent security path sanitization, doctor perf, and test coverage from `main`
+
+After upgrading: `npm i -g neuronai@0.2.7`, then **reload Cursor MCP**. If a project already
+has a corrupted `.neuron/brain/knowledge.json`, restore from git / backup or run `neuron scan`
+after removing the broken file.
+
+## 0.2.6
+
+Antigravity template path fix in the published CLI bundle.
+
+## 0.2.5
+
+Maintenance bump (see git history on `main`).
+
 ## 0.2.4
 
 Honest contribution metrics — stop near-constant ~20–30k “token savings” on scanned repos.

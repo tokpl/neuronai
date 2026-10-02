@@ -7,14 +7,7 @@
  * Usage: node scripts/dogfood-audit.mjs
  */
 import { spawnSync } from 'node:child_process';
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  renameSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -207,9 +200,17 @@ function buildRealisticProject(root) {
 
   // Similar-name noise for false-positive testing
   write(root, 'src/billing-ui/Badge.tsx', `export function BillingBadge() { return null; }\n`);
-  write(root, 'src/billing-admin/page.tsx', `export function BillingAdminPage() { return null; }\n`);
+  write(
+    root,
+    'src/billing-admin/page.tsx',
+    `export function BillingAdminPage() { return null; }\n`,
+  );
   write(root, 'docs/billing.md', `# Billing docs\n\nHigh-level product notes.\n`);
-  write(root, 'tests/billing.test.ts', `import { describe, it } from 'vitest';\ndescribe('billing', () => { it('placeholder', () => {}); });\n`);
+  write(
+    root,
+    'tests/billing.test.ts',
+    `import { describe, it } from 'vitest';\ndescribe('billing', () => { it('placeholder', () => {}); });\n`,
+  );
   write(
     root,
     'tests/payments/PaymentService.test.ts',
@@ -378,9 +379,10 @@ function scoreRow(spec, body) {
   if (spec.expectEmpty) {
     correct = empty ? 'correct' : 'incorrect';
   } else if (spec.expectEmptyish) {
-    correct = empty || !(body.recommendation || (body.relevantFiles?.length ?? 0) > 3)
-      ? 'correct'
-      : 'incorrect';
+    correct =
+      empty || !(body.recommendation || (body.relevantFiles?.length ?? 0) > 3)
+        ? 'correct'
+        : 'incorrect';
   } else {
     const hit = (spec.expectPaths ?? []).some((re) => re.test(blob));
     const noise = (spec.expectNot ?? []).some((re) => re.test(blob));
@@ -508,10 +510,10 @@ await withMcp(root, async (client) => {
       query: spec.q,
       intent: body.intent,
       modules: (body.relevantModules ?? []).map((m) => m.path),
-      files: (body.relevantFiles ?? []).map((f) => `${f.path}${f.kind === 'symbol' ? ` (${f.name})` : ''}`),
-      symbols: (body.relevantFiles ?? [])
-        .filter((f) => f.kind === 'symbol')
-        .map((f) => f.name),
+      files: (body.relevantFiles ?? []).map(
+        (f) => `${f.path}${f.kind === 'symbol' ? ` (${f.name})` : ''}`,
+      ),
+      symbols: (body.relevantFiles ?? []).filter((f) => f.kind === 'symbol').map((f) => f.name),
       rules: (body.relevantRules ?? []).map((r) => r.title),
       recommendation: body.recommendation
         ? { path: body.recommendation.path, reason: body.recommendation.reason }
@@ -554,8 +556,9 @@ await withMcp(root, async (client) => {
 
 // --- Mutations + incremental scan ---
 const mutation = { before: {}, after: {} };
-mutation.before.map = JSON.parse(readFileSync(join(root, '.neuron', 'brain', 'knowledge.json'), 'utf8')).map
-  ?.entries?.length;
+mutation.before.map = JSON.parse(
+  readFileSync(join(root, '.neuron', 'brain', 'knowledge.json'), 'utf8'),
+).map?.entries?.length;
 renameSync(join(root, 'src', 'billing'), join(root, 'src', 'payments-domain'));
 // Move a service
 mkdirSync(join(root, 'src', 'payments-domain', 'core'), { recursive: true });
@@ -569,21 +572,20 @@ write(
   'src/notifications/service.ts',
   `export class NotificationService {\n  async send() {}\n}\n`,
 );
-write(
-  root,
-  'src/payments/service.ts',
-  `export class CheckoutService {\n  async charge() {}\n}\n`,
-); // symbol rename: PaymentService → CheckoutService
+write(root, 'src/payments/service.ts', `export class CheckoutService {\n  async charge() {}\n}\n`); // symbol rename: PaymentService → CheckoutService
 
 const incrStarted = Date.now();
 run(['scan', '--update'], root);
 mutation.incrementalMs = Date.now() - incrStarted;
 
-const mapAfter = JSON.parse(readFileSync(join(root, '.neuron', 'brain', 'knowledge.json'), 'utf8'))
-  .map?.entries ?? [];
+const mapAfter =
+  JSON.parse(readFileSync(join(root, '.neuron', 'brain', 'knowledge.json'), 'utf8')).map?.entries ??
+  [];
 mutation.after = {
   mapCount: mapAfter.length,
-  hasOldBillingDir: mapAfter.some((e) => e.path.includes('src/billing/') && !e.path.includes('billing-')),
+  hasOldBillingDir: mapAfter.some(
+    (e) => e.path.includes('src/billing/') && !e.path.includes('billing-'),
+  ),
   hasPaymentsDomain: mapAfter.some((e) => e.path.includes('src/payments-domain')),
   hasDeletedHealth: mapAfter.some((e) => e.path.includes('health.ts')),
   hasNotifications: mapAfter.some((e) => e.path.includes('notifications')),
@@ -619,7 +621,11 @@ for (const size of ['small', 'medium', 'large']) {
   run(['init', '--yes'], scaleRoot);
   const scanMs = Date.now() - scanStarted;
   // touch one file then incremental
-  write(scaleRoot, 'src/gen/module0/service.ts', `export class GenService0 { run() { return 1; } }\n`);
+  write(
+    scaleRoot,
+    'src/gen/module0/service.ts',
+    `export class GenService0 { run() { return 1; } }\n`,
+  );
   const incrStart = Date.now();
   run(['scan', '--update'], scaleRoot);
   const incrMs = Date.now() - incrStart;
@@ -650,9 +656,10 @@ const summary = {
     avgContextTokens: Math.round(
       rows.reduce((s, r) => s + (r.contextTokens ?? 0), 0) / Math.max(1, rows.length),
     ),
-    avgRetrievalMs: Math.round(
-      (rows.reduce((s, r) => s + (r.retrievalMs ?? 0), 0) / Math.max(1, rows.length)) * 10,
-    ) / 10,
+    avgRetrievalMs:
+      Math.round(
+        (rows.reduce((s, r) => s + (r.retrievalMs ?? 0), 0) / Math.max(1, rows.length)) * 10,
+      ) / 10,
   },
   rows,
   mutation,

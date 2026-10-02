@@ -1,10 +1,6 @@
 import type { MemoryType } from '@neuronai/types';
 
-import {
-  categoryLabel,
-  classifyKnowledge,
-  type BrainKnowledgeCategory,
-} from '@neuronai/brain';
+import { categoryLabel, classifyKnowledge, type BrainKnowledgeCategory } from '@neuronai/brain';
 
 import type { CodeChangeAnalysis } from '../analysis/code-change-analyzer.js';
 import { confirmationQuestionForType } from './synthesize-durable-memory.js';

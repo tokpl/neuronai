@@ -108,9 +108,9 @@ describe('code queries', () => {
 
   it('classifies dependency and impact intents', () => {
     expect(classifyIntent('What calls PaymentService?')).toBe('DEPENDENCY');
-    expect(classifyIntent('What files would I likely need to change to modify payment processing?')).toBe(
-      'IMPACT',
-    );
+    expect(
+      classifyIntent('What files would I likely need to change to modify payment processing?'),
+    ).toBe('IMPACT');
   });
 
   it('expandConnectedSlice prefers high-confidence dependencies', () => {
@@ -126,8 +126,8 @@ describe('code queries', () => {
       'MODIFICATION',
     );
     expect(slice.symbol).toMatch(/BillingService/);
-    expect(slice.dependencies.every((d) => d.confidence === 'high' || d.confidence === 'medium')).toBe(
-      true,
-    );
+    expect(
+      slice.dependencies.every((d) => d.confidence === 'high' || d.confidence === 'medium'),
+    ).toBe(true);
   });
 });

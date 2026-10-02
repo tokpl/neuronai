@@ -54,11 +54,29 @@ const RULES: IntentRule[] = [
     pattern:
       /\b(convention|conventions|standard|standards|style guide|best practice|do we always|naming|what rule|which rule|what (should|must) i avoid|what constraint)\b/i,
   },
-  { intent: 'DECISION', pattern: /\b(why (do|did|does|are|is)|rationale|decided|decision|trade-?off|instead of)\b/i },
-  { intent: 'CONFIGURATION', pattern: /\b(config|configured|configure|configuration|env var|environment variable|settings?|\.env)\b/i },
-  { intent: 'LOCATION', pattern: /\b(where|which file|which module|what file|locate|located|find the|path to)\b/i },
-  { intent: 'ARCHITECTURE', pattern: /\b(architecture|architectural|structure|structured|layers?|design of|overall|high[- ]level|how is .* organi[sz]ed)\b/i },
-  { intent: 'IMPLEMENTATION', pattern: /\b(how (does|do|is|are)|implemented|implementation|works?|flow of|what happens when)\b/i },
+  {
+    intent: 'DECISION',
+    pattern: /\b(why (do|did|does|are|is)|rationale|decided|decision|trade-?off|instead of)\b/i,
+  },
+  {
+    intent: 'CONFIGURATION',
+    pattern:
+      /\b(config|configured|configure|configuration|env var|environment variable|settings?|\.env)\b/i,
+  },
+  {
+    intent: 'LOCATION',
+    pattern: /\b(where|which file|which module|what file|locate|located|find the|path to)\b/i,
+  },
+  {
+    intent: 'ARCHITECTURE',
+    pattern:
+      /\b(architecture|architectural|structure|structured|layers?|design of|overall|high[- ]level|how is .* organi[sz]ed)\b/i,
+  },
+  {
+    intent: 'IMPLEMENTATION',
+    pattern:
+      /\b(how (does|do|is|are)|implemented|implementation|works?|flow of|what happens when)\b/i,
+  },
 ];
 
 export function classifyIntent(query: string): QueryIntent {

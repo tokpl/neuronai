@@ -145,8 +145,7 @@ function grade(spec, body) {
     .join('\n');
 
   if (spec.negative) {
-    const hasLoc =
-      Boolean(body.recommendation?.path) || (body.relevantFiles?.length ?? 0) > 1;
+    const hasLoc = Boolean(body.recommendation?.path) || (body.relevantFiles?.length ?? 0) > 1;
     if (spec.forbid?.some((re) => re.test(blob))) return 'WRONG';
     return hasLoc ? 'WRONG' : 'NO_MATCH';
   }
@@ -173,7 +172,11 @@ function buildTsApp(root) {
     'src/billing/service.ts',
     `import { InvoiceRepository } from './repository.js';\nexport class BillingService {\n  private repo = new InvoiceRepository();\n  createInvoice() { return this.repo.save({}); }\n  cancelInvoice(id: string) { return this.repo.update(id, { status: 'cancelled' }); }\n}\n`,
   );
-  write(root, 'src/billing/repository.ts', 'export class InvoiceRepository { save(x: object) { return x; } update(id: string, p: object) { return { id, ...p }; } }\n');
+  write(
+    root,
+    'src/billing/repository.ts',
+    'export class InvoiceRepository { save(x: object) { return x; } update(id: string, p: object) { return { id, ...p }; } }\n',
+  );
   write(
     root,
     'src/billing/routes.ts',
@@ -182,25 +185,60 @@ function buildTsApp(root) {
   write(root, 'src/payments/PaymentService.ts', 'export class PaymentService { charge() {} }\n');
   write(root, 'src/payments/stripe.ts', 'export class StripeClient { charge() {} }\n');
   write(root, 'src/db/client.ts', 'export class DatabaseClient { query() {} }\n');
-  write(root, 'src/db/postgres.ts', 'export class PostgresClient extends DatabaseClient { query() {} }\n'.replace('extends DatabaseClient', '/* concrete pg */'));
-  write(root, 'src/db/postgres.ts', 'export class PostgresClient { query(_s: string) { return []; } }\n');
+  write(
+    root,
+    'src/db/postgres.ts',
+    'export class PostgresClient extends DatabaseClient { query() {} }\n'.replace(
+      'extends DatabaseClient',
+      '/* concrete pg */',
+    ),
+  );
+  write(
+    root,
+    'src/db/postgres.ts',
+    'export class PostgresClient { query(_s: string) { return []; } }\n',
+  );
   write(root, 'src/api/routes.ts', 'export { billingRouter } from "../billing/routes.js";\n');
-  write(root, 'tests/auth/AuthService.test.ts', 'import { AuthService } from "../../src/auth/service.js";\ntest("a", () => new AuthService());\n');
+  write(
+    root,
+    'tests/auth/AuthService.test.ts',
+    'import { AuthService } from "../../src/auth/service.js";\ntest("a", () => new AuthService());\n',
+  );
   write(root, 'tests/billing/invoices.test.ts', 'test("inv", () => {});\n');
 }
 
 function buildNextish(root) {
-  write(root, 'package.json', JSON.stringify({ name: 'next-app', dependencies: { next: '15.0.0', react: '19.0.0' } }));
-  write(root, 'app/layout.tsx', 'export default function Root({ children }: any) { return children; }\n');
+  write(
+    root,
+    'package.json',
+    JSON.stringify({ name: 'next-app', dependencies: { next: '15.0.0', react: '19.0.0' } }),
+  );
+  write(
+    root,
+    'app/layout.tsx',
+    'export default function Root({ children }: any) { return children; }\n',
+  );
   write(root, 'app/page.tsx', 'export default function Page() { return null; }\n');
-  write(root, 'app/api/auth/route.ts', 'export async function POST() { return Response.json({}); }\n');
-  write(root, 'app/api/billing/route.ts', 'export async function POST() { return Response.json({}); }\n');
+  write(
+    root,
+    'app/api/auth/route.ts',
+    'export async function POST() { return Response.json({}); }\n',
+  );
+  write(
+    root,
+    'app/api/billing/route.ts',
+    'export async function POST() { return Response.json({}); }\n',
+  );
   write(root, 'lib/auth.ts', 'export function getSession() { return null; }\n');
   write(root, 'components/BillingCard.tsx', 'export function BillingCard() { return null; }\n');
 }
 
 function buildMonorepo(root) {
-  write(root, 'package.json', JSON.stringify({ name: 'mono', private: true, workspaces: ['apps/*', 'packages/*'] }));
+  write(
+    root,
+    'package.json',
+    JSON.stringify({ name: 'mono', private: true, workspaces: ['apps/*', 'packages/*'] }),
+  );
   write(root, 'pnpm-workspace.yaml', 'packages:\n  - apps/*\n  - packages/*\n');
   write(root, 'apps/web/package.json', JSON.stringify({ name: '@acme/web' }));
   write(root, 'apps/web/src/pages/index.tsx', 'export default function Home() { return null; }\n');
@@ -209,14 +247,22 @@ function buildMonorepo(root) {
   write(root, 'packages/auth/package.json', JSON.stringify({ name: '@acme/auth' }));
   write(root, 'packages/auth/src/index.ts', 'export class AuthService { login() {} }\n');
   write(root, 'packages/billing/package.json', JSON.stringify({ name: '@acme/billing' }));
-  write(root, 'packages/billing/src/index.ts', 'export class BillingService { createInvoice() {} }\n');
+  write(
+    root,
+    'packages/billing/src/index.ts',
+    'export class BillingService { createInvoice() {} }\n',
+  );
   write(root, 'packages/database/src/client.ts', 'export class Db { query() {} }\n');
 }
 
 function buildPython(root) {
   write(root, 'pyproject.toml', '[project]\nname = "pyapp"\nversion = "0.1.0"\n');
   write(root, 'app/api/routes.py', 'def create_invoice():\n    pass\n');
-  write(root, 'app/services/billing.py', 'class BillingService:\n    def create_invoice(self):\n        pass\n');
+  write(
+    root,
+    'app/services/billing.py',
+    'class BillingService:\n    def create_invoice(self):\n        pass\n',
+  );
   write(root, 'app/services/auth.py', 'class AuthService:\n    def login(self):\n        pass\n');
   write(root, 'app/models/invoice.py', 'class Invoice:\n    pass\n');
   write(root, 'tests/test_auth.py', 'def test_auth():\n    assert True\n');
@@ -243,7 +289,11 @@ function buildUnconventional(root) {
 
 function buildGraphTrustFixture(root) {
   write(root, 'package.json', JSON.stringify({ name: 'graph-trust', type: 'module' }));
-  write(root, 'src/a.ts', 'export class Alpha { run() { return 1; } }\nexport function helper() { return 2; }\n');
+  write(
+    root,
+    'src/a.ts',
+    'export class Alpha { run() { return 1; } }\nexport function helper() { return 2; }\n',
+  );
   write(
     root,
     'src/b.ts',
@@ -255,18 +305,37 @@ function buildGraphTrustFixture(root) {
     `import { Router } from 'express';\nimport { use } from './b.js';\nconst router = Router();\nrouter.post('/x', use);\nexport default router;\n`,
   );
   write(root, 'src/barrel.ts', `export { Alpha } from './a.js';\n`);
-  write(root, 'src/dynamic.ts', `export async function load() {\n  const m = await import('./a.js');\n  return m;\n}\n`);
+  write(
+    root,
+    'src/dynamic.ts',
+    `export async function load() {\n  const m = await import('./a.js');\n  return m;\n}\n`,
+  );
 }
 
 const ADVERSARIAL = [
-  { q: 'Where is authentication implemented?', expect: [/auth/i], forbid: [/billing-ui|kubernetes/i] },
+  {
+    q: 'Where is authentication implemented?',
+    expect: [/auth/i],
+    forbid: [/billing-ui|kubernetes/i],
+  },
   { q: 'Where is authentication configured?', expect: [/auth|config/i], soft: true },
   { q: 'Where are authentication tests?', expect: [/tests\/auth|AuthService\.test/i], soft: true },
   { q: 'What calls PaymentService?', expect: [/Payment|payment/i], soft: true },
   { q: 'Who depends on BillingService?', expect: [/billing|Billing/i] },
-  { q: 'What happens before an invoice is cancelled?', expect: [/cancel|invoice|billing/i], soft: true },
-  { q: 'Where should I add validation for invoice cancellation?', expect: [/billing|invoice|validation/i] },
-  { q: 'Which files would be affected if PaymentService changes?', expect: [/payment/i], soft: true },
+  {
+    q: 'What happens before an invoice is cancelled?',
+    expect: [/cancel|invoice|billing/i],
+    soft: true,
+  },
+  {
+    q: 'Where should I add validation for invoice cancellation?',
+    expect: [/billing|invoice|validation/i],
+  },
+  {
+    q: 'Which files would be affected if PaymentService changes?',
+    expect: [/payment/i],
+    soft: true,
+  },
   { q: 'Where is the database abstraction?', expect: [/db|Database|client/i], soft: true },
   { q: 'Where is the concrete PostgreSQL implementation?', expect: [/postgres|db/i], soft: true },
   { q: 'Which route reaches createInvoice?', expect: [/route|invoice|billing/i], soft: true },
@@ -325,10 +394,7 @@ async function sectionRealWorld(bin) {
             contextTokens: body.metrics?.contextTokens ?? null,
             corpusTokens: body.metrics?.corpusTokens ?? null,
             recommendation: body.recommendation?.path ?? null,
-            grade: grade(
-              { expect: [/auth|Auth|security|gate/i], soft: true },
-              body,
-            ),
+            grade: grade({ expect: [/auth|Auth|security|gate/i], soft: true }, body),
           };
         });
       }
@@ -453,7 +519,10 @@ function sectionGraphTrust(bin) {
   return {
     stats,
     edgeCounts: Object.fromEntries(
-      [...new Set(edges.map((e) => e.type))].map((t) => [t, edges.filter((e) => e.type === t).length]),
+      [...new Set(edges.map((e) => e.type))].map((t) => [
+        t,
+        edges.filter((e) => e.type === t).length,
+      ]),
     ),
     confidence: Object.fromEntries(
       ['high', 'medium', 'low'].map((c) => [c, edges.filter((e) => e.confidence === c).length]),
@@ -486,9 +555,11 @@ function sectionLargeRepo(bin) {
     const noChange = runCli(bin, ['scan', '--update'], root);
     write(root, 'src/auth/service.ts', 'export class AuthService { login() { return 1; } }\n');
     const one = runCli(bin, ['scan', '--update'], root);
-    for (let i = 0; i < 10; i++) write(root, `src/gen/f${i}.ts`, `export const x${i} = ${i + 1};\n`);
+    for (let i = 0; i < 10; i++)
+      write(root, `src/gen/f${i}.ts`, `export const x${i} = ${i + 1};\n`);
     const ten = runCli(bin, ['scan', '--update'], root);
-    for (let i = 100; i < 200; i++) write(root, `src/gen/f${i}.ts`, `export const x${i} = ${i + 2};\n`);
+    for (let i = 100; i < 200; i++)
+      write(root, `src/gen/f${i}.ts`, `export const x${i} = ${i + 2};\n`);
     const hundred = runCli(bin, ['scan', '--update'], root);
     const stats = knowledgeStats(root);
     const row = {
@@ -544,7 +615,13 @@ function sectionFailureModes(bin) {
     runCli(bin, ['init', '--yes'], root);
     runCli(
       bin,
-      ['remember', 'User rule must survive corruption recovery.', '--yes', '--type', 'business_rule'],
+      [
+        'remember',
+        'User rule must survive corruption recovery.',
+        '--yes',
+        '--type',
+        'business_rule',
+      ],
       root,
     );
     write(root, '.neuron/brain/knowledge.json', '{ not json');
@@ -567,7 +644,9 @@ function sectionFailureModes(bin) {
       note: 'User memories live in runtime/store.json; knowledge.json corruption should not wipe them',
     });
     if (!userSurvived) {
-      report.bugsFound.push('User memory check after knowledge corruption — verify persistence path');
+      report.bugsFound.push(
+        'User memory check after knowledge corruption — verify persistence path',
+      );
     }
     rmSync(root, { recursive: true, force: true });
   }
@@ -614,11 +693,10 @@ function sectionArchitectureAudit() {
   const checks = [];
 
   const rg = (pattern, paths) => {
-    const r = spawnSync(
-      process.platform === 'win32' ? 'rg.exe' : 'rg',
-      ['-n', pattern, ...paths],
-      { cwd: repo, encoding: 'utf8' },
-    );
+    const r = spawnSync(process.platform === 'win32' ? 'rg.exe' : 'rg', ['-n', pattern, ...paths], {
+      cwd: repo,
+      encoding: 'utf8',
+    });
     return (r.stdout || '').trim();
   };
 
@@ -670,7 +748,15 @@ function sectionArchitectureAudit() {
     'utf8',
   );
   const skill = readFileSync(
-    join(repo, 'packages', 'cursor-integration', 'templates', 'skills', 'neuron-memory', 'SKILL.md'),
+    join(
+      repo,
+      'packages',
+      'cursor-integration',
+      'templates',
+      'skills',
+      'neuron-memory',
+      'SKILL.md',
+    ),
     'utf8',
   );
   const pathOk =
@@ -721,7 +807,10 @@ function sectionDocsAudit() {
     const p = join(repo, f);
     if (!existsSync(p)) continue;
     const text = readFileSync(p, 'utf8');
-    if (/saved \d+ agent tokens|agent token savings(?! —)/i.test(text) && !/not measured agent/i.test(text)) {
+    if (
+      /saved \d+ agent tokens|agent token savings(?! —)/i.test(text) &&
+      !/not measured agent/i.test(text)
+    ) {
       issues.push({ file: f, issue: 'Possible overclaim of agent token savings' });
     }
     if (/4× cheaper|3× faster/i.test(text)) {
@@ -815,11 +904,7 @@ function sectionPriorBenchmarks() {
     out[f] = {
       present: true,
       summary:
-        j.final_verdict ||
-        j.product_impact ||
-        j.summary ||
-        j.verdict ||
-        Object.keys(j).slice(0, 5),
+        j.final_verdict || j.product_impact || j.summary || j.verdict || Object.keys(j).slice(0, 5),
     };
   }
   return out;
@@ -849,8 +934,9 @@ async function main() {
   report.sections.docs = sectionDocsAudit();
   report.sections.cursorPath = {
     recommended: 'neuron_context → open returned paths → targeted exploration',
-    templatesOk: report.sections.architecture.find((c) => c.name === 'cursor_single_understanding_path')
-      ?.ok,
+    templatesOk: report.sections.architecture.find(
+      (c) => c.name === 'cursor_single_understanding_path',
+    )?.ok,
   };
   report.sections.priorBenchmarks = sectionPriorBenchmarks();
   report.sections.graphTrust = sectionGraphTrust(neuronBin);

@@ -40,9 +40,7 @@ async function main() {
   }
 
   const mcpJsonPath = join(fixture, '.cursor', 'mcp.json');
-  const mcpJson = existsSync(mcpJsonPath)
-    ? JSON.parse(readFileSync(mcpJsonPath, 'utf8'))
-    : null;
+  const mcpJson = existsSync(mcpJsonPath) ? JSON.parse(readFileSync(mcpJsonPath, 'utf8')) : null;
 
   const transport = new StdioClientTransport({
     command: process.execPath,
@@ -57,8 +55,7 @@ async function main() {
   const names = listed.tools.map((t) => t.name).sort();
   const expected = [...EXPECTED_TOOLS].sort();
   const hasContext = names.includes('neuron_context');
-  const exactSeven =
-    names.length === expected.length && names.every((n, i) => n === expected[i]);
+  const exactSeven = names.length === expected.length && names.every((n, i) => n === expected[i]);
 
   let callOk = false;
   let callError = null;

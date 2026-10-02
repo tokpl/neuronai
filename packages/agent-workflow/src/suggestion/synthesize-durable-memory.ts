@@ -111,14 +111,10 @@ export function synthesizeDurableMemory(input: {
   task?: string;
 }): DurableMemoryDraft {
   const title =
-    firstLine(input.commitMessage) ||
-    firstLine(input.task)?.slice(0, 80) ||
-    input.analysis.summary;
+    firstLine(input.commitMessage) || firstLine(input.task)?.slice(0, 80) || input.analysis.summary;
 
   const decision = decisionSentence(input);
-  const blob = [input.commitMessage, input.task, input.analysis.summary]
-    .filter(Boolean)
-    .join('\n');
+  const blob = [input.commitMessage, input.task, input.analysis.summary].filter(Boolean).join('\n');
   const replaced = replacedLine(blob);
   const ownership = ownershipLine(input.analysis.modules);
   const why = whyLine(input.type, input.analysis);

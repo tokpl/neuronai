@@ -59,7 +59,9 @@ describe('buildContextContribution', () => {
     expect(contribution.summary).not.toMatch(/dumping/i);
     expect(contribution.summary).toMatch(/Used 12 memories from Project Brain/);
     expect(contribution.summary).not.toMatch(/skipped/i);
-    expect(contribution.summary).toMatch(/Pointed the agent to 2 file\/module paths and 1 project rule/);
+    expect(contribution.summary).toMatch(
+      /Pointed the agent to 2 file\/module paths and 1 project rule/,
+    );
     expect(contribution.summary).toMatch(
       /Context is ~3\.3× more compact than matched Project Brain knowledge/,
     );

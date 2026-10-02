@@ -29,13 +29,25 @@ const WAVE1 = {
 };
 
 const GOLD = {
-  T01: ['src/api/routes/payments.ts', 'src/billing/invoice-service.ts', 'src/services/payment-service.ts'],
+  T01: [
+    'src/api/routes/payments.ts',
+    'src/billing/invoice-service.ts',
+    'src/services/payment-service.ts',
+  ],
   T02: ['src/api/routes/payments.ts', 'src/services/payment-service.ts'],
   T03: ['src/auth/service.ts', 'src/middleware/auth.ts', 'tests/auth/auth.test.ts'],
-  T05: ['src/workers/jobs.ts', 'src/services/payment-service.ts', 'src/workers/payment-retry-worker.ts'],
+  T05: [
+    'src/workers/jobs.ts',
+    'src/services/payment-service.ts',
+    'src/workers/payment-retry-worker.ts',
+  ],
   T10: ['src/api/routes/webhooks.ts', 'src/workers/jobs.ts', 'src/services/payment-service.ts'],
   T11: ['src/api/routes/payments.ts', 'src/services/payment-service.ts'],
-  T12: ['src/services/payment-service.ts', 'src/services/stripe.ts', 'src/db/payment-repository.ts'],
+  T12: [
+    'src/services/payment-service.ts',
+    'src/services/stripe.ts',
+    'src/db/payment-repository.ts',
+  ],
   T13: [],
 };
 
@@ -170,7 +182,10 @@ function scoreRun(key, agentId) {
     if (kind === 'neuron_mcp') neuronMcp = true;
     if (kind === 'shell') {
       const cmd = String(t.input?.command || '');
-      if (/neuron|apps\\cli\\dist\\index\.js|apps\/cli\/dist\/index\.js/i.test(cmd) && /context/i.test(cmd)) {
+      if (
+        /neuron|apps\\cli\\dist\\index\.js|apps\/cli\/dist\/index\.js/i.test(cmd) &&
+        /context/i.test(cmd)
+      ) {
         neuronCliShell = true;
       }
     }
@@ -230,7 +245,11 @@ function scoreRun(key, agentId) {
     transcript,
     TRACE_QUALITY: 'HARD_TOOL_USE',
     tool_events: ledger.length,
-    ledger_short: ledger.slice(0, 20).map((e) => `${e.kind}:${e.tool}${e.path ? `(${e.path.split('/').slice(-2).join('/')})` : ''}`),
+    ledger_short: ledger
+      .slice(0, 20)
+      .map(
+        (e) => `${e.kind}:${e.tool}${e.path ? `(${e.path.split('/').slice(-2).join('/')})` : ''}`,
+      ),
     list_dir,
     grep,
     file_reads: reads,
@@ -238,7 +257,8 @@ function scoreRun(key, agentId) {
     shells,
     exploration_calls: exploration,
     first_useful_file: firstUseful,
-    files_before_useful: firstUseful == null ? readsBeforeUseful : Math.min(readsBeforeUseful, reads),
+    files_before_useful:
+      firstUseful == null ? readsBeforeUseful : Math.min(readsBeforeUseful, reads),
     wrong_files: wrongFiles,
     rediscovery,
     correct_start: correctStart,
@@ -288,8 +308,7 @@ function ruleAdherence(taskId, arm) {
   if (!existsSync(pay)) return { checked: false };
   const txt = readFileSync(pay, 'utf8');
   const hasRefund = /refund/i.test(txt);
-  const stripeInRoute =
-    /from ['"].*stripe['"]/i.test(txt) || /StripeClient/.test(txt);
+  const stripeInRoute = /from ['"].*stripe['"]/i.test(txt) || /StripeClient/.test(txt);
   const usesPaymentService = /PaymentService|payments\.refund/i.test(txt);
   return {
     checked: true,
@@ -367,7 +386,13 @@ const report = {
 writeFileSync(join(repo, 'live-agent-validation-report.json'), JSON.stringify(report, null, 2));
 
 const fmt = (n) =>
-  n == null ? 'UNAVAILABLE' : typeof n === 'number' ? (Number.isInteger(n) ? String(n) : n.toFixed(2)) : String(n);
+  n == null
+    ? 'UNAVAILABLE'
+    : typeof n === 'number'
+      ? Number.isInteger(n)
+        ? String(n)
+        : n.toFixed(2)
+      : String(n);
 
 const md = `# Live agent validation
 

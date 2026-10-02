@@ -17,18 +17,12 @@ export type CodeEdgeType =
   | 'BELONGS_TO';
 
 export type CodeSymbolKind =
-  | 'class'
-  | 'function'
-  | 'method'
-  | 'interface'
-  | 'type'
-  | 'const'
-  | 'route'
-  | 'unknown';
+  'class' | 'function' | 'method' | 'interface' | 'type' | 'const' | 'route' | 'unknown';
 
 /** Short, human-readable proof for a relationship. */
 export interface CodeEvidence {
-  kind: 'import' | 'export' | 'call' | 'route' | 'extends' | 'implements' | 'reference' | 'structure';
+  kind:
+    'import' | 'export' | 'call' | 'route' | 'extends' | 'implements' | 'reference' | 'structure';
   detail: string;
 }
 

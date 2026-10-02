@@ -21,15 +21,9 @@ export type {
 export { nowIso } from './types.js';
 export { buildProjectMap, type ScanMapEntry, type ScanProjectMap } from './map/builder.js';
 export { extractSymbols } from './symbols/extractor.js';
-export {
-  buildCodeIntelligence,
-  mergeCodeIntelligence,
-} from './code/intelligence.js';
+export { buildCodeIntelligence, mergeCodeIntelligence } from './code/intelligence.js';
 
-export {
-  FileImportanceAnalyzer,
-  createFileImportanceAnalyzer,
-} from './filesystem/importance.js';
+export { FileImportanceAnalyzer, createFileImportanceAnalyzer } from './filesystem/importance.js';
 export { CodebaseScanner, createCodebaseScanner } from './filesystem/scanner.js';
 export { LanguageRegistry, createLanguageRegistry } from './languages/registry.js';
 export { SensitiveFileDetector, createSensitiveFileDetector } from './security/sensitive.js';
@@ -49,10 +43,7 @@ export {
   createProjectBrainWriter,
   renderProjectReport,
 } from './brain/writer.js';
-export {
-  ProjectBrainBootstrap,
-  createProjectBrainBootstrap,
-} from './facade/bootstrap.js';
+export { ProjectBrainBootstrap, createProjectBrainBootstrap } from './facade/bootstrap.js';
 
 /** MERGE: project-analyzer APIs re-exported from scanner for a single DX surface. */
 export {

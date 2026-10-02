@@ -52,7 +52,10 @@ export class TechnologyDetector {
       }
     }
 
-    if (await exists(join(root, 'docker-compose.yml')) || (await exists(join(root, 'docker-compose.yaml')))) {
+    if (
+      (await exists(join(root, 'docker-compose.yml'))) ||
+      (await exists(join(root, 'docker-compose.yaml')))
+    ) {
       tools.add('Docker');
     }
     if (await exists(join(root, 'Dockerfile'))) tools.add('Docker');
@@ -60,12 +63,15 @@ export class TechnologyDetector {
       backend.add('PHP');
       tools.add('Composer');
     }
-    if (await exists(join(root, 'requirements.txt')) || (await exists(join(root, 'pyproject.toml')))) {
+    if (
+      (await exists(join(root, 'requirements.txt'))) ||
+      (await exists(join(root, 'pyproject.toml')))
+    ) {
       if (!backend.size) backend.add('Python');
     }
     if (await exists(join(root, 'go.mod'))) backend.add('Go');
     if (await exists(join(root, 'Cargo.toml'))) backend.add('Rust');
-    if (await exists(join(root, 'pom.xml')) || (await exists(join(root, 'build.gradle')))) {
+    if ((await exists(join(root, 'pom.xml'))) || (await exists(join(root, 'build.gradle')))) {
       backend.add('Java');
     }
 

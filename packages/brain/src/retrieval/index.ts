@@ -12,11 +12,6 @@ export { brainDocs, mapEntryDoc, memoryDocs, type BrainDocSource } from './docs.
 export { conceptsFor, conceptsForTerm, termsForConcept, KNOWN_CONCEPTS } from './concepts.js';
 export { classifyIntent, intentAffinity, type QueryIntent } from './intent.js';
 export { pickRecommendation, type ModificationAdvice } from './recommend.js';
-export {
-  locationRole,
-  locationRoleBoost,
-  locationQueryBoost,
-  type LocationRole,
-} from './roles.js';
+export { locationRole, locationRoleBoost, locationQueryBoost, type LocationRole } from './roles.js';
 export { dedupeRetrievalHits } from './dedupe-hits.js';
 export { diversifyRetrievalHits } from './diversify-hits.js';

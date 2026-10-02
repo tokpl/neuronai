@@ -57,8 +57,7 @@ const report = {
     'Historical: Cursor IDE could list legacy Neuron tools and return -32602 until reload. Product stdio MCP exposes the 7-tool surface including neuron_context.',
   Root_cause:
     'C — Cursor IDE may hold a stale tools/list after upgrades until MCP toggle/reload. D — Cursor Task reuses parent workspace MCP (does not load nested fixture mcp.json).',
-  Fix:
-    'No Neuron architecture change. Operator: Settings → Tools & MCP → toggle neuron (or Reload Window). See live-agent-mcp-report.json for hard Cursor Task A/B proof.',
+  Fix: 'No Neuron architecture change. Operator: Settings → Tools & MCP → toggle neuron (or Reload Window). See live-agent-mcp-report.json for hard Cursor Task A/B proof.',
   Why_it_works:
     'stdio MCP Client against the same command/args/env as mcp.json lists exactly 7 tools and neuron_context returns paths+rules. After Cursor refreshes its catalog, CallMcpTool hits the same binary.',
   Regression_test:
@@ -103,7 +102,12 @@ const report = {
     LIVE_AGENT_HARD_PROOF: liveLabel,
   },
   cases: [
-    { case: 'Fresh Cursor', MCP_visible: 'UNAVAILABLE', neuron_context: 'UNAVAILABLE', Call_works: 'UNAVAILABLE' },
+    {
+      case: 'Fresh Cursor',
+      MCP_visible: 'UNAVAILABLE',
+      neuron_context: 'UNAVAILABLE',
+      Call_works: 'UNAVAILABLE',
+    },
     {
       case: 'Existing Cursor (after reload / current session)',
       MCP_visible: liveLabel === 'MEASURED' ? 'YES' : 'MAY_BE_STALE',

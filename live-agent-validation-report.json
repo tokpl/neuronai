@@ -642,10 +642,7 @@
         "transcript": "C:\\Users\\sonde\\.cursor\\projects\\c-projekty-neuron-ai-memory\\agent-transcripts\\4ae5dcf5-fee8-4438-a7aa-222659cda2c0\\subagents\\93ccb157-78f6-4337-9f6d-d2d44d3094a9.jsonl",
         "TRACE_QUALITY": "HARD_TOOL_USE",
         "tool_events": 2,
-        "ledger_short": [
-          "list_dir:Glob",
-          "grep:Grep(.tmp/work-T13-A)"
-        ],
+        "ledger_short": ["list_dir:Glob", "grep:Grep(.tmp/work-T13-A)"],
         "list_dir": 1,
         "grep": 1,
         "file_reads": 0,
@@ -670,9 +667,7 @@
         "transcript": "C:\\Users\\sonde\\.cursor\\projects\\c-projekty-neuron-ai-memory\\agent-transcripts\\4ae5dcf5-fee8-4438-a7aa-222659cda2c0\\subagents\\d2878c48-703f-4f11-8124-27057eccd799.jsonl",
         "TRACE_QUALITY": "HARD_TOOL_USE",
         "tool_events": 1,
-        "ledger_short": [
-          "shell:Shell"
-        ],
+        "ledger_short": ["shell:Shell"],
         "list_dir": 0,
         "grep": 0,
         "file_reads": 0,
@@ -770,10 +765,7 @@
           "mcpServers": {
             "neuron": {
               "command": "C:\\Program Files\\nodejs\\node.exe",
-              "args": [
-                "C:\\projekty\\neuron-ai-memory\\apps\\cli\\dist\\index.js",
-                "mcp"
-              ],
+              "args": ["C:\\projekty\\neuron-ai-memory\\apps\\cli\\dist\\index.js", "mcp"],
               "env": {
                 "NEURON_CWD": "C:\\projekty\\neuron-ai-memory\\.tmp\\mcp-proof"
               }
@@ -809,10 +801,7 @@
         "mcpServers": {
           "neuron": {
             "command": "C:\\Program Files\\nodejs\\node.exe",
-            "args": [
-              "C:\\projekty\\neuron-ai-memory\\apps\\cli\\dist\\index.js",
-              "mcp"
-            ],
+            "args": ["C:\\projekty\\neuron-ai-memory\\apps\\cli\\dist\\index.js", "mcp"],
             "env": {
               "NEURON_CWD": "C:\\projekty\\neuron-ai-memory\\.tmp\\mcp-proof"
             }
@@ -823,10 +812,7 @@
         "mcpServers": {
           "neuron": {
             "command": "C:\\Program Files\\nodejs\\node.exe",
-            "args": [
-              "C:\\projekty\\neuron-ai-memory\\apps\\cli\\dist\\index.js",
-              "mcp"
-            ],
+            "args": ["C:\\projekty\\neuron-ai-memory\\apps\\cli\\dist\\index.js", "mcp"],
             "env": {
               "NEURON_CWD": "C:\\projekty\\neuron-ai-memory"
             }

@@ -17,7 +17,11 @@ import {
   type NeuronInitReport,
 } from '../templates/first-run.js';
 import { CLI_VERSION, pathExists } from '../services/neuron-fs.js';
-import { setupCursorIntegration, setupAntigravityIntegration, syncProjectBrainFiles } from '../services/cursor-setup.js';
+import {
+  setupCursorIntegration,
+  setupAntigravityIntegration,
+  syncProjectBrainFiles,
+} from '../services/cursor-setup.js';
 import { applyNeuronGitignore } from '../services/gitignore.js';
 import {
   isNeuronInitialized,
@@ -393,7 +397,9 @@ export async function runInit(
     ui.info('     - Cursor: Settings → Tools & MCP → turn on "neuron" (toggle off/on if upgraded)');
   }
   if (localConfig.integrations.antigravity) {
-    ui.info('     - Antigravity: Settings → Customizations → Installed MCP Servers → Click Refresh');
+    ui.info(
+      '     - Antigravity: Settings → Customizations → Installed MCP Servers → Click Refresh',
+    );
   }
   ui.info('  2. Ask your coding agent to change something — it should call neuron_context first');
   ui.info('  3. Or inspect locally — neuron context "where should I add …?"');

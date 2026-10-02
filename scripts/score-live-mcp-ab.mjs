@@ -62,7 +62,10 @@ function extractToolUses(raw) {
 function isBroadRediscovery(name, raw) {
   if (name === 'Glob') {
     if (/glob_pattern"\s*:\s*"\*\*\/\*/.test(raw)) return true;
-    if (/target_directory"\s*:\s*"c:\\\\projekty\\\\neuron-ai-memory"/.test(raw) && /\*\*/.test(raw))
+    if (
+      /target_directory"\s*:\s*"c:\\\\projekty\\\\neuron-ai-memory"/.test(raw) &&
+      /\*\*/.test(raw)
+    )
       return true;
   }
   if (name === 'Grep') {
@@ -70,7 +73,8 @@ function isBroadRediscovery(name, raw) {
     if (/"path"\s*:\s*"c:\\\\projekty\\\\neuron-ai-memory"/.test(raw)) return true;
     if (!/"path"\s*:/.test(raw) && /"pattern"\s*:/.test(raw)) return true;
   }
-  if (name === 'Shell' && /\b(tree|Get-ChildItem\s+-Recurse|rg\s+--|find\s+\.)/i.test(raw)) return true;
+  if (name === 'Shell' && /\b(tree|Get-ChildItem\s+-Recurse|rg\s+--|find\s+\.)/i.test(raw))
+    return true;
   return false;
 }
 
@@ -80,13 +84,17 @@ function firstReadPath(tools, raw) {
     const m = t.raw.match(/"path"\s*:\s*"([^"]+)"/);
     if (m) return m[1].replace(/\\\\/g, '\\');
   }
-  const m2 = raw.match(/"type"\s*:\s*"tool_use"\s*,\s*"name"\s*:\s*"Read"[\s\S]*?"path"\s*:\s*"([^"]+)"/);
+  const m2 = raw.match(
+    /"type"\s*:\s*"tool_use"\s*,\s*"name"\s*:\s*"Read"[\s\S]*?"path"\s*:\s*"([^"]+)"/,
+  );
   return m2 ? m2[1].replace(/\\\\/g, '\\') : null;
 }
 
 function answerBlob(raw) {
   // last assistant text
-  const parts = [...raw.matchAll(/"role"\s*:\s*"assistant"[\s\S]*?"text"\s*:\s*"((?:\\.|[^"\\])*)"/g)];
+  const parts = [
+    ...raw.matchAll(/"role"\s*:\s*"assistant"[\s\S]*?"text"\s*:\s*"((?:\\.|[^"\\])*)"/g),
+  ];
   if (!parts.length) return raw.slice(-4000);
   return parts[parts.length - 1][1].replace(/\\n/g, '\n').replace(/\\"/g, '"');
 }
@@ -160,10 +168,7 @@ function scoreRun(taskId, arm, agentId) {
     );
 
   const pathsFromNeuronUsed =
-    arm === 'B' &&
-    neuronContextCalled &&
-    firstUseful != null &&
-    !rediscoveryViolation;
+    arm === 'B' && neuronContextCalled && firstUseful != null && !rediscoveryViolation;
 
   return {
     taskId,
@@ -260,8 +265,7 @@ function main() {
     metrics.explorationOps.B_median != null &&
     metrics.explorationOps.A_median != null &&
     metrics.explorationOps.B_median <= metrics.explorationOps.A_median;
-  const successOk =
-    (metrics.taskSuccess.B_rate ?? 0) >= (metrics.taskSuccess.A_rate ?? 0) - 0.05;
+  const successOk = (metrics.taskSuccess.B_rate ?? 0) >= (metrics.taskSuccess.A_rate ?? 0) - 0.05;
 
   let mcpProof = 'FAILED';
   if (bMcpRate >= 0.8 && metrics.runsScored.B >= 15) {
@@ -315,7 +319,9 @@ function main() {
     },
     metrics,
     tokenLatency: 'UNAVAILABLE',
-    perTaskResults: results.sort((a, b) => a.taskId.localeCompare(b.taskId) || a.arm.localeCompare(b.arm)),
+    perTaskResults: results.sort(
+      (a, b) => a.taskId.localeCompare(b.taskId) || a.arm.localeCompare(b.arm),
+    ),
     failures: [
       ...(metrics.runsScored.missing
         ? [{ id: 'MISSING_TRANSCRIPTS', count: metrics.runsScored.missing }]

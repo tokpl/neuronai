@@ -622,8 +622,7 @@ const report = {
       id,
       baseline_sequence: a?.sequence?.slice(0, 12),
       neuron_sequence: b?.sequence?.slice(0, 12),
-      neuron_trust:
-        b?.neuron_first && !b?.rediscovered_repo ? 'trusted_targeted' : 'partial',
+      neuron_trust: b?.neuron_first && !b?.rediscovered_repo ? 'trusted_targeted' : 'partial',
     };
   }),
   caveats: [
@@ -747,7 +746,10 @@ Next: expand to 20×2 via the same Task harness; optional SDK stream with real \
 `;
 
 writeFileSync(join(repo, 'live-agent-validation-report.json'), JSON.stringify(report, null, 2));
-writeFileSync(join(repo, '.tmp', 'live-agent-results.json'), JSON.stringify({ completed: 16, expected: 16, results }, null, 2));
+writeFileSync(
+  join(repo, '.tmp', 'live-agent-results.json'),
+  JSON.stringify({ completed: 16, expected: 16, results }, null, 2),
+);
 writeFileSync(join(repo, 'docs', 'LIVE_AGENT_VALIDATION.md'), md);
 
 console.log(

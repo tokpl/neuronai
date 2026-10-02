@@ -36,7 +36,5 @@ export function shouldAutoPersist(
   confidence: number,
   qualityOk: boolean,
 ): boolean {
-  return (
-    policy.mode === 'automatic' && qualityOk && confidence >= policy.autoSaveMinConfidence
-  );
+  return policy.mode === 'automatic' && qualityOk && confidence >= policy.autoSaveMinConfidence;
 }

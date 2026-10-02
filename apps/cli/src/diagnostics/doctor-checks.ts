@@ -428,9 +428,8 @@ async function checkStaleScanKnowledge(cwd: string): Promise<DoctorCheck> {
   try {
     const { access } = await import('node:fs/promises');
     const { join } = await import('node:path');
-    const { isScanDerived, isUserAuthored, normalizeEvidencePath } = await import(
-      '@neuronai/storage'
-    );
+    const { isScanDerived, isUserAuthored, normalizeEvidencePath } =
+      await import('@neuronai/storage');
     const { openProjectSession } = await import('../services/project-session.js');
     const session = await openProjectSession(cwd);
 

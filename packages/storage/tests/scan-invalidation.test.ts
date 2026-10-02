@@ -8,7 +8,9 @@ import {
 } from '../src/scan-invalidation.js';
 import type { MemoryRecord } from '@neuronai/types';
 
-function mem(partial: Partial<MemoryRecord> & Pick<MemoryRecord, 'id' | 'title' | 'content'>): MemoryRecord {
+function mem(
+  partial: Partial<MemoryRecord> & Pick<MemoryRecord, 'id' | 'title' | 'content'>,
+): MemoryRecord {
   return {
     projectId: 'p',
     type: 'knowledge',

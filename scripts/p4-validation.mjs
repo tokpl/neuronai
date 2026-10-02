@@ -256,9 +256,12 @@ async function sectionContextQuality() {
   const neg = await withMcp(root, async (client) => {
     const { body } = await ask(client, 'Where is Terraform?');
     const ctx = String(body.context ?? '');
-    const empty =
-      /no stored project knowledge|no matching/i.test(ctx) && !body.recommendation;
-    return { empty, rec: body.recommendation?.path ?? null, fabricated: /terraform/i.test(body.recommendation?.path ?? '') };
+    const empty = /no stored project knowledge|no matching/i.test(ctx) && !body.recommendation;
+    return {
+      empty,
+      rec: body.recommendation?.path ?? null,
+      fabricated: /terraform/i.test(body.recommendation?.path ?? ''),
+    };
   });
 
   rmSync(root, { recursive: true, force: true });
@@ -298,7 +301,8 @@ function sectionDoctorGit() {
   const flagged = /HEAD changed|scan --update/i.test(doctor.out);
   rmSync(root, { recursive: true, force: true });
   console.log(`  recordedHead=${Boolean(meta1.lastScanGitHead)} flaggedAfterCommit=${flagged}`);
-  if (!meta1.lastScanGitHead) report.bugsLeft.push('Git HEAD not recorded on scan in this environment');
+  if (!meta1.lastScanGitHead)
+    report.bugsLeft.push('Git HEAD not recorded on scan in this environment');
   return { recordedHead: Boolean(meta1.lastScanGitHead), flagged, doctorOk: doctor.ok || flagged };
 }
 
@@ -429,7 +433,8 @@ async function main() {
   writeFileSync(join(repo, 'p4-validation-report.json'), JSON.stringify(report, null, 2));
   console.log('\nWrote p4-validation-report.json');
   console.log(`VERDICT: ${verdict}`);
-  if (report.blockers.length) console.log('Blockers:\n' + report.blockers.map((b) => `  - ${b}`).join('\n'));
+  if (report.blockers.length)
+    console.log('Blockers:\n' + report.blockers.map((b) => `  - ${b}`).join('\n'));
   process.exitCode = verdict === 'NOT READY' ? 1 : 0;
 }
 

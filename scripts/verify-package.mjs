@@ -79,7 +79,11 @@ try {
   const search = run(process.execPath, [bin, 'search', 'authentication'], project);
   check(/auth/i.test(search), 'init + search return project knowledge');
 
-  const context = run(process.execPath, [bin, 'context', 'Where is authentication handled?'], project);
+  const context = run(
+    process.execPath,
+    [bin, 'context', 'Where is authentication handled?'],
+    project,
+  );
   check(
     /auth|src\//i.test(context) &&
       (/Saved ~[\d.k]+ tokens of context/i.test(context) ||
@@ -117,20 +121,21 @@ try {
     fp.rankSha === expectedSha && fp.brainVersion === workspaceBrain.version,
     `packed Brain fingerprint matches workspace (${fp.brainVersion}@${fp.rankSha})`,
   );
-  check(
-    packedIndex.includes(fp.rankSha),
-    'packed index.js embeds the Brain fingerprint hash',
-  );
+  check(packedIndex.includes(fp.rankSha), 'packed index.js embeds the Brain fingerprint hash');
 
   // Remember → retrieve round-trip on the packed binary.
-  run(process.execPath, [
-    bin,
-    'remember',
-    'Never call payment providers from route handlers.',
-    '--yes',
-    '--type',
-    'business_rule',
-  ], project);
+  run(
+    process.execPath,
+    [
+      bin,
+      'remember',
+      'Never call payment providers from route handlers.',
+      '--yes',
+      '--type',
+      'business_rule',
+    ],
+    project,
+  );
   const remembered = run(
     process.execPath,
     [bin, 'context', 'What rule applies to payment code?'],

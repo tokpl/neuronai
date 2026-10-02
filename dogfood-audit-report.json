@@ -16,22 +16,14 @@
       "category": "location",
       "query": "Where is authentication implemented?",
       "intent": "LOCATION",
-      "modules": [
-        "src/auth/"
-      ],
+      "modules": ["src/auth/"],
       "files": [
         "src/auth/jwt.ts (signToken)",
         "src/auth/jwt.ts (verifyToken)",
         "src/auth/middleware.ts (authenticateRequest)"
       ],
-      "symbols": [
-        "signToken",
-        "verifyToken",
-        "authenticateRequest"
-      ],
-      "rules": [
-        "Authentication uses the AuthService abstraction"
-      ],
+      "symbols": ["signToken", "verifyToken", "authenticateRequest"],
+      "rules": ["Authentication uses the AuthService abstraction"],
       "recommendation": {
         "path": "src/auth/",
         "reason": "Authentication / authorization; belongs to the auth module"
@@ -57,10 +49,7 @@
         "src/billing/routes.ts (billingRouter)",
         "src/api/routes/users.ts (usersRouter)"
       ],
-      "symbols": [
-        "billingRouter",
-        "usersRouter"
-      ],
+      "symbols": ["billingRouter", "usersRouter"],
       "rules": [],
       "recommendation": {
         "path": "src/api/routes/index.ts",
@@ -79,9 +68,7 @@
       "category": "location",
       "query": "Where is billing implemented?",
       "intent": "LOCATION",
-      "modules": [
-        "src/billing/"
-      ],
+      "modules": ["src/billing/"],
       "files": [
         "src/billing/invoices/service.ts (cancelInvoice)",
         "src/billing/invoices/service.ts (InvoiceService)",
@@ -90,12 +77,7 @@
         "src/billing/routes.ts (billingRouter)",
         "src/billing/invoices/repository.ts (InvoiceRepository)"
       ],
-      "symbols": [
-        "cancelInvoice",
-        "InvoiceService",
-        "billingRouter",
-        "InvoiceRepository"
-      ],
+      "symbols": ["cancelInvoice", "InvoiceService", "billingRouter", "InvoiceRepository"],
       "rules": [],
       "recommendation": {
         "path": "src/billing/invoices/service.ts",
@@ -114,9 +96,7 @@
       "category": "location",
       "query": "Where is database access?",
       "intent": "LOCATION",
-      "modules": [
-        "src/db/"
-      ],
+      "modules": ["src/db/"],
       "files": [
         "src/db/schema.ts",
         "drizzle.config.ts",
@@ -143,9 +123,7 @@
       "category": "location",
       "query": "Where is the payment integration?",
       "intent": "LOCATION",
-      "modules": [
-        "src/payments/"
-      ],
+      "modules": ["src/payments/"],
       "files": [
         "src/payments/service.ts (PaymentService)",
         "src/payments/service.ts",
@@ -153,11 +131,7 @@
         "src/payments/stripe.ts (StripeClient)",
         "src/db/schema.ts (payments)"
       ],
-      "symbols": [
-        "PaymentService",
-        "StripeClient",
-        "payments"
-      ],
+      "symbols": ["PaymentService", "StripeClient", "payments"],
       "rules": [],
       "recommendation": {
         "path": "src/payments/service.ts",
@@ -176,18 +150,14 @@
       "category": "location",
       "query": "Where is configuration loaded?",
       "intent": "CONFIGURATION",
-      "modules": [
-        "src/config/"
-      ],
+      "modules": ["src/config/"],
       "files": [
         "src/config/env.ts (loadConfig)",
         "drizzle.config.ts",
         "package.json",
         "tsconfig.json"
       ],
-      "symbols": [
-        "loadConfig"
-      ],
+      "symbols": ["loadConfig"],
       "rules": [],
       "recommendation": null,
       "contextTokens": 124,
@@ -210,9 +180,7 @@
         "src/api/routes/users.ts",
         "src/billing/routes.ts (billingRouter)"
       ],
-      "symbols": [
-        "billingRouter"
-      ],
+      "symbols": ["billingRouter"],
       "rules": [
         "Never call Stripe directly from route handlers",
         "Cross-cutting concerns belong in middleware, not route handlers"
@@ -243,12 +211,7 @@
         "src/billing/invoices/service.ts",
         "src/billing/invoices/repository.ts (InvoiceRepository)"
       ],
-      "symbols": [
-        "validateInvoiceInput",
-        "invoices",
-        "cancelInvoice",
-        "InvoiceRepository"
-      ],
+      "symbols": ["validateInvoiceInput", "invoices", "cancelInvoice", "InvoiceRepository"],
       "rules": [],
       "recommendation": {
         "path": "src/billing/invoices/repository.ts",
@@ -267,22 +230,14 @@
       "category": "modification",
       "query": "Where should I add a new authentication provider?",
       "intent": "MODIFICATION",
-      "modules": [
-        "src/auth/"
-      ],
+      "modules": ["src/auth/"],
       "files": [
         "src/auth/jwt.ts (signToken)",
         "src/auth/jwt.ts (verifyToken)",
         "src/auth/middleware.ts (authenticateRequest)"
       ],
-      "symbols": [
-        "signToken",
-        "verifyToken",
-        "authenticateRequest"
-      ],
-      "rules": [
-        "Authentication uses the AuthService abstraction"
-      ],
+      "symbols": ["signToken", "verifyToken", "authenticateRequest"],
+      "rules": ["Authentication uses the AuthService abstraction"],
       "recommendation": {
         "path": "src/auth/middleware.ts",
         "reason": "Exported symbol; belongs to the auth module; defines authenticateRequest"
@@ -308,13 +263,8 @@
         "src/billing/invoices/service.ts (InvoiceService)",
         "src/billing/invoices/repository.ts"
       ],
-      "symbols": [
-        "cancelInvoice",
-        "InvoiceService"
-      ],
-      "rules": [
-        "Use dependency injection / service modules for business logic"
-      ],
+      "symbols": ["cancelInvoice", "InvoiceService"],
+      "rules": ["Use dependency injection / service modules for business logic"],
       "recommendation": {
         "path": "src/billing/invoices/service.ts",
         "reason": "Service / business logic; belongs to the billing module"
@@ -341,10 +291,7 @@
         "src/billing/invoices/service.ts (InvoiceService)",
         "src/billing/invoices/service.ts"
       ],
-      "symbols": [
-        "PaymentService",
-        "InvoiceService"
-      ],
+      "symbols": ["PaymentService", "InvoiceService"],
       "rules": [],
       "recommendation": {
         "path": "tests/payments/PaymentService.test.ts",
@@ -363,22 +310,14 @@
       "category": "architecture",
       "query": "How is authentication structured?",
       "intent": "ARCHITECTURE",
-      "modules": [
-        "src/auth/"
-      ],
+      "modules": ["src/auth/"],
       "files": [
         "src/auth/jwt.ts (signToken)",
         "src/auth/jwt.ts (verifyToken)",
         "src/auth/middleware.ts (authenticateRequest)"
       ],
-      "symbols": [
-        "signToken",
-        "verifyToken",
-        "authenticateRequest"
-      ],
-      "rules": [
-        "Authentication uses the AuthService abstraction"
-      ],
+      "symbols": ["signToken", "verifyToken", "authenticateRequest"],
+      "rules": ["Authentication uses the AuthService abstraction"],
       "recommendation": null,
       "contextTokens": 125,
       "corpusTokens": 3239,
@@ -393,22 +332,15 @@
       "category": "architecture",
       "query": "How does billing flow through the application?",
       "intent": "IMPLEMENTATION",
-      "modules": [
-        "src/billing/"
-      ],
+      "modules": ["src/billing/"],
       "files": [
         "src/billing/invoices/service.ts (cancelInvoice)",
         "src/billing/invoices/service.ts (InvoiceService)",
         "src/billing/invoices/service.ts",
         "src/billing/invoices/repository.ts"
       ],
-      "symbols": [
-        "cancelInvoice",
-        "InvoiceService"
-      ],
-      "rules": [
-        "All billing mutations go through BillingService"
-      ],
+      "symbols": ["cancelInvoice", "InvoiceService"],
+      "rules": ["All billing mutations go through BillingService"],
       "recommendation": {
         "path": "src/billing/invoices/service.ts",
         "reason": "Exported symbol; belongs to the billing module; defines cancelInvoice"
@@ -426,9 +358,7 @@
       "category": "architecture",
       "query": "What layer owns database access?",
       "intent": "ARCHITECTURE",
-      "modules": [
-        "src/db/"
-      ],
+      "modules": ["src/db/"],
       "files": [
         "src/db/schema.ts",
         "drizzle.config.ts",
@@ -459,9 +389,7 @@
         "src/billing/routes.ts",
         "src/auth/middleware.ts (authenticateRequest)"
       ],
-      "symbols": [
-        "authenticateRequest"
-      ],
+      "symbols": ["authenticateRequest"],
       "rules": [
         "Cross-cutting concerns belong in middleware, not route handlers",
         "Never call Stripe directly from route handlers"
@@ -505,22 +433,15 @@
       "category": "rules",
       "query": "What rule applies to payment code?",
       "intent": "CONVENTION",
-      "modules": [
-        "src/payments/"
-      ],
+      "modules": ["src/payments/"],
       "files": [
         "src/payments/service.ts (PaymentService)",
         "src/payments/service.ts",
         "src/payments/repository.ts",
         "src/db/schema.ts (payments)"
       ],
-      "symbols": [
-        "PaymentService",
-        "payments"
-      ],
-      "rules": [
-        "Never call Stripe directly from route handlers"
-      ],
+      "symbols": ["PaymentService", "payments"],
+      "rules": ["Never call Stripe directly from route handlers"],
       "recommendation": null,
       "contextTokens": 107,
       "corpusTokens": 3239,
@@ -535,22 +456,14 @@
       "category": "rules",
       "query": "What decision was made about authentication?",
       "intent": "DECISION",
-      "modules": [
-        "src/auth/"
-      ],
+      "modules": ["src/auth/"],
       "files": [
         "src/auth/jwt.ts (signToken)",
         "src/auth/jwt.ts (verifyToken)",
         "src/auth/middleware.ts (authenticateRequest)"
       ],
-      "symbols": [
-        "signToken",
-        "verifyToken",
-        "authenticateRequest"
-      ],
-      "rules": [
-        "Authentication uses the AuthService abstraction"
-      ],
+      "symbols": ["signToken", "verifyToken", "authenticateRequest"],
+      "rules": ["Authentication uses the AuthService abstraction"],
       "recommendation": null,
       "contextTokens": 128,
       "corpusTokens": 3239,
@@ -570,9 +483,7 @@
         "src/billing/invoices/service.ts (cancelInvoice)",
         "src/billing/invoices/service.ts"
       ],
-      "symbols": [
-        "cancelInvoice"
-      ],
+      "symbols": ["cancelInvoice"],
       "rules": [
         "PostgreSQL is the system of record - avoid dual-writes to other stores",
         "All billing mutations go through BillingService",

@@ -21,11 +21,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import {
-  EXPECTED_MCP_TOOLS,
-  LEGACY_TOOL_MARKERS,
-  formatNeuronMcpStatus,
-} from '../src/index.js';
+import { EXPECTED_MCP_TOOLS, LEGACY_TOOL_MARKERS, formatNeuronMcpStatus } from '../src/index.js';
 
 describe('stale Cursor MCP catalog failure model', () => {
   it('keeps legacy markers and expected 7 tools disjoint', () => {

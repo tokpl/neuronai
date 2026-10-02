@@ -312,7 +312,11 @@ function buildRepoA(root) {
     'export function createInvoice() {}\nexport function cancelInvoice() {}\n',
   );
   write(root, 'src/services/payment-service.ts', 'export class PaymentService { charge() {} }\n');
-  write(root, 'src/services/stripe.ts', 'export class StripeClient {}\nexport function createStripeClient() {}\n');
+  write(
+    root,
+    'src/services/stripe.ts',
+    'export class StripeClient {}\nexport function createStripeClient() {}\n',
+  );
   write(root, 'src/api/routes/index.ts', 'export { usersRouter } from "./users.js";\n');
   write(root, 'src/api/routes/users.ts', 'export const usersRouter = {};\n');
   write(root, 'src/api/routes/health.ts', 'export const healthRouter = {};\n');
@@ -329,7 +333,11 @@ function buildRepoB(root) {
   write(
     root,
     'package.json',
-    JSON.stringify({ name: 'repo-b-monorepo', private: true, workspaces: ['apps/*', 'packages/*'] }, null, 2),
+    JSON.stringify(
+      { name: 'repo-b-monorepo', private: true, workspaces: ['apps/*', 'packages/*'] },
+      null,
+      2,
+    ),
   );
   write(
     root,
@@ -338,19 +346,31 @@ function buildRepoB(root) {
   );
   write(root, 'apps/web/package.json', JSON.stringify({ name: '@acme/web' }, null, 2));
   write(root, 'apps/web/src/pages/index.tsx', 'export default function Home() { return null; }\n');
-  write(root, 'apps/api/package.json', JSON.stringify({ name: '@acme/api', dependencies: { express: '^4' } }, null, 2));
+  write(
+    root,
+    'apps/api/package.json',
+    JSON.stringify({ name: '@acme/api', dependencies: { express: '^4' } }, null, 2),
+  );
   write(root, 'apps/api/src/routes/billing.ts', 'export const billingRoutes = {};\n');
   write(root, 'apps/api/src/routes/health.ts', 'export const health = {};\n');
   write(root, 'apps/api/src/server.ts', 'export function createServer() {}\n');
   write(root, 'packages/auth/package.json', JSON.stringify({ name: '@acme/auth' }, null, 2));
   write(root, 'packages/auth/src/service.ts', 'export class AuthService {}\n');
   write(root, 'packages/auth/src/middleware.ts', 'export function authMiddleware() {}\n');
-  write(root, 'packages/billing/package.json', JSON.stringify({ name: '@acme/billing', dependencies: { stripe: '^17' } }, null, 2));
+  write(
+    root,
+    'packages/billing/package.json',
+    JSON.stringify({ name: '@acme/billing', dependencies: { stripe: '^17' } }, null, 2),
+  );
   write(root, 'packages/billing/src/service.ts', 'export class BillingService {}\n');
   write(root, 'packages/billing/src/PaymentService.ts', 'export class PaymentService {}\n');
   write(root, 'packages/billing/src/invoices.ts', 'export function createInvoice() {}\n');
   write(root, 'packages/billing/src/stripe.ts', 'export class StripeClient {}\n');
-  write(root, 'packages/database/package.json', JSON.stringify({ name: '@acme/database', dependencies: { pg: '^8' } }, null, 2));
+  write(
+    root,
+    'packages/database/package.json',
+    JSON.stringify({ name: '@acme/database', dependencies: { pg: '^8' } }, null, 2),
+  );
   write(root, 'packages/database/src/client.ts', 'export class DatabaseClient {}\n');
   write(root, 'packages/database/src/schema.ts', 'export const schema = {};\n');
   write(root, 'apps/api/src/workers/jobs.ts', 'export function enqueueJob() {}\n');
@@ -421,10 +441,50 @@ function buildRepoD(root) {
 }
 
 function seedRules(bin, root) {
-  run(bin, ['remember', 'Never call Stripe directly from route handlers.', '--yes', '--type', 'business_rule'], root);
-  run(bin, ['remember', 'All billing mutations go through BillingService.', '--yes', '--type', 'business_rule'], root);
-  run(bin, ['remember', 'Authentication uses the AuthService abstraction.', '--yes', '--type', 'business_rule'], root);
-  run(bin, ['remember', 'Database access must stay inside repositories.', '--yes', '--type', 'business_rule'], root);
+  run(
+    bin,
+    [
+      'remember',
+      'Never call Stripe directly from route handlers.',
+      '--yes',
+      '--type',
+      'business_rule',
+    ],
+    root,
+  );
+  run(
+    bin,
+    [
+      'remember',
+      'All billing mutations go through BillingService.',
+      '--yes',
+      '--type',
+      'business_rule',
+    ],
+    root,
+  );
+  run(
+    bin,
+    [
+      'remember',
+      'Authentication uses the AuthService abstraction.',
+      '--yes',
+      '--type',
+      'business_rule',
+    ],
+    root,
+  );
+  run(
+    bin,
+    [
+      'remember',
+      'Database access must stay inside repositories.',
+      '--yes',
+      '--type',
+      'business_rule',
+    ],
+    root,
+  );
 }
 
 async function benchmarkRepo(name, builder, bin = neuronBin) {
@@ -444,7 +504,11 @@ async function benchmarkRepo(name, builder, bin = neuronBin) {
       const body = await ask(client, spec.q);
       let verdict = scoreQuery(spec, body);
       // Soft expectations: empty on a shape without workers is acceptable, not incorrect.
-      if (spec.soft && verdict === 'incorrect' && !(body.relevantFiles?.length || body.recommendation)) {
+      if (
+        spec.soft &&
+        verdict === 'incorrect' &&
+        !(body.relevantFiles?.length || body.recommendation)
+      ) {
         verdict = 'acceptable';
       }
       rows.push({
@@ -452,7 +516,11 @@ async function benchmarkRepo(name, builder, bin = neuronBin) {
         category: spec.category,
         query: spec.q,
         intent: body.intent,
-        topResult: body.recommendation?.path ?? body.relevantModules?.[0]?.path ?? body.relevantFiles?.[0]?.path ?? null,
+        topResult:
+          body.recommendation?.path ??
+          body.relevantModules?.[0]?.path ??
+          body.relevantFiles?.[0]?.path ??
+          null,
         relevantFiles: (body.relevantFiles ?? []).map((f) => f.path),
         relevantModules: (body.relevantModules ?? []).map((m) => m.path),
         rules: (body.relevantRules ?? []).map((r) => r.title),
@@ -470,9 +538,10 @@ async function benchmarkRepo(name, builder, bin = neuronBin) {
 }
 
 function parseDeltaFromScanOutput(out) {
-  const m = /(\d+)\s+unchanged\s*·\s*(\d+)\s+changed\s*·\s*(\d+)\s+added\s*·\s*(\d+)\s+deleted(?:\s*·\s*(\d+)\s+reanalyzed)?/i.exec(
-    out,
-  );
+  const m =
+    /(\d+)\s+unchanged\s*·\s*(\d+)\s+changed\s*·\s*(\d+)\s+added\s*·\s*(\d+)\s+deleted(?:\s*·\s*(\d+)\s+reanalyzed)?/i.exec(
+      out,
+    );
   if (!m) return null;
   return {
     unchanged: Number(m[1]),
@@ -604,7 +673,9 @@ function runRenameConsistency(bin = neuronBin) {
   const scanOut = run(bin, ['scan', '--update'], root);
   const delta = parseDeltaFromScanOutput(scanOut);
 
-  const knowledge = JSON.parse(readFileSync(join(root, '.neuron', 'brain', 'knowledge.json'), 'utf8'));
+  const knowledge = JSON.parse(
+    readFileSync(join(root, '.neuron', 'brain', 'knowledge.json'), 'utf8'),
+  );
   const mapPaths = (knowledge.map?.entries ?? []).map((e) => e.path);
   const store = JSON.parse(readFileSync(join(root, '.neuron', 'runtime', 'store.json'), 'utf8'));
   const memories = store.memories ?? [];
@@ -616,7 +687,11 @@ function runRenameConsistency(bin = neuronBin) {
     (m) =>
       (m.tags ?? []).includes('scan') &&
       (m.paths ?? []).some((p) => String(p).includes('src/billing/')) &&
-      (m.paths ?? []).every((p) => String(p).includes('src/billing/') || !existsSync(join(root, String(p).replace(/\/$/, '')))),
+      (m.paths ?? []).every(
+        (p) =>
+          String(p).includes('src/billing/') ||
+          !existsSync(join(root, String(p).replace(/\/$/, ''))),
+      ),
   );
 
   const mapHasOld = mapPaths.some((p) => p.includes('src/billing/'));
@@ -630,11 +705,7 @@ function runRenameConsistency(bin = neuronBin) {
     userMemorySurvived: userAlive,
     staleScanMemoriesWithOnlyBillingPaths: staleBillingScan.length,
     userRuleTitle,
-    pass:
-      !mapHasOld &&
-      mapHasNew &&
-      userAlive &&
-      staleBillingScan.length === 0,
+    pass: !mapHasOld && mapHasNew && userAlive && staleBillingScan.length === 0,
   };
 }
 
@@ -660,7 +731,12 @@ function architectureAudit() {
 
   const legacy = spawnSync(
     process.platform === 'win32' ? 'rg.exe' : 'rg',
-    ['-n', 'neuron_prepare_task|neuron_get_context|neuron_scan_project', 'packages/cursor-integration/templates', 'apps/cli/dist/templates'],
+    [
+      '-n',
+      'neuron_prepare_task|neuron_get_context|neuron_scan_project',
+      'packages/cursor-integration/templates',
+      'apps/cli/dist/templates',
+    ],
     { cwd: repo, encoding: 'utf8' },
   );
   findings.push({
@@ -677,7 +753,9 @@ function architectureAudit() {
   // Allow comments/docs that say "no embeddings"
   const cloudHits = (cloud.stdout || '')
     .split('\n')
-    .filter((l) => l && !/no embeddings|without embeddings|not.*embedding|Reserved for future/i.test(l));
+    .filter(
+      (l) => l && !/no embeddings|without embeddings|not.*embedding|Reserved for future/i.test(l),
+    );
   findings.push({
     check: 'no cloud/embedding runtime remnants',
     ok: cloudHits.length === 0,
@@ -685,7 +763,9 @@ function architectureAudit() {
   });
 
   const cliPkg = JSON.parse(readFileSync(join(repo, 'apps', 'cli', 'package.json'), 'utf8'));
-  const runtimeNeuron = Object.keys(cliPkg.dependencies || {}).filter((d) => d.startsWith('@neuronai/'));
+  const runtimeNeuron = Object.keys(cliPkg.dependencies || {}).filter((d) =>
+    d.startsWith('@neuronai/'),
+  );
   findings.push({
     check: 'packed CLI has zero @neuronai/* runtime deps',
     ok: runtimeNeuron.length === 0,
@@ -710,7 +790,10 @@ async function packedStrangerProof() {
 
   const pack = runCmd(pnpm, ['pack', '--pack-destination', work], join(repo, 'apps', 'cli'));
   if (pack.status !== 0) throw new Error(pack.stderr || pack.stdout);
-  const tarball = join(work, readdirSync(work).find((f) => f.endsWith('.tgz')));
+  const tarball = join(
+    work,
+    readdirSync(work).find((f) => f.endsWith('.tgz')),
+  );
   const project = join(work, 'stranger');
   mkdirSync(project, { recursive: true });
   buildRepoA(project);
@@ -774,11 +857,11 @@ spawnSync(
   ['--filter', '@neuronai/project-scanner', 'build'],
   { cwd: repo, stdio: 'inherit', shell: process.platform === 'win32' },
 );
-spawnSync(
-  process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm',
-  ['--filter', 'neuronai', 'build'],
-  { cwd: repo, stdio: 'inherit', shell: process.platform === 'win32' },
-);
+spawnSync(process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm', ['--filter', 'neuronai', 'build'], {
+  cwd: repo,
+  stdio: 'inherit',
+  shell: process.platform === 'win32',
+});
 
 console.log('\n=== Query benchmarks (A–D) ===');
 for (const [name, builder] of [
@@ -834,8 +917,12 @@ const allRows = report.repos.flatMap((r) => r.rows);
 const correctN = allRows.filter((r) => r.correct === 'correct').length;
 const acceptableN = allRows.filter((r) => r.correct === 'acceptable').length;
 const incorrectN = allRows.filter((r) => r.correct === 'incorrect').length;
-const locationMod = allRows.filter((r) => r.category === 'location' || r.category === 'modification');
-const locModOk = locationMod.filter((r) => r.correct === 'correct' || r.correct === 'acceptable').length;
+const locationMod = allRows.filter(
+  (r) => r.category === 'location' || r.category === 'modification',
+);
+const locModOk = locationMod.filter(
+  (r) => r.correct === 'correct' || r.correct === 'acceptable',
+).length;
 const negatives = allRows.filter((r) => r.category === 'negative');
 const negOk = negatives.filter((r) => r.correct === 'correct').length;
 const mods = allRows.filter((r) => r.category === 'modification');
@@ -874,8 +961,7 @@ report.summary = {
     oneFileNotFullRepo:
       typeof oneFile?.filesAnalyzed === 'number' ? oneFile.filesAnalyzed <= 20 : false,
     // Wall-clock can be walk-dominated on large fixtures; still expect a clear gap.
-    noChangeMuchFasterThanFull:
-      noChange && full ? noChange.timeMs < full.timeMs * 0.75 : false,
+    noChangeMuchFasterThanFull: noChange && full ? noChange.timeMs < full.timeMs * 0.75 : false,
   },
   renamePass: report.rename.pass,
   architectureOk: report.architectureAudit.every((f) => f.ok),
@@ -907,7 +993,8 @@ if (
 }
 if (!report.rename.pass) blockers.push('Rename/delete consistency failed');
 if (!report.architectureAudit.every((f) => f.ok)) blockers.push('Architecture audit failed');
-if (wantPacked && report.packed && !report.packed.mcpOk) blockers.push('Packed MCP catalog incomplete');
+if (wantPacked && report.packed && !report.packed.mcpOk)
+  blockers.push('Packed MCP catalog incomplete');
 
 report.verdict = blockers.length === 0 ? 'GO' : 'NO-GO';
 report.blockers = blockers;

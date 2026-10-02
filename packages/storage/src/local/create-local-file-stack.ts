@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
@@ -101,7 +102,7 @@ export async function createLocalFileMemoryStack(
     snapshot.versions = next.versions;
     snapshot.relations = next.relations;
 
-    const tmp = `${storePath}.tmp`;
+    const tmp = `${storePath}.tmp.${randomUUID()}`;
     await writeFile(tmp, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
     await rename(tmp, storePath);
 

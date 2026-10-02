@@ -3,13 +3,7 @@
  * remember → stale path — against the packed/bundled production CLI.
  */
 import { spawnSync } from 'node:child_process';
-import {
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -109,12 +103,16 @@ const mcp = JSON.parse(readFileSync(join(root, '.cursor', 'mcp.json'), 'utf8'));
 console.log(JSON.stringify(mcp, null, 2));
 const entry = mcp.mcpServers.neuron;
 if (!entry?.args?.includes('mcp')) throw new Error('mcp.json missing mcp arg');
-if (!/neuron_context/.test(readFileSync(join(root, '.cursor', 'rules', 'neuron-memory.mdc'), 'utf8'))) {
+if (
+  !/neuron_context/.test(readFileSync(join(root, '.cursor', 'rules', 'neuron-memory.mdc'), 'utf8'))
+) {
   throw new Error('rules still missing neuron_context');
 }
-if (/neuron_prepare_task|neuron_get_context/.test(
-  readFileSync(join(root, '.cursor', 'rules', 'neuron-memory.mdc'), 'utf8'),
-)) {
+if (
+  /neuron_prepare_task|neuron_get_context/.test(
+    readFileSync(join(root, '.cursor', 'rules', 'neuron-memory.mdc'), 'utf8'),
+  )
+) {
   throw new Error('rules still name legacy tools');
 }
 
@@ -164,7 +162,13 @@ for (const q of [
 
 console.log('\n== remember → MCP ==');
 run(
-  ['remember', 'Never call the payment provider directly from route handlers.', '--yes', '--type', 'business_rule'],
+  [
+    'remember',
+    'Never call the payment provider directly from route handlers.',
+    '--yes',
+    '--type',
+    'business_rule',
+  ],
   root,
 );
 
@@ -225,7 +229,10 @@ if (billingPaths.length) {
 }
 console.log('ok  map no longer contains src/billing paths');
 
-writeFileSync(join(root, 'gate-metrics.json'), `${JSON.stringify({ metrics, handshake, uxBody }, null, 2)}\n`);
+writeFileSync(
+  join(root, 'gate-metrics.json'),
+  `${JSON.stringify({ metrics, handshake, uxBody }, null, 2)}\n`,
+);
 console.log('\n== metrics ==');
 console.log(JSON.stringify(metrics, null, 2));
 console.log(`\nGATE_OK project=${root}`);

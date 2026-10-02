@@ -77,14 +77,14 @@ describe('code intelligence', () => {
     });
 
     expect(code.symbols.some((s) => s.name === 'BillingService')).toBe(true);
-    expect(code.symbols.some((s) => s.name === 'cancelInvoice' && s.parent === 'BillingService')).toBe(
-      true,
-    );
+    expect(
+      code.symbols.some((s) => s.name === 'cancelInvoice' && s.parent === 'BillingService'),
+    ).toBe(true);
 
     const imports = code.edges.filter((e) => e.type === 'IMPORTS' && e.confidence === 'high');
-    expect(imports.some((e) => e.from.includes('routes.ts') && e.to.includes('billing/service'))).toBe(
-      true,
-    );
+    expect(
+      imports.some((e) => e.from.includes('routes.ts') && e.to.includes('billing/service')),
+    ).toBe(true);
 
     const calls = code.edges.filter((e) => e.type === 'CALLS');
     expect(calls.length).toBeGreaterThan(0);
@@ -113,14 +113,12 @@ describe('code intelligence', () => {
     });
 
     expect(
-      code.edges.some(
-        (e) => e.type === 'IMPORTS' && e.from === 'src/b.ts' && e.to === 'src/a.ts',
-      ),
+      code.edges.some((e) => e.type === 'IMPORTS' && e.from === 'src/b.ts' && e.to === 'src/a.ts'),
     ).toBe(true);
     expect(code.edges.some((e) => e.type === 'CALLS' && /Alpha\.run|helper/.test(e.to))).toBe(true);
-    expect(code.edges.filter((e) => e.type === 'CALLS' && /Mystery/i.test(JSON.stringify(e)))).toHaveLength(
-      0,
-    );
+    expect(
+      code.edges.filter((e) => e.type === 'CALLS' && /Mystery/i.test(JSON.stringify(e))),
+    ).toHaveLength(0);
   });
 
   it('does not invent CALLS to unresolved symbols', async () => {

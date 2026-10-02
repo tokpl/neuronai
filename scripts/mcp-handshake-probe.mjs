@@ -113,10 +113,7 @@ const contextOk =
   !/[0-9a-f]{8}-[0-9a-f]{4}-/.test(body.context ?? '');
 
 const fail =
-  !names.includes('neuron_context') ||
-  legacy.length > 0 ||
-  !report.expectedMatch ||
-  !contextOk;
+  !names.includes('neuron_context') || legacy.length > 0 || !report.expectedMatch || !contextOk;
 
 if (!contextOk) console.error('neuron_context response failed product checks');
 process.exit(fail ? 1 : 0);

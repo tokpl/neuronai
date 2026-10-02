@@ -169,9 +169,7 @@ export async function createNeuronRuntime(
     }
 
     const brain = stack.brain;
-    const deletedPaths = new Set(
-      (report.delta?.deleted ?? []).map((p) => p.replace(/\\/g, '/')),
-    );
+    const deletedPaths = new Set((report.delta?.deleted ?? []).map((p) => p.replace(/\\/g, '/')));
     const pathGone = (path: string): boolean => {
       const p = path.replace(/\\/g, '/');
       if (deletedPaths.has(p)) return true;
@@ -310,9 +308,13 @@ export async function createNeuronRuntime(
     // for untouched files instead of wiping them when relationshipsList is empty.
     const nextEdges =
       mode === 'update' && report.relationshipsList.length === 0 && !focusTouched
-        ? ((brain.knowledge.graph.edges ?? []) as Array<{ from: string; to: string; type?: string }>).filter(
-            (e) => !pathGone(e.from) && !pathGone(String(e.to)),
-          )
+        ? (
+            (brain.knowledge.graph.edges ?? []) as Array<{
+              from: string;
+              to: string;
+              type?: string;
+            }>
+          ).filter((e) => !pathGone(e.from) && !pathGone(String(e.to)))
         : report.relationshipsList.map((rel) => ({
             from: rel.fromFile,
             to: rel.toModule,
@@ -367,8 +369,7 @@ export async function createNeuronRuntime(
         files: nextCode.files.filter((f) => pathStillOnDisk(f.path)),
         symbols: nextCode.symbols.filter((s) => pathStillOnDisk(s.path)),
         edges: nextCode.edges.filter(
-          (e) =>
-            pathStillOnDisk(e.from.split('#')[0]!) && pathStillOnDisk(e.to.split('#')[0]!),
+          (e) => pathStillOnDisk(e.from.split('#')[0]!) && pathStillOnDisk(e.to.split('#')[0]!),
         ),
       };
       await brain.updateCode(liveCode);

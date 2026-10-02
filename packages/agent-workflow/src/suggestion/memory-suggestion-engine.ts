@@ -160,8 +160,6 @@ export class MemorySuggestionEngine {
   }
 }
 
-export function createMemorySuggestionEngine(
-  rules?: WorkflowRulesEngine,
-): MemorySuggestionEngine {
+export function createMemorySuggestionEngine(rules?: WorkflowRulesEngine): MemorySuggestionEngine {
   return new MemorySuggestionEngine(rules);
 }

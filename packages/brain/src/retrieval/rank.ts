@@ -13,14 +13,7 @@ import type { ProjectMapEntry } from '../models.js';
  */
 
 export type RetrievalKind =
-  | 'decision'
-  | 'pattern'
-  | 'warning'
-  | 'knowledge'
-  | 'rule'
-  | 'context'
-  | 'insight'
-  | 'location';
+  'decision' | 'pattern' | 'warning' | 'knowledge' | 'rule' | 'context' | 'insight' | 'location';
 
 export interface RetrievalDoc {
   id: string;

@@ -40,10 +40,15 @@ describe('ProjectBrain', () => {
     expect(loadedBrain.dna.identity.summary?.value).toBe('Updated summary');
 
     // Test update methods
-    await loadedBrain.updateDNA({ ...loadedBrain.dna, identity: { ...loadedBrain.dna.identity, name: { value: 'renamed' } } });
+    await loadedBrain.updateDNA({
+      ...loadedBrain.dna,
+      identity: { ...loadedBrain.dna.identity, name: { value: 'renamed' } },
+    });
     expect(loadedBrain.dna.identity.name?.value).toBe('renamed');
 
-    await loadedBrain.updateKnowledge({ rules: [{ id: 'r1', title: 'test rule', body: 'body', type: 'rule' }] });
+    await loadedBrain.updateKnowledge({
+      rules: [{ id: 'r1', title: 'test rule', body: 'body', type: 'rule' }],
+    });
     expect(loadedBrain.knowledge.rules).toHaveLength(1);
     expect(loadedBrain.knowledge.rules[0].title).toBe('test rule');
   });
@@ -173,9 +178,7 @@ describe('ProjectBrain', () => {
     await brain.updateMap({
       version: 1,
       updatedAt: new Date().toISOString(),
-      entries: [
-        { kind: 'file', name: 'src/index.ts', path: 'src/index.ts' }
-      ]
+      entries: [{ kind: 'file', name: 'src/index.ts', path: 'src/index.ts' }],
     });
     expect(brain.getMap().entries[0].name).toBe('src/index.ts');
 
@@ -211,18 +214,18 @@ describe('ProjectBrain', () => {
 
     // Test that the recordDecision method works
     await brain.recordDecision({
-        id: 'd10',
-        projectId: 'p2',
-        type: 'architecture_decision',
-        title: 'Use TypeScript',
-        content: 'Type safety',
-        status: 'active',
-        importanceScore: 0.9,
-        confidence: 0.9,
-        source: 'manual',
-        tags: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+      id: 'd10',
+      projectId: 'p2',
+      type: 'architecture_decision',
+      title: 'Use TypeScript',
+      content: 'Type safety',
+      status: 'active',
+      importanceScore: 0.9,
+      confidence: 0.9,
+      source: 'manual',
+      tags: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     });
     expect(brain.knowledge.decisions).toHaveLength(1);
     expect(brain.knowledge.decisions[0].title).toBe('Use TypeScript');

@@ -101,11 +101,27 @@ function buildFixture(root) {
   );
 
   write(root, 'src/config/env.ts', `export const config = { db: process.env.DATABASE_URL };\n`);
-  write(root, 'src/db/schema.ts', `export const invoices = { name: 'invoices' };\nexport const payments = { name: 'payments' };\n`);
-  write(root, 'src/db/client.ts', `export class DatabaseClient { query(_s: string) { return []; } }\n`);
+  write(
+    root,
+    'src/db/schema.ts',
+    `export const invoices = { name: 'invoices' };\nexport const payments = { name: 'payments' };\n`,
+  );
+  write(
+    root,
+    'src/db/client.ts',
+    `export class DatabaseClient { query(_s: string) { return []; } }\n`,
+  );
 
-  write(root, 'src/auth/service.ts', `export class AuthService {\n  login() {}\n  verify() {}\n}\n`);
-  write(root, 'src/auth/middleware.ts', `export function authMiddleware() { return (req: unknown) => req; }\n`);
+  write(
+    root,
+    'src/auth/service.ts',
+    `export class AuthService {\n  login() {}\n  verify() {}\n}\n`,
+  );
+  write(
+    root,
+    'src/auth/middleware.ts',
+    `export function authMiddleware() { return (req: unknown) => req; }\n`,
+  );
   write(root, 'src/auth/jwt.ts', `export function signToken() { return 't'; }\n`);
 
   write(
@@ -118,16 +134,32 @@ function buildFixture(root) {
     'src/billing/routes.ts',
     `import { Router } from 'express';\nimport { BillingService } from './service.js';\nconst billing = new BillingService();\nexport const billingRouter = Router();\nbillingRouter.post('/billing/invoices', () => billing.createInvoice(10));\nbillingRouter.post('/billing/invoices/:id/cancel', (req: any) => billing.cancelInvoice(req.params.id));\n`,
   );
-  write(root, 'src/billing/invoices/service.ts', `export class InvoiceService {\n  cancelInvoice(id: string) { return { id, status: 'cancelled' }; }\n  createInvoice() {}\n}\n`);
-  write(root, 'src/billing/invoices/repository.ts', `export class InvoiceRepository {\n  save(row: object) { return row; }\n  markCancelled(id: string) { return { id, status: 'cancelled' }; }\n}\n`);
-  write(root, 'src/billing/invoices/validation.ts', `export function validateInvoice(input: unknown) { return input; }\n`);
+  write(
+    root,
+    'src/billing/invoices/service.ts',
+    `export class InvoiceService {\n  cancelInvoice(id: string) { return { id, status: 'cancelled' }; }\n  createInvoice() {}\n}\n`,
+  );
+  write(
+    root,
+    'src/billing/invoices/repository.ts',
+    `export class InvoiceRepository {\n  save(row: object) { return row; }\n  markCancelled(id: string) { return { id, status: 'cancelled' }; }\n}\n`,
+  );
+  write(
+    root,
+    'src/billing/invoices/validation.ts',
+    `export function validateInvoice(input: unknown) { return input; }\n`,
+  );
 
   write(
     root,
     'src/payments/service.ts',
     `import { StripeClient } from './stripe.js';\nexport class PaymentService {\n  private stripe = new StripeClient();\n  charge() { return this.stripe.charge(); }\n  createPaymentIntent() { return this.stripe.createPaymentIntent(); }\n}\n`,
   );
-  write(root, 'src/payments/stripe.ts', `export class StripeClient {\n  charge() { return 'ok'; }\n  createPaymentIntent() { return { id: 'pi' }; }\n}\n`);
+  write(
+    root,
+    'src/payments/stripe.ts',
+    `export class StripeClient {\n  charge() { return 'ok'; }\n  createPaymentIntent() { return { id: 'pi' }; }\n}\n`,
+  );
   write(root, 'src/payments/repository.ts', `export class PaymentRepository { record() {}\n}\n`);
   write(
     root,
@@ -135,10 +167,26 @@ function buildFixture(root) {
     `import { Router } from 'express';\nimport { PaymentService } from './service.js';\nconst payments = new PaymentService();\nexport const paymentsRouter = Router();\npaymentsRouter.post('/payments', () => payments.createPaymentIntent());\n`,
   );
 
-  write(root, 'src/api/routes/index.ts', `export { healthRouter } from './health.js';\nexport { usersRouter } from './users.js';\n`);
-  write(root, 'src/api/routes/health.ts', `import { Router } from 'express';\nexport const healthRouter = Router();\nhealthRouter.get('/health', () => ({ ok: true }));\n`);
-  write(root, 'src/api/routes/users.ts', `import { Router } from 'express';\nexport const usersRouter = Router();\nusersRouter.get('/api/users', () => []);\n`);
-  write(root, 'src/api/server.ts', `import express from 'express';\nexport function createServer() { return express(); }\n`);
+  write(
+    root,
+    'src/api/routes/index.ts',
+    `export { healthRouter } from './health.js';\nexport { usersRouter } from './users.js';\n`,
+  );
+  write(
+    root,
+    'src/api/routes/health.ts',
+    `import { Router } from 'express';\nexport const healthRouter = Router();\nhealthRouter.get('/health', () => ({ ok: true }));\n`,
+  );
+  write(
+    root,
+    'src/api/routes/users.ts',
+    `import { Router } from 'express';\nexport const usersRouter = Router();\nusersRouter.get('/api/users', () => []);\n`,
+  );
+  write(
+    root,
+    'src/api/server.ts',
+    `import express from 'express';\nexport function createServer() { return express(); }\n`,
+  );
 
   write(root, 'src/workers/email-job.ts', `export async function sendEmailJob() {}\n`);
   write(root, 'src/workers/billing-job.ts', `export async function reconcileBillingJob() {}\n`);
@@ -147,16 +195,32 @@ function buildFixture(root) {
 
   // Noise / similarly named / legacy / generated / UI
   write(root, 'src/billing-ui/Badge.tsx', `export function BillingBadge() { return null; }\n`);
-  write(root, 'src/billing-admin/Dashboard.tsx', `export function BillingAdminDashboard() { return null; }\n`);
+  write(
+    root,
+    'src/billing-admin/Dashboard.tsx',
+    `export function BillingAdminDashboard() { return null; }\n`,
+  );
   write(root, 'src/legacy/old-payments.ts', `export function legacyCharge() {}\n`);
   write(root, 'src/generated/billing_pb.ts', `export const BillingProto = {};\n`);
   write(root, 'src/experimental/pay-v2.ts', `export function experimentalPay() {}\n`);
   write(root, 'docs/billing.md', `# Billing product notes\n`);
   write(root, 'docs/deploy.md', `# Deploy\nNo Kubernetes in this repo.\n`);
 
-  write(root, 'tests/auth/AuthService.test.ts', `import { AuthService } from '../../src/auth/service.js';\ntest('auth', () => { new AuthService(); });\n`);
-  write(root, 'tests/billing/invoices.test.ts', `import { InvoiceService } from '../../src/billing/invoices/service.js';\ntest('cancel', () => { new InvoiceService().cancelInvoice('1'); });\n`);
-  write(root, 'tests/payments/PaymentService.test.ts', `import { PaymentService } from '../../src/payments/service.js';\ntest('pay', () => { new PaymentService(); });\n`);
+  write(
+    root,
+    'tests/auth/AuthService.test.ts',
+    `import { AuthService } from '../../src/auth/service.js';\ntest('auth', () => { new AuthService(); });\n`,
+  );
+  write(
+    root,
+    'tests/billing/invoices.test.ts',
+    `import { InvoiceService } from '../../src/billing/invoices/service.js';\ntest('cancel', () => { new InvoiceService().cancelInvoice('1'); });\n`,
+  );
+  write(
+    root,
+    'tests/payments/PaymentService.test.ts',
+    `import { PaymentService } from '../../src/payments/service.js';\ntest('pay', () => { new PaymentService(); });\n`,
+  );
 
   // Bulk noise files so tree/rg has more to chew
   for (let i = 0; i < 40; i++) {
@@ -487,11 +551,7 @@ async function runNeuron(root, task, client) {
   }
 
   for (const path of unique.slice(0, 8)) {
-    const filePath = path.endsWith('/')
-      ? null
-      : existsSync(join(root, path))
-        ? path
-        : null;
+    const filePath = path.endsWith('/') ? null : existsSync(join(root, path)) ? path : null;
     if (path.endsWith('/')) {
       record(ops, 'list_dir', `list recommended ${path}`, path);
       continue;
@@ -572,7 +632,8 @@ function summarizeRun(arm, task, ops, opened, firstUseful, brain, extra = {}) {
     starting_point: startingPoint,
     correctness: answer,
     unnecessary_exploration: explorationOps.length,
-    rediscovery_calls: explorationOps.filter((o) => firstUseful == null || o.n < firstUseful).length,
+    rediscovery_calls: explorationOps.filter((o) => firstUseful == null || o.n < firstUseful)
+      .length,
     ops,
     brain_compression: brain
       ? {
@@ -615,8 +676,7 @@ function verdictFrom(comparison, mode) {
     return { product_impact: 'UNPROVEN', why: 'No comparable agent runs.' };
   }
   const red = comparison.exploration_reduction_pct;
-  const startOk =
-    comparison.neuron.starting_correct + comparison.neuron.starting_acceptable;
+  const startOk = comparison.neuron.starting_correct + comparison.neuron.starting_acceptable;
   const startRate = startOk / Math.max(1, comparison.neuron.tasks);
   const correctRate =
     (comparison.neuron.correct + comparison.neuron.partially_correct * 0.5) /
@@ -723,9 +783,7 @@ const comparison = {
   first_useful_op_delta: firstUsefulImprovement,
 };
 
-const brainSamples = pairs
-  .map((p) => p.neuron.brain_compression)
-  .filter(Boolean);
+const brainSamples = pairs.map((p) => p.neuron.brain_compression).filter(Boolean);
 const avgBrain = brainSamples.length
   ? {
       avg_context_tokens: Math.round(
@@ -871,7 +929,9 @@ console.log(`\nWrote ${outJson}`);
 console.log(
   `Exploration: baseline ${baselineAgg.avg_exploration_calls} → neuron ${neuronAgg.avg_exploration_calls} (−${explorationReductionPct}%)`,
 );
-console.log(`First useful file op: ${baselineAgg.avg_first_useful_file_op} → ${neuronAgg.avg_first_useful_file_op}`);
+console.log(
+  `First useful file op: ${baselineAgg.avg_first_useful_file_op} → ${neuronAgg.avg_first_useful_file_op}`,
+);
 console.log(`PRODUCT IMPACT: ${verdict.product_impact}`);
 
 if (!keep) rmSync(root, { recursive: true, force: true });

@@ -45,9 +45,7 @@ export async function askChoice<T extends string>(options: {
       0,
       choices.findIndex((c) => c.value === defaultValue),
     );
-    const answer = (
-      await rl.question(`Choose 1-${choices.length} [${defaultIndex + 1}]: `)
-    ).trim();
+    const answer = (await rl.question(`Choose 1-${choices.length} [${defaultIndex + 1}]: `)).trim();
     if (!answer) return defaultValue;
     const n = Number.parseInt(answer, 10);
     if (Number.isFinite(n) && n >= 1 && n <= choices.length) {

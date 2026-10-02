@@ -42,7 +42,11 @@ async function fixture(): Promise<string> {
     'utf8',
   );
   await writeFile(join(root, 'tsconfig.json'), '{}', 'utf8');
-  await writeFile(join(root, 'docker-compose.yml'), 'services:\n  db:\n    image: postgres\n', 'utf8');
+  await writeFile(
+    join(root, 'docker-compose.yml'),
+    'services:\n  db:\n    image: postgres\n',
+    'utf8',
+  );
   await writeFile(
     join(root, 'README.md'),
     '# Fixture\n\n- Uses modular services\n- PostgreSQL backend\n',
@@ -53,7 +57,11 @@ async function fixture(): Promise<string> {
     `import { Outbox } from './Outbox';\nexport class PaymentService {}\n`,
     'utf8',
   );
-  await writeFile(join(root, 'src', 'services', 'UserService.ts'), `export class UserService {}\n`, 'utf8');
+  await writeFile(
+    join(root, 'src', 'services', 'UserService.ts'),
+    `export class UserService {}\n`,
+    'utf8',
+  );
   await writeFile(
     join(root, 'src', 'services', 'AuthService.ts'),
     `export class AuthService { /* jwt */ }\n`,

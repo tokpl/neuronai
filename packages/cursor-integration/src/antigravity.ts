@@ -97,7 +97,7 @@ export async function installAntigravityIntegration(
     let stale = false;
     if (!missing) {
       const body = await readFile(dest, 'utf8');
-      stale = (templateParts.includes('neuron-memory.mdc') && !body.includes(REQUIRED_GUIDANCE));
+      stale = templateParts.includes('neuron-memory.mdc') && !body.includes(REQUIRED_GUIDANCE);
     }
     if (missing || options.force || stale) {
       const content = await loadTemplate(...templateParts);

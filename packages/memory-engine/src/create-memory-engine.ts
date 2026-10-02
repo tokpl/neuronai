@@ -1,8 +1,4 @@
-import type {
-  MemoryRecord,
-  MemoryRelationRecord,
-  MemoryVersionRecord,
-} from '@neuronai/types';
+import type { MemoryRecord, MemoryRelationRecord, MemoryVersionRecord } from '@neuronai/types';
 
 import {
   DefaultImportanceCalculator,

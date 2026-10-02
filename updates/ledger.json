@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "activeDraftId": "aktualizacja-tablice-informacyjne",
+  "backlog": [],
+  "updates": [
+    {
+      "id": "aktualizacja-tablice-informacyjne",
+      "title": "Aktualizacja - tablice informacyjne",
+      "status": "draft",
+      "createdAt": "2026-10-02T17:57:01.319Z",
+      "items": [
+        {
+          "id": "de6d9eaf",
+          "kind": "fix",
+          "text": "Tekst na tablicach informacyjnych siedzi równo w drewnianej ramie.",
+          "devNote": "Primitive3D face corners + FACE_W/H fit inside 2737 frame",
+          "resources": [
+            "sky-infoboards"
+          ],
+          "wikiTopics": [],
+          "addedAt": "2026-10-02T17:57:04.569Z"
+        }
+      ]
+    }
+  ]
+}

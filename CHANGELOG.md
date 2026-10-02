@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.8
+
+Publish of the MCP concurrent JSON write fix (0.2.7 was blocked as a staged npm version).
+
+Same contents as intended 0.2.7: unique `*.tmp.<uuid>` atomic writes for brain/store JSON.
+
 ## 0.2.7
 
 Fix MCP crash on concurrent brain writes (Cursor multi-window / multi-project).
@@ -11,7 +17,7 @@ Fix MCP crash on concurrent brain writes (Cursor multi-window / multi-project).
   write `knowledge.json` / store at the same time
 - Also includes recent security path sanitization, doctor perf, and test coverage from `main`
 
-After upgrading: `npm i -g neuronai@0.2.7`, then **reload Cursor MCP**. If a project already
+After upgrading: `npm i -g neuronai@0.2.8`, then **reload Cursor MCP**. If a project already
 has a corrupted `.neuron/brain/knowledge.json`, restore from git / backup or run `neuron scan`
 after removing the broken file.
 

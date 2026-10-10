@@ -73,6 +73,7 @@ describe('cli commands', () => {
 
     expect(names).toEqual(
       [
+        'antigravity',
         'brain',
         'context',
         'cursor',
@@ -209,6 +210,24 @@ describe('cli commands', () => {
     process.exitCode = 0;
     await runCursorDoctor(root);
     expect(process.exitCode === 0 || process.exitCode === undefined).toBe(true);
+  });
+
+  it('antigravity setup writes always_on rule and workspace MCP', async () => {
+    const root = await makeTemp();
+    await writeFixture(root, 'node');
+    await runInit(root, { yes: true });
+
+    const { runAntigravitySetup } = await import('../src/commands/antigravity-setup.js');
+    await runAntigravitySetup(root, { force: true });
+
+    const rules = await readFile(join(root, '.agents', 'rules', 'neuron-memory.md'), 'utf8');
+    expect(rules).toMatch(/trigger:\s*always_on/);
+    const mcp = JSON.parse(await readFile(join(root, '.agents', 'mcp_config.json'), 'utf8')) as {
+      mcpServers: { neuron: { env: { NEURON_CWD: string } } };
+    };
+    expect(mcp.mcpServers.neuron.env.NEURON_CWD).toBe(root);
+    const agents = await readFile(join(root, 'AGENTS.md'), 'utf8');
+    expect(agents).toContain('<!-- neuron-memory:start -->');
   });
 
   it('doctor checks after init', async () => {

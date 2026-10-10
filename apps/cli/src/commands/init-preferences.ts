@@ -1,5 +1,5 @@
 import type { NeuronLocalConfig } from '../config/local-config.js';
-import { askChoice } from '../ui/prompt.js';
+import { askMultiSelect, askSelect } from '../ui/prompt.js';
 import type { GitIgnorePreset } from '../services/gitignore.js';
 
 export type MemorySavePreference = {
@@ -7,18 +7,26 @@ export type MemorySavePreference = {
   privacyMode: NeuronLocalConfig['privacy']['mode'];
 };
 
-export type IdeIntegrationPreference = 'cursor' | 'antigravity' | 'both' | 'none';
+export type IdeIntegrationFlags = {
+  cursor: boolean;
+  antigravity: boolean;
+};
+
+type IdeChoice = 'cursor' | 'antigravity';
 
 export async function askInitPreferences(options: { useDefaults?: boolean }): Promise<{
   memory: MemorySavePreference;
   gitignore: GitIgnorePreset;
-  ide: IdeIntegrationPreference;
+  ide: IdeIntegrationFlags;
 }> {
   const useDefaults = options.useDefaults === true;
 
-  const ide = await askChoice({
+  const ideSelected = await askMultiSelect<IdeChoice>({
     title: 'Which IDE are you configuring Neuron for?',
-    detail: ['Neuron can configure MCP and specific rules for your editor automatically.'],
+    detail: [
+      'Neuron configures MCP and editor rules for each selected environment.',
+      'Select at least one — Space toggles, Enter confirms.',
+    ],
     choices: [
       {
         value: 'cursor',
@@ -28,24 +36,22 @@ export async function askInitPreferences(options: { useDefaults?: boolean }): Pr
       {
         value: 'antigravity',
         label: 'Antigravity IDE',
-        hint: 'configure ~/.gemini/config/mcp_config.json and .antigravity/rules',
-      },
-      {
-        value: 'both',
-        label: 'Both',
-        hint: 'configure for both environments',
-      },
-      {
-        value: 'none',
-        label: 'None',
-        hint: 'skip IDE configuration',
+        hint: 'configure .agents/mcp_config.json, rules, skill + global MCP fallback',
       },
     ],
-    defaultValue: 'cursor',
+    initialSelected: [],
+    defaultSelected: ['cursor'],
+    requireOne: true,
+    emptyWarning: 'Select at least one IDE',
     useDefaults,
   });
 
-  const memoryChoice = await askChoice({
+  const ide: IdeIntegrationFlags = {
+    cursor: ideSelected.includes('cursor'),
+    antigravity: ideSelected.includes('antigravity'),
+  };
+
+  const memoryChoice = await askSelect({
     title: 'How should Neuron remember project knowledge?',
     detail: [
       'This only affects durable engineering knowledge — never raw chat logs.',
@@ -80,7 +86,7 @@ export async function askInitPreferences(options: { useDefaults?: boolean }): Pr
         ? { autoSave: false, privacyMode: 'manual' }
         : { autoSave: true, privacyMode: 'suggest' };
 
-  const gitignore = await askChoice({
+  const gitignore = await askSelect({
     title: 'Update .gitignore for Neuron?',
     detail: [
       'Team Brain can share .neuron/brain/ + prefs.json via Git.',
@@ -112,5 +118,5 @@ export async function askInitPreferences(options: { useDefaults?: boolean }): Pr
     useDefaults,
   });
 
-  return { memory, gitignore, ide: ide as IdeIntegrationPreference };
+  return { memory, gitignore, ide };
 }

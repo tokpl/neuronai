@@ -167,20 +167,22 @@ Init detects the project, writes the brain, and wires your selected IDE. Real ou
 ✓ Learned 21 things about this project
 [7/8] IDE integration…
 ✓ Created Cursor rules + MCP (.cursor/)
-✓ Created Antigravity IDE rules + MCP (~/.gemini/config/mcp_config.json)
+✓ Created Antigravity rules + MCP (.agents/ + ~/.gemini/config/mcp_config.json)
 ```
 
 ### Connect your IDE
 
 During `neuron init` you can select which IDE to configure:
 - **Cursor**: Writes `.cursor/mcp.json` and agent rules. Then **Settings → Tools & MCP → enable "neuron"**.
-- **Antigravity IDE**: Writes `~/.gemini/config/mcp_config.json` and project rules (`.antigravity/rules/`). Then open **Settings → Customizations → Installed MCP Servers → Click Refresh**.
+- **Antigravity IDE**: Writes workspace `.agents/mcp_config.json` (with `NEURON_CWD`), always-on rules under `.agents/rules/` (`trigger: always_on`), skill `.agents/skills/neuron-memory/`, an `AGENTS.md` Neuron block, and a global MCP fallback at `~/.gemini/config/mcp_config.json`. Then **Customizations → Installed MCP Servers → Refresh**, and **Allow `mcp(neuron/*)`** so tools are not stuck in Ask mode. Antigravity init runs a **deep** scan (no manual `neuron scan --deep`).
 
 After upgrading NeuronAI, reload your IDE's MCP tool list so it refreshes to the current **7 tools**.
 
 ```bash
-neuron cursor     # Cursor connection status
-neuron doctor     # stdio catalog + IDE reload guidance
+neuron cursor              # Cursor connection status
+neuron antigravity setup   # (re)write Antigravity wiring
+neuron antigravity doctor  # diagnose Antigravity MCP + rules
+neuron doctor              # stdio catalog + IDE reload guidance
 ```
 
 ---
@@ -277,6 +279,8 @@ live-agent result. Details: [`docs/FINAL_RELEASE_AUDIT.md`](./docs/FINAL_RELEASE
 | `neuron brain` | Metrics: measured, derived, estimated |
 | `neuron status` | Project and memory overview |
 | `neuron cursor` | Cursor connection status |
+| `neuron antigravity setup` | Write Antigravity `.agents/` MCP, rules, skill, `AGENTS.md` |
+| `neuron antigravity doctor` | Diagnose Antigravity wiring |
 | `neuron doctor` | Diagnose brain, storage and IDE setup |
 | `neuron mcp` | MCP server (Your IDE calls this) |
 

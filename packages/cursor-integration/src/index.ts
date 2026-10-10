@@ -7,7 +7,11 @@ export {
   type NeuronMcpEntry,
 } from './mcp-config.js';
 export { installCursorIntegration, type CursorInstallResult } from './install.js';
-export { installAntigravityIntegration, type AntigravityInstallResult } from './antigravity.js';
+export {
+  installAntigravityIntegration,
+  mergeGlobalAntigravityMcp,
+  type AntigravityInstallResult,
+} from './antigravity.js';
 export { writeProjectBrainFiles, type ProjectBrainInput } from './project-brain.js';
 export {
   runCursorDoctorChecks,
@@ -21,3 +25,7 @@ export {
   type IdeCatalogState,
   type McpProbeResult,
 } from './doctor.js';
+export {
+  runAntigravityDoctorChecks,
+  type AntigravityDoctorReport,
+} from './antigravity-doctor.js';

@@ -4,6 +4,7 @@ import {
   installCursorIntegration,
   installAntigravityIntegration,
   runCursorDoctorChecks,
+  runAntigravityDoctorChecks,
 } from '@neuronai/cursor-integration';
 
 import { isNeuronInitialized } from './neuron-fs.js';
@@ -34,4 +35,8 @@ export async function setupAntigravityIntegration(
 
 export async function diagnoseCursor(cwd = process.cwd()) {
   return runCursorDoctorChecks(resolve(cwd));
+}
+
+export async function diagnoseAntigravity(cwd = process.cwd()) {
+  return runAntigravityDoctorChecks(resolve(cwd));
 }

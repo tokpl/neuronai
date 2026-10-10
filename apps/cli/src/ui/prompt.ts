@@ -1,14 +1,14 @@
 import { createInterface } from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 
+import { canPromptInteractively } from './prompt-env.js';
+import { runAskMultiSelect, runAskSelect } from './tty-prompt.js';
 import { ui } from './output.js';
 
-export function canPromptInteractively(): boolean {
-  return Boolean(input.isTTY && output.isTTY) && process.env['CI'] !== 'true';
-}
+export { canPromptInteractively } from './prompt-env.js';
 
 /**
- * Ask a numbered multiple-choice question.
+ * Ask a numbered multiple-choice question (legacy — used by `neuron remember`).
  * When non-interactive (or `useDefaults`), returns `defaultValue` without prompting.
  */
 export async function askChoice<T extends string>(options: {
@@ -84,4 +84,31 @@ export async function askConfirm(options: {
   } finally {
     rl.close();
   }
+}
+
+/** Arrow-key single-select for `neuron init` prefs. */
+export async function askSelect<T extends string>(options: {
+  title: string;
+  detail?: string[];
+  choices: Array<{ value: T; label: string; hint?: string }>;
+  defaultValue: T;
+  useDefaults?: boolean;
+  footer?: string;
+}): Promise<T> {
+  return runAskSelect(options);
+}
+
+/** Arrow-key multi-select (Space toggle) for `neuron init` IDE targets. */
+export async function askMultiSelect<T extends string>(options: {
+  title: string;
+  detail?: string[];
+  choices: Array<{ value: T; label: string; hint?: string }>;
+  initialSelected?: T[];
+  defaultSelected: T[];
+  requireOne?: boolean;
+  emptyWarning?: string;
+  useDefaults?: boolean;
+  footer?: string;
+}): Promise<T[]> {
+  return runAskMultiSelect(options);
 }

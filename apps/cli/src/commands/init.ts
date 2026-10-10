@@ -160,6 +160,12 @@ export async function runInit(
   // 4. Preferences (interactive unless --yes / non-TTY / CI)
   progress.start('Preferences…');
   const prefs = await askInitPreferences({ useDefaults: options.yes === true });
+  // Pure Antigravity: automatic privacy (no AskQuestion UI). Cursor (alone or with AG) keeps wizard choice.
+  const antigravityOnly = prefs.ide.antigravity && !prefs.ide.cursor;
+  const memoryPrefs = antigravityOnly
+    ? { autoSave: true, privacyMode: 'automatic' as const }
+    : prefs.memory;
+  const scanDepth = prefs.ide.antigravity ? 'deep' : 'fast';
   const localConfig: NeuronLocalConfig = {
     schemaVersion: 1,
     project: {
@@ -169,21 +175,21 @@ export async function runInit(
       stack: project.stack,
     },
     memory: {
-      autoSave: prefs.memory.autoSave,
+      autoSave: memoryPrefs.autoSave,
       threshold: 0.45,
     },
     privacy: {
-      mode: prefs.memory.privacyMode,
+      mode: memoryPrefs.privacyMode,
       localOnly: true,
       telemetry: false,
     },
     scan: {
-      depth: 'fast',
+      depth: scanDepth,
       ignore: [...DEFAULT_IGNORE],
     },
     integrations: {
-      cursor: prefs.ide === 'cursor' || prefs.ide === 'both',
-      antigravity: prefs.ide === 'antigravity' || prefs.ide === 'both',
+      cursor: prefs.ide.cursor,
+      antigravity: prefs.ide.antigravity,
     },
   };
 
@@ -243,9 +249,9 @@ export async function runInit(
   );
   const gitignore = await applyNeuronGitignore(cwd, prefs.gitignore);
   const saveLabel =
-    prefs.memory.privacyMode === 'automatic'
+    memoryPrefs.privacyMode === 'automatic'
       ? 'Remember automatically (high-confidence knowledge is saved without asking)'
-      : prefs.memory.privacyMode === 'manual'
+      : memoryPrefs.privacyMode === 'manual'
         ? 'Only when you ask'
         : 'Ask before adding durable knowledge to the Project Brain (Yes / No / Edit)';
   progress.ok(`Save mode: ${saveLabel}`);
@@ -274,7 +280,7 @@ export async function runInit(
     stored = result.stored;
 
     try {
-      const scan = await session.scan('fast');
+      const scan = await session.scan(scanDepth);
       scanModules = scan.report.modules;
       scanFiles = scan.report.filesScanned;
       scanMemories = scan.memoriesStored;
@@ -289,8 +295,8 @@ export async function runInit(
       await saveMetadata(meta, cwd);
       progress.ok(
         scanModules > 0
-          ? `Mapped ${scanModules} modules across ${scanFiles} files`
-          : `Read ${scanFiles} files`,
+          ? `Mapped ${scanModules} modules across ${scanFiles} files (${scanDepth} scan)`
+          : `Read ${scanFiles} files (${scanDepth} scan)`,
       );
       progress.ok(`Learned ${stored + scanMemories} things about this project`);
     } catch (err) {
@@ -343,12 +349,17 @@ export async function runInit(
     const antigravity = await setupAntigravityIntegration(cwd, { force: options.force });
     report.mcpConfigured = report.mcpConfigured || antigravity.mcpConfigured;
     if (antigravity.mcpConfigured) {
-      progress.ok('Created Antigravity IDE rules + MCP (~/.gemini/config/mcp_config.json)');
+      progress.ok(
+        'Created Antigravity rules + MCP (.agents/ + ~/.gemini/config/mcp_config.json)',
+      );
     } else {
       throw new NeuronCliError({
         title: 'Neuron cannot finish Antigravity IDE setup because:',
-        reason: 'Failed to write MCP configuration to ~/.gemini/config/mcp_config.json',
-        solution: 'Check file permissions for ~/.gemini/config/mcp_config.json',
+        reason: antigravity.mcpErrors.length
+          ? antigravity.mcpErrors.join('; ')
+          : 'Failed to write .agents/mcp_config.json',
+        solution: 'Re-run Antigravity setup and verify MCP configuration.',
+        commands: ['neuron antigravity setup --force', 'neuron antigravity doctor'],
       });
     }
   }
@@ -381,9 +392,9 @@ export async function runInit(
     `The brain lives in ${paths.neuronDir.replace(paths.root, '.')}`,
     'Commit .neuron/brain/ to share it with your team.',
     `New knowledge: ${
-      prefs.memory.privacyMode === 'automatic'
+      memoryPrefs.privacyMode === 'automatic'
         ? 'saved automatically'
-        : prefs.memory.privacyMode === 'manual'
+        : memoryPrefs.privacyMode === 'manual'
           ? 'only when you ask'
           : 'Neuron asks before saving anything'
     }`,
@@ -397,9 +408,11 @@ export async function runInit(
     ui.info('     - Cursor: Settings → Tools & MCP → turn on "neuron" (toggle off/on if upgraded)');
   }
   if (localConfig.integrations.antigravity) {
-    ui.info(
-      '     - Antigravity: Settings → Customizations → Installed MCP Servers → Click Refresh',
-    );
+    ui.info('     - Antigravity: Customizations → Installed MCP Servers → Refresh');
+    ui.info('     - Allow mcp(neuron/*) so tools are not stuck in Ask mode');
+    if (scanDepth === 'deep') {
+      ui.info('     - Deep scan already ran for Antigravity (no need for neuron scan --deep)');
+    }
   }
   ui.info('  2. Ask your coding agent to change something — it should call neuron_context first');
   ui.info('  3. Or inspect locally — neuron context "where should I add …?"');
@@ -407,5 +420,9 @@ export async function runInit(
   if (localConfig.integrations.cursor) {
     ui.blank();
     ui.info('  neuron cursor    shows the Cursor connection status any time');
+  }
+  if (localConfig.integrations.antigravity) {
+    ui.blank();
+    ui.info('  neuron antigravity doctor    diagnose Antigravity wiring any time');
   }
 }

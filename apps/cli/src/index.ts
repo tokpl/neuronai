@@ -6,6 +6,8 @@ import { NotImplementedError } from '@neuronai/types';
 import { NEURON_BRAIN_FINGERPRINT } from './brain-fingerprint.generated.js';
 import { runBrain } from './commands/brain.js';
 import { runContext } from './commands/context.js';
+import { runAntigravityDoctor } from './commands/antigravity-doctor.js';
+import { runAntigravitySetup } from './commands/antigravity-setup.js';
 import { runCursor } from './commands/cursor.js';
 import { runCursorDoctor } from './commands/cursor-doctor.js';
 import { runCursorInit } from './commands/cursor-init.js';
@@ -31,6 +33,7 @@ Usage:
 Start here:
   neuron init              Detect the project, build the brain, wire Cursor
   neuron cursor            Check the Cursor connection and what to do next
+  neuron antigravity       Wire / diagnose Antigravity IDE (setup, doctor)
 
 The brain:
   neuron scan              Re-learn from the codebase (--deep, --update)
@@ -148,6 +151,29 @@ export function createCli() {
         return;
       }
       await runCursor(process.cwd());
+    });
+
+  cli
+    .command('antigravity [action]', 'Antigravity IDE; actions: setup, doctor')
+    .option('--force', 'With setup: overwrite rules, skill, AGENTS.md block')
+    .action(async (action: string | undefined, options: { force?: boolean }) => {
+      if (action === 'setup' || !action) {
+        if (!action) {
+          ui.info('Tip: neuron antigravity setup | neuron antigravity doctor');
+          ui.blank();
+        }
+        await runAntigravitySetup(process.cwd(), options);
+        return;
+      }
+      if (action === 'doctor') {
+        await runAntigravityDoctor(process.cwd());
+        return;
+      }
+      ui.error(`Unknown action: neuron antigravity ${action}`);
+      ui.blank();
+      ui.suggest('neuron antigravity setup    write .agents/ MCP, rules, skill, AGENTS.md');
+      ui.suggest('neuron antigravity doctor   diagnose the Antigravity integration');
+      process.exitCode = 1;
     });
 
   cli.command('mcp', 'Start the Neuron MCP server over stdio (for Cursor)').action(async () => {

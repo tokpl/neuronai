@@ -10,15 +10,388 @@
       "createdAt": "2026-10-02T17:57:01.319Z",
       "items": [
         {
-          "id": "de6d9eaf",
+          "id": "09bf6fc3",
           "kind": "fix",
-          "text": "Tekst na tablicach informacyjnych siedzi równo w drewnianej ramie.",
-          "devNote": "Primitive3D face corners + FACE_W/H fit inside 2737 frame",
+          "text": "Tablice informacyjne znów rysują tekst shadereem na powierzchni tablicy (bez wystającego Draw3D).",
+          "devNote": "RT→texreplace on BLUE_FABRIC; fixed police_nb_car.dff UV 0..1; removed Primitive3D",
           "resources": [
             "sky-infoboards"
           ],
           "wikiTopics": [],
-          "addedAt": "2026-10-02T17:57:04.569Z"
+          "addedAt": "2026-10-02T18:09:30.760Z"
+        },
+        {
+          "id": "ad9805ad",
+          "kind": "update",
+          "text": "Panel tablicy ogłoszeń w HQ: po prawej jak dawniej, osobny tytuł i treść, podgląd bez prawa edycji oraz pomoc znaczników formatowania (jak na uprawie).",
+          "devNote": "PRL-side panel; title+body; canEdit readonly; formatting help; sg_infoboards.title",
+          "resources": [
+            "sky-infoboards",
+            "sky-gui"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T18:14:50.972Z"
+        },
+        {
+          "id": "9f8cd885",
+          "kind": "update",
+          "text": "Przy edycji tablicy ogłoszeń zmiany widać od razu na tablicy w świecie (lokalnie, przed zapisem).",
+          "devNote": "Local RT preview on title/body input (debounced); restore on cancel",
+          "resources": [
+            "sky-infoboards",
+            "sky-gui"
+          ],
+          "wikiTopics": [],
+          "addedAt": "2026-10-02T18:17:36.035Z"
+        },
+        {
+          "id": "0c0f04f6",
+          "kind": "fix",
+          "text": "Tablica ogłoszeń otwiera panel po wejściu w strefę przy tablicy (colshape), a nie po timerze odległości.",
+          "devNote": "createColSphere skyIBcol:id; client ColShape hit/leave like PRL",
+          "resources": [
+            "sky-infoboards"
+          ],
+          "wikiTopics": [],
+          "addedAt": "2026-10-02T18:20:08.566Z"
+        },
+        {
+          "id": "d836fa2d",
+          "kind": "fix",
+          "text": "Poprawka: panel tablicy ogłoszeń znów otwiera się po wejściu w strefę przy tablicy.",
+          "devNote": "onClientColShapeHit was on resourceRoot+propagate=false so never fired; switch to root+skyIBcol filter",
+          "resources": [
+            "sky-infoboards"
+          ],
+          "wikiTopics": [],
+          "addedAt": "2026-10-02T18:28:32.838Z"
+        },
+        {
+          "id": "19a82051",
+          "kind": "update",
+          "text": "Przepisane teksty na tablicach w kwaterze - więcej praktycznych wskazówek pod uprawę, lab, nocleg, szafki, warsztat, mennicę i salę operacyjną.",
+          "devNote": "sky-headquarters/server/boards/content.lua - denser RP/practical copy for all static HQ boards",
+          "resources": [
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T18:31:39.547Z"
+        },
+        {
+          "id": "e56227bb",
+          "kind": "update",
+          "text": "Tablica ogłoszeń ma limit 22 linii treści - tyle ile mieści się na fizycznej tablicy; licznik w panelu edycji.",
+          "devNote": "MAX_BODY_LINES=22 from filled mint RT; CEF+server enforce; catalogs trimmed",
+          "resources": [
+            "sky-infoboards",
+            "sky-gui",
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T18:35:02.852Z"
+        },
+        {
+          "id": "a1f1fc34",
+          "kind": "fix",
+          "text": "Sadzenie w uprawie wymaga tylko nasion - donice mają już ziemię. Panel minigierki uprawy bierze kolor gangu zamiast fioletu.",
+          "devNote": "grow plant: no substrate item; sessions pass gang colorR/G/B; Moss/contacts buy lists drop substrate",
+          "resources": [
+            "sky-headquarters",
+            "sky-inventory",
+            "sky-gui"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:08:54.749Z"
+        },
+        {
+          "id": "3f77f346",
+          "kind": "fix",
+          "text": "Etykieta „Co robisz” w minigierce warsztatu/uprawy bierze kolor gangu zamiast stałego fioletu.",
+          "devNote": "sky-wsm-brief__kicker had hardcoded rgba(192,132,252) - now --wsm-accent",
+          "resources": [
+            "sky-gui"
+          ],
+          "wikiTopics": [],
+          "addedAt": "2026-10-02T19:13:39.119Z"
+        },
+        {
+          "id": "f8dcdb2c",
+          "kind": "fix",
+          "text": "Naprawiona minigierka sadzenia (crash przy starcie) oraz toasty uprawy z kolorem gangu.",
+          "devNote": "GrowCareGame refreshView infinite loop with host.requestRedraw; grow toasts pass gang accent RGB",
+          "resources": [
+            "sky-gui",
+            "sky-headquarters"
+          ],
+          "wikiTopics": [],
+          "addedAt": "2026-10-02T19:16:17.954Z"
+        },
+        {
+          "id": "3c65d703",
+          "kind": "fix",
+          "text": "Podlewanie w uprawie HQ: umiarkowany łyk wody; przelejesz dopiero gdy woda w donicy wyszłaby powyżej 100 (nie przy ~60).",
+          "devNote": "actions.lua settleWater delta 12-18, overwater only if nextWater>100",
+          "resources": [
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:31:58.907Z"
+        },
+        {
+          "id": "b9e40fcf",
+          "kind": "update",
+          "text": "W uprawie HQ nosisz wodę w kubku (3 łyki = 3 podlewania) - copy i interakcje bez „konewki”.",
+          "devNote": "carry/sessions/actions/grow_interaction konewka→kubek, 3 łyki",
+          "resources": [
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:31:59.677Z"
+        },
+        {
+          "id": "95953ddb",
+          "kind": "update",
+          "text": "Status rośliny w uprawie to krótki ludzki opis (nie surowe metry). Toast gangu ma jeden pasek koloru zamiast podwójnego.",
+          "devNote": "SkyHqGrowActions_statusText prose; Toast.ts single borderLeft accent",
+          "resources": [
+            "sky-headquarters",
+            "sky-gui"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:32:00.053Z"
+        },
+        {
+          "id": "31f50b3d",
+          "kind": "feature",
+          "text": "Minigierki opieki w uprawie HQ przepisane na osobne gry przestrzenne (podlewanie strumieniem, mgła, przycinanie, sadzenie, zbiór, skręcanie, suszenie, dawka).",
+          "devNote": "GrowCareGame.ts spatial per-kind rewrite + sky-gui build",
+          "resources": [
+            "sky-gui",
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:32:00.894Z"
+        },
+        {
+          "id": "bb4abca7",
+          "kind": "update",
+          "text": "Rośliny w donicach uprawy rosną przez etapy (większa skala, czytelny wygląd); mokra ziemia w donicy jest ciemniejsza.",
+          "devNote": "config 6 stages + scales; soil visual wet; pot ColSphere removed",
+          "resources": [
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:32:01.740Z"
+        },
+        {
+          "id": "8a2cdb66",
+          "kind": "feature",
+          "text": "Uprawa HQ: własne modele roślin w donicy (6 etapów wzrostu + uschnięta + mokra/sucha ziemia) zamiast malutkich krzaków stock.",
+          "devNote": "Blender+DragonFF grow-plants DFFs; sky-models grow-weed-s0..s5 + soil; customModel on plant visuals",
+          "resources": [
+            "sky-models",
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:37:42.353Z"
+        },
+        {
+          "id": "b6293516",
+          "kind": "fix",
+          "text": "Rośliny w uprawie HQ widać nad ziemią w donicy. Po sadzeniu / podlaniu / statusie toast mówi wprost, co robić dalej.",
+          "devNote": "offsetZ 0.42 plant above pot soil; nextStepHint toasts after plant/water/status",
+          "resources": [
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:42:09.411Z"
+        },
+        {
+          "id": "d92e6eed",
+          "kind": "fix",
+          "text": "Uprawa HQ: rośliny z zieloną teksturą (naprawiony TXD), bez osobnej ziemi i bez zbędnych col pod stołem/podajnikiem; status bez zbędnych instrukcji „jak sprawdzić”.",
+          "devNote": "remove soilVisual+craft/cooler Col; restore stock plants.txd; parent 810; bigger scale/offset; clean status hints; plantSync addEvent",
+          "resources": [
+            "sky-headquarters",
+            "sky-models"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:46:59.260Z"
+        },
+        {
+          "id": "8a76b1b6",
+          "kind": "fix",
+          "text": "Uprawa HQ: kiełek wyższy i z teksturą liści (nie czarny manekin), bez zbędnej ziemi w donicy, stół/podajnik bez kolizji, status bez instrukcji „jak sprawdzić”.",
+          "devNote": "regen Blender taller+veg_bush3a; offsetZ 0.62; no soil dff; craft/cooler collisions off; status without TAB howto",
+          "resources": [
+            "sky-headquarters",
+            "sky-models"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:50:39.182Z"
+        },
+        {
+          "id": "72bb522a",
+          "kind": "fix",
+          "text": "Uprawa HQ: roślina znowu zielona i widoczna w donicy (etapy wzrostu), bez zbędnej ziemi i bez kolizji stołu/podajnika.",
+          "devNote": "useCustomModels=false stock 810/813 stages; bury stock soil in pot offsetZ 0.38; craft/cooler no col; status copy cleanup",
+          "resources": [
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:51:38.410Z"
+        },
+        {
+          "id": "8715329b",
+          "kind": "fix",
+          "text": "Uprawa HQ: roślina siedzi na glebie w donicy (nie przebija ścianek) - dopasowany offset i skala do modelu 742.",
+          "devNote": "pot_03 742 is 1.305m tall - offsetZ 1.10 soil rim; stock 810 scale 0.22-0.58 fits opening; clear customModel before setElementModel",
+          "resources": [
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T19:55:24.888Z"
+        },
+        {
+          "id": "54c9fa4b",
+          "kind": "fix",
+          "text": "Uprawa HQ: podlewanie bez zbędnego „poczekaj chwilę”; status przy krytycznych warunkach bez powtórki o podlewaniu.",
+          "devNote": "no careCd on water/mist; status omits nextHint when critical/stun; success toasts Podlane/Nawilżone without repeat water CTA",
+          "resources": [
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T20:00:47.893Z"
+        },
+        {
+          "id": "bb6f6b3b",
+          "kind": "update",
+          "text": "Uprawa HQ: w statusie donicy widać procent wzrostu rośliny (np. kiełkuje 12%).",
+          "devNote": "statusText cycleProgress percent next to phase label",
+          "resources": [
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T20:04:39.094Z"
+        },
+        {
+          "id": "82ff45b1",
+          "kind": "update",
+          "text": "Uprawa HQ: etapy rośliny to realny wzrost (kiełek → krzak → kwiaty), a nie sama skala; sucha/mokra/uschnięta to warianty koloru. Minigierki opieki trudniejsze i bardziej precyzyjne.",
+          "devNote": "Blender real cannabis morphology s0-s5; dry/wet color variants; dead wilted; useCustomModels=true; GrowCareGame harder spatial crafts",
+          "resources": [
+            "sky-headquarters",
+            "sky-models",
+            "sky-gui"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T20:11:48.107Z"
+        },
+        {
+          "id": "3708ad91",
+          "kind": "fix",
+          "text": "Uprawa HQ: liście rośliny to ząbkowane wachlarze jak u prawdziwej marihuany - etapy różnią się kształtem (kiełek / wegetacja / kwiaty), nie tylko skalą.",
+          "devNote": "serrated cannabis fan leaflets in Blender DFFs; morph stages not scale",
+          "resources": [
+            "sky-models",
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T20:20:10.455Z"
+        },
+        {
+          "id": "b4245502",
+          "kind": "fix",
+          "text": "Uprawa HQ: łodygi bez kwadratów (okrągłe), rośliny wyraźnie większe w donicy.",
+          "devNote": "grow_plant_stages_blender.py: add_cylinder/stem_seg tube + larger specs; config weed scaleFrom/To 1.15–1.35; regen DFF grow-plants",
+          "resources": [
+            "sky-models",
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T20:25:55.409Z"
+        },
+        {
+          "id": "03a11fae",
+          "kind": "fix",
+          "text": "Uprawa HQ: rośliny bez pixelacji tekstury, niższe i bardziej rozłożyste na boki (krzak zamiast wieży).",
+          "devNote": "plants.txd solid 64x64 (no bushland atlas); blender shorter wider bush morphology; UV planar; config scale ~1.05-1.25",
+          "resources": [
+            "sky-models",
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T20:37:14.071Z"
+        },
+        {
+          "id": "c6efa50b",
+          "kind": "fix",
+          "text": "Uprawa HQ: roślina siedzi w ziemi (nie unosi się), bez lewitujących listków obok gałęzi.",
+          "devNote": "offsetZ 0.95→0.82; bury root_z=-0.035; mid fans on stem lerp (no floating); coli only on tips/stem; brighter solid TXD",
+          "resources": [
+            "sky-models",
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T20:48:08.955Z"
+        },
+        {
+          "id": "68a27042",
+          "kind": "update",
+          "text": "Uprawa HQ: wyraźne warianty rośliny - mokra (zielona), sucha (żółtobrązowa) i uschnięta (brąz, zwiędła).",
+          "devNote": "plants.txd: grow_leaf/stem/bud × wet/dry/dead solids; DFF refs per-part textures; dead from stage3 wilt",
+          "resources": [
+            "sky-models",
+            "sky-headquarters"
+          ],
+          "wikiTopics": [
+            "gangi-hq"
+          ],
+          "addedAt": "2026-10-02T20:57:32.470Z"
         }
       ]
     }

@@ -40,15 +40,15 @@ export async function runCursor(cwd = process.cwd()): Promise<void> {
 
   const rules = await pathExists(join(cursorDir, 'rules', 'neuron-memory.mdc'));
   const skill = await pathExists(join(cursorDir, 'skills', 'neuron-memory', 'SKILL.md'));
-  const prime = await pathExists(join(cursorDir, 'skills', 'neuron-prime', 'SKILL.md'));
   const deliver = await pathExists(join(cursorDir, 'skills', 'neuron-deliver', 'SKILL.md'));
-  const workflowOk = skill && prime && deliver;
+  // Prime is part of `neuron init` — no separate /neuron-prime skill ships.
+  const workflowOk = skill && deliver;
 
   ui.kv('MCP server', registered ? `registered (${mcpPath})` : 'not registered');
   ui.kv('Agent rule', rules ? 'installed' : 'missing');
   ui.kv(
     'Skills',
-    workflowOk ? 'memory + prime + deliver' : 'incomplete (need memory, prime, deliver)',
+    workflowOk ? 'memory + deliver' : 'incomplete (need neuron-memory + neuron-deliver)',
   );
   ui.blank();
 

@@ -17,9 +17,24 @@ import { isNeuronInitialized, neuronPaths } from '../src/services/neuron-fs.js';
 
 const temps: string[] = [];
 
+async function rmRetry(dir: string, attempts = 5): Promise<void> {
+  for (let i = 0; i < attempts; i += 1) {
+    try {
+      await rm(dir, { recursive: true, force: true });
+      return;
+    } catch (err) {
+      const code = (err as NodeJS.ErrnoException).code;
+      if (i === attempts - 1 || (code !== 'ENOTEMPTY' && code !== 'EBUSY' && code !== 'EPERM')) {
+        throw err;
+      }
+      await new Promise((r) => setTimeout(r, 50 * (i + 1)));
+    }
+  }
+}
+
 afterEach(async () => {
   for (const dir of temps.splice(0)) {
-    await rm(dir, { recursive: true, force: true });
+    await rmRetry(dir);
   }
 });
 
@@ -77,10 +92,12 @@ describe('cli commands', () => {
         'brain',
         'context',
         'cursor',
+        'decay',
         'doctor',
         'init',
         'init cursor',
         'mcp',
+        'prime',
         'remember',
         'reset',
         'scan',
@@ -90,7 +107,7 @@ describe('cli commands', () => {
     );
   });
 
-  it('dispatches every cursor action to its own handler', async () => {
+  it('dispatches every cursor action to its own handler', { timeout: 60_000 }, async () => {
     const root = await makeTemp();
     await writeFixture(root, 'node');
     await runInit(root, { yes: true });

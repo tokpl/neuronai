@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.2.9
+
+Neuron Deliver + 9-tool MCP product surface (Brain-gated plan → build → verify → remember).
+
+### Deliver (`/neuron-deliver`)
+
+- Persistent `.neuron/workflow/gate.json` + `present.codingAllowed` / `present.clarify`
+- Cursor **best-effort** `neuron-gate` hook (Write deny while gate open; honor `codingAllowed`)
+- `neuron_workflow`: `propose_waves` (from `knowledge.code`), `complete_checklist`, board get/set/clear
+- `checklistOk` / `verifyOk` require full `checklistDone` evidence per playbook
+- Playbooks: build | ui | docs | polish | maintain
+- `LAST_DELIVER.md` on completed + remembered; doctor checks gate hook + last deliver
+
+### MCP
+
+- Product surface is **exactly 9 tools** (adds `neuron_resolve_clarify`, `neuron_workflow`)
+- After upgrading: `npm i -g neuronai@0.2.9`, then **reload Cursor MCP** (OFF→ON) so the IDE
+  catalog shows all 9 tools — stale 7-tool catalogs break Deliver
+
+### Also
+
+- `neuron init` includes prime; only memory + deliver skills ship (no Absolute)
+- Honest docs: gate hook is best-effort; Antigravity remains honor-only for Write deny
+
 ## 0.2.8
 
 Publish of the MCP concurrent JSON write fix (0.2.7 was blocked as a staged npm version).

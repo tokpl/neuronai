@@ -7,7 +7,10 @@
 ├── memory/*.md           # per-memory markdown mirrors (reviewable)   (commit)
 ├── workflow/
 │   ├── board.json        # deliver board (MCP neuron_workflow)        (commit)
-│   └── board.md          # human-readable board                       (commit)
+│   ├── board.md          # human-readable board                       (commit)
+│   ├── LAST_DELIVER.md   # last completed deliver receipt             (commit)
+│   ├── gate.json         # open clarify gate                          (ignore)
+│   └── history.jsonl     # deliver run history                        (ignore)
 ├── brain/
 │   ├── dna.json          # stack, modules, structure         (commit)
 │   ├── knowledge.json    # memories, decisions, rules, graph, map, code (commit)

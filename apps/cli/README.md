@@ -60,10 +60,10 @@ the code it describes.
 
 ---
 
-## See it in Cursor
+## See it in Cursor & Antigravity IDE
 
 Neuron does **not** replace the coding assistant. It removes repetitive project rediscovery.
-Cursor is told (via the generated rule) to call `neuron_context` **before** broad repository
+Your IDE is told (via generated rules for Cursor or Antigravity) to call `neuron_context` **before** broad repository
 exploration, then open the returned paths.
 
 <p align="center">
@@ -152,34 +152,59 @@ neuron init
 Node.js 22+. Or: `npx neuronai init`. One package, one dependency (`@modelcontextprotocol/sdk`).
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/quickstart.png" alt="Quick start: install, neuron init, enable Cursor MCP" width="920" />
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/quickstart.png" alt="Quick start: install, neuron init, enable MCP" width="920" />
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/cursor-workflow.png" alt="Developer workflow: install → init → open Cursor → ask with project context" width="920" />
+  <img src="https://raw.githubusercontent.com/tokpl/neuronai/main/docs/assets/cursor-workflow.png" alt="Developer workflow: install → init → open IDE → ask with project context" width="920" />
 </p>
 
-Init detects the project, writes the brain, and wires Cursor. Real output sketch:
+Init detects the project, writes the brain, and wires your selected IDE. Real output sketch:
 
 ```text
 [5/8] Initial scan…
 ✓ Mapped 5 modules across 15 files
 ✓ Learned 21 things about this project
-[7/8] Cursor integration…
+[7/8] IDE integration…
 ✓ Created Cursor rules + MCP (.cursor/)
+✓ Created Antigravity rules + MCP (.agents/ + ~/.gemini/config/mcp_config.json)
 ```
 
-### Connect Cursor
+### Connect your IDE
 
-`neuron init` writes `.cursor/mcp.json` and agent rules. Then **Settings → Tools & MCP → enable
-"neuron"**. After upgrading NeuronAI, toggle the server off/on (or Reload Window) so the tool
-list refreshes to the current **9 tools**. If chat still shows `neuron_prepare_task` or
-`CallMcpTool` returns `-32602`, that is a **stale Cursor catalog** — reload MCP; do not rewrite
-config.
+During `neuron init` you can select which IDE to configure:
+- **Cursor**: Writes `.cursor/mcp.json` and agent rules. Then **Settings → Tools & MCP → enable "neuron"**.
+- **Antigravity IDE**: Writes workspace `.agents/mcp_config.json` (with `NEURON_CWD`), always-on rules under `.agents/rules/` (`trigger: always_on`), skill `.agents/skills/neuron-memory/`, an `AGENTS.md` Neuron block, and a global MCP fallback at `~/.gemini/config/mcp_config.json`. Then **Customizations → Installed MCP Servers → Refresh**, and **Allow `mcp(neuron/*)`** so tools are not stuck in Ask mode. Antigravity init runs a **deep** scan (no manual `neuron scan --deep`).
+
+After upgrading NeuronAI, reload your IDE's MCP tool list so it refreshes to the current tool set
+(includes `neuron_context`, `neuron_resolve_clarify`, `neuron_workflow`).
 
 ```bash
-neuron cursor     # connection status
-neuron doctor     # stdio catalog + IDE reload guidance
+neuron cursor              # Cursor connection status
+neuron antigravity setup   # (re)write Antigravity wiring
+neuron antigravity doctor  # diagnose Antigravity MCP + rules
+neuron doctor              # stdio catalog + IDE reload guidance
+```
+
+### Workflow skills (prime & deliver)
+
+`neuron cursor setup` also installs **Neuron Workflow** skills so the agent knows *how* to
+work — not only *where* to look. Full guide: [docs/workflow.md](https://github.com/tokpl/neuronai/blob/main/docs/workflow.md).
+
+| Command | Meaning | Use when |
+| --- | --- | --- |
+| **`neuron init`** | Brain + scan + **prime** (prefs + `PROJECT_MAP.md`) + IDE | First setup |
+| **`neuron prime`** | Refresh conventions + map | Stack / scripts changed after init |
+| **`/neuron-deliver`** | Brain-gated plan → build → verify → **remember** (beats Absolute prompt boards) | Multi-file features, tickets |
+
+`neuron_context` can return **`present.clarify` / `present.gate` / `codingAllowed: false`** —
+the agent must AskQuestion and must not write application code until you answer. Cursor also
+gets a **best-effort** `neuron-gate` hook (blocks Write while `gate.json` is open); always honor
+`codingAllowed` — Shell and other hosts may bypass the hook.
+
+```text
+neuron prime
+/neuron-deliver Add rate limiting to the public API
 ```
 
 ---
@@ -192,16 +217,25 @@ neuron doctor     # stdio catalog + IDE reload guidance
 
 ```text
 .neuron/
-├── prefs.json            # your init answers                 (commit)
+├── prefs.json                 # init answers + workflow prefs     (commit)
+├── PROJECT_MAP.md             # living map from init / prime      (commit)
+├── memory/*.md                # per-memory markdown mirrors       (commit)
+├── workflow/
+│   ├── board.json             # deliver board (neuron_workflow)   (commit)
+│   ├── board.md               # human-readable board              (commit)
+│   ├── LAST_DELIVER.md        # last completed deliver receipt    (commit)
+│   ├── gate.json              # open clarify gate                 (ignored)
+│   └── history.jsonl          # deliver history                   (ignored)
 ├── brain/
-│   ├── dna.json          # stack, modules, structure         (commit)
-│   ├── knowledge.json    # memories, decisions, rules, code  (commit)
-│   └── health.json       # derived health score              (commit)
-├── runtime/store.json    # regenerable engine store          (ignored)
-└── cache/                # scan cache                        (ignored)
+│   ├── dna.json               # stack, modules, structure         (commit)
+│   ├── knowledge.json         # memories, decisions, rules, code  (commit)
+│   └── health.json            # derived health score              (commit)
+├── runtime/store.json         # regenerable engine store          (ignored)
+└── cache/                     # scan cache                        (ignored)
 ```
 
-Commit `.neuron/brain/` and your team shares one project memory.
+Commit `.neuron/brain/`, `prefs.json`, and (optionally) `workflow/board*` + `LAST_DELIVER.md`
+so the team shares one project memory and deliver trail.
 
 ---
 
@@ -228,6 +262,8 @@ Nine tools, one job each. Full reference: [`docs/mcp.md`](https://github.com/tok
 | `neuron_update` | Change a memory (versioned) |
 | `neuron_after_task` | Propose what to remember after coding |
 | `neuron_resolve_suggestion` | Apply Yes / Edit / No |
+| `neuron_resolve_clarify` | Persist clarify answers; clears `gate.json` |
+| `neuron_workflow` | Deliver board: get/set/clear / `propose_waves` / `complete_checklist` |
 | `neuron_scan` | Rebuild the brain from the codebase |
 
 ---
@@ -268,7 +304,7 @@ live-agent result. Details: [`docs/FINAL_RELEASE_AUDIT.md`](https://github.com/t
 
 | Command | What it does |
 | --- | --- |
-| `neuron init` | Detect the project, build the brain, wire Cursor |
+| `neuron init` | Detect the project, build the brain, wire Cursor / Antigravity IDE |
 | `neuron scan` | Re-learn from the codebase (`--deep`, `--update`) |
 | `neuron search <query>` | Search what the project knows |
 | `neuron context <task>` | Show compact context for a task |
@@ -276,8 +312,10 @@ live-agent result. Details: [`docs/FINAL_RELEASE_AUDIT.md`](https://github.com/t
 | `neuron brain` | Metrics: measured, derived, estimated |
 | `neuron status` | Project and memory overview |
 | `neuron cursor` | Cursor connection status |
-| `neuron doctor` | Diagnose brain, storage and Cursor setup |
-| `neuron mcp` | MCP server (Cursor calls this) |
+| `neuron antigravity setup` | Write Antigravity `.agents/` MCP, rules, skill, `AGENTS.md` |
+| `neuron antigravity doctor` | Diagnose Antigravity wiring |
+| `neuron doctor` | Diagnose brain, storage and IDE setup |
+| `neuron mcp` | MCP server (Your IDE calls this) |
 
 ---
 

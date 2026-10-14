@@ -197,8 +197,10 @@ work — not only *where* to look. Full guide: [docs/workflow.md](./docs/workflo
 | **`neuron prime`** | Refresh conventions + map | Stack / scripts changed after init |
 | **`/neuron-deliver`** | Brain-gated plan → build → verify → **remember** (beats Absolute prompt boards) | Multi-file features, tickets |
 
-`neuron_context` can return **`present.clarify` / `present.gate`** — the agent must ask
-(AskQuestion) and must not write application code until you answer. That is Brain-enforced.
+`neuron_context` can return **`present.clarify` / `present.gate` / `codingAllowed: false`** —
+the agent must AskQuestion and must not write application code until you answer. Cursor also
+gets a **best-effort** `neuron-gate` hook (blocks Write while `gate.json` is open); always honor
+`codingAllowed` — Shell and other hosts may bypass the hook.
 
 ```text
 neuron prime
@@ -215,18 +217,25 @@ neuron prime
 
 ```text
 .neuron/
-├── prefs.json            # init answers + workflow prefs     (commit)
-├── PROJECT_MAP.md        # living map from neuron init / prime (commit)
-├── workflow/board.md     # resumable /neuron-deliver board   (commit)
+├── prefs.json                 # init answers + workflow prefs     (commit)
+├── PROJECT_MAP.md             # living map from init / prime      (commit)
+├── memory/*.md                # per-memory markdown mirrors       (commit)
+├── workflow/
+│   ├── board.json             # deliver board (neuron_workflow)   (commit)
+│   ├── board.md               # human-readable board              (commit)
+│   ├── LAST_DELIVER.md        # last completed deliver receipt    (commit)
+│   ├── gate.json              # open clarify gate                 (ignored)
+│   └── history.jsonl          # deliver history                   (ignored)
 ├── brain/
-│   ├── dna.json          # stack, modules, structure         (commit)
-│   ├── knowledge.json    # memories, decisions, rules, code  (commit)
-│   └── health.json       # derived health score              (commit)
-├── runtime/store.json    # regenerable engine store          (ignored)
-└── cache/                # scan cache                        (ignored)
+│   ├── dna.json               # stack, modules, structure         (commit)
+│   ├── knowledge.json         # memories, decisions, rules, code  (commit)
+│   └── health.json            # derived health score              (commit)
+├── runtime/store.json         # regenerable engine store          (ignored)
+└── cache/                     # scan cache                        (ignored)
 ```
 
-Commit `.neuron/brain/` and your team shares one project memory.
+Commit `.neuron/brain/`, `prefs.json`, and (optionally) `workflow/board*` + `LAST_DELIVER.md`
+so the team shares one project memory and deliver trail.
 
 ---
 
@@ -253,6 +262,8 @@ Nine tools, one job each. Full reference: [`docs/mcp.md`](./docs/mcp.md).
 | `neuron_update` | Change a memory (versioned) |
 | `neuron_after_task` | Propose what to remember after coding |
 | `neuron_resolve_suggestion` | Apply Yes / Edit / No |
+| `neuron_resolve_clarify` | Persist clarify answers; clears `gate.json` |
+| `neuron_workflow` | Deliver board: get/set/clear / `propose_waves` / `complete_checklist` |
 | `neuron_scan` | Rebuild the brain from the codebase |
 
 ---

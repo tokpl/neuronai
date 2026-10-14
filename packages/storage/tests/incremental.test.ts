@@ -8,9 +8,24 @@ import { createNeuronRuntime } from '../src/index.js';
 
 const temps: string[] = [];
 
+async function rmRetry(dir: string, attempts = 5): Promise<void> {
+  for (let i = 0; i < attempts; i += 1) {
+    try {
+      await rm(dir, { recursive: true, force: true });
+      return;
+    } catch (err) {
+      const code = (err as NodeJS.ErrnoException).code;
+      if (i === attempts - 1 || (code !== 'ENOTEMPTY' && code !== 'EBUSY' && code !== 'EPERM')) {
+        throw err;
+      }
+      await new Promise((r) => setTimeout(r, 50 * (i + 1)));
+    }
+  }
+}
+
 afterEach(async () => {
   for (const dir of temps.splice(0)) {
-    await rm(dir, { recursive: true, force: true });
+    await rmRetry(dir);
   }
 });
 
@@ -30,7 +45,8 @@ async function project(): Promise<string> {
 }
 
 describe('incremental scan', () => {
-  it('skips re-analysis when nothing changed', async () => {
+  // Two scans under turbo+Windows regularly exceed vitest's 5s default.
+  it('skips re-analysis when nothing changed', { timeout: 30_000 }, async () => {
     const cwd = await project();
     const runtime = await createNeuronRuntime({ cwd });
 
@@ -42,7 +58,7 @@ describe('incremental scan', () => {
     expect(update.report.delta?.reanalyzed).toBe(0);
   });
 
-  it('does not erase the brain when the update is a no-op', async () => {
+  it('does not erase the brain when the update is a no-op', { timeout: 30_000 }, async () => {
     const cwd = await project();
     const runtime = await createNeuronRuntime({ cwd });
 
@@ -60,7 +76,7 @@ describe('incremental scan', () => {
     expect(runtime.listMemories()).toHaveLength(memoriesBefore);
   });
 
-  it('picks up a genuinely new module', async () => {
+  it('picks up a genuinely new module', { timeout: 30_000 }, async () => {
     const cwd = await project();
     const runtime = await createNeuronRuntime({ cwd });
     await runtime.scan('fast');

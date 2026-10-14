@@ -13,7 +13,11 @@ export async function extractSymbols(
   const candidates = files
     .filter(
       (f) =>
-        f.importance === 'HIGH' && (f.language === 'typescript' || f.language === 'javascript'),
+        f.importance === 'HIGH' &&
+        (f.language === 'typescript' ||
+          f.language === 'javascript' ||
+          f.language === 'python' ||
+          f.language === 'go'),
     )
     .slice(0, options.maxFiles ?? 200);
 
@@ -35,7 +39,11 @@ export async function extractSymbols(
 
     for (const item of texts) {
       if (!item) continue;
-      out.push(...fromSource(item.file.relativePath.replace(/\\/g, '/'), item.text));
+      const rel = item.file.relativePath.replace(/\\/g, '/');
+      const lang = item.file.language;
+      if (lang === 'python') out.push(...fromPython(rel, item.text));
+      else if (lang === 'go') out.push(...fromGo(rel, item.text));
+      else out.push(...fromSource(rel, item.text));
     }
   }
 
@@ -59,5 +67,29 @@ function fromSource(fromFile: string, text: string): CodeRelationship[] {
     out.push({ fromFile, toModule: `${method} ${path}`, kind: 'export' });
   }
 
+  return out.slice(0, 40);
+}
+
+/** Deterministic Python defs/classes — not a full analyzer. */
+function fromPython(fromFile: string, text: string): CodeRelationship[] {
+  const out: CodeRelationship[] = [];
+  for (const m of text.matchAll(/^(?:async\s+)?def\s+(\w+)\s*\(/gm)) {
+    out.push({ fromFile, toModule: m[1]!, kind: 'export' });
+  }
+  for (const m of text.matchAll(/^class\s+(\w+)\s*[:(]/gm)) {
+    out.push({ fromFile, toModule: m[1]!, kind: 'export' });
+  }
+  return out.slice(0, 40);
+}
+
+/** Deterministic Go funcs/types — not a full analyzer. */
+function fromGo(fromFile: string, text: string): CodeRelationship[] {
+  const out: CodeRelationship[] = [];
+  for (const m of text.matchAll(/^func\s+(?:\([^)]+\)\s+)?(\w+)\s*\(/gm)) {
+    out.push({ fromFile, toModule: m[1]!, kind: 'export' });
+  }
+  for (const m of text.matchAll(/^type\s+(\w+)\s+(?:struct|interface)/gm)) {
+    out.push({ fromFile, toModule: m[1]!, kind: 'export' });
+  }
   return out.slice(0, 40);
 }

@@ -41,7 +41,9 @@ export async function runCursorDoctor(cwd = process.cwd()): Promise<void> {
     ui.info('  1. Cursor Settings → Tools & MCP → toggle neuron OFF');
     ui.info('  2. Toggle neuron ON  (or Developer: Reload Window)');
     ui.info('  3. Open Tools & MCP → neuron');
-    ui.info('  4. Confirm exactly 7 tools (no neuron_prepare_task / neuron_get_context)');
+    ui.info(
+      '  4. Confirm exactly 9 tools incl. neuron_resolve_clarify + neuron_workflow (no neuron_prepare_task / neuron_get_context)',
+    );
     ui.info('  5. Confirm neuron_context is listed');
     ui.info('  6. In chat: call neuron_context for a real task');
     ui.info('  7. Confirm a real project path + remembered rules (no -32602)');
@@ -53,7 +55,7 @@ export async function runCursorDoctor(cwd = process.cwd()): Promise<void> {
       'Neuron MCP wiring/binary has issues (stdio probe).',
       [
         'MCP config missing or invalid (.cursor/mcp.json)',
-        'Configured binary does not expose the 7-tool surface',
+        'Configured binary does not expose the 9-tool product surface',
         'neuron_context missing or not callable on fresh stdio',
       ],
       [

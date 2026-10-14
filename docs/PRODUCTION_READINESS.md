@@ -15,7 +15,7 @@ NeuronAI is reliable enough for real developer use **on TypeScript/JavaScript pr
 
 Conditions:
 
-1. **`CURSOR_MCP_PROOF` can fail while `STDIO_MCP_PROOF` passes.** After upgrades, Cursor may keep a stale in-memory tools/list (legacy `neuron_prepare_task` / `neuron_get_context`). Invokes then return `-32602` against the live 7-tool binary. **Fix: toggle neuron MCP off/on or Reload Window** — not a ProjectBrain bug. See [`mcp-integration-report.json`](../mcp-integration-report.json) and [`docs/LIVE_AGENT_VALIDATION.md`](./LIVE_AGENT_VALIDATION.md).
+1. **`CURSOR_MCP_PROOF` can fail while `STDIO_MCP_PROOF` passes.** After upgrades, Cursor may keep a stale in-memory tools/list (legacy `neuron_prepare_task` / `neuron_get_context`). Invokes then return `-32602` against the live 9-tool binary. **Fix: toggle neuron MCP off/on or Reload Window** — not a ProjectBrain bug. See [`mcp-integration-report.json`](../mcp-integration-report.json) and [`docs/LIVE_AGENT_VALIDATION.md`](./LIVE_AGENT_VALIDATION.md).
 2. **Live Cursor/LLM A/B (`LIVE_AGENT_PROOF`)** remains blocked until the IDE catalog exposes callable `neuron_context`. Scripted exploration reduction is separate (`EXPLORATION_POLICY_PROOF`).
 3. **Python / non-TS code intelligence** is map+lexical only (`knowledge.code` symbols/edges = 0 on the Python shape). Location answers can still be CORRECT via Project Map.
 4. **Large-repo wall-clock** for no-change updates remains **walk-dominated** (~1.1s at ~10k files) even when `reanalyzed = 0`. Analysis cost is incremental; walk cost is not free.
@@ -202,7 +202,7 @@ Friction observed / left:
 ## 15. Bugs fixed
 
 1. `resolveImport` now maps `.js`/`.jsx`/`.mjs`/`.cjs` specs to on-disk `.ts`/`.tsx` (and index variants). Unit test added.
-2. `.cursor/commands/*` and agent-requestable `.cursor/rules/*` rewritten to the 7-tool surface with `neuron_context` first.
+2. `.cursor/commands/*` and agent-requestable `.cursor/rules/*` rewritten to the 9-tool surface with `neuron_context` first.
 3. Production harness false-negative on MCP tool count (`registerTool('neuron_…')` vs `name:` regex) corrected.
 
 ---
@@ -235,7 +235,7 @@ Confirmed:
 - ProjectBrain remains the runtime source of truth
 - `knowledge.code` is the only code-intelligence store
 - One retrieval path into context compilation
-- MCP stays at **7 tools**; CLI and MCP share Brain APIs
+- MCP stays at **9 tools**; CLI and MCP share Brain APIs
 - No second index / embeddings / cloud DB introduced
 
 ---
@@ -283,7 +283,7 @@ Docs claim audit: **0 overclaim hits** on agent-token-savings / Graft-like marke
 
 # GO WITH CONDITIONS
 
-NeuronAI can be installed into an unfamiliar **TypeScript/JavaScript** repository tomorrow and, when Cursor uses the packaged 7-tool MCP, will reliably point agents at where to look, what is connected (verified edges only), which rules apply, and where to start — **without manufacturing relationships or hallucinating negative-query locations**.
+NeuronAI can be installed into an unfamiliar **TypeScript/JavaScript** repository tomorrow and, when Cursor uses the packaged 9-tool MCP, will reliably point agents at where to look, what is connected (verified edges only), which rules apply, and where to start — **without manufacturing relationships or hallucinating negative-query locations**.
 
 Conditions: live LLM agent proof still pending; non-TS depth limited; large-repo updates pay walk cost; restart MCP after upgrades.
 

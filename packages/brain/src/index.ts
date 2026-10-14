@@ -2,6 +2,11 @@ export type {
   BrainPaths,
   BrainPrefs,
   BrainStatus,
+  DeliverGateState,
+  DeliverPlaybook,
+  DeliverSignals,
+  WorkflowBoard,
+  WorkflowPrefs,
   ProjectMap,
   ProjectMapEntry,
   ProjectMapKind,
@@ -125,6 +130,73 @@ export {
   type RelevantLocation,
   type RelevantRule,
 } from './context.js';
+export {
+  buildClarifyPlan,
+  type BuildClarifyInput,
+  type ClarifyAskQuestion,
+  type ClarifyOption,
+  type ClarifyPlan,
+  type ClarifyQuestion,
+  type ContextGate,
+} from './clarify.js';
+export {
+  draftClarifyMemory,
+  type ClarifyAnswerInput,
+  type ClarifyMemoryDraft,
+} from './clarify-resolve.js';
+export {
+  importMemoryMarkdown,
+  syncMemoryMarkdown,
+} from './memory-files.js';
+export {
+  detectConventions,
+  isPrimed,
+  runPrime,
+  type DetectedConventions,
+  type PrimeResult,
+} from './workflow/prime.js';
+export {
+  emptyBoard,
+  readWorkflowBoard,
+  writeWorkflowBoard,
+  assertBoardTransition,
+  boardHealth,
+  sortWavesByDepends,
+  WorkflowBoardError,
+} from './workflow/board.js';
+export {
+  answerDeliverGate,
+  clearDeliverGate,
+  gateBlocksExecute,
+  isGateActive,
+  readDeliverGate,
+  writeDeliverGate,
+} from './workflow/gate.js';
+export {
+  playbookChecklist,
+  checklistComplete,
+  missingChecklistIds,
+  type PlaybookChecklistItem,
+} from './workflow/playbooks.js';
+export {
+  proposeDeliverWaves,
+  type ProposeWavesInput,
+  type ProposedWave,
+  type ProposeQuality,
+} from './workflow/propose-waves.js';
+export {
+  appendDeliverHistory,
+  readDeliverHistory,
+  type DeliverHistoryEntry,
+} from './workflow/history.js';
+export { writeLastDeliverMd } from './workflow/last-deliver.js';
+export { detectPlaybook } from './clarify.js';
+export {
+  extractReferencedPaths,
+  findStaleMemories,
+  type DecayFinding,
+} from './decay.js';
+export { applyDecayFix, type DecayFixResult } from './decay-fix.js';
 export {
   buildContextContribution,
   formatContributionTokens,

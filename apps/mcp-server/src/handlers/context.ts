@@ -1,16 +1,19 @@
+import {
+  playbookChecklist,
+  writeDeliverGate,
+  clearDeliverGate,
+  gateBlocksExecute,
+  type DeliverPlaybook,
+} from '@neuronai/brain';
+
 import type { McpRuntime } from '../config/runtime.js';
 import { failResult, okResult } from '../middleware/errors.js';
 import { AFTER_CODING_REMINDER } from './after-coding-reminder.js';
-import { CONTEXT_PRESENT } from './context-present.js';
+import { buildContextPresent } from './context-present.js';
 
 /**
  * The only context tool. Retrieval ranks, the compiler compresses, and the
  * agent receives one markdown document — no briefing/markdown/plan twins.
- *
- * Structured fields (files, modules, rules, metrics, contribution) help the host;
- * the `context` string is what should go into the model prompt.
- * `afterCoding` reminds the agent to close the remember loop after durable work.
- * `contribution` + `present.footer` tell the agent what to show at end of reply.
  */
 export async function handleContext(
   runtime: McpRuntime,
@@ -23,8 +26,36 @@ export async function handleContext(
       modules: args.files,
     });
 
-    const eff = prepared.efficiency;
     const contrib = prepared.contribution;
+    const playbook = (prepared.clarify.playbook ?? 'build') as DeliverPlaybook;
+    const checklist = playbookChecklist(playbook);
+
+    if (prepared.clarify.questions.length > 0) {
+      runtime.pendingClarify = {
+        task: args.task,
+        prompt: prepared.clarify.askQuestion?.prompt,
+        remainingIds: prepared.clarify.questions.map((q) => q.id),
+      };
+      if (prepared.clarify.gate?.required) {
+        await writeDeliverGate(runtime.neuron.brain, {
+          reason: prepared.clarify.gate.reason,
+          until: prepared.clarify.gate.until,
+          questionIds: prepared.clarify.questions.map((q) => q.id),
+          task: args.task,
+          playbook,
+        });
+      }
+    } else {
+      runtime.pendingClarify = null;
+      if (prepared.clarify.express || !prepared.clarify.gate?.required) {
+        // Express / no gate this turn — clear stale gate only when Brain says proceed
+        if (prepared.clarify.express) {
+          await clearDeliverGate(runtime.neuron.brain);
+        }
+      }
+    }
+
+    const gateFileActive = await gateBlocksExecute(runtime.neuron.brain);
 
     return okResult({
       context: prepared.context,
@@ -47,7 +78,25 @@ export async function handleContext(
         rediscoveryTokensSimulated: contrib.rediscoveryTokensSimulated,
         label: contrib.label,
       },
-      present: CONTEXT_PRESENT,
+      present: buildContextPresent({
+        questions: prepared.clarify.questions,
+        askQuestion: prepared.clarify.askQuestion,
+        gate: prepared.clarify.gate,
+        recommendPrime: prepared.clarify.recommendPrime,
+        recommendDeliver:
+          prepared.intent === 'ARCHITECTURE' ||
+          (prepared.intent === 'MODIFICATION' && prepared.clarify.questions.length > 0) ||
+          prepared.clarify.playbook !== 'build',
+        playbook: prepared.clarify.playbook,
+        express: prepared.clarify.express,
+        checklist,
+        gateFileActive,
+      }),
+      clarify: {
+        questions: prepared.clarify.questions,
+        recommendPrime: prepared.clarify.recommendPrime,
+        gate: prepared.clarify.gate,
+      },
       recommendation: prepared.recommendation
         ? {
             path: prepared.recommendation.path,
@@ -77,17 +126,17 @@ export async function handleContext(
       relevantRules: prepared.relevantRules,
       flow: prepared.flow,
       metrics: {
-        contextTokens: eff.contextTokens,
-        budgetTokens: eff.budgetTokens,
-        corpusTokens: eff.corpusTokens,
-        itemsSelected: eff.itemsSelected,
-        itemsDiscarded: eff.itemsDiscarded,
-        estimatedTokensSaved: eff.estimatedTokensSaved,
-        compressionRatio: eff.compressionRatio,
-        baseline: eff.baseline,
-        retrievalMs: eff.retrievalMs,
-        estimatedRediscoveryAvoided: eff.estimatedRediscoveryAvoided,
-        rediscoveryBaseline: eff.rediscoveryBaseline,
+        contextTokens: prepared.efficiency.contextTokens,
+        budgetTokens: prepared.efficiency.budgetTokens,
+        corpusTokens: prepared.efficiency.corpusTokens,
+        itemsSelected: prepared.efficiency.itemsSelected,
+        itemsDiscarded: prepared.efficiency.itemsDiscarded,
+        estimatedTokensSaved: prepared.efficiency.estimatedTokensSaved,
+        compressionRatio: prepared.efficiency.compressionRatio,
+        baseline: prepared.efficiency.baseline,
+        retrievalMs: prepared.efficiency.retrievalMs,
+        estimatedRediscoveryAvoided: prepared.efficiency.estimatedRediscoveryAvoided,
+        rediscoveryBaseline: prepared.efficiency.rediscoveryBaseline,
       },
     });
   } catch (error) {

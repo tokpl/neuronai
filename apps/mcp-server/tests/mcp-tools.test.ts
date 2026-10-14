@@ -10,7 +10,9 @@ import { handleContext } from '../src/handlers/context.js';
 import { handleRemember } from '../src/handlers/remember.js';
 import { handleResolveSuggestion } from '../src/handlers/resolve-suggestion.js';
 import { handleSearch } from '../src/handlers/search.js';
+import { handleWorkflow } from '../src/handlers/workflow.js';
 import { TOOL_NAMES } from '../src/tools/register-tools.js';
+import { playbookChecklist } from '@neuronai/brain';
 
 const temps: string[] = [];
 
@@ -46,8 +48,8 @@ async function seed(runtime: McpRuntime): Promise<void> {
 }
 
 describe('MCP tool surface', () => {
-  it('exposes exactly seven tools', () => {
-    expect(TOOL_NAMES).toHaveLength(7);
+  it('exposes the registered MCP tool surface', () => {
+    expect(TOOL_NAMES).toHaveLength(9);
     expect([...TOOL_NAMES]).toEqual([
       'neuron_context',
       'neuron_search',
@@ -55,6 +57,8 @@ describe('MCP tool surface', () => {
       'neuron_update',
       'neuron_after_task',
       'neuron_resolve_suggestion',
+      'neuron_resolve_clarify',
+      'neuron_workflow',
       'neuron_scan',
     ]);
   });
@@ -71,6 +75,7 @@ describe('neuron_context', () => {
 
     expect(Object.keys(result).sort()).toEqual([
       'afterCoding',
+      'clarify',
       'context',
       'contribution',
       'intent',
@@ -103,9 +108,29 @@ describe('neuron_context', () => {
     expect(contribution.brainCompressionTokens).toBeGreaterThanOrEqual(0);
     expect(contribution.memoriesUsed).toBeGreaterThan(0);
     expect(contribution.summary).toMatch(/matched Project Brain knowledge|Packed into|saved ~/);
-    const present = result['present'] as { footer: { instruction: string } };
+    const present = result['present'] as {
+      footer: { instruction: string };
+      prefer?: string;
+    };
     expect(present.footer.instruction).toMatch(/REQUIRED every time/);
     expect(present.footer.instruction).toMatch(/contribution\.summary/);
+    expect(result['clarify']).toBeDefined();
+  });
+
+  it('returns present.clarify / gate for a vague task on a thin brain', async () => {
+    const runtime = await newRuntime();
+    // No seed — thin brain
+    const result = body(await handleContext(runtime, { task: 'Add auth' }));
+    const present = result['present'] as {
+      prefer?: string;
+      question?: { title: string; options: unknown[] };
+      gate?: { required: boolean };
+      clarify?: { questions: unknown[] };
+    };
+    expect(present.prefer).toBe('AskQuestion');
+    expect(present.question?.options.length).toBeGreaterThan(0);
+    expect(present.gate?.required).toBe(true);
+    expect(present.clarify?.questions.length).toBeGreaterThan(0);
   });
 
   it('mentions each relevant memory once', async () => {
@@ -308,5 +333,44 @@ describe('ask before remembering', () => {
 
     expect(result['ok']).toBe(false);
     expect(JSON.stringify(result)).toMatch(/No pending suggestion/);
+  });
+});
+
+describe('neuron_workflow', () => {
+  it('propose_waves then complete_checklist with full evidence', async () => {
+    const runtime = await newRuntime();
+
+    const proposed = body(
+      await handleWorkflow(runtime, {
+        action: 'propose_waves',
+        board: { goal: 'Ship rate limit docs' },
+        playbook: 'docs',
+        seedPath: 'docs/mcp.md',
+      }),
+    );
+    expect(proposed['ok']).toBe(true);
+    const proposedMeta = proposed['proposed'] as { quality: string; waveCount: number };
+    expect(proposedMeta.waveCount).toBeGreaterThan(0);
+    expect(['code', 'map', 'generic']).toContain(proposedMeta.quality);
+
+    const incomplete = body(
+      await handleWorkflow(runtime, {
+        action: 'complete_checklist',
+        checklistDone: ['cited'],
+      }),
+    );
+    expect(incomplete['ok']).toBe(false);
+    expect(incomplete['checklistOk']).toBe(false);
+
+    const ids = playbookChecklist('docs').map((c) => c.id);
+    const complete = body(
+      await handleWorkflow(runtime, {
+        action: 'complete_checklist',
+        checklistDone: ids,
+        checklistNotes: Object.fromEntries(ids.map((id) => [id, 'ok'])),
+      }),
+    );
+    expect(complete['ok']).toBe(true);
+    expect(complete['checklistOk']).toBe(true);
   });
 });

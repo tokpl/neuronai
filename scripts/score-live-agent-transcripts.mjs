@@ -375,7 +375,7 @@ const report = {
     'Self-reported rediscovery was optimistic vs hard traces',
   ],
   how_to_unblock_mcp_proof: [
-    'In Cursor: toggle Neuron MCP off/on or restart so catalog shows neuron_context (7-tool product surface), not legacy neuron_prepare_task list',
+    'In Cursor: toggle Neuron MCP off/on or restart so catalog shows neuron_context (9-tool product surface), not legacy neuron_prepare_task list',
     'Fix CallMcpTool −32602 (tools discoverable but not invokable)',
     'Point NEURON_CWD at disposable fixture (or give Task/SDK per-run mcpServers with fixture cwd)',
     'OR set usable CURSOR_API_KEY and run scripts/live-agent-validation.mjs with @cursor/sdk mcpServers.neuron → neuron_context',
@@ -510,7 +510,7 @@ Interpretation: CLI guidance still helps some runs, but **hard traces show conti
 
 ## 5. How to unblock true FINAL validation
 
-1. Reload Cursor Neuron MCP until tools are exactly: \`neuron_context\`, \`neuron_search\`, \`neuron_remember\`, … (product 7-tool surface).
+1. Reload Cursor Neuron MCP until tools are exactly 9: \`neuron_context\`, … , \`neuron_resolve_clarify\`, \`neuron_workflow\`, \`neuron_scan\` (product surface).
 2. Ensure \`CallMcpTool\` can invoke them (fix −32602).
 3. Set MCP \`NEURON_CWD\` to disposable fixture (or SDK \`mcpServers\` per run).
 4. Run \`20 × 2 × A/B\` with hard transcript scoring (\`scripts/score-live-agent-transcripts.mjs\`).

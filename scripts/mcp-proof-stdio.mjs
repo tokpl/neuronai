@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * P0 Cursor MCP integration — stdio baseline against a fixture or cwd.
- * Guarantees: tools/list has exactly the 7 product tools + neuron_context callable.
+ * Guarantees: tools/list has exactly the 9 product tools + neuron_context callable.
  */
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
@@ -20,6 +20,8 @@ export const EXPECTED_TOOLS = [
   'neuron_update',
   'neuron_after_task',
   'neuron_resolve_suggestion',
+  'neuron_resolve_clarify',
+  'neuron_workflow',
   'neuron_scan',
 ];
 
@@ -55,7 +57,8 @@ async function main() {
   const names = listed.tools.map((t) => t.name).sort();
   const expected = [...EXPECTED_TOOLS].sort();
   const hasContext = names.includes('neuron_context');
-  const exactSeven = names.length === expected.length && names.every((n, i) => n === expected[i]);
+  const exactProduct =
+    names.length === expected.length && names.every((n, i) => n === expected[i]);
 
   let callOk = false;
   let callError = null;
@@ -76,23 +79,22 @@ async function main() {
 
   const report = {
     generatedAt: new Date().toISOString(),
-    STDIO_MCP: exactSeven && hasContext && callOk ? 'PASS' : 'FAIL',
+    STDIO_MCP: exactProduct && hasContext && callOk ? 'PASS' : 'FAIL',
     fixture,
     mcpJson,
-    tools_list: names,
-    expected_tools: expected,
-    exact_seven_product_tools: exactSeven,
-    neuron_context_present: hasContext,
-    neuron_context_callable: callOk,
-    call_error: callError,
-    recommendation_path: sample?.recommendation?.path ?? null,
-    rules_count: sample?.relevantRules?.length ?? null,
+    tools: names,
+    expected,
+    exactProduct,
+    hasContext,
+    callOk,
+    callError,
+    samplePaths: sample?.relevantFiles?.slice?.(0, 3) ?? null,
   };
 
   mkdirSync(dirname(outPath), { recursive: true });
-  writeFileSync(outPath, JSON.stringify(report, null, 2));
+  writeFileSync(outPath, `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report, null, 2));
-  process.exitCode = report.STDIO_MCP === 'PASS' ? 0 : 1;
+  process.exit(report.STDIO_MCP === 'PASS' ? 0 : 1);
 }
 
 main().catch((e) => {

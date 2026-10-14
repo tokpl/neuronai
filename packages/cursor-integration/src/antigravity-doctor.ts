@@ -200,21 +200,24 @@ export async function runAntigravityDoctorChecks(
     fix: 'neuron antigravity setup --force',
   });
 
-  const skillPath = join(agentsDir, 'skills', 'neuron-memory', 'SKILL.md');
-  const skillExist = await exists(skillPath);
+  const workflowSkills = ['neuron-memory', 'neuron-deliver'] as const;
+  let skillOk = 0;
   let skillLegacy = false;
-  if (skillExist) {
+  for (const name of workflowSkills) {
+    const skillPath = join(agentsDir, 'skills', name, 'SKILL.md');
+    if (!(await exists(skillPath))) continue;
+    skillOk += 1;
     const body = await readFile(skillPath, 'utf8');
-    skillLegacy = LEGACY_TOOL_MARKERS.some((m) => body.includes(m));
+    if (LEGACY_TOOL_MARKERS.some((m) => body.includes(m))) skillLegacy = true;
   }
   checks.push({
-    name: 'Neuron skill',
-    ok: skillExist && !skillLegacy,
-    detail: !skillExist
-      ? 'Missing skills/neuron-memory/SKILL.md'
-      : skillLegacy
-        ? 'Skill still names retired MCP tools'
-        : skillPath,
+    name: 'Neuron skills',
+    ok: skillOk === workflowSkills.length && !skillLegacy,
+    detail: skillLegacy
+      ? 'A skill still names retired MCP tools'
+      : skillOk === workflowSkills.length
+        ? `${skillOk}/${workflowSkills.length} skills (memory + deliver)`
+        : `Missing skills (${skillOk}/${workflowSkills.length})`,
     fix: 'neuron antigravity setup --force',
   });
 

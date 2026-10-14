@@ -16,6 +16,8 @@ import { runDoctor } from './commands/doctor.js';
 import { runInit } from './commands/init.js';
 import { runRemember } from './commands/remember.js';
 import { runReset } from './commands/reset.js';
+import { runDecay } from './commands/decay.js';
+import { runPrimeCommand } from './commands/prime.js';
 import { runScan } from './commands/scan.js';
 import { runSearch } from './commands/search.js';
 import { runStatus } from './commands/status.js';
@@ -37,6 +39,7 @@ Start here:
 
 The brain:
   neuron scan              Re-learn from the codebase (--deep, --update)
+  neuron prime             Awaken conventions + living PROJECT_MAP.md
   neuron context <question> What Neuron would tell an AI about this task
   neuron search <query>    Search what the project knows
   neuron remember <text>   Add something yourself
@@ -45,6 +48,7 @@ The brain:
 
 Maintenance:
   neuron doctor            Diagnose the brain, storage and Cursor setup
+  neuron decay [--fix]    Flag (or archive) memories with missing file refs
   neuron reset --force     Delete the local brain
   neuron mcp               Run the MCP server (Cursor calls this for you)
 
@@ -94,6 +98,19 @@ export function createCli() {
     .option('--architecture', 'Architecture-focused scan')
     .action(async (options: { deep?: boolean; update?: boolean; architecture?: boolean }) => {
       await runScan(process.cwd(), options);
+    });
+
+  cli
+    .command('prime', 'Awaken workflow prefs + living .neuron/PROJECT_MAP.md')
+    .action(async () => {
+      await runPrimeCommand(process.cwd());
+    });
+
+  cli
+    .command('decay', 'Report memories that reference missing files')
+    .option('--fix', 'Archive stale memories (status=archived, not deleted)')
+    .action(async (options: { fix?: boolean }) => {
+      await runDecay(process.cwd(), options);
     });
 
   cli

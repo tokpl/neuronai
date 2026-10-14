@@ -40,13 +40,19 @@ export async function runCursor(cwd = process.cwd()): Promise<void> {
 
   const rules = await pathExists(join(cursorDir, 'rules', 'neuron-memory.mdc'));
   const skill = await pathExists(join(cursorDir, 'skills', 'neuron-memory', 'SKILL.md'));
+  const prime = await pathExists(join(cursorDir, 'skills', 'neuron-prime', 'SKILL.md'));
+  const deliver = await pathExists(join(cursorDir, 'skills', 'neuron-deliver', 'SKILL.md'));
+  const workflowOk = skill && prime && deliver;
 
   ui.kv('MCP server', registered ? `registered (${mcpPath})` : 'not registered');
   ui.kv('Agent rule', rules ? 'installed' : 'missing');
-  ui.kv('Skill', skill ? 'installed' : 'missing');
+  ui.kv(
+    'Skills',
+    workflowOk ? 'memory + prime + deliver' : 'incomplete (need memory, prime, deliver)',
+  );
   ui.blank();
 
-  if (!registered || !rules || !skill) {
+  if (!registered || !rules || !workflowOk) {
     ui.warn('Cursor wiring is incomplete.');
     ui.suggest('Run: neuron cursor setup --force');
     process.exitCode = 1;

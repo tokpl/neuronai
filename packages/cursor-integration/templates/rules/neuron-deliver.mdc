@@ -1,0 +1,19 @@
+---
+description: Gated Brain-first delivery with gate.json, propose_waves, playbook checklists
+globs:
+alwaysApply: false
+---
+
+# Neuron Deliver
+
+When the user asks to **deliver**, **plan and build**, **build end-to-end**, **pick up a ticket**,
+or start multi-file / UI / docs / polish / maintain work:
+
+1. Follow the `neuron-deliver` skill — playbooks live **inside** deliver
+2. `neuron_context` (`deep`); honor `present.codingAllowed`, `present.gate`, `present.deliver`
+3. Clarify → `neuron_resolve_clarify` (clears `.neuron/workflow/gate.json`); prefer AskQuestion; do not code until gate clears (`codingAllowed` + Cursor best-effort hook)
+4. After blueprint: `neuron_workflow` **propose_waves** then **complete_checklist**; board enforces `dependsOn` / `remembered` / `checklistDone`
+5. Verify with Brain scripts; before done: `neuron_after_task` → `remembered: true`
+6. Never auto-commit; never `.absolute-work/`
+
+Skip the full loop for typos, renames, and one-line fixes.

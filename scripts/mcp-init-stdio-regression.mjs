@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * P0 regression: real neuron init → generated .cursor/mcp.json → same command
- * stdio handshake → tools/list (exactly 7) → neuron_context callable with path + rule.
+ * stdio handshake → tools/list (exactly 9) → neuron_context callable with path + rule.
  *
  * Does NOT mock MCP. Does NOT claim CURSOR_MCP / IDE catalog.
  */
@@ -23,10 +23,12 @@ const EXPECTED = [
   'neuron_after_task',
   'neuron_context',
   'neuron_remember',
+  'neuron_resolve_clarify',
   'neuron_resolve_suggestion',
   'neuron_scan',
   'neuron_search',
   'neuron_update',
+  'neuron_workflow',
 ].sort();
 
 function write(root, rel, body) {

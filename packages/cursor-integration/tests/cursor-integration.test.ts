@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, readFile, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -40,7 +40,9 @@ describe('mcp config', () => {
 });
 
 describe('cursor install + doctor', () => {
-  it('installs mcp, rules, skill, commands and passes doctor after brain files', async () => {
+  it(
+    'installs mcp, rules, skill, commands and passes doctor after brain files',
+    async () => {
     const root = await mkdtemp(join(tmpdir(), 'neuron-cursor-'));
     temps.push(root);
     await mkdir(join(root, '.neuron'), { recursive: true });
@@ -62,17 +64,53 @@ describe('cursor install + doctor', () => {
     const skill = await readFile(installed.skillPath, 'utf8');
     expect(skill).toMatch(/neuron_context/);
 
+    await expect(
+      readFile(join(root, '.cursor', 'skills', 'neuron-prime', 'SKILL.md'), 'utf8'),
+    ).rejects.toThrow();
+    const deliver = await readFile(
+      join(root, '.cursor', 'skills', 'neuron-deliver', 'SKILL.md'),
+      'utf8',
+    );
+    expect(deliver).toMatch(/neuron_after_task/);
+    expect(deliver).toMatch(/\.neuron\/workflow/);
+    expect(deliver).toMatch(/neuron_workflow/);
+    expect(deliver).toMatch(/brainRefs/);
+    expect(deliver).toMatch(/playbook/);
+    expect(deliver).toMatch(/express/i);
+    expect(deliver).toMatch(/propose_waves/);
+    expect(deliver).toMatch(/codingAllowed|checklistDone|complete_checklist/);
+    expect(deliver).toMatch(/neuron-gate|gate\.json/);
+    await expect(
+      readFile(join(root, '.cursor', 'hooks', 'neuron-gate.mjs'), 'utf8'),
+    ).resolves.toMatch(/gate\.json/);
+    await expect(readFile(join(root, '.cursor', 'hooks.json'), 'utf8')).resolves.toMatch(
+      /neuron-gate/,
+    );
+    await expect(
+      readFile(join(installed.commandsDir, 'neuron-deliver.md'), 'utf8'),
+    ).resolves.toMatch(/neuron-deliver/);
+
     await writeProjectBrainFiles(join(root, '.neuron'), {
       projectId: 'p1',
       projectName: 'demo',
       stack: ['typescript'],
     });
+    await writeFile(
+      join(root, 'package.json'),
+      JSON.stringify({ name: 'demo', scripts: { test: 'vitest' } }),
+      'utf8',
+    );
+    const { openProjectBrain, runPrime } = await import('@neuronai/brain');
+    await runPrime(await openProjectBrain(root));
 
     const report = await runCursorDoctorChecks(root);
     const failed = report.checks.filter((c) => !c.ok).map((c) => `${c.name}: ${c.detail}`);
     expect(failed).toEqual([]);
     expect(report.ok).toBe(true);
-  });
+    expect(report.checks.find((c) => c.name === 'Neuron primed')?.ok).toBe(true);
+  },
+    30_000,
+  );
 
   it('only references tools that the MCP server actually registers', async () => {
     const root = await mkdtemp(join(tmpdir(), 'neuron-cursor-tools-'));
@@ -86,15 +124,19 @@ describe('cursor install + doctor', () => {
       'neuron_update',
       'neuron_after_task',
       'neuron_resolve_suggestion',
+      'neuron_resolve_clarify',
+      'neuron_workflow',
       'neuron_scan',
     ];
 
     const texts = [
       await readFile(installed.rulesPath, 'utf8'),
       await readFile(installed.skillPath, 'utf8'),
+      await readFile(join(root, '.cursor', 'skills', 'neuron-deliver', 'SKILL.md'), 'utf8'),
       await readFile(join(installed.commandsDir, 'neuron-context.md'), 'utf8'),
       await readFile(join(installed.commandsDir, 'neuron-save.md'), 'utf8'),
       await readFile(join(installed.commandsDir, 'neuron-explain.md'), 'utf8'),
+      await readFile(join(installed.commandsDir, 'neuron-deliver.md'), 'utf8'),
     ].join('\n');
 
     const mentioned = [...texts.matchAll(/neuron_[a-z_]+/g)].map((m) => m[0]);
@@ -135,7 +177,8 @@ describe('cursor install + doctor', () => {
 
     const report = await runCursorDoctorChecks(root);
     expect(report.checks.find((c) => c.name === 'Neuron rules')?.ok).toBe(true);
-    expect(report.checks.find((c) => c.name === 'Neuron skill')?.ok).toBe(true);
+    expect(report.checks.find((c) => c.name === 'Neuron skills')?.ok).toBe(true);
+    expect(report.checks.find((c) => c.name === 'Neuron workflow rules')?.ok).toBe(true);
     expect(report.checks.find((c) => c.name === 'Cursor commands')?.ok).toBe(true);
   });
 });

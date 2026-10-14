@@ -32,7 +32,7 @@ neuron init
 Then:
 
 1. Enable **neuron** in Cursor → Settings → Tools & MCP  
-2. If upgrading: toggle MCP off/on (or restart Cursor) so the 7-tool catalog refreshes  
+2. If upgrading: toggle MCP off/on (or restart Cursor) so the 9-tool catalog refreshes  
 3. Ask the coding agent to change something — or run `neuron context "…"` locally  
 4. `neuron doctor` for health / freshness / HEAD drift  
 

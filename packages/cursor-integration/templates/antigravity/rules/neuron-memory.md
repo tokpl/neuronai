@@ -26,6 +26,18 @@ For a quick lookup rather than a full task, use `neuron_search`.
 
 If the brain looks empty or architecture context is thin, call `neuron_scan` with mode `deep` (or ask the user to run `neuron scan --deep`) before large exploration.
 
+## When you are unsure — ask (required)
+
+If `neuron_context` returns `present.clarify` / `present.question` / `present.gate`:
+
+1. Ask the first `present.question` (or `present.clarify.questions[0]`) and wait.
+2. **HARD GATE:** if `present.gate.required`, do **not** write application code until answered.
+3. Continue remaining clarify questions one at a time.
+4. Still append `contribution.summary` at end of reply.
+
+Otherwise if something material is ambiguous: ask one question; soft-recommend `neuron init`
+or `neuron prime` when Brain is thin; prefer `neuron-deliver` for multi-file builds. Skip for typos/renames.
+
 ## During coding
 
 Follow the decisions and constraints that came back. Do not invent a second architecture when

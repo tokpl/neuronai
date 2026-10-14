@@ -74,7 +74,23 @@ neuron search "how does authentication work"
 and architecture, not the whole repository.
 
 In Cursor, just describe a task — the agent calls `neuron_context` on its own and follows the
-locations, decisions and warnings it gets back.
+locations, decisions and warnings it gets back. If something material is unclear, it should
+**ask you** before coding — not invent architecture.
+
+### Deliver (optional, powerful)
+
+After `neuron init` / `neuron cursor setup`, Cursor has:
+
+| Command | What it means | Example |
+| --- | --- | --- |
+| `/neuron-deliver` | Gated build: clarify → plan → code → remember | `/neuron-deliver Add OAuth with Google` |
+
+Conventions + living `.neuron/PROJECT_MAP.md` are created by **`neuron init`**
+(refresh later with `neuron prime` if scripts/stack change).
+
+**Deliver** = ship a feature with hard gates so the agent does not code before you agree.
+
+Details: [Workflow](./workflow.md).
 
 ## 5. Keep it current
 
@@ -98,4 +114,4 @@ npm uninstall -g neuronai
 
 No Docker. No database. No API keys. Nothing outside your project directory.
 
-Next: [How it works](./how-it-works.md) · [MCP tools](./mcp.md) · [FAQ](./faq.md)
+Next: [Workflow suite](./workflow.md) · [How it works](./how-it-works.md) · [MCP tools](./mcp.md) · [FAQ](./faq.md)

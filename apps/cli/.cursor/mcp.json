@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "neuron": {
+      "command": "npx.cmd",
+      "args": [
+        "-y",
+        "neuronai",
+        "mcp"
+      ],
+      "env": {
+        "NEURON_CWD": "C:\\projekty\\neuron-ai-memory\\apps\\cli"
+      }
+    }
+  }
+}

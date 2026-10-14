@@ -45,7 +45,7 @@ markdown plus structured `relevantFiles` / `relevantModules` / `relevantRules` /
 1. **Local-first** — knowledge on disk under `.neuron/`, no network calls at runtime
 2. **Git is the team brain** — commit `.neuron/brain/` and your team shares one memory
 3. **Neuron delivers knowledge, the model writes the code** — it is not an agent
-4. **Small MCP surface** — 7 tools, one job each
+4. **Small MCP surface** — 9 tools, one job each (context, search, remember, update, after_task, resolve_suggestion, resolve_clarify, workflow, scan)
 5. **Explainable** — every hit reports why it matched; every metric says how it was produced
 
 ## Install

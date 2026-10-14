@@ -41,6 +41,7 @@ import {
   getSymbol,
 } from './code/queries.js';
 import { computeBrainMetrics, explainMetric, formatBrainMetricsReport } from './metrics.js';
+import { importMemoryMarkdown, syncMemoryMarkdown } from './memory-files.js';
 import { resolveBrainPaths } from './paths.js';
 
 async function exists(path: string): Promise<boolean> {
@@ -167,6 +168,10 @@ export class ProjectBrain {
       prefs,
       migrationNotes: notes,
     });
+    const imported = await importMemoryMarkdown(brain);
+    if (imported > 0) {
+      notes.push(`Imported ${imported} memories from .neuron/memory/*.md`);
+    }
     await brain.save();
     return brain;
   }
@@ -190,6 +195,12 @@ export class ProjectBrain {
     await writeJson(this.paths.health, this.health);
     if (this.prefs) {
       await writeJson(this.paths.prefs, this.prefs);
+    }
+    // Reviewable per-memory markdown (team Git diffs) — best-effort.
+    try {
+      await syncMemoryMarkdown(this);
+    } catch {
+      // never block save on markdown mirror
     }
   }
 

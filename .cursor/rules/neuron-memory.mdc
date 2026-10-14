@@ -24,6 +24,25 @@ Before broad repository exploration (listing trees, grepping for modules, huntin
 
 For a quick lookup rather than a full task, use `neuron_search`.
 
+## When you are unsure — ask (required)
+
+If `neuron_context` returns `present.clarify` / `present.question` / `present.gate`:
+
+1. Prefer Cursor **AskQuestion** with `present.question` (title / prompt / options) — first question only.
+2. **HARD GATE:** if `present.gate.required` or `present.codingAllowed === false`, do **not** write application code until the user answers and the gate clears. Cursor `neuron-gate` hook is a **best-effort** Write deny while `.neuron/workflow/gate.json` is open — still honor `codingAllowed` (Shell / other hosts may bypass).
+3. After each answer call `neuron_resolve_clarify` with `questionId` + `optionId` (or `freeText`).
+4. Then continue remaining `present.clarify.questions` one at a time.
+5. Honor `present.callFirst` — call `neuron_context` again at the start of the next coding task.
+6. Still append `contribution.summary` at end of reply.
+7. Deliver board: `neuron_workflow` `get_board` / `set_board` / `propose_waves` / `complete_checklist` / `clear_board` (under `.neuron/workflow/`).
+
+If Brain did not send clarify but something material is still ambiguous:
+
+1. Ask one clear question (AskQuestion when available) and wait.
+2. Thin Brain → soft-recommend `neuron init` or `neuron prime` (refresh).
+3. Multi-file plan-and-build → prefer `/neuron-deliver`.
+4. Skip the interview for typos, renames, and one-line fixes.
+
 ## During coding
 
 Follow the decisions and constraints that came back. Do not invent a second architecture when

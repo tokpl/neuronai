@@ -160,14 +160,16 @@ export async function installAntigravityIntegration(
 ): Promise<AntigravityInstallResult> {
   const agentsDir = join(projectRoot, '.agents');
   const rulesDir = join(agentsDir, 'rules');
-  const skillsDir = join(agentsDir, 'skills', 'neuron-memory');
+  const workflowSkills = ['neuron-memory', 'neuron-deliver'] as const;
 
   await mkdir(rulesDir, { recursive: true });
-  await mkdir(skillsDir, { recursive: true });
+  for (const skill of workflowSkills) {
+    await mkdir(join(agentsDir, 'skills', skill), { recursive: true });
+  }
 
   const workspaceMcpPath = join(agentsDir, 'mcp_config.json');
   const rulesPath = join(rulesDir, 'neuron-memory.md');
-  const skillPath = join(skillsDir, 'SKILL.md');
+  const skillPath = join(agentsDir, 'skills', 'neuron-memory', 'SKILL.md');
   const agentsMdPath = join(projectRoot, 'AGENTS.md');
 
   // 1. Workspace MCP (primary for multi-project)
@@ -229,9 +231,13 @@ export async function installAntigravityIntegration(
     ['antigravity', 'rules', 'neuron-memory.md'],
     (body) => isGuidanceStale(body) || !body.includes('trigger: always_on'),
   );
-  await refreshGuidance(skillPath, ['antigravity', 'skills', 'neuron-memory', 'SKILL.md'], (body) =>
-    LEGACY_MARKERS.some((m) => body.includes(m)),
-  );
+  for (const skill of workflowSkills) {
+    await refreshGuidance(
+      join(agentsDir, 'skills', skill, 'SKILL.md'),
+      ['antigravity', 'skills', skill, 'SKILL.md'],
+      (body) => LEGACY_MARKERS.some((m) => body.includes(m)),
+    );
+  }
 
   // 4. AGENTS.md marked block
   const block = await loadTemplate('antigravity', 'AGENTS.neuron-block.md');

@@ -54,12 +54,12 @@ const liveLabel = liveAgentLabel();
 const report = {
   generatedAt: new Date().toISOString(),
   Problem:
-    'Historical: Cursor IDE could list legacy Neuron tools and return -32602 until reload. Product stdio MCP exposes the 7-tool surface including neuron_context.',
+    'Historical: Cursor IDE could list legacy Neuron tools and return -32602 until reload. Product stdio MCP exposes the 9-tool surface including neuron_context.',
   Root_cause:
     'C — Cursor IDE may hold a stale tools/list after upgrades until MCP toggle/reload. D — Cursor Task reuses parent workspace MCP (does not load nested fixture mcp.json).',
   Fix: 'No Neuron architecture change. Operator: Settings → Tools & MCP → toggle neuron (or Reload Window). See live-agent-mcp-report.json for hard Cursor Task A/B proof.',
   Why_it_works:
-    'stdio MCP Client against the same command/args/env as mcp.json lists exactly 7 tools and neuron_context returns paths+rules. After Cursor refreshes its catalog, CallMcpTool hits the same binary.',
+    'stdio MCP Client against the same command/args/env as mcp.json lists exactly 9 tools and neuron_context returns paths+rules. After Cursor refreshes its catalog, CallMcpTool hits the same binary.',
   Regression_test:
     'node scripts/mcp-proof-stdio.mjs  (+ packages/cursor-integration doctor Tool catalog stdio; vitest MCP callable test); live-agent-mcp-report.json',
   Fresh_Cursor: 'UNAVAILABLE (manual gate — cannot restart Cursor IDE from this harness)',
@@ -67,7 +67,7 @@ const report = {
     liveLabel === 'MEASURED'
       ? 'PASS in sessions where IDE catalog shows neuron_context (see live-agent-mcp-report.json)'
       : 'May FAIL if IDE catalog is stale (legacy names / -32602). stdio binary PASS.',
-  Reload: 'Required after Neuron upgrades when IDE catalog drifts from the 7-tool surface',
+  Reload: 'Required after Neuron upgrades when IDE catalog drifts from the 9-tool surface',
   Real_project:
     'Config PASS (.cursor/mcp.json → dist mcp + NEURON_CWD). Doctor stdio Tool catalog PASS. IDE catalog requires operator awareness after upgrades.',
   labels: {

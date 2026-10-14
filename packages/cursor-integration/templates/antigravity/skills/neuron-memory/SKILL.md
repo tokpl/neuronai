@@ -24,6 +24,16 @@ It also must **capture** durable decisions so the next session does not rediscov
 7. Note `contribution` — append `contribution.summary` once at the end of your user-visible reply.
 
 If architecture context is thin, call `neuron_scan` with mode `deep` before rediscovering the tree.
+Soft-recommend `neuron init` (or `neuron prime` refresh) when Brain/conventions are thin.
+Multi-file plan-and-build → `neuron-deliver` (hard gates; board under `.neuron/workflow/`).
+
+## What ships with Neuron
+
+| Intent | How |
+| --- | --- |
+| Everyday context + remember loop | this skill (`neuron-memory`) |
+| Gated clarify → blueprint → build → remember | `neuron-deliver` |
+| Conventions + living map | part of `neuron init` (refresh: `neuron prime`) |
 
 ## Tools
 
@@ -35,6 +45,8 @@ If architecture context is thin, call `neuron_scan` with mode `deep` before redi
 | Change existing knowledge (versioned) | `neuron_update` |
 | Propose what to remember after coding | `neuron_after_task` |
 | Apply the user's Yes / Edit / No answer | `neuron_resolve_suggestion` |
+| Persist clarify answers | `neuron_resolve_clarify` |
+| Workflow board | `neuron_workflow` |
 | Rebuild the brain from the codebase | `neuron_scan` |
 
 ## End of reply (when you used neuron_context)

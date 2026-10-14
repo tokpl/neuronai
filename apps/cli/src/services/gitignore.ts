@@ -9,7 +9,12 @@ const MARKER_BEGIN = '# >>> neuronai';
 const MARKER_END = '# <<< neuronai';
 
 /** Regenerable state. Everything else under `.neuron/` is the shareable brain. */
-const EPHEMERAL_ENTRIES = ['.neuron/cache/', '.neuron/runtime/'] as const;
+const EPHEMERAL_ENTRIES = [
+  '.neuron/cache/',
+  '.neuron/runtime/',
+  '.neuron/workflow/history.jsonl',
+  '.neuron/workflow/gate.json',
+] as const;
 
 function blockFor(preset: Exclude<GitIgnorePreset, 'skip'>): string {
   // ASCII only: this block lands in other people's repos and terminals.

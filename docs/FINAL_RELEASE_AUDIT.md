@@ -150,7 +150,7 @@ This audit did **not** re-soak a fresh 10k corpus (prior evidence accepted; not 
 | --- | --- |
 | `pnpm verify:package` | **PASS** (stranger install, brain fingerprint `0.2.0@5da4f29ab6e5`, no workspace `@neuronai/*` runtime deps) |
 | `pnpm verify:offline` | **PASS** |
-| `pnpm verify:mcp` | **PASS** stdio 7 tools + callable `neuron_context` |
+| `pnpm verify:mcp` | **PASS** stdio 9 tools + callable `neuron_context` |
 | `pnpm validate:p4` | **READY WITH CONDITIONS** |
 
 ---
@@ -159,7 +159,7 @@ This audit did **not** re-soak a fresh 10k corpus (prior evidence accepted; not 
 
 | Check | Result |
 | --- | --- |
-| Fresh stdio: exactly 7 tools | **PASS** |
+| Fresh stdio: exactly 9 tools | **PASS** |
 | `neuron_context` present; legacy names absent from product `TOOL_NAMES` | **PASS** |
 | Rules instruct call-before-explore | **PASS** (`.cursor/rules`, tool description) |
 | Doctor: stdio vs IDE catalog / reload / git HEAD | **PASS** (P4 doctor HEAD awareness) |
@@ -174,7 +174,7 @@ This audit did **not** re-soak a fresh 10k corpus (prior evidence accepted; not 
 | Offline / no network runtime | **PASS** |
 | Secrets in context | No systematic leak found in audited path; brain is local JSON |
 | Path traversal via retrieval | Retrieval ranks stored paths; does not read arbitrary disk outside project brain/cwd model |
-| MCP tool surface | Fixed 7 tools; no shell exec via retrieval |
+| MCP tool surface | Fixed 9 tools; no shell exec via retrieval |
 | Scan invalidation vs user memory | User memories preserved on mutation fixture |
 | Generated/vendor overwhelm | Ranking prefers core modules (prior suites); monitor in large monorepos |
 
@@ -198,7 +198,7 @@ No release-blocking security defect found in this pass.
 
 ### PROVEN
 
-- Real Cursor MCP `neuron_context` works (7-tool surface)
+- Real Cursor MCP `neuron_context` works (9-tool surface)
 - 20/20 B agents called `neuron_context` (hard ledger)
 - 0/20 A called Neuron MCP
 - 0 B rediscovery-order violations in this benchmark

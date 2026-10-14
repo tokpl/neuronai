@@ -4,7 +4,7 @@ import { join } from 'node:path';
 
 import { validateCursorMcpConfig, type NeuronMcpEntry } from './mcp-config.js';
 
-/** Tool names retired when MCP collapsed to the 7-tool Project Brain surface. */
+/** Tool names retired when MCP collapsed to the product Project Brain surface. */
 export const LEGACY_TOOL_MARKERS = [
   'neuron_prepare_task',
   'neuron_get_context',
@@ -22,6 +22,8 @@ export const EXPECTED_MCP_TOOLS = [
   'neuron_update',
   'neuron_after_task',
   'neuron_resolve_suggestion',
+  'neuron_resolve_clarify',
+  'neuron_workflow',
   'neuron_scan',
 ] as const;
 
@@ -240,7 +242,7 @@ function buildMcpStatus(input: {
 
   let action: NeuronMcpStatus['action'] = 'RELOAD_REQUIRED';
   let actionDetail =
-    'CLI cannot inspect Cursor’s in-memory catalog. Toggle neuron MCP OFF/ON (or Reload Window), then confirm exactly 7 tools including neuron_context and that CallMcpTool no longer returns -32602.';
+    'STALE CATALOG FIX: Cursor Settings → Tools & MCP → neuron OFF → wait → ON (or Developer: Reload Window). Confirm tool count matches EXPECTED_MCP_TOOLS (includes neuron_context, neuron_resolve_clarify, neuron_workflow). -32602 on legacy names = stale IDE catalog, not a Brain bug.';
   if (!input.configOk) {
     action = 'FIX_CONFIG';
     actionDetail = 'Run: neuron cursor setup --force';
@@ -268,7 +270,7 @@ function buildMcpStatus(input: {
         (freshOk ? 'neuron_context missing or call failed' : 'skipped — stdio probe failed')),
     ideCatalog: 'MANUAL_CHECK_REQUIRED',
     ideCatalogDetail:
-      'CLI cannot read Cursor’s private in-memory tools/list. Manual: Settings → Tools & MCP → neuron → confirm exactly 7 tools, neuron_context present, no neuron_prepare_task / neuron_get_context. If CallMcpTool returns -32602 against legacy names while stdio is PASS → stale IDE catalog (RELOAD).',
+      'CLI cannot read Cursor’s private in-memory tools/list. Manual: Settings → Tools & MCP → neuron → confirm exactly 9 tools (includes neuron_resolve_clarify + neuron_workflow), neuron_context present, no neuron_prepare_task / neuron_get_context. If CallMcpTool returns -32602 against legacy names while stdio is PASS → stale IDE catalog (RELOAD).',
     action,
     actionDetail,
   };
@@ -378,25 +380,48 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
     fix: 'neuron cursor setup --force',
   });
 
-  const skillPath = join(cursorDir, 'skills', 'neuron-memory', 'SKILL.md');
-  const skillExist = await exists(skillPath);
+  const workflowSkills = ['neuron-memory', 'neuron-deliver'] as const;
+  let skillOk = 0;
   let skillLegacy = false;
-  if (skillExist) {
+  for (const name of workflowSkills) {
+    const skillPath = join(cursorDir, 'skills', name, 'SKILL.md');
+    if (!(await exists(skillPath))) continue;
+    skillOk += 1;
     const body = await readFile(skillPath, 'utf8');
-    skillLegacy = LEGACY_TOOL_MARKERS.some((m) => body.includes(m));
+    if (LEGACY_TOOL_MARKERS.some((m) => body.includes(m))) skillLegacy = true;
   }
   checks.push({
-    name: 'Neuron skill',
-    ok: skillExist && !skillLegacy,
-    detail: !skillExist
-      ? 'Missing skills/neuron-memory/SKILL.md'
-      : skillLegacy
-        ? 'Skill still names retired MCP tools'
-        : skillPath,
+    name: 'Neuron skills',
+    ok: skillOk === workflowSkills.length && !skillLegacy,
+    detail: skillLegacy
+      ? 'A skill still names retired MCP tools'
+      : skillOk === workflowSkills.length
+        ? `${skillOk}/${workflowSkills.length} skills (memory + deliver)`
+        : `Missing skills (${skillOk}/${workflowSkills.length})`,
     fix: 'neuron cursor setup --force',
   });
 
-  const commands = ['neuron-context.md', 'neuron-save.md', 'neuron-explain.md'];
+  const workflowRules = ['neuron-deliver.mdc'] as const;
+  let workflowRulesOk = 0;
+  for (const name of workflowRules) {
+    if (await exists(join(cursorDir, 'rules', name))) workflowRulesOk += 1;
+  }
+  checks.push({
+    name: 'Neuron workflow rules',
+    ok: workflowRulesOk === workflowRules.length,
+    detail:
+      workflowRulesOk === workflowRules.length
+        ? 'neuron-deliver.mdc'
+        : `Missing neuron-deliver.mdc`,
+    fix: 'neuron cursor setup --force',
+  });
+
+  const commands = [
+    'neuron-context.md',
+    'neuron-save.md',
+    'neuron-explain.md',
+    'neuron-deliver.md',
+  ];
   let cmdOk = 0;
   let cmdLegacy = false;
 
@@ -430,8 +455,24 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
 
   let brainStatus = `${brainOk}/${brainFiles.length} files`;
   let brainRetrievalOk = brainOk === brainFiles.length;
+  let primedOk = false;
+  let primedDetail = 'Not primed — run neuron init (or neuron prime refresh)';
+  let decayDetail = 'n/a';
+  let gateOk = true;
+  let gateDetail = 'No open deliver gate';
+  let deliverDetail = 'No deliver history yet';
+  let boardOk = true;
+  let boardDetail = 'No active deliver board';
   try {
-    const { openProjectBrain } = await import('@neuronai/brain');
+    const {
+      openProjectBrain,
+      isPrimed,
+      findStaleMemories,
+      readDeliverGate,
+      isGateActive,
+      readDeliverHistory,
+      readWorkflowBoard,
+    } = await import('@neuronai/brain');
     const brain = await openProjectBrain(projectRoot);
     const s = brain.status();
     brainStatus =
@@ -439,8 +480,39 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
         ? `READY · health ${s.healthPercent}% · knowledge ${s.memoryCount}`
         : `${brainOk}/${brainFiles.length} brain files - run neuron init`;
     brainRetrievalOk = brainOk === brainFiles.length && s.dnaUpdated;
+    primedOk = isPrimed(brain);
+    primedDetail = primedOk
+      ? `${brain.paths.projectMap} · prefs.workflow.primedAt`
+      : 'Missing PROJECT_MAP.md or prefs.workflow.primedAt';
+    const stale = findStaleMemories(brain);
+    decayDetail =
+      stale.length === 0
+        ? 'No stale file refs in memories'
+        : `${stale.length} memories reference missing files (review / neuron_update)`;
+
+    const gate = await readDeliverGate(brain);
+    gateOk = !isGateActive(gate);
+    gateDetail = gateOk
+      ? 'No open deliver gate'
+      : `Open gate — ${gate!.questionIds.filter((id) => !gate!.answeredIds.includes(id)).length} clarify left (${gate!.reason})`;
+
+    const board = await readWorkflowBoard(brain);
+    if (board && board.phase !== 'completed' && board.status === 'active') {
+      boardOk = true; // advisory incomplete
+      boardDetail = `Active deliver · phase ${board.phase} · ${board.waves.filter((w) => w.status === 'done').length}/${board.waves.length} waves`;
+    } else if (board?.phase === 'completed') {
+      boardDetail = `Last board completed · remembered=${Boolean(board.remembered)}`;
+    }
+
+    const history = await readDeliverHistory(brain, 20);
+    if (history.length) {
+      const remembered = history.filter((h) => h.remembered).length;
+      const express = history.filter((h) => h.express).length;
+      deliverDetail = `Last ${history.length} delivers · remembered ${remembered}/${history.length} · express ${express}/${history.length}`;
+    }
   } catch {
     brainRetrievalOk = false;
+    decayDetail = 'Could not scan for decay';
   }
 
   checks.push({
@@ -448,6 +520,74 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
     ok: brainRetrievalOk,
     detail: brainStatus,
     fix: 'neuron init && neuron scan',
+  });
+
+  checks.push({
+    name: 'Neuron primed',
+    ok: primedOk,
+    detail: primedDetail,
+    fix: 'neuron prime',
+  });
+
+  const hooksJson = join(cursorDir, 'hooks.json');
+  const gateHook = join(cursorDir, 'hooks', 'neuron-gate.mjs');
+  let hooksOk = false;
+  let hooksDetail = 'Missing neuron-gate hook';
+  if (await exists(hooksJson) && (await exists(gateHook))) {
+    try {
+      const hj = await readFile(hooksJson, 'utf8');
+      hooksOk = hj.includes('neuron-gate');
+      hooksDetail = hooksOk
+        ? 'preToolUse neuron-gate.mjs (blocks Write while gate open)'
+        : 'hooks.json present but neuron-gate not wired';
+    } catch {
+      hooksOk = false;
+    }
+  }
+  checks.push({
+    name: 'Deliver gate hook',
+    ok: hooksOk,
+    detail: hooksDetail,
+    fix: 'neuron cursor setup --force',
+  });
+
+  checks.push({
+    name: 'Open deliver gate',
+    ok: gateOk,
+    detail: gateDetail,
+    fix: 'neuron_resolve_clarify until gate clears (or clear .neuron/workflow/gate.json after answers)',
+  });
+
+  const lastDeliverPath = join(neuronDir, 'workflow', 'LAST_DELIVER.md');
+  const lastDeliverOk = await exists(lastDeliverPath);
+  checks.push({
+    name: 'Last deliver receipt',
+    ok: true,
+    detail: lastDeliverOk
+      ? 'LAST_DELIVER.md present (team-visible)'
+      : 'No LAST_DELIVER.md yet — appears after a completed remembered deliver',
+    fix: 'Finish /neuron-deliver with neuron_after_task + remembered',
+  });
+
+  checks.push({
+    name: 'Deliver board',
+    ok: boardOk,
+    detail: boardDetail,
+    fix: '/neuron-deliver or neuron_workflow get_board',
+  });
+
+  checks.push({
+    name: 'Deliver history',
+    ok: true, // advisory
+    detail: deliverDetail,
+    fix: 'Complete delivers with neuron_after_task + remembered',
+  });
+
+  checks.push({
+    name: 'Memory decay',
+    ok: true, // advisory
+    detail: decayDetail,
+    fix: 'neuron_update or remove stale memories',
   });
 
   let probe: McpProbeResult | undefined;
@@ -517,7 +657,7 @@ export async function runCursorDoctorChecks(projectRoot: string): Promise<Cursor
     name: 'IDE catalog',
     ok: true,
     detail:
-      'MANUAL CHECK REQUIRED · CLI cannot read Cursor’s private tools/list. After reload: exactly 7 neuron tools, neuron_context visible, no neuron_prepare_task. -32602 on legacy names = stale IDE catalog.',
+      'MANUAL CHECK REQUIRED · CLI cannot read Cursor’s private tools/list. After reload: exactly 9 neuron tools (incl. neuron_resolve_clarify, neuron_workflow), neuron_context visible, no neuron_prepare_task. -32602 on legacy names = stale IDE catalog.',
     fix: 'Cursor Settings → Tools & MCP → neuron OFF → ON (or Developer: Reload Window)',
     reloadRequired: true,
   });

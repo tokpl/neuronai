@@ -1,7 +1,7 @@
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { openProjectBrain } from '@neuronai/brain';
+import { openProjectBrain, runPrime } from '@neuronai/brain';
 import { defaultNeuronConfig } from '@neuronai/config';
 import { createProjectResolver } from '@neuronai/project-analyzer';
 
@@ -313,10 +313,19 @@ export async function runInit(
   report.decisions = session.brain.knowledge.decisions.length;
   report.conventions = session.brain.knowledge.rules.length;
 
-  // 6. Brain creation
+  // 6. Brain creation + prime (conventions + living map — no separate /neuron-prime)
   progress.start('Brain creation…');
   await syncProjectBrainFiles(cwd);
   progress.ok('Project Brain written (.neuron/brain/ + prefs.json)');
+  try {
+    const primed = await openProjectBrain(cwd);
+    const primeResult = await runPrime(primed);
+    progress.ok(`Primed workflow prefs + map (${primeResult.projectMapPath})`);
+  } catch (err) {
+    progress.warn(
+      `Prime partial: ${err instanceof Error ? err.message : 'unknown error'} — run: neuron prime`,
+    );
+  }
 
   // 7. IDE Integration
   progress.start('IDE integration…');

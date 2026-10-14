@@ -5,24 +5,27 @@ import {
   handleAfterTask,
   handleContext,
   handleRemember,
+  handleResolveClarify,
   handleResolveSuggestion,
   handleScan,
   handleSearch,
   handleUpdate,
+  handleWorkflow,
 } from '../handlers/index.js';
 import {
   afterTaskSchema,
   contextSchema,
   rememberSchema,
+  resolveClarifySchema,
   resolveSuggestionSchema,
   scanSchema,
   searchSchema,
   updateSchema,
+  workflowSchema,
 } from '../validation/schemas.js';
 
 /**
- * Seven tools, one job each. Descriptions are context the agent pays for on
- * every turn, so they stay one line.
+ * MCP tools — keep descriptions short (agent context cost).
  */
 export const TOOL_NAMES = [
   'neuron_context',
@@ -31,6 +34,8 @@ export const TOOL_NAMES = [
   'neuron_update',
   'neuron_after_task',
   'neuron_resolve_suggestion',
+  'neuron_resolve_clarify',
+  'neuron_workflow',
   'neuron_scan',
 ] as const;
 
@@ -39,7 +44,7 @@ export function registerTools(server: McpServer, runtime: McpRuntime): void {
     'neuron_context',
     {
       description:
-        'Before exploring the repository: return where to look (modules, files, symbols), rules and memories. Call first. After the turn, append contribution.summary to the user reply (see present.footer). After durable coding, call neuron_after_task (afterCoding).',
+        'Call FIRST before exploring. Returns paths/rules + present.callFirst/clarify/gate. If clarify/gate set: AskQuestion then neuron_resolve_clarify. Append contribution.summary. After durable work: neuron_after_task.',
       inputSchema: contextSchema,
     },
     async (args) => handleContext(runtime, args),
@@ -76,7 +81,7 @@ export function registerTools(server: McpServer, runtime: McpRuntime): void {
     'neuron_after_task',
     {
       description:
-        'After coding, propose or autosave durable knowledge. Follow present: if persisted is set, briefly say what was saved (no AskQuestion); if question is set, AskQuestion with title/prompt/options then neuron_resolve_suggestion. Autosave never cancels contribution.summary after neuron_context.',
+        'After coding, propose or autosave durable knowledge. Follow present; then neuron_resolve_suggestion when AskQuestion. Autosave never cancels contribution.summary.',
       inputSchema: afterTaskSchema,
     },
     async (args) => handleAfterTask(runtime, args),
@@ -89,6 +94,26 @@ export function registerTools(server: McpServer, runtime: McpRuntime): void {
       inputSchema: resolveSuggestionSchema,
     },
     async (args) => handleResolveSuggestion(runtime, args),
+  );
+
+  server.registerTool(
+    'neuron_resolve_clarify',
+    {
+      description:
+        'Persist the user answer to a neuron_context clarify question (questionId + optionId or freeText). Clears gate when all answers stored.',
+      inputSchema: resolveClarifySchema,
+    },
+    async (args) => handleResolveClarify(runtime, args),
+  );
+
+  server.registerTool(
+    'neuron_workflow',
+    {
+      description:
+        'Deliver board (.neuron/workflow/): get_board | set_board | clear_board | propose_waves | complete_checklist. propose_waves needs resolvable seedPath when code intel exists. complete_checklist requires checklistDone covering the playbook.',
+      inputSchema: workflowSchema,
+    },
+    async (args) => handleWorkflow(runtime, args),
   );
 
   server.registerTool(

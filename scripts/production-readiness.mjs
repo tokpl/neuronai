@@ -735,10 +735,14 @@ function sectionArchitectureAudit() {
     'utf8',
   );
   const toolCount = (reg.match(/registerTool\(\s*'neuron_/g) || []).length;
-  const namedSeven = /TOOL_NAMES\s*=\s*\[[^\]]*'neuron_context'/.test(reg) && toolCount === 7;
+  const namedProduct =
+    /TOOL_NAMES\s*=\s*\[[^\]]*'neuron_context'/.test(reg) &&
+    /neuron_resolve_clarify/.test(reg) &&
+    /neuron_workflow/.test(reg) &&
+    toolCount === 9;
   checks.push({
-    name: 'mcp_seven_tools',
-    ok: namedSeven,
+    name: 'mcp_product_tools',
+    ok: namedProduct,
     detail: `registerTool count=${toolCount}`,
   });
 
@@ -770,9 +774,9 @@ function sectionArchitectureAudit() {
     detail: pathOk ? 'rules+skill teach neuron_context first' : 'conflict detected',
   });
 
-  // Affirmative calls to tools outside the 7-tool surface
+  // Affirmative calls to tools outside the 9-tool product surface
   const badCall =
-    /(?:Call|call|Use|use|Prefer)\s+`neuron_(?!context|search|remember|update|after_task|resolve_suggestion|scan)[a-z_]+`/g;
+    /(?:Call|call|Use|use|Prefer)\s+`neuron_(?!context|search|remember|update|after_task|resolve_suggestion|resolve_clarify|workflow|scan)[a-z_]+`/g;
   let legacyHits = '';
   for (const dir of [join(repo, '.cursor', 'commands'), join(repo, '.cursor', 'rules')]) {
     if (!existsSync(dir)) continue;
@@ -981,7 +985,7 @@ async function main() {
     'Python projects: map/lexical location works; knowledge.code symbols/edges remain TS/JS-oriented (0 symbols in python shape)',
   );
   report.bugsLeft.push(
-    'Workspace Cursor MCP catalog may stay stale until MCP server restart — packaged CLI exposes 7 tools including neuron_context',
+    'Workspace Cursor MCP catalog may stay stale until MCP server restart — packaged CLI exposes 9 tools including neuron_context',
   );
   const adv = report.sections.adversarial.counts;
   const advTotal = Object.values(adv).reduce((a, b) => a + b, 0) || 1;

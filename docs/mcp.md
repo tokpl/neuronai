@@ -1,6 +1,6 @@
 # MCP tools
 
-Neuron registers **7 tools**, one job each. Tool descriptions are context the agent pays for on
+Neuron registers **9 tools**, one job each. Tool descriptions are context the agent pays for on
 every turn, so they are deliberately short.
 
 | Tool | Purpose |
@@ -11,7 +11,19 @@ every turn, so they are deliberately short.
 | `neuron_update` | Change an existing memory — versioned, old content kept |
 | `neuron_after_task` | Propose what is worth remembering after coding |
 | `neuron_resolve_suggestion` | Apply the user's Yes / Edit / No answer |
+| `neuron_resolve_clarify` | Persist clarify answers from `present.clarify` |
+| `neuron_workflow` | Deliver board under `.neuron/workflow/` — `get_board` / `set_board` / `clear_board` / `propose_waves` / `complete_checklist` |
 | `neuron_scan` | Rebuild the project brain from the codebase |
+
+### `neuron_workflow` actions
+
+| Action | Purpose |
+| --- | --- |
+| `get_board` | Read board + gate/health/history summary |
+| `set_board` | Persist phase/waves/signals (validated; gate blocks execute) |
+| `clear_board` | Reset board |
+| `propose_waves` | Build ordered waves from `knowledge.code` + playbook; refuses with `PROPOSE_NEEDS_CODE` when code intel exists but `seedPath` does not resolve. Sets `signals.proposeQuality`: `code` \| `map` \| `generic` |
+| `complete_checklist` | Merge `checklistDone` (+ optional notes) for the active playbook — required before `checklistOk` / `verifyOk` |
 
 ## `neuron_context`
 
@@ -131,5 +143,25 @@ In both cases, if the turn also used `neuron_context`, the agent still appends
 
 ## Prompts
 
-- `neuron_before_coding`
+- `neuron_before_coding` — also nudges Brain-thin → `neuron init` / `neuron prime`, major builds → `neuron-deliver`
 - `neuron_after_coding`
+
+## Workflow suite (Cursor / Antigravity skills)
+
+Shipped with `neuron cursor setup` / `neuron antigravity setup`. Neuron-branded, Brain-first —
+not Absolute, and Absolute is never installed or wrapped.
+
+Skills installed: **`neuron-memory`** + **`/neuron-deliver`** only.
+Prime (conventions + `PROJECT_MAP.md`) is part of **`neuron init`** (refresh: `neuron prime`).
+
+Full how-to: [Workflow](./workflow.md).
+
+| Surface | Meaning | How to use |
+| --- | --- | --- |
+| `neuron init` | Awaken the project | First setup — includes prime |
+| `neuron prime` | Refresh map/prefs | After stack/scripts change |
+| `/neuron-deliver …` | Gated delivery | Pass a goal. Agent clarifies → you approve blueprint/board/waves → verify → `neuron_after_task` |
+
+**Clarify by default (Brain-enforced):** `neuron_context` may return `present.clarify`,
+`present.question`, and `present.gate`. Agents must AskQuestion and must not write application
+code while `present.gate.required` is true — even outside `/neuron-deliver`.

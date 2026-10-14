@@ -7,7 +7,7 @@
  * Failure chain:
  *   old Cursor in-memory tools/list (legacy names)
  *        ↓
- *   new 7-tool stdio server (neuron_context, …)
+ *   new 9-tool stdio server (neuron_context, …)
  *        ↓
  *   CallMcpTool(legacy name)
  *        ↓
@@ -24,13 +24,15 @@ import { describe, expect, it } from 'vitest';
 import { EXPECTED_MCP_TOOLS, LEGACY_TOOL_MARKERS, formatNeuronMcpStatus } from '../src/index.js';
 
 describe('stale Cursor MCP catalog failure model', () => {
-  it('keeps legacy markers and expected 7 tools disjoint', () => {
+  it('keeps legacy markers and expected tools disjoint', () => {
     const overlap = EXPECTED_MCP_TOOLS.filter((t) =>
       (LEGACY_TOOL_MARKERS as readonly string[]).includes(t),
     );
     expect(overlap).toEqual([]);
-    expect(EXPECTED_MCP_TOOLS).toHaveLength(7);
+    expect(EXPECTED_MCP_TOOLS).toHaveLength(9);
     expect(EXPECTED_MCP_TOOLS).toContain('neuron_context');
+    expect(EXPECTED_MCP_TOOLS).toContain('neuron_resolve_clarify');
+    expect(EXPECTED_MCP_TOOLS).toContain('neuron_workflow');
     expect(LEGACY_TOOL_MARKERS).toContain('neuron_prepare_task');
     expect(LEGACY_TOOL_MARKERS).toContain('neuron_get_context');
   });

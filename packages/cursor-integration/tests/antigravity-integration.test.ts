@@ -69,7 +69,9 @@ describe('mergeGlobalAntigravityMcp', () => {
 });
 
 describe('antigravity install + doctor', () => {
-  it('installs workspace MCP with NEURON_CWD, always_on rule, skill, AGENTS.md', async () => {
+  it(
+    'installs workspace MCP with NEURON_CWD, always_on rule, skill, AGENTS.md',
+    async () => {
     const root = await mkdtemp(join(tmpdir(), 'neuron-ag-'));
     temps.push(root);
     await mkdir(join(root, '.neuron'), { recursive: true });
@@ -94,6 +96,16 @@ describe('antigravity install + doctor', () => {
     expect(skill).toMatch(/Antigravity/);
     expect(skill).not.toMatch(/AskQuestion/);
 
+    await expect(
+      readFile(join(root, '.agents', 'skills', 'neuron-prime', 'SKILL.md'), 'utf8'),
+    ).rejects.toThrow();
+    const deliver = await readFile(
+      join(root, '.agents', 'skills', 'neuron-deliver', 'SKILL.md'),
+      'utf8',
+    );
+    expect(deliver).toMatch(/neuron_after_task/);
+    expect(deliver).toMatch(/neuron init/);
+
     const agents = await readFile(installed.agentsMdPath, 'utf8');
     expect(agents).toContain('<!-- neuron-memory:start -->');
     expect(agents).toContain('<!-- neuron-memory:end -->');
@@ -112,8 +124,11 @@ describe('antigravity install + doctor', () => {
     // Stdio probe may fail in CI without built CLI; core file checks must pass.
     expect(failed).toEqual([]);
     expect(report.checks.find((c) => c.name === 'Neuron rules')?.ok).toBe(true);
+    expect(report.checks.find((c) => c.name === 'Neuron skills')?.ok).toBe(true);
     expect(report.checks.find((c) => c.name === 'NEURON_CWD on workspace MCP')?.ok).toBe(true);
-  });
+  },
+    30_000,
+  );
 
   it('rewrites stale rules missing trigger: always_on without --force', async () => {
     const root = await mkdtemp(join(tmpdir(), 'neuron-ag-stale-'));

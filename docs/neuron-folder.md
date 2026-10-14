@@ -2,7 +2,12 @@
 
 ```text
 .neuron/
-├── prefs.json            # init answers, privacy mode        (commit)
+├── prefs.json            # init answers, privacy mode, workflow prefs (commit)
+├── PROJECT_MAP.md        # living map from neuron init / prime        (commit)
+├── memory/*.md           # per-memory markdown mirrors (reviewable)   (commit)
+├── workflow/
+│   ├── board.json        # deliver board (MCP neuron_workflow)        (commit)
+│   └── board.md          # human-readable board                       (commit)
 ├── brain/
 │   ├── dna.json          # stack, modules, structure         (commit)
 │   ├── knowledge.json    # memories, decisions, rules, graph, map, code (commit)
@@ -11,6 +16,8 @@
 │   └── store.json        # engine store — regenerable        (ignore)
 └── cache/                # scan cache                        (ignore)
 ```
+
+`PROJECT_MAP.md` and `workflow/` appear when you use the [Workflow suite](./workflow.md).
 
 Everything under `brain/` plus `prefs.json` is the durable source of truth. Everything under
 `runtime/` and `cache/` can be deleted at any time and rebuilt with `neuron scan`.

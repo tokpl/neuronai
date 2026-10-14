@@ -4,12 +4,12 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 /**
- * Regression: production MCP entry must expose exactly the 7-tool surface
+ * Regression: production MCP entry must expose the registered tool surface
  * and neuron_context must be callable. Protects the Cursor upgrade failure mode
  * where IDE catalogs go stale — binary correctness is still gated here.
  */
 describe('MCP stdio product surface', () => {
-  it('lists exactly 7 tools and neuron_context is callable', async () => {
+  it('lists registered tools and neuron_context is callable', async () => {
     const repo = join(dirname(fileURLToPath(import.meta.url)), '../../..');
     const require = createRequire(join(repo, 'apps', 'cli', 'package.json'));
     const { Client } = require('@modelcontextprotocol/sdk/client/index.js');
@@ -20,10 +20,12 @@ describe('MCP stdio product surface', () => {
       'neuron_after_task',
       'neuron_context',
       'neuron_remember',
+      'neuron_resolve_clarify',
       'neuron_resolve_suggestion',
       'neuron_scan',
       'neuron_search',
       'neuron_update',
+      'neuron_workflow',
     ].sort();
 
     const transport = new StdioClientTransport({

@@ -23,6 +23,23 @@ It also must **capture** durable decisions so the next session does not rediscov
 6. Note `afterCoding` in the result — you owe a `neuron_after_task` call when work becomes durable.
 7. Note `contribution` — append `contribution.summary` once at the end of your user-visible reply.
 
+## What ships with Neuron
+
+| Intent | How |
+| --- | --- |
+| Everyday context + remember loop | this skill (`neuron-memory`) |
+| Gated clarify → blueprint → build → remember | `/neuron-deliver` |
+| Conventions + living map | part of `neuron init` (refresh: `neuron prime`) |
+
+If `neuron_context` returns `present.clarify` / `present.gate`, AskQuestion and **do not code** until answered.
+
+If Brain/conventions are thin before major work, soft-recommend `neuron init` (or `neuron prime` refresh), then continue if the user insists.
+Multi-file plan-and-build → `/neuron-deliver` (Brain gates + `neuron_workflow` board +
+`neuron_after_task` — stronger than Absolute prompt playbooks).
+
+**Unsure?** Ask the user — one question at a time — before inventing architecture or scope.
+How-to for humans: `docs/workflow.md` in the NeuronAI repo (or project docs that link it).
+
 ## Tools
 
 | Intent | Tool |
@@ -33,6 +50,8 @@ It also must **capture** durable decisions so the next session does not rediscov
 | Change existing knowledge (versioned) | `neuron_update` |
 | Propose what to remember after coding | `neuron_after_task` |
 | Apply the user's Yes / Edit / No answer | `neuron_resolve_suggestion` |
+| Persist clarify answers | `neuron_resolve_clarify` |
+| Workflow board | `neuron_workflow` (`get_board` / `set_board` / `propose_waves` / `complete_checklist` / `clear_board`) |
 | Rebuild the brain from the codebase | `neuron_scan` |
 
 ## End of reply (when you used neuron_context)
@@ -76,3 +95,5 @@ One markdown document. Do not ask for "all memories".
 
 Default mode is **suggest**: Neuron proposes, the user decides. Local-first — no cloud, no API key,
 no telemetry.
+
+Never invent MCP tool names. Never store secrets, tokens, or chat transcripts.

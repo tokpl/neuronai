@@ -163,6 +163,30 @@ export interface ProjectHealth {
   notes: string[];
 }
 
+/** Playbook mode inside /neuron-deliver (not separate Absolute skills). */
+export type DeliverPlaybook = 'build' | 'ui' | 'docs' | 'polish' | 'maintain';
+
+/** Workflow prefs used by prime / deliver / verify (Brain-owned, not Absolute config). */
+export interface WorkflowPrefs {
+  outputStyle?: 'normal' | 'terse';
+  autonomy?: 'gate-all' | 'auto-low-risk';
+  tdd?: 'strict' | 'pragmatic';
+  specDir?: string;
+  /** Enabled deliver playbooks (default: all). */
+  families?: DeliverPlaybook[];
+  /** Project scripts in their own form (e.g. `pnpm test`). */
+  scripts?: {
+    test?: string;
+    lint?: string;
+    typecheck?: string;
+    format?: string;
+    build?: string;
+  };
+  packageManager?: string;
+  defaultBranch?: string;
+  primedAt?: string;
+}
+
 /** Init answers / local prefs (`.neuron/prefs.json`). */
 export interface BrainPrefs {
   schemaVersion: number;
@@ -183,13 +207,98 @@ export interface BrainPrefs {
   integrations?: {
     cursor?: boolean;
   };
+  /** Workflow prefs written by neuron init / prime (used by /neuron-deliver). */
+  workflow?: WorkflowPrefs;
   [key: string]: unknown;
+}
+
+/** Quality signals — deliver’s answer to “did the agent honor the loop?” */
+export interface DeliverSignals {
+  gatesHonored?: boolean;
+  verifyOk?: boolean;
+  /** Playbook checklist satisfied before verifyOk. */
+  checklistOk?: boolean;
+  /**
+   * Evidence: checklist item ids completed (must cover full playbookChecklist).
+   * checklistOk is rejected unless this is complete — not an honor flag.
+   */
+  checklistDone?: string[];
+  /** Optional notes per checklist id (what was verified). */
+  checklistNotes?: Record<string, string>;
+  wavesCompleted?: number;
+  wavesTotal?: number;
+  express?: boolean;
+  clarifyQuestionCount?: number;
+  proposeWavesUsed?: boolean;
+  /** propose_waves quality: code graph vs map vs generic template. */
+  proposeQuality?: 'code' | 'map' | 'generic';
+  rememberedAt?: string;
+  completedAt?: string;
+}
+
+/** Persisted pre-execute gate under `.neuron/workflow/gate.json`. */
+export interface DeliverGateState {
+  version: 1;
+  required: true;
+  reason: string;
+  until: 'clarify-answered' | 'prime-recommended';
+  questionIds: string[];
+  answeredIds: string[];
+  task?: string;
+  playbook?: DeliverPlaybook;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/** Resumable deliver board under `.neuron/workflow/board.json`. */
+export interface WorkflowBoard {
+  version: 1;
+  updatedAt: string;
+  goal: string;
+  phase:
+    | 'clarify'
+    | 'blueprint'
+    | 'decompose'
+    | 'execute'
+    | 'verify'
+    | 'converge'
+    | 'completed';
+  status: 'active' | 'blocked' | 'completed';
+  /** Active playbook for this deliver (build/ui/docs/polish/maintain). */
+  playbook?: DeliverPlaybook;
+  waves: Array<{
+    id: string;
+    title: string;
+    status: 'pending' | 'in_progress' | 'done' | 'blocked';
+    /** Wave ids that must be done first (board engine). */
+    dependsOn?: string[];
+    /** File/module paths this wave owns (from Brain map when possible). */
+    paths?: string[];
+    tasks: string[];
+  }>;
+  scripts?: WorkflowPrefs['scripts'];
+  /** Short approved blueprint (goal / approach / ownership) — survives resume. */
+  blueprint?: string;
+  /** Clarify answers already resolved via neuron_resolve_clarify. */
+  clarifyAnswers?: Array<{ questionId: string; answer: string }>;
+  /** Brain decisions / memories / modules this deliver is grounded in. */
+  brainRefs?: string[];
+  /** Set true after neuron_after_task ran for this board’s converge. */
+  remembered?: boolean;
+  /** Loop quality signals (advantage vs Absolute’s silent skip). */
+  signals?: DeliverSignals;
 }
 
 export interface BrainPaths {
   projectRoot: string;
   neuronDir: string;
   prefs: string;
+  projectMap: string;
+  workflowDir: string;
+  workflowBoard: string;
+  workflowGate: string;
+  workflowHistory: string;
+  memoryDir: string;
   brainDir: string;
   dna: string;
   knowledge: string;

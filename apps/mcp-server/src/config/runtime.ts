@@ -19,6 +19,13 @@ export interface PendingMemorySuggestion {
   task?: string;
 }
 
+/** Open clarify questions from the last neuron_context call. */
+export interface PendingClarify {
+  task?: string;
+  prompt?: string;
+  remainingIds: string[];
+}
+
 /**
  * MCP adapter state. The shared runtime does all the wiring; this only adds
  * what is specific to serving an agent over stdio.
@@ -29,6 +36,7 @@ export interface McpRuntime {
   privacyMode: PrivacyMode;
   logger: Logger;
   pendingSuggestion: PendingMemorySuggestion | null;
+  pendingClarify: PendingClarify | null;
 }
 
 export async function createMcpRuntime(cwd = process.cwd()): Promise<McpRuntime> {
@@ -53,5 +61,12 @@ export async function createMcpRuntime(cwd = process.cwd()): Promise<McpRuntime>
     privacyMode,
   });
 
-  return { neuron, workflow, privacyMode, logger, pendingSuggestion: null };
+  return {
+    neuron,
+    workflow,
+    privacyMode,
+    logger,
+    pendingSuggestion: null,
+    pendingClarify: null,
+  };
 }

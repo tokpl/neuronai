@@ -8,10 +8,17 @@ export function resolveBrainPaths(projectRoot: string): BrainPaths {
   const neuronDir = join(root, '.neuron');
   const brainDir = join(neuronDir, 'brain');
   const runtimeDir = join(neuronDir, 'runtime');
+  const workflowDir = join(neuronDir, 'workflow');
   return {
     projectRoot: root,
     neuronDir,
     prefs: join(neuronDir, 'prefs.json'),
+    projectMap: join(neuronDir, 'PROJECT_MAP.md'),
+    workflowDir,
+    workflowBoard: join(workflowDir, 'board.json'),
+    workflowGate: join(workflowDir, 'gate.json'),
+    workflowHistory: join(workflowDir, 'history.jsonl'),
+    memoryDir: join(neuronDir, 'memory'),
     brainDir,
     dna: join(brainDir, 'dna.json'),
     knowledge: join(brainDir, 'knowledge.json'),

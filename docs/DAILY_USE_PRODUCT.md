@@ -10,7 +10,7 @@
 
 # READY WITH CONDITIONS
 
-NeuronAI is worth keeping installed for **TypeScript/JavaScript** projects when Cursor uses the packaged 7-tool MCP and calls `neuron_context` first. After this phase, realistic developer prompts get actionable start points, connected structure, and project rules in the same compact document.
+NeuronAI is worth keeping installed for **TypeScript/JavaScript** projects when Cursor uses the packaged 9-tool MCP and calls `neuron_context` first. After this phase, realistic developer prompts get actionable start points, connected structure, and project rules in the same compact document.
 
 Conditions (honest):
 
@@ -65,7 +65,7 @@ Conditions (honest):
 
 ## 5. What you deliberately did NOT change
 
-- ProjectBrain / single retrieval path / 7-tool MCP
+- ProjectBrain / single retrieval path / 9-tool MCP
 - Storage layout (`.neuron/brain/knowledge.json`)
 - No embeddings / DB / cloud
 - No new MCP tools (`neuron_impact`, etc.)

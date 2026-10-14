@@ -1,7 +1,8 @@
 import { createBrainCompiler, estimateTokens, type CompiledContext } from './compiler/index.js';
 import { resolvePreparationMode } from './compiler/modes.js';
 import { buildContextContribution, type ContextContribution } from './contribution.js';
-import type { ProjectMapEntry } from './models.js';
+import { buildClarifyPlan, type ClarifyPlan } from './clarify.js';
+import type { BrainPrefs, ProjectMapEntry } from './models.js';
 import {
   dedupeRetrievalHits,
   diversifyRetrievalHits,
@@ -31,6 +32,10 @@ export interface PrepareContextInput {
   modules?: string[];
   /** Optional structural code plane for dependency expansion. */
   code?: CodeIntelligence;
+  /** Project prefs (workflow section, privacy, …). */
+  prefs?: BrainPrefs | null;
+  /** Map entry count when known. */
+  mapEntryCount?: number;
 }
 
 /** What the agent should open, in structured form. */
@@ -92,6 +97,8 @@ export interface PreparedContext extends CompiledContext {
   efficiency: ContextEfficiency;
   /** Ready-to-print contribution footer for CLI / Cursor agents. */
   contribution: ContextContribution;
+  /** Brain-enforced clarify / gate (Wave A). Empty when nothing to ask. */
+  clarify: ClarifyPlan;
 }
 
 export function prepareContext(input: PrepareContextInput): PreparedContext {
@@ -229,6 +236,15 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
     rediscoveryBaseline: 'simulated-structural-exploration',
   };
 
+  const clarify = buildClarifyPlan({
+    task: input.task,
+    intent: result.stats.intent,
+    docs: input.docs,
+    prefs: input.prefs,
+    recommendation: finalRecommendation,
+    mapEntryCount: input.mapEntryCount,
+  });
+
   return {
     ...compiled,
     hits: result.hits,
@@ -250,6 +266,7 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
       memoriesSkipped,
       memoriesInBrain: matchedKnowledge.length,
     }),
+    clarify,
   };
 }
 

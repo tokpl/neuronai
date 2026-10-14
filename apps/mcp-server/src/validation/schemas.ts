@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /**
- * Input schemas for the seven MCP tools.
+ * Input schemas for MCP tools.
  * Every schema here is registered — there is no speculative surface.
  */
 
@@ -65,4 +65,90 @@ export const resolveSuggestionSchema = {
 
 export const scanSchema = {
   mode: z.enum(['fast', 'deep', 'architecture', 'update']).optional(),
+};
+
+export const resolveClarifySchema = {
+  questionId: z.string().min(1),
+  optionId: z.string().min(1).optional(),
+  freeText: z.string().min(1).optional(),
+  questionPrompt: z.string().optional(),
+  task: z.string().optional(),
+  projectId,
+};
+
+export const workflowSchema = {
+  action: z.enum([
+    'get_board',
+    'set_board',
+    'clear_board',
+    'propose_waves',
+    'complete_checklist',
+  ]),
+  seedPath: z.string().optional(),
+  playbook: z.enum(['build', 'ui', 'docs', 'polish', 'maintain']).optional(),
+  checklistDone: z.array(z.string()).optional(),
+  checklistNotes: z.record(z.string()).optional(),
+  board: z
+    .object({
+      goal: z.string().optional(),
+      phase: z
+        .enum([
+          'clarify',
+          'blueprint',
+          'decompose',
+          'execute',
+          'verify',
+          'converge',
+          'completed',
+        ])
+        .optional(),
+      status: z.enum(['active', 'blocked', 'completed']).optional(),
+      playbook: z.enum(['build', 'ui', 'docs', 'polish', 'maintain']).optional(),
+      waves: z
+        .array(
+          z.object({
+            id: z.string(),
+            title: z.string(),
+            status: z.enum(['pending', 'in_progress', 'done', 'blocked']),
+            dependsOn: z.array(z.string()).optional(),
+            paths: z.array(z.string()).optional(),
+            tasks: z.array(z.string()),
+          }),
+        )
+        .optional(),
+      blueprint: z.string().optional(),
+      clarifyAnswers: z
+        .array(z.object({ questionId: z.string(), answer: z.string() }))
+        .optional(),
+      brainRefs: z.array(z.string()).optional(),
+      remembered: z.boolean().optional(),
+      signals: z
+        .object({
+          gatesHonored: z.boolean().optional(),
+          verifyOk: z.boolean().optional(),
+          checklistOk: z.boolean().optional(),
+          checklistDone: z.array(z.string()).optional(),
+          checklistNotes: z.record(z.string()).optional(),
+          wavesCompleted: z.number().optional(),
+          wavesTotal: z.number().optional(),
+          express: z.boolean().optional(),
+          clarifyQuestionCount: z.number().optional(),
+          proposeWavesUsed: z.boolean().optional(),
+          proposeQuality: z.enum(['code', 'map', 'generic']).optional(),
+          rememberedAt: z.string().optional(),
+          completedAt: z.string().optional(),
+        })
+        .optional(),
+      scripts: z
+        .object({
+          test: z.string().optional(),
+          lint: z.string().optional(),
+          typecheck: z.string().optional(),
+          format: z.string().optional(),
+          build: z.string().optional(),
+        })
+        .optional(),
+    })
+    .optional(),
+  projectId,
 };

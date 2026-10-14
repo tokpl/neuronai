@@ -10,7 +10,7 @@
 | Label | Status | Meaning |
 | --- | --- | --- |
 | `STDIO_MCP_PROOF` | **PASS** | Fixture + monorepo: `tools/list` = 7 product tools; `neuron_context` callable |
-| `CURSOR_MCP_PROOF` | **MANUAL GATE** | Reload Cursor MCP; confirm 7 tools + callableable `neuron_context` |
+| `CURSOR_MCP_PROOF` | **MANUAL GATE** | Reload Cursor MCP; confirm 9 tools + callableable `neuron_context` |
 | `LIVE_AGENT_PROOF` | **UNAVAILABLE** | Final 20×2 A/B blocked until `CURSOR_MCP_PROOF` |
 
 ---
@@ -50,7 +50,7 @@ Not A (unknown forever), B (bad args), E (schema), F (handshake), or G (`NEURON_
 
 ### Why it works (stdio)
 
-Same command/args/env as generated `.cursor/mcp.json` → exact 7 tools → `neuron_context` returns payment paths + Stripe/PaymentService rule.
+Same command/args/env as generated `.cursor/mcp.json` → exact 9 tools → `neuron_context` returns payment paths + Stripe/PaymentService rule.
 
 ### Fresh / Existing / Reload / Generated
 

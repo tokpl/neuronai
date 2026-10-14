@@ -13,7 +13,23 @@ journey with sockets and DNS disabled — you can run that against a clone yours
 
 **Is NeuronAI an agent?**
 No. It is memory. It retrieves and compresses what your project already knows and hands it to
-whatever agent you use.
+whatever agent you use. `/neuron-deliver` teaches that agent how to clarify and gate work —
+it is not a separate coding runtime. Conventions + map come from `neuron init`.
+
+**What is `neuron init` vs `/neuron-deliver`?**
+**Init** awakens the project (includes prime: conventions + `.neuron/PROJECT_MAP.md`).
+**Deliver** is gated build: clarify → approve plan → implement in waves → remember into Brain.
+Unlike Absolute Work, gates and the board are Brain/MCP-backed, and “done” calls `neuron_after_task`.
+See [Workflow](./workflow.md).
+
+**Is `/neuron-deliver` just Absolute with a new name?**
+No. Absolute is prompt-only. Neuron Deliver uses Project Brain, persistent `gate.json` +
+`codingAllowed`, `propose_waves` from code intelligence, playbook checklists (`checklistOk`
+before `verifyOk`), deep clarify, and local deliver history for doctor. Absolute is never installed.
+
+**Will the agent ask me when it does not know something?**
+Yes — the always-on Neuron rule says: if scope or ownership is ambiguous, ask one question at
+a time instead of guessing. `/neuron-deliver` makes that a full gated loop.
 
 **How does a team share memory?**
 Commit `.neuron/brain/` and `prefs.json`. Teammates get the same decisions and conventions on

@@ -416,6 +416,8 @@ export async function createNeuronRuntime(
         ...input,
         docs: corpus(),
         code: stack.brain.getCode(),
+        prefs: stack.brain.prefs,
+        mapEntryCount: stack.brain.knowledge.map?.entries?.length ?? 0,
       }),
     scan,
     persist,

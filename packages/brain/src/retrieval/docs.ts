@@ -31,17 +31,19 @@ function kindForMemory(type: string): RetrievalKind {
 
 /** Convert engine memory records into retrieval documents. */
 export function memoryDocs(memories: MemoryRecord[]): RetrievalDoc[] {
-  return memories.map((memory) => ({
-    id: memory.id,
-    title: memory.title,
-    content: memory.content,
-    kind: kindForMemory(memory.type),
-    type: memory.type,
-    tags: memory.tags,
-    importance: memory.importanceScore,
-    freshness: memory.freshnessScore,
-    confidence: memory.confidenceScore,
-  }));
+  return memories
+    .filter((memory) => memory.status !== 'archived' && memory.status !== 'superseded')
+    .map((memory) => ({
+      id: memory.id,
+      title: memory.title,
+      content: memory.content,
+      kind: kindForMemory(memory.type),
+      type: memory.type,
+      tags: memory.tags,
+      importance: memory.importanceScore,
+      freshness: memory.freshnessScore,
+      confidence: memory.confidenceScore,
+    }));
 }
 
 /**

@@ -176,13 +176,33 @@ During `neuron init` you can select which IDE to configure:
 - **Cursor**: Writes `.cursor/mcp.json` and agent rules. Then **Settings → Tools & MCP → enable "neuron"**.
 - **Antigravity IDE**: Writes workspace `.agents/mcp_config.json` (with `NEURON_CWD`), always-on rules under `.agents/rules/` (`trigger: always_on`), skill `.agents/skills/neuron-memory/`, an `AGENTS.md` Neuron block, and a global MCP fallback at `~/.gemini/config/mcp_config.json`. Then **Customizations → Installed MCP Servers → Refresh**, and **Allow `mcp(neuron/*)`** so tools are not stuck in Ask mode. Antigravity init runs a **deep** scan (no manual `neuron scan --deep`).
 
-After upgrading NeuronAI, reload your IDE's MCP tool list so it refreshes to the current **7 tools**.
+After upgrading NeuronAI, reload your IDE's MCP tool list so it refreshes to the current tool set
+(includes `neuron_context`, `neuron_resolve_clarify`, `neuron_workflow`).
 
 ```bash
 neuron cursor              # Cursor connection status
 neuron antigravity setup   # (re)write Antigravity wiring
 neuron antigravity doctor  # diagnose Antigravity MCP + rules
 neuron doctor              # stdio catalog + IDE reload guidance
+```
+
+### Workflow skills (prime & deliver)
+
+`neuron cursor setup` also installs **Neuron Workflow** skills so the agent knows *how* to
+work — not only *where* to look. Full guide: [docs/workflow.md](./docs/workflow.md).
+
+| Command | Meaning | Use when |
+| --- | --- | --- |
+| **`neuron init`** | Brain + scan + **prime** (prefs + `PROJECT_MAP.md`) + IDE | First setup |
+| **`neuron prime`** | Refresh conventions + map | Stack / scripts changed after init |
+| **`/neuron-deliver`** | Brain-gated plan → build → verify → **remember** (beats Absolute prompt boards) | Multi-file features, tickets |
+
+`neuron_context` can return **`present.clarify` / `present.gate`** — the agent must ask
+(AskQuestion) and must not write application code until you answer. That is Brain-enforced.
+
+```text
+neuron prime
+/neuron-deliver Add rate limiting to the public API
 ```
 
 ---
@@ -195,7 +215,9 @@ neuron doctor              # stdio catalog + IDE reload guidance
 
 ```text
 .neuron/
-├── prefs.json            # your init answers                 (commit)
+├── prefs.json            # init answers + workflow prefs     (commit)
+├── PROJECT_MAP.md        # living map from neuron init / prime (commit)
+├── workflow/board.md     # resumable /neuron-deliver board   (commit)
 ├── brain/
 │   ├── dna.json          # stack, modules, structure         (commit)
 │   ├── knowledge.json    # memories, decisions, rules, code  (commit)
@@ -221,7 +243,7 @@ neuron remember "Rate limiting belongs in middleware, not individual handlers"
 
 ## MCP tools
 
-Seven tools, one job each. Full reference: [`docs/mcp.md`](./docs/mcp.md).
+Nine tools, one job each. Full reference: [`docs/mcp.md`](./docs/mcp.md).
 
 | Tool | Purpose |
 | --- | --- |

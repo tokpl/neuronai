@@ -173,7 +173,7 @@ Init detects the project, writes the brain, and wires Cursor. Real output sketch
 
 `neuron init` writes `.cursor/mcp.json` and agent rules. Then **Settings → Tools & MCP → enable
 "neuron"**. After upgrading NeuronAI, toggle the server off/on (or Reload Window) so the tool
-list refreshes to the current **7 tools**. If chat still shows `neuron_prepare_task` or
+list refreshes to the current **9 tools**. If chat still shows `neuron_prepare_task` or
 `CallMcpTool` returns `-32602`, that is a **stale Cursor catalog** — reload MCP; do not rewrite
 config.
 
@@ -218,7 +218,7 @@ neuron remember "Rate limiting belongs in middleware, not individual handlers"
 
 ## MCP tools
 
-Seven tools, one job each. Full reference: [`docs/mcp.md`](https://github.com/tokpl/neuronai/blob/main/docs/mcp.md).
+Nine tools, one job each. Full reference: [`docs/mcp.md`](https://github.com/tokpl/neuronai/blob/main/docs/mcp.md).
 
 | Tool | Purpose |
 | --- | --- |

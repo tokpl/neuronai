@@ -81,7 +81,81 @@ export async function buildCodeIntelligence(
     }
   }
 
-  return linkParses(parses);
+  const linked = linkParses(parses);
+  const poly = await buildPolyglotHints(files, {
+    maxFiles: options.maxFiles ?? MAX_FILES,
+    concurrency,
+  });
+  return {
+    ...linked,
+    files: [...linked.files, ...poly.files].slice(0, MAX_FILES),
+    symbols: [...linked.symbols, ...poly.symbols].slice(0, MAX_SYMBOLS),
+    edges: linked.edges,
+  };
+}
+
+/** Lightweight Python/Go file + symbol nodes (no invented edges). */
+async function buildPolyglotHints(
+  files: ScannedFile[],
+  options: { maxFiles: number; concurrency: number },
+): Promise<{ files: CodeFileNode[]; symbols: CodeSymbolNode[] }> {
+  const candidates = files
+    .filter((f) => f.importance === 'HIGH' && (f.language === 'python' || f.language === 'go'))
+    .slice(0, Math.min(80, options.maxFiles));
+
+  const filesOut: CodeFileNode[] = [];
+  const symbolsOut: CodeSymbolNode[] = [];
+
+  for (let i = 0; i < candidates.length; i += options.concurrency) {
+    const batch = candidates.slice(i, i + options.concurrency);
+    const texts = await Promise.all(
+      batch.map(async (f) => {
+        try {
+          const raw = await readFile(f.absolutePath, 'utf8');
+          return { file: f, text: raw.slice(0, MAX_FILE_CHARS) };
+        } catch {
+          return null;
+        }
+      }),
+    );
+    for (const item of texts) {
+      if (!item) continue;
+      const path = norm(item.file.relativePath);
+      const exportNames: string[] = [];
+      const names =
+        item.file.language === 'go'
+          ? [
+              ...item.text.matchAll(/^func\s+(?:\([^)]+\)\s+)?(\w+)\s*\(/gm),
+              ...item.text.matchAll(/^type\s+(\w+)\s+(?:struct|interface)/gm),
+            ]
+          : [
+              ...item.text.matchAll(/^(?:async\s+)?def\s+(\w+)\s*\(/gm),
+              ...item.text.matchAll(/^class\s+(\w+)\s*[:(]/gm),
+            ];
+      for (const m of names.slice(0, 30)) {
+        const name = m[1]!;
+        exportNames.push(name);
+        const isType =
+          new RegExp(`^(?:class|type)\\s+${name}\\b`, 'm').test(item.text);
+        symbolsOut.push({
+          id: symbolId(path, name),
+          name,
+          kind: isType ? 'class' : 'function',
+          path,
+          exported: true,
+          summary: `${item.file.language} symbol`,
+        });
+      }
+      filesOut.push({
+        path,
+        imports: [],
+        exports: exportNames,
+        summary: `${item.file.language} module (polyglot scan)`,
+      });
+    }
+  }
+
+  return { files: filesOut, symbols: symbolsOut };
 }
 
 interface LinkContext {

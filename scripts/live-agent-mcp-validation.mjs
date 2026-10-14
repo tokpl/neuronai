@@ -77,7 +77,7 @@ function status() {
     tasks: TASKS.length,
     acceptanceBeforeBenchmark: [
       'GetMcpTools lists neuron server',
-      'exactly 7 product tools including neuron_context',
+      'exactly 9 product tools including neuron_context, neuron_resolve_clarify, neuron_workflow',
       'CallMcpTool neuron_context returns fixture Recommended start + Stripe rule',
       'then 20×A + 20×B with hard transcript scoring',
     ],

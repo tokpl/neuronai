@@ -28,7 +28,7 @@ describe('deliver gate', () => {
       playbook: 'build',
     });
 
-    let gate = await readDeliverGate(brain);
+    const gate = await readDeliverGate(brain);
     expect(isGateActive(gate)).toBe(true);
     const raw = await readFile(brain.paths.workflowGate, 'utf8');
     expect(raw).toMatch(/scope/);

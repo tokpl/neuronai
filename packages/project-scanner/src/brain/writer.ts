@@ -138,6 +138,7 @@ export function renderProjectReport(report: ProjectScanReport): string {
     createFormatStack(report.stack),
     '```',
     '',
+    ...(report.easel?.present ? [report.easel.markdown] : []),
     '## Next',
     '',
     '- Review `.neuron/constitution.md` (suggested only)',

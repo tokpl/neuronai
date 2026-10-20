@@ -37,6 +37,7 @@ export {
 export { GitAnalyzer, createGitAnalyzer } from './git/analyzer.js';
 export { DocumentationAnalyzer, createDocumentationAnalyzer } from './documentation/analyzer.js';
 export { InitialMemoryGenerator, createInitialMemoryGenerator } from './memory/generator.js';
+export { EaselAnalyzer, createEaselAnalyzer, type EaselInsight } from './integrations/easel.js';
 export { IncrementalScanner, createIncrementalScanner } from './incremental/scanner.js';
 export {
   ProjectBrainWriter,

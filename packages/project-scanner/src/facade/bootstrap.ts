@@ -7,6 +7,7 @@ import { createProjectBrainWriter, renderProjectReport } from '../brain/writer.j
 import { buildCodeIntelligence } from '../code/intelligence.js';
 import { createDependencyGraphBuilder } from '../dependencies/graph.js';
 import { createDocumentationAnalyzer } from '../documentation/analyzer.js';
+import { createEaselAnalyzer } from '../integrations/easel.js';
 import { createCodebaseScanner } from '../filesystem/scanner.js';
 import { createTechnologyDetector } from '../frameworks/technology.js';
 import { createGitAnalyzer } from '../git/analyzer.js';
@@ -103,6 +104,7 @@ export class ProjectBrainBootstrap {
   private readonly relations = createCodeRelationshipAnalyzer();
   private readonly git = createGitAnalyzer();
   private readonly docs = createDocumentationAnalyzer();
+  private readonly easel = createEaselAnalyzer();
   private readonly memories = createInitialMemoryGenerator();
   private readonly brain = createProjectBrainWriter();
   private readonly incremental = createIncrementalScanner();
@@ -191,14 +193,20 @@ export class ProjectBrainBootstrap {
         ? { readmeSummary: null, docFiles: [], knowledgeBullets: [] as string[] }
         : await this.docs.analyze(root, walk.files);
 
-    const generated = this.memories.generate({
-      stack,
-      architecture,
-      dependencyGraph,
-      git: gitInsight,
-      docs: docInsight,
-    });
-    const suggestedRules = this.memories.suggestRules({ architecture, stack });
+    // Design state of the interface (Easel): never part of the file walk, read from a fixed set of JSON files.
+    const easelInsight = mode === 'architecture' ? null : await this.easel.analyze(root);
+
+    const generated = [
+      ...this.memories.generate({
+        stack,
+        architecture,
+        dependencyGraph,
+        git: gitInsight,
+        docs: docInsight,
+      }),
+      ...(easelInsight?.memories ?? []),
+    ];
+    const suggestedRules = [...this.memories.suggestRules({ architecture, stack }), ...(easelInsight?.rules ?? [])];
     const constitutionMarkdown = this.brain.buildConstitutionMarkdown(projectName, suggestedRules);
     const cursorRulesMarkdown = this.brain.buildCursorRules(stack, suggestedRules);
 
@@ -244,6 +252,9 @@ export class ProjectBrainBootstrap {
       architectureMarkdown: architecture.markdown,
       constitutionMarkdown,
       cursorRulesMarkdown,
+      ...(easelInsight?.present
+        ? { easel: { present: true, markdown: easelInsight.markdown, summary: easelInsight.summary } }
+        : {}),
     };
     report.markdown = renderProjectReport(report);
 

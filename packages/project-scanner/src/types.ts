@@ -147,6 +147,12 @@ export interface ProjectScanReport {
   architectureMarkdown: string;
   constitutionMarkdown: string;
   cursorRulesMarkdown: string;
+  /** Design state read from `.easel/` (the Easel design toolkit), when the project has one. */
+  easel?: {
+    present: boolean;
+    markdown: string;
+    summary: { pageType?: string; direction?: string; screens: number; journeys: number; libraryItems: number; openItems: number };
+  };
 }
 
 export interface ScanOptions {

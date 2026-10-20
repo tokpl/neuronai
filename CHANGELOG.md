@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Easel integration
+
+- The scanner reads the design state of [Easel](docs/easel.md) (`.easel/`: approved direction, motion plan, screens, journeys, library items, open items) into project memories and a *Design system (Easel)* section of `project-report.md`, so `neuron_context` answers design questions in every chat
+- Never reads `.easel/auth` or `.easel/artifacts`; no change for projects without `.easel/`
+
 ## 0.2.9
 
 Neuron Deliver + 9-tool MCP product surface (Brain-gated plan → build → verify → remember).

@@ -239,6 +239,10 @@ so the team shares one project memory and deliver trail.
 
 ---
 
+## Works with Easel
+
+Projects that also use [Easel](docs/easel.md) (a design-engineering toolkit) get their approved design direction, screens, journeys and library items in the brain, so every chat knows the design system.
+
 ## Ask before remembering
 
 Neuron never writes a memory you did not approve. After a change the agent proposes a draft and

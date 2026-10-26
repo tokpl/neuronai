@@ -19,6 +19,7 @@ export function resolveBrainPaths(projectRoot: string): BrainPaths {
     workflowGate: join(workflowDir, 'gate.json'),
     workflowHistory: join(workflowDir, 'history.jsonl'),
     workflowEvidence: join(workflowDir, 'evidence'),
+    workflowFeedback: join(workflowDir, 'feedback'),
     memoryDir: join(neuronDir, 'memory'),
     brainDir,
     dna: join(brainDir, 'dna.json'),

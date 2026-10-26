@@ -216,6 +216,10 @@ export {
   type DeliverHistoryEntry,
 } from './workflow/history.js';
 export { writeLastDeliverMd } from './workflow/last-deliver.js';
+export {
+  writeFeedbackArtifacts,
+  feedbackChatAskInstruction,
+} from './workflow/feedback-artifacts.js';
 export { detectPlaybook } from './clarify.js';
 export {
   extractReferencedPaths,

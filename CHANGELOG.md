@@ -7,6 +7,21 @@
 - The scanner reads the design state of [Easel](docs/easel.md) (`.easel/`: approved direction, motion plan, screens, journeys, library items, open items) into project memories and a *Design system (Easel)* section of `project-report.md`, so `neuron_context` answers design questions in every chat
 - Never reads `.easel/auth` or `.easel/artifacts`; no change for projects without `.easel/`
 
+## 0.2.11
+
+Feedback workspace files (Easel-style) + Agent-mode chat asks.
+
+### Feedback artifacts
+
+- On board write with `feedbackItems`, Brain writes `.neuron/workflow/feedback/`:
+  - `FEEDBACK.md` — human todo / statuses
+  - `OPEN_QUESTIONS.md` — asks waiting on the user
+  - `items.json` — machine mirror
+- When AskQuestion is unavailable (Agent mode): ask **in chat**, quote `fb-id`; Fix still blocked until `userAnswer`
+- `get_board` / `propose_waves` return `feedbackDir` and chat `present` when asks are open
+
+After upgrading: `npm i -g neuronai@0.2.11`, then **reload Cursor MCP**.
+
 ## 0.2.10
 
 Feedback triage + device/browser evidence, thin-brain / Agency Deliver hardenings.

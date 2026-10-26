@@ -349,6 +349,8 @@ export interface BrainPaths {
   workflowHistory: string;
   /** Device/screenshot evidence for mobile + feedback verify. */
   workflowEvidence: string;
+  /** Human-readable feedback triage artifacts (FEEDBACK.md, OPEN_QUESTIONS.md). */
+  workflowFeedback: string;
   memoryDir: string;
   brainDir: string;
   dna: string;

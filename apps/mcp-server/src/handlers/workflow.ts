@@ -4,6 +4,7 @@ import {
   detectPlaybook,
   detectRunbook,
   emptyBoard,
+  feedbackChatAskInstruction,
   feedbackHasOpenAsks,
   isDeliverRunbook,
   missingChecklistIds,
@@ -49,6 +50,7 @@ export async function handleWorkflow(
       const board = await readWorkflowBoard(brain);
       const gate = await readDeliverGate(brain);
       const history = await readDeliverHistory(brain, 10);
+      const chatAsk = feedbackChatAskInstruction(board?.signals?.feedbackItems);
       return okResult({
         board,
         path: brain.paths.workflowBoard,
@@ -56,9 +58,18 @@ export async function handleWorkflow(
         deviceId: brain.prefs?.workflow?.deviceId ?? null,
         evidenceDir:
           brain.prefs?.workflow?.mobileEvidenceDir ?? brain.paths.workflowEvidence,
+        feedbackDir: brain.paths.workflowFeedback,
         health: boardHealth(board),
         gate,
         history,
+        ...(chatAsk
+          ? {
+              present: {
+                prefer: 'chat',
+                instruction: chatAsk,
+              },
+            }
+          : {}),
       });
     }
 
@@ -121,10 +132,12 @@ export async function handleWorkflow(
       };
       const path = await writeWorkflowBoard(brain, next, { previous: existing });
       const saved = await readWorkflowBoard(brain);
+      const chatAsk = feedbackChatAskInstruction(saved?.signals?.feedbackItems);
       return okResult({
         board: saved,
         path,
         health: boardHealth(saved),
+        feedbackDir: brain.paths.workflowFeedback,
         proposed: {
           seedPath: proposed.seedPath,
           usedCode: proposed.usedCode,
@@ -133,6 +146,17 @@ export async function handleWorkflow(
           waveCount: proposed.waves.length,
           feedbackItemCount: feedbackItems?.length ?? 0,
         },
+        instruction:
+          runbook === 'feedback'
+            ? [
+                'Feedback artifacts: `.neuron/workflow/feedback/FEEDBACK.md` + `items.json` + evidence PNGs.',
+                'AskQuestion if available; in Agent mode ask **in chat** and write needs_info → OPEN_QUESTIONS.md.',
+                'Do not claim fixed from code-only reads.',
+              ].join(' ')
+            : undefined,
+        ...(chatAsk
+          ? { present: { prefer: 'chat', instruction: chatAsk } }
+          : {}),
       });
     }
 

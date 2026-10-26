@@ -5,6 +5,7 @@ import { nowIso } from '../defaults.js';
 import type { WorkflowBoard } from '../models.js';
 import type { ProjectBrain } from '../project-brain.js';
 import { assertBoardTransition } from './board-validate.js';
+import { writeFeedbackArtifacts } from './feedback-artifacts.js';
 import { gateBlocksExecute } from './gate.js';
 import { appendDeliverHistory } from './history.js';
 import { writeLastDeliverMd } from './last-deliver.js';
@@ -95,13 +96,39 @@ export async function writeWorkflowBoard(
     `- waves: ${next.signals?.wavesCompleted ?? 0}/${next.signals?.wavesTotal ?? next.waves.length}`,
     `- checklistOk: ${next.signals?.checklistOk ?? '—'}`,
     `- verifyOk: ${next.signals?.verifyOk ?? '—'}`,
+    `- runbook: ${next.signals?.runbook ?? '—'}`,
+    `- feedbackItems: ${next.signals?.feedbackItems?.length ?? 0}`,
     `- express: ${next.signals?.express ?? false}`,
     `- proposeWavesUsed: ${next.signals?.proposeWavesUsed ?? false}`,
     `- rememberedAt: ${next.signals?.rememberedAt ?? '—'}`,
     '',
+    ...(next.signals?.feedbackItems?.length
+      ? [
+          '## Feedback items',
+          '',
+          ...next.signals.feedbackItems.map(
+            (i) =>
+              `- **${i.id}** [${i.status}] ${i.text.slice(0, 100)}${
+                i.status === 'needs_info' && !i.userAnswer?.trim()
+                  ? ` — ASK: ${i.askPrompt ?? '…'}`
+                  : ''
+              }`,
+          ),
+          '',
+          'Human mirror: `.neuron/workflow/feedback/FEEDBACK.md`',
+          '',
+        ]
+      : []),
   ].join('\n');
   const { join } = await import('node:path');
   await writeFile(join(brain.paths.workflowDir, 'board.md'), md, 'utf8');
+
+  try {
+    await writeFeedbackArtifacts(brain, next);
+  } catch {
+    // feedback md is best-effort
+  }
+
   return brain.paths.workflowBoard;
 }
 

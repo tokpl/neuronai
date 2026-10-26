@@ -23,18 +23,29 @@ export interface NeuronMcpEntry {
 
 /**
  * Resolve the neuronai CLI entry for MCP.
- * Prefer local monorepo build when present; otherwise npx (no global install required).
+ * Prefer `node` + absolute `index.js` (Cursor + doctor can spawn without a shell).
+ * Avoid bare `npx.cmd` on Windows — Node 20+ rejects spawning `.cmd`/`.bat` without
+ * `shell: true` (`spawn EINVAL`).
  */
 export function resolveNeuronCliInvocation(cwd: string): { command: string; args: string[] } {
   const here = dirname(fileURLToPath(import.meta.url));
+  const runningEntry = fileURLToPath(import.meta.url);
   const candidates = [
+    // Bundled CLI (`neuronai/dist/index.js`) — same process that runs `neuron cursor setup`
+    ...(/(^|[/\\])dist[/\\]index\.js$/i.test(runningEntry) ? [runningEntry] : []),
     // packages/cursor-integration/{src|dist} → apps/cli/dist
     join(here, '..', '..', '..', 'apps', 'cli', 'dist', 'index.js'),
     join(here, '..', '..', 'apps', 'cli', 'dist', 'index.js'),
-    // project-local install
+    // project-local / global install
     join(cwd, 'node_modules', 'neuronai', 'dist', 'index.js'),
     join(cwd, 'apps', 'cli', 'dist', 'index.js'),
-  ];
+    process.env.APPDATA
+      ? join(process.env.APPDATA, 'npm', 'node_modules', 'neuronai', 'dist', 'index.js')
+      : '',
+    process.env.npm_config_prefix
+      ? join(process.env.npm_config_prefix, 'node_modules', 'neuronai', 'dist', 'index.js')
+      : '',
+  ].filter(Boolean);
 
   for (const candidate of candidates) {
     const abs = resolve(candidate);
@@ -46,7 +57,7 @@ export function resolveNeuronCliInvocation(cwd: string): { command: string; args
     }
   }
 
-  // Published package path - works without `npm i -g`
+  // Last resort: npx (doctor probe enables shell for .cmd on Windows)
   const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
   return {
     command: npxCmd,

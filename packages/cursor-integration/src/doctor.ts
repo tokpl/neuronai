@@ -77,6 +77,11 @@ export interface McpProbeResult {
   neuronContextError?: string;
 }
 
+/** Node 20+ on Windows: spawning `.cmd`/`.bat` without `shell: true` throws `spawn EINVAL`. */
+export function mcpProbeNeedsShell(command: string): boolean {
+  return process.platform === 'win32' && /\.(cmd|bat)$/i.test(command);
+}
+
 /**
  * Spawn the configured MCP binary (same entry Cursor uses): initialize → tools/list
  * → optional tools/call neuron_context.
@@ -89,11 +94,14 @@ export async function probeConfiguredMcp(
 ): Promise<McpProbeResult> {
   const callContext = options.callContext ?? true;
   const contextTask = options.contextTask ?? 'Where is the payment implementation?';
+  const useShell = mcpProbeNeedsShell(command);
 
   return new Promise((resolve) => {
     const child = spawn(command, args, {
       env: { ...process.env, ...env },
       stdio: ['pipe', 'pipe', 'pipe'],
+      shell: useShell,
+      windowsHide: true,
     });
     let out = '';
     let err = '';

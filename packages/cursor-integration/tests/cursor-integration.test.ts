@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import {
   installCursorIntegration,
+  mcpProbeNeedsShell,
   mergeNeuronMcpConfig,
   runCursorDoctorChecks,
   validateCursorMcpConfig,
@@ -36,6 +37,16 @@ describe('mcp config', () => {
   it('rejects missing neuron server', () => {
     const v = validateCursorMcpConfig({ mcpServers: {} });
     expect(v.ok).toBe(false);
+  });
+
+  it('flags Windows batch MCP commands for shell spawn', () => {
+    if (process.platform === 'win32') {
+      expect(mcpProbeNeedsShell('npx.cmd')).toBe(true);
+      expect(mcpProbeNeedsShell('C:\\npm\\npx.CMD')).toBe(true);
+      expect(mcpProbeNeedsShell(process.execPath)).toBe(false);
+    } else {
+      expect(mcpProbeNeedsShell('npx.cmd')).toBe(false);
+    }
   });
 });
 

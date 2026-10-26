@@ -7,6 +7,14 @@
 - The scanner reads the design state of [Easel](docs/easel.md) (`.easel/`: approved direction, motion plan, screens, journeys, library items, open items) into project memories and a *Design system (Easel)* section of `project-report.md`, so `neuron_context` answers design questions in every chat
 - Never reads `.easel/auth` or `.easel/artifacts`; no change for projects without `.easel/`
 
+## 0.2.12
+
+Windows MCP spawn hotfix.
+
+- `neuron cursor setup` prefers `node` + absolute `neuronai/dist/index.js` (avoids bare `npx.cmd`)
+- `neuron cursor doctor` enables `shell` when probing `.cmd`/`.bat` — fixes `spawn EINVAL` on Node 20+ Windows
+- After upgrade: `npm i -g neuronai@0.2.12`, then `neuron cursor setup --force` and reload Cursor MCP
+
 ## 0.2.11
 
 Feedback workspace files (Easel-style) + Agent-mode chat asks.

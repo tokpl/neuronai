@@ -17,6 +17,7 @@ export {
   runCursorDoctorChecks,
   formatNeuronMcpStatus,
   probeConfiguredMcp,
+  mcpProbeNeedsShell,
   EXPECTED_MCP_TOOLS,
   LEGACY_TOOL_MARKERS,
   type CursorDoctorCheck,

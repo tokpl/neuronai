@@ -111,7 +111,7 @@ export function feedbackHasOpenAsks(items: FeedbackItem[] | undefined): boolean 
 export function parseFeedbackItems(text: string): FeedbackItem[] {
   const lines = text.split(/\r?\n/);
   const items: FeedbackItem[] = [];
-  const re = /^\s*(\d{1,3})([a-z]?)[).:\-]\s*(.+)$/i;
+  const re = /^\s*(\d{1,3})([a-z]?)[).:-]\s*(.+)$/i;
   for (const line of lines) {
     const m = line.match(re);
     if (!m) continue;

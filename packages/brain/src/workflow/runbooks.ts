@@ -22,8 +22,8 @@ export function detectRunbook(task: string, explicit?: DeliverRunbook): DeliverR
   if (
     /\bfeedback\b/.test(t) ||
     /\b(lista\s+punkt|feedback\s+\d|triage)\b/.test(t) ||
-    (/(?:^|\n)\s*\d{1,3}[a-z]?[).:\-]\s+\S+/m.test(task) &&
-      (task.match(/(?:^|\n)\s*\d{1,3}[a-z]?[).:\-]\s+/gm)?.length ?? 0) >= 3)
+    (/(?:^|\n)\s*\d{1,3}[a-z]?[).:-]\s+\S+/m.test(task) &&
+      (task.match(/(?:^|\n)\s*\d{1,3}[a-z]?[).:-]\s+/gm)?.length ?? 0) >= 3)
   ) {
     return 'feedback';
   }

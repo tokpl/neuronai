@@ -148,8 +148,14 @@ export function buildClarifyPlan(input: BuildClarifyInput): ClarifyPlan {
   const counts = countKnowledge(input.docs);
   const mapCount = input.mapEntryCount ?? counts.locations;
   const knowledgeTotal = counts.memories + counts.decisions + counts.rules;
-  const brainThin = knowledgeTotal < 3 || mapCount < 2;
+  /** Truly empty knowledge plane — only this hard-gates with the Thin Brain ask. */
+  const knowledgeThin = knowledgeTotal < 3;
+  /** Missing map/modules — soft nudge only when knowledge already exists. */
+  const structureThin = mapCount < 2;
   const workflowMissing = !hasWorkflowPrefs(input.prefs);
+  const thinAck = Boolean(input.prefs?.workflow?.thinBrainAcknowledgedAt);
+  /** Legacy name: hard cold-start only when knowledge is empty (not map/prefs alone). */
+  const brainThin = knowledgeThin;
   const brainRich = knowledgeTotal >= 5 && mapCount >= 2 && Boolean(input.recommendation);
 
   const needsClarifyIntent =
@@ -168,14 +174,18 @@ export function buildClarifyPlan(input: BuildClarifyInput): ClarifyPlan {
 
   const deepGrill = needsClarifyIntent && (vague || multiFile || playbook !== 'build');
 
-  // --- Thin Brain cold-start (advantage vs Absolute: we diagnose emptiness) ---
-  if (brainThin || workflowMissing) {
+  // Soft product nudge whenever structure/prefs are incomplete — never alone a hard gate.
+  if (!thinAck && (knowledgeThin || structureThin || workflowMissing)) {
     recommendPrime = true;
+  }
+
+  // --- Thin Brain cold-start: HARD interview only when knowledge is empty ---
+  if (knowledgeThin && !thinAck) {
     questions.push({
       id: 'prime',
       title: '🧠 Neuron · Thin Brain',
       prompt: [
-        'Project Brain looks thin (few decisions/map entries or missing workflow prefs).',
+        'Project Brain looks thin (few decisions / memories / rules).',
         'Neuron Deliver is strongest after `neuron init` (conventions + map). Absolute would guess — we will not.',
         '',
         'What should we do?',
@@ -382,13 +392,13 @@ export function buildClarifyPlan(input: BuildClarifyInput): ClarifyPlan {
 
   const capped = questions.slice(0, MAX_QUESTIONS);
 
-  if (capped.length > 0 && (vague || multiFile || brainThin || deepGrill)) {
+  if (capped.length > 0 && (vague || multiFile || knowledgeThin || deepGrill)) {
     gate = {
       required: true,
-      reason: brainThin
-        ? 'Brain is thin or prefs incomplete — clarify (and consider init/prime) before coding'
+      reason: knowledgeThin
+        ? 'Brain knowledge is thin — clarify (and consider init/prime) before coding'
         : 'Ambiguous or multi-file change — answer clarify before writing application code',
-      until: brainThin && capped[0]?.id === 'prime' ? 'prime-recommended' : 'clarify-answered',
+      until: knowledgeThin && capped[0]?.id === 'prime' ? 'prime-recommended' : 'clarify-answered',
     };
   }
 

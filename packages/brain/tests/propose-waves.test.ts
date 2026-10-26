@@ -26,8 +26,57 @@ describe('proposeDeliverWaves', () => {
   it('exposes playbook checklists', () => {
     expect(playbookChecklist('ui').some((c) => c.id === 'a11y')).toBe(true);
     expect(playbookChecklist('ui').some((c) => c.id === 'responsive')).toBe(true);
+    expect(playbookChecklist('ui').some((c) => c.id === 'journey-ok')).toBe(true);
+    expect(playbookChecklist('ui').some((c) => c.id === 'no-fantasy')).toBe(true);
+    expect(playbookChecklist('build').some((c) => c.id === 'no-fantasy')).toBe(true);
     expect(playbookChecklist('docs').some((c) => c.id === 'cited')).toBe(true);
     expect(playbookChecklist('docs').some((c) => c.id === 'no-invent')).toBe(true);
+  });
+
+  it('incident runbook orders reproduce before fix before verify', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'neuron-waves-incident-'));
+    const brain = await openProjectBrain(root, {
+      seed: { projectId: 'wi', name: 'wi', stack: ['ts'] },
+    });
+    const { waves, runbook } = proposeDeliverWaves(brain, {
+      goal: 'Hotfix P0 outage in auth',
+      playbook: 'build',
+      runbook: 'incident',
+      seedPath: 'src/auth.ts',
+    });
+    expect(runbook).toBe('incident');
+    expect(waves.map((w) => w.title)).toEqual([
+      'Reproduce',
+      'Fix',
+      'Verify',
+      'Remember postmortem',
+    ]);
+    expect(waves[1]?.dependsOn).toEqual(['w1']);
+  });
+
+  it('enterprise-change runbook differs from default feature build', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'neuron-waves-ent-'));
+    const brain = await openProjectBrain(root, {
+      seed: { projectId: 'we', name: 'we', stack: ['ts'] },
+    });
+    const feature = proposeDeliverWaves(brain, {
+      goal: 'Add rate limiting',
+      playbook: 'build',
+      runbook: 'feature',
+      seedPath: 'src/mw.ts',
+    });
+    const enterprise = proposeDeliverWaves(brain, {
+      goal: 'Add rate limiting for compliance',
+      playbook: 'build',
+      runbook: 'enterprise-change',
+      seedPath: 'src/mw.ts',
+    });
+    expect(feature.runbook).toBe('feature');
+    expect(enterprise.runbook).toBe('enterprise-change');
+    expect(enterprise.waves[0]?.title).toMatch(/scope/i);
+    expect(enterprise.waves.map((w) => w.title)).not.toEqual(
+      feature.waves.map((w) => w.title),
+    );
   });
 
   it('refuses with PROPOSE_NEEDS_CODE when code intel exists but seedPath does not resolve', async () => {

@@ -18,7 +18,7 @@ description: >-
 4. **`checklistOk` / `verifyOk` require `signals.checklistDone` covering every playbook id** — use
    `neuron_workflow` `complete_checklist`.
 5. **`propose_waves`** refuses when code intel exists but `seedPath` does not resolve (pass
-   recommendation path).
+   recommendation path). Optional `runbook`: `feature` | `incident` | `enterprise-change`.
 
 Never install Absolute. Never use `.absolute-work/`.
 
@@ -30,15 +30,38 @@ CONTEXT → CLARIFY (gate.json) → BLUEPRINT → propose_waves → EXECUTE → 
 
 Board lives under `.neuron/workflow/` (`neuron_workflow`). Waves carry `brainRefs`. Playbooks: build | ui | docs | polish | maintain.
 
+## Verify = Reality Check (Brain-enforced)
+
+Default status is **NEEDS WORK** until evidence exists. For **build** and **ui**:
+
+- Every checklist id must appear in `checklistDone`.
+- Every id needs `checklistNotes[id]` (≥3 chars): script output, file path, or screenshot path.
+- `no-fantasy` — ban “production ready / 98/100 / zero issues” without those notes.
+- UI also requires `journey-ok` (entry → action → result + what was checked).
+
+`complete_checklist` and board validation reject `checklistOk` / `verifyOk` when notes are missing. There is no separate reality-checker skill.
+
 ## Playbooks (engines-lite inside deliver)
 
-| Playbook | Evidence via checklistDone |
+| Playbook | Evidence via checklistDone (+ notes on build/ui) |
 | --- | --- |
-| build | scripts-green, blueprint-diff, paths-honored |
-| ui | tokens, a11y, no-slop, responsive, motion |
+| build | scripts-green, blueprint-diff, paths-honored, no-fantasy |
+| ui | tokens, a11y, no-slop, responsive, motion, journey-ok, no-fantasy |
 | docs | cited, diataxis, no-invent, outdated |
 | polish | no-scope, hold-churn, complexity, tests-still |
 | maintain | one-family, no-silent-majors, lockfile, verify-scripts |
+
+## Runbooks (thin wave templates)
+
+Pass `runbook` to `propose_waves` (or let Brain detect from the goal):
+
+| Runbook | Phase order |
+| --- | --- |
+| feature | clarify → implement → verify |
+| incident | reproduce → fix → verify → remember postmortem |
+| enterprise-change | scope/risk → implement → security checklist → verify |
+
+Waves still come from `knowledge.code` / seedPath — runbooks only arrange phases.
 
 ## Express
 

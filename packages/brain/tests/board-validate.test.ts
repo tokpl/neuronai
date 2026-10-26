@@ -85,7 +85,35 @@ describe('assertBoardTransition', () => {
     ).toThrow(/CHECKLIST_EVIDENCE|checklistDone/i);
   });
 
-  it('accepts checklistOk when checklistDone covers playbook', () => {
+  it('rejects checklistOk without checklistNotes on build', () => {
+    expect(() =>
+      assertBoardTransition(
+        board({
+          phase: 'verify',
+          playbook: 'build',
+          waves: [{ id: 'w1', title: 'A', status: 'done', tasks: ['x'] }],
+          signals: {
+            checklistOk: true,
+            checklistDone: [
+              'scripts-green',
+              'blueprint-diff',
+              'paths-honored',
+              'no-fantasy',
+            ],
+          },
+        }),
+        null,
+      ),
+    ).toThrow(/CHECKLIST_NOTES|checklistNotes/i);
+  });
+
+  it('accepts checklistOk when checklistDone and notes cover playbook', () => {
+    const ids = [
+      'scripts-green',
+      'blueprint-diff',
+      'paths-honored',
+      'no-fantasy',
+    ];
     const next = assertBoardTransition(
       board({
         phase: 'verify',
@@ -93,7 +121,8 @@ describe('assertBoardTransition', () => {
         waves: [{ id: 'w1', title: 'A', status: 'done', tasks: ['x'] }],
         signals: {
           checklistOk: true,
-          checklistDone: ['scripts-green', 'blueprint-diff', 'paths-honored'],
+          checklistDone: ids,
+          checklistNotes: Object.fromEntries(ids.map((id) => [id, `evidence for ${id}`])),
         },
       }),
       null,

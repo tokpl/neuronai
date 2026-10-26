@@ -91,7 +91,9 @@ export async function handleContext(
         express: prepared.clarify.express,
         checklist,
         gateFileActive,
+        orientation: prepared.orientation,
       }),
+      orientation: prepared.orientation,
       clarify: {
         questions: prepared.clarify.questions,
         recommendPrime: prepared.clarify.recommendPrime,

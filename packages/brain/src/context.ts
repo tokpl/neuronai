@@ -4,6 +4,12 @@ import { buildContextContribution, type ContextContribution } from './contributi
 import { buildClarifyPlan, type ClarifyPlan } from './clarify.js';
 import type { BrainPrefs, ProjectMapEntry } from './models.js';
 import {
+  buildOrientationMap,
+  formatOrientationMarkdown,
+  shouldEmitOrientation,
+  type OrientationMap,
+} from './orientation.js';
+import {
   dedupeRetrievalHits,
   diversifyRetrievalHits,
   retrieve,
@@ -36,6 +42,8 @@ export interface PrepareContextInput {
   prefs?: BrainPrefs | null;
   /** Map entry count when known. */
   mapEntryCount?: number;
+  /** Optional display name for Orientation Map one-liner. */
+  projectName?: string;
 }
 
 /** What the agent should open, in structured form. */
@@ -99,6 +107,8 @@ export interface PreparedContext extends CompiledContext {
   contribution: ContextContribution;
   /** Brain-enforced clarify / gate (Wave A). Empty when nothing to ask. */
   clarify: ClarifyPlan;
+  /** Agency-style Orientation Map when onboarding / deep / how-does-X. */
+  orientation?: OrientationMap;
 }
 
 export function prepareContext(input: PrepareContextInput): PreparedContext {
@@ -245,8 +255,31 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
     mapEntryCount: input.mapEntryCount,
   });
 
+  const emitOrientation = shouldEmitOrientation({
+    mode: compiled.mode,
+    intent: result.stats.intent,
+    task: input.task,
+    recommendation: finalRecommendation,
+  });
+  const orientation = emitOrientation
+    ? buildOrientationMap({
+        task: input.task,
+        intent: result.stats.intent,
+        recommendation: finalRecommendation,
+        relevantFiles,
+        relevantModules,
+        projectName: input.projectName,
+      })
+    : undefined;
+
+  const contextWithOrientation =
+    orientation && !compiled.context.includes('## Orientation Map')
+      ? `${compiled.context.trimEnd()}\n\n${formatOrientationMarkdown(orientation)}\n`
+      : compiled.context;
+
   return {
     ...compiled,
+    context: contextWithOrientation,
     hits: result.hits,
     intent: result.stats.intent,
     concepts: result.stats.concepts,
@@ -267,6 +300,7 @@ export function prepareContext(input: PrepareContextInput): PreparedContext {
       memoriesInBrain: matchedKnowledge.length,
     }),
     clarify,
+    orientation,
   };
 }
 

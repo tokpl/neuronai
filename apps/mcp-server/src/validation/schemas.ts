@@ -86,6 +86,7 @@ export const workflowSchema = {
   ]),
   seedPath: z.string().optional(),
   playbook: z.enum(['build', 'ui', 'docs', 'polish', 'maintain']).optional(),
+  runbook: z.enum(['feature', 'incident', 'enterprise-change']).optional(),
   checklistDone: z.array(z.string()).optional(),
   checklistNotes: z.record(z.string()).optional(),
   board: z
@@ -135,6 +136,7 @@ export const workflowSchema = {
           clarifyQuestionCount: z.number().optional(),
           proposeWavesUsed: z.boolean().optional(),
           proposeQuality: z.enum(['code', 'map', 'generic']).optional(),
+          runbook: z.enum(['feature', 'incident', 'enterprise-change']).optional(),
           rememberedAt: z.string().optional(),
           completedAt: z.string().optional(),
         })

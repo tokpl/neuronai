@@ -185,6 +185,11 @@ export interface WorkflowPrefs {
   packageManager?: string;
   defaultBranch?: string;
   primedAt?: string;
+  /**
+   * User already answered the Thin Brain clarify (continue / scan / prime).
+   * Stops re-opening the same hard gate every neuron_context call.
+   */
+  thinBrainAcknowledgedAt?: string;
 }
 
 /** Init answers / local prefs (`.neuron/prefs.json`). */
@@ -232,6 +237,8 @@ export interface DeliverSignals {
   proposeWavesUsed?: boolean;
   /** propose_waves quality: code graph vs map vs generic template. */
   proposeQuality?: 'code' | 'map' | 'generic';
+  /** Thin runbook scenario applied when proposing waves. */
+  runbook?: 'feature' | 'incident' | 'enterprise-change';
   rememberedAt?: string;
   completedAt?: string;
 }

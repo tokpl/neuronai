@@ -63,6 +63,25 @@ export async function handleResolveClarify(
 
     const { cleared } = await answerDeliverGate(runtime.neuron.brain, args.questionId);
 
+    // Persist Thin Brain acknowledgment so the next neuron_context does not re-gate.
+    if (args.questionId === 'prime') {
+      try {
+        const brain = runtime.neuron.brain;
+        const prefs = brain.prefs;
+        if (prefs) {
+          await brain.savePrefs({
+            ...prefs,
+            workflow: {
+              ...prefs.workflow,
+              thinBrainAcknowledgedAt: new Date().toISOString(),
+            },
+          });
+        }
+      } catch {
+        // prefs write is best-effort; gate clear still applies this turn
+      }
+    }
+
     // Mirror answer onto active board when present
     try {
       const board = await readWorkflowBoard(runtime.neuron.brain);

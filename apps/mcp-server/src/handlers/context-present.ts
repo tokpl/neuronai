@@ -81,6 +81,22 @@ export type ContextPresent = {
     checklist?: Array<{ id: string; label: string }>;
     instruction: string;
   };
+  /** Agency Onboarding Engineer shape — Brain paths, not a separate agent. */
+  orientation?: {
+    oneLiner: string;
+    fiveMinute: {
+      primaryTasks: string;
+      primaryInputs: string;
+      primaryOutputs: string;
+      keyFiles: string[];
+      mainPaths: string[];
+    };
+    deepDive: {
+      entryPoints: string[];
+      flow: string[];
+      filesInspected: string[];
+    };
+  };
 };
 
 const CLARIFY_INSTRUCTION = [
@@ -110,11 +126,12 @@ export function buildContextPresent(clarify: {
   checklist?: Array<{ id: string; label: string }>;
   /** When gate.json is open even if this turn has no new questions. */
   gateFileActive?: boolean;
+  orientation?: ContextPresent['orientation'];
 }): ContextPresent {
   const nudgeParts: string[] = [];
   if (clarify.recommendPrime) {
     nudgeParts.push(
-      'Brain looks thin — run `neuron init` (or `neuron prime` refresh) before a large rediscovery.',
+      'Brain map/prefs look incomplete — soft-recommend `neuron init` / `neuron prime` (not a hard gate when knowledge already exists).',
     );
   }
   if (clarify.recommendDeliver) {
@@ -156,6 +173,7 @@ export function buildContextPresent(clarify: {
         }
       : undefined,
     deliver: deliverBlock,
+    orientation: clarify.orientation,
   };
 
   if (!clarify.questions.length) {

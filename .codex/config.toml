@@ -1,0 +1,9 @@
+[mcp_servers.neuron]
+command = 'C:\Program Files\nodejs\node.exe'
+args = [
+    'C:\projekty\neuron-ai-memory\apps\cli\dist\index.js',
+    "mcp",
+]
+
+[mcp_servers.neuron.env]
+NEURON_CWD = 'C:\projekty\neuron-ai-memory'

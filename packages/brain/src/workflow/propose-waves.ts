@@ -2,10 +2,17 @@ import type { ProjectBrain } from '../project-brain.js';
 import { getImpact } from '../code/queries.js';
 import type { DeliverPlaybook, WorkflowBoard } from '../models.js';
 import { WorkflowBoardError } from './board-validate.js';
+import {
+  applyRunbook,
+  detectRunbook,
+  type DeliverRunbook,
+} from './runbooks.js';
 
 export interface ProposeWavesInput {
   goal: string;
   playbook?: DeliverPlaybook;
+  /** Thin scenario template: feature | incident | enterprise-change. */
+  runbook?: DeliverRunbook;
   /** Seed path/symbol from Brain recommendation or map. */
   seedPath?: string;
   /**
@@ -30,6 +37,7 @@ export function proposeDeliverWaves(
   seedPath: string | null;
   usedCode: boolean;
   quality: ProposeQuality;
+  runbook: DeliverRunbook;
 } {
   const playbook = input.playbook ?? 'build';
   const code = brain.getCode();
@@ -226,7 +234,19 @@ export function proposeDeliverWaves(
     }
   }
 
-  return { waves, seedPath: seed, usedCode, quality };
+  const runbook = detectRunbook(input.goal, input.runbook);
+  const shaped =
+    runbook === 'feature' && playbook !== 'build' && playbook !== 'ui'
+      ? waves
+      : applyRunbook(runbook, waves, { goal: input.goal, seedPath: seed, playbook });
+
+  return {
+    waves: shaped,
+    seedPath: seed,
+    usedCode,
+    quality,
+    runbook,
+  };
 }
 
 function scriptTasks(scripts: {

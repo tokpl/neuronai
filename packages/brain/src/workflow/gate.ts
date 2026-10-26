@@ -1,5 +1,6 @@
+import { randomUUID } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 
 import { nowIso } from '../defaults.js';
 import type { DeliverGateState, DeliverPlaybook } from '../models.js';
@@ -18,6 +19,32 @@ export function isGateActive(gate: DeliverGateState | null): boolean {
   if (!gate?.required) return false;
   const pending = gate.questionIds.filter((id) => !gate.answeredIds.includes(id));
   return pending.length > 0;
+}
+
+/** Atomic JSON write with short retries — Windows EPERM/EBUSY on rename is common. */
+async function writeGateFile(path: string, value: unknown, attempts = 5): Promise<void> {
+  let lastErr: unknown;
+  for (let i = 0; i < attempts; i += 1) {
+    const tmp = `${path}.tmp.${randomUUID()}`;
+    try {
+      await writeFile(tmp, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+      await rename(tmp, path);
+      return;
+    } catch (err) {
+      lastErr = err;
+      try {
+        await rm(tmp, { force: true });
+      } catch {
+        // ignore cleanup
+      }
+      const code = (err as NodeJS.ErrnoException).code;
+      if (code !== 'EPERM' && code !== 'EBUSY' && code !== 'EEXIST' && code !== 'ENOENT') {
+        throw err;
+      }
+      await new Promise((r) => setTimeout(r, 30 * (i + 1)));
+    }
+  }
+  throw lastErr;
 }
 
 export async function writeDeliverGate(
@@ -46,7 +73,7 @@ export async function writeDeliverGate(
     createdAt: prev?.createdAt ?? nowIso(),
     updatedAt: nowIso(),
   };
-  await writeFile(brain.paths.workflowGate, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
+  await writeGateFile(brain.paths.workflowGate, next);
   return next;
 }
 
@@ -70,7 +97,7 @@ export async function answerDeliverGate(
     answeredIds,
     updatedAt: nowIso(),
   };
-  await writeFile(brain.paths.workflowGate, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
+  await writeGateFile(brain.paths.workflowGate, next);
   return { gate: next, cleared: false };
 }
 

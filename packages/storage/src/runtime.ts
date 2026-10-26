@@ -414,10 +414,22 @@ export async function createNeuronRuntime(
     context: (input) =>
       prepareContext({
         ...input,
+        projectName:
+          stack.brain.dna.identity.name?.value ??
+          stack.brain.dna.identity.projectId?.value ??
+          project.name,
         docs: corpus(),
         code: stack.brain.getCode(),
         prefs: stack.brain.prefs,
-        mapEntryCount: stack.brain.knowledge.map?.entries?.length ?? 0,
+        // Prefer PROJECT map; fall back to DNA modules / graph nodes so a missing
+        // map.json does not falsely trigger Thin Brain when the project is known.
+        mapEntryCount: Math.max(
+          stack.brain.knowledge.map?.entries?.length ?? 0,
+          stack.brain.dna.structure.modules?.value?.length ?? 0,
+          Array.isArray(stack.brain.knowledge.graph?.nodes)
+            ? stack.brain.knowledge.graph.nodes.length
+            : 0,
+        ),
       }),
     scan,
     persist,

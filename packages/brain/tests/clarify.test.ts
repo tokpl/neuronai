@@ -57,6 +57,38 @@ describe('buildClarifyPlan', () => {
     expect(plan.questions.length).toBeLessThanOrEqual(7);
   });
 
+  it('does not hard-gate Thin Brain when knowledge is rich but map/prefs are missing', () => {
+    const docs: RetrievalDoc[] = [
+      doc({ id: '1', title: 'Auth middleware', kind: 'decision', content: 'JWT in middleware' }),
+      doc({ id: '2', title: 'Rate limit rule', kind: 'rule', content: 'middleware only' }),
+      doc({ id: '3', title: 'Session pattern', kind: 'pattern', content: 'httpOnly cookies' }),
+    ];
+    const plan = buildClarifyPlan({
+      task: 'Fix false thin-brain gate when map is empty',
+      intent: 'DEBUGGING',
+      docs,
+      mapEntryCount: 0,
+      // no workflow prefs
+    });
+    expect(plan.recommendPrime).toBe(true);
+    expect(plan.questions.some((q) => q.id === 'prime')).toBe(false);
+    expect(plan.gate?.until).not.toBe('prime-recommended');
+  });
+
+  it('stops re-asking Thin Brain after thinBrainAcknowledgedAt', () => {
+    const plan = buildClarifyPlan({
+      task: 'Add auth',
+      intent: 'MODIFICATION',
+      docs: [],
+      prefs: {
+        ...richPrefs,
+        workflow: { ...richPrefs.workflow, thinBrainAcknowledgedAt: '2026-01-01T00:00:00.000Z' },
+      },
+    });
+    expect(plan.questions.some((q) => q.id === 'prime')).toBe(false);
+    expect(plan.recommendPrime).toBe(false);
+  });
+
   it('express when Brain is rich and recommendation path is in map docs', () => {
     const docs: RetrievalDoc[] = [
       doc({ id: '1', title: 'Auth middleware', kind: 'decision', content: 'JWT in middleware' }),

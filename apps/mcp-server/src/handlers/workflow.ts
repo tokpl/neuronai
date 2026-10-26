@@ -1,15 +1,20 @@
 import {
   boardHealth,
   checklistComplete,
+  detectRunbook,
   emptyBoard,
+  isDeliverRunbook,
   missingChecklistIds,
+  missingEvidenceNotes,
   playbookChecklist,
+  playbookRequiresEvidenceNotes,
   proposeDeliverWaves,
   readDeliverGate,
   readDeliverHistory,
   readWorkflowBoard,
   writeWorkflowBoard,
   type DeliverPlaybook,
+  type DeliverRunbook,
   type WorkflowBoard,
 } from '@neuronai/brain';
 
@@ -26,6 +31,7 @@ export async function handleWorkflow(
     board?: Partial<WorkflowBoard> & { goal?: string };
     seedPath?: string;
     playbook?: DeliverPlaybook;
+    runbook?: DeliverRunbook;
     checklistDone?: string[];
     checklistNotes?: Record<string, string>;
   },
@@ -63,14 +69,20 @@ export async function handleWorkflow(
       const existing =
         (await readWorkflowBoard(brain)) ?? emptyBoard(args.board?.goal ?? args.seedPath ?? 'untitled');
       const playbook = (args.playbook ?? args.board?.playbook ?? existing.playbook ?? 'build') as DeliverPlaybook;
+      const goal = args.board?.goal ?? existing.goal;
+      const runbook = detectRunbook(
+        goal,
+        isDeliverRunbook(args.runbook) ? args.runbook : undefined,
+      );
       const proposed = proposeDeliverWaves(brain, {
-        goal: args.board?.goal ?? existing.goal,
+        goal,
         playbook,
+        runbook,
         seedPath: args.seedPath,
       });
       const next: WorkflowBoard = {
         ...existing,
-        goal: args.board?.goal ?? existing.goal,
+        goal,
         playbook,
         phase: 'decompose',
         status: 'active',
@@ -80,6 +92,7 @@ export async function handleWorkflow(
           ...existing.signals,
           proposeWavesUsed: true,
           proposeQuality: proposed.quality,
+          runbook: proposed.runbook,
           express: existing.signals?.express,
         },
       };
@@ -93,6 +106,7 @@ export async function handleWorkflow(
           seedPath: proposed.seedPath,
           usedCode: proposed.usedCode,
           quality: proposed.quality,
+          runbook: proposed.runbook,
           waveCount: proposed.waves.length,
         },
       });
@@ -105,6 +119,10 @@ export async function handleWorkflow(
       }
       const playbook = (args.playbook ?? existing.playbook ?? 'build') as DeliverPlaybook;
       const checklistDone = args.checklistDone ?? existing.signals?.checklistDone ?? [];
+      const checklistNotes = {
+        ...existing.signals?.checklistNotes,
+        ...args.checklistNotes,
+      };
       const missing = missingChecklistIds(playbook, checklistDone);
       if (missing.length) {
         return okResult({
@@ -116,20 +134,32 @@ export async function handleWorkflow(
             'Pass every playbook checklist id in checklistDone with notes proving the check — then retry complete_checklist.',
         });
       }
+      const missingNotes = missingEvidenceNotes(playbook, checklistDone, checklistNotes);
+      if (missingNotes.length) {
+        return okResult({
+          ok: false,
+          checklistOk: false,
+          missingNotes,
+          requiresEvidenceNotes: playbookRequiresEvidenceNotes(playbook),
+          required: playbookChecklist(playbook),
+          instruction:
+            'Reality-check: build/ui require checklistNotes[id] (≥3 chars) for every checklist id — script output, path, or screenshot — then retry complete_checklist. Default status is NEEDS WORK until notes exist.',
+        });
+      }
       const next: WorkflowBoard = {
         ...existing,
         playbook,
         signals: {
           ...existing.signals,
           checklistDone,
-          checklistNotes: { ...existing.signals?.checklistNotes, ...args.checklistNotes },
+          checklistNotes,
           checklistOk: true,
         },
       };
       const path = await writeWorkflowBoard(brain, next, { previous: existing });
       return okResult({
         ok: true,
-        checklistOk: checklistComplete(playbook, checklistDone),
+        checklistOk: checklistComplete(playbook, checklistDone, checklistNotes),
         board: await readWorkflowBoard(brain),
         path,
         health: boardHealth(await readWorkflowBoard(brain)),

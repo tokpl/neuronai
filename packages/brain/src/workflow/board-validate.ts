@@ -1,5 +1,5 @@
 import type { WorkflowBoard } from '../models.js';
-import { missingChecklistIds } from './playbooks.js';
+import { missingChecklistIds, missingEvidenceNotes } from './playbooks.js';
 
 export class WorkflowBoardError extends Error {
   readonly code: string;
@@ -118,10 +118,21 @@ export function assertBoardTransition(
   }
 
   const missingChecks = missingChecklistIds(next.playbook, next.signals?.checklistDone);
+  const missingNotes = missingEvidenceNotes(
+    next.playbook,
+    next.signals?.checklistDone,
+    next.signals?.checklistNotes,
+  );
   if (next.signals?.checklistOk && missingChecks.length > 0) {
     throw new WorkflowBoardError(
       'CHECKLIST_EVIDENCE',
       `checklistOk requires signals.checklistDone to cover all playbook items; missing: ${missingChecks.join(', ')}`,
+    );
+  }
+  if (next.signals?.checklistOk && missingNotes.length > 0) {
+    throw new WorkflowBoardError(
+      'CHECKLIST_NOTES',
+      `checklistOk requires checklistNotes proof for build/ui items; missing notes: ${missingNotes.join(', ')}`,
     );
   }
   if (next.signals?.verifyOk) {
@@ -135,6 +146,12 @@ export function assertBoardTransition(
       throw new WorkflowBoardError(
         'CHECKLIST_EVIDENCE',
         `verifyOk blocked — checklistDone incomplete: ${missingChecks.join(', ')}`,
+      );
+    }
+    if (missingNotes.length > 0) {
+      throw new WorkflowBoardError(
+        'CHECKLIST_NOTES',
+        `verifyOk blocked — checklistNotes incomplete: ${missingNotes.join(', ')}`,
       );
     }
   }

@@ -110,7 +110,7 @@ export function registerTools(server: McpServer, runtime: McpRuntime): void {
     'neuron_workflow',
     {
       description:
-        'Deliver board (.neuron/workflow/): get_board | set_board | clear_board | propose_waves | complete_checklist. propose_waves needs resolvable seedPath when code intel exists. complete_checklist requires checklistDone covering the playbook.',
+        'Deliver board (.neuron/workflow/): get_board | set_board | clear_board | propose_waves | complete_checklist. propose_waves needs resolvable seedPath when code intel exists; optional runbook feature|incident|enterprise-change. complete_checklist requires checklistDone (+ checklistNotes on build/ui).',
       inputSchema: workflowSchema,
     },
     async (args) => handleWorkflow(runtime, args),

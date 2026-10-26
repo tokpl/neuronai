@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|StrReplace|EditNotebook|Delete|ApplyPatch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node 'c:\\projekty\\neuron-ai-memory\\.codex\\hooks\\neuron-gate.mjs'"
+          }
+        ]
+      }
+    ]
+  }
+}

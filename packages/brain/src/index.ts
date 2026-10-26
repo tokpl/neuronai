@@ -176,6 +176,8 @@ export {
   playbookChecklist,
   checklistComplete,
   missingChecklistIds,
+  missingEvidenceNotes,
+  playbookRequiresEvidenceNotes,
   type PlaybookChecklistItem,
 } from './workflow/playbooks.js';
 export {
@@ -184,6 +186,19 @@ export {
   type ProposedWave,
   type ProposeQuality,
 } from './workflow/propose-waves.js';
+export {
+  applyRunbook,
+  detectRunbook,
+  isDeliverRunbook,
+  DELIVER_RUNBOOKS,
+  type DeliverRunbook,
+} from './workflow/runbooks.js';
+export {
+  buildOrientationMap,
+  formatOrientationMarkdown,
+  shouldEmitOrientation,
+  type OrientationMap,
+} from './orientation.js';
 export {
   appendDeliverHistory,
   readDeliverHistory,

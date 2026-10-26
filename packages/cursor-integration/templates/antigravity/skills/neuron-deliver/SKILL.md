@@ -6,62 +6,62 @@ description: >-
   UI / docs / polish / maintain / feedback asks.
 ---
 
-# Neuron Deliver ‚Äî Brain-gated SDLC
+# Neuron Deliver ó Brain-gated SDLC
 
 ## Enforcement
 
-1. **`present.codingAllowed === false`** ‚Üí no app code (agents must honor this on every host).
-2. **Cursor hook** `neuron-gate.mjs` ‚Äî **best-effort** deny of Write/StrReplace/‚Ä¶ while
+1. **`present.codingAllowed === false`** õ no app code (agents must honor this on every host).
+2. **Cursor hook** `neuron-gate.mjs` ó **best-effort** deny of Write/StrReplace/Ö while
    `.neuron/workflow/gate.json` is open (`failClosed` on `preToolUse`). Not universal: Shell and
    non-Cursor hosts can still mutate; always honor `codingAllowed`.
 3. Board rejects execute while gate open; `completed` needs `remembered`.
-4. **`checklistOk` / `verifyOk` require `signals.checklistDone` covering every checklist id** ‚Äî use
+4. **`checklistOk` / `verifyOk` require `signals.checklistDone` covering every checklist id** ó use
    `neuron_workflow` `complete_checklist`.
 5. **`propose_waves`** refuses when code intel exists but `seedPath` does not resolve (pass
    recommendation path). Optional `runbook`: `feature` | `incident` | `enterprise-change` | **`feedback`**.
 
-Never install Absolute. Never use `.absolute-work/`.
+Never install Absolute. Never use `.absolute-work/`. Prefer `neuron init` / `neuron prime` when Brain is thin.
 
 ## Loop
 
 ```
-CONTEXT ‚Üí CLARIFY (gate.json) ‚Üí BLUEPRINT ‚Üí propose_waves ‚Üí EXECUTE ‚Üí complete_checklist ‚Üí VERIFY ‚Üí neuron_after_task ‚Üí LAST_DELIVER.md
+CONTEXT õ CLARIFY (gate.json) õ BLUEPRINT õ propose_waves õ EXECUTE õ complete_checklist õ VERIFY õ neuron_after_task õ LAST_DELIVER.md
 ```
 
 Board lives under `.neuron/workflow/` (`neuron_workflow`). Waves carry `brainRefs`.  
 Playbooks: build | ui | docs | polish | maintain.  
-**(There is no separate ‚Äúmobile‚Äù playbook.)** Device/browser proof for bug lists = runbook **`feedback`**.
+**(There is no separate ìmobileî playbook.)** Device/browser proof for bug lists = runbook **`feedback`**.
 
-## Feedback Triage (Flutter ¬∑ Next.js ¬∑ PHP ¬∑ any UI)
+## Feedback Triage (Flutter ∑ Next.js ∑ PHP ∑ any UI)
 
-When the user pastes a numbered list like `Feedback 21.10.2026_2` / `1. ‚Ä¶` / `12b)‚Ä¶`:
+When the user pastes a numbered list like `Feedback 21.10.2026_2` / `1. Ö` / `12b)Ö`:
 
 ```
-Ingest ‚Üí Reproduce in product ‚Üí Fix confirmed ‚Üí Re-verify with evidence ‚Üí Remember
+Ingest õ Reproduce in product õ Fix confirmed õ Re-verify with evidence õ Remember
 ```
 
 Stack-agnostic capture:
 
 | Surface | How to prove |
 | --- | --- |
-| Flutter / phone | adb screencap / Dart MCP screenshot ‚Üí `.neuron/workflow/evidence/fb-N/` |
-| Next.js / web | browser screenshot (Playwright / computer-use / Easel) ‚Üí same evidence folder |
-| PHP / other | same ‚Äî running UI shot, not code-only |
+| Flutter / phone | adb screencap / Dart MCP screenshot õ `.neuron/workflow/evidence/fb-N/` |
+| Next.js / web | browser screenshot (Playwright / computer-use / Easel) õ same evidence folder |
+| PHP / other | same ó running UI shot, not code-only |
 
 Rules:
 
-1. Parse into `signals.feedbackItems` (`fb-1`, `fb-12b`, ‚Ä¶) ‚Äî **no code** on ingest.
+1. Parse into `signals.feedbackItems` (`fb-1`, `fb-12b`, Ö) ó **no code** on ingest.
 2. Reproduce **in the running product**. Status: `confirmed` | `cannot_repro` | `by_design` | **`needs_info`**.
-3. **If you do not understand expected behavior** ‚Üí AskQuestion the user, set item `needs_info` + `askPrompt`, wait, store **`userAnswer`**, then reclassify (usually `confirmed`) and only then fix.
+3. **If you do not understand expected behavior** õ AskQuestion the user, set item `needs_info` + `askPrompt`, wait, store **`userAnswer`**, then reclassify (usually `confirmed`) and only then fix.
 4. Fix wave is **Brain-blocked** while any `needs_info` lacks `userAnswer`, or while zero items are `confirmed`.
-5. After fix: `after*.png` + vision notes ‚Üí `complete_checklist` (FEEDBACK_CHECKLIST) with **existing** file paths.
-6. Never mark ‚Äúdone‚Äù from reading source alone.
+5. After fix: `after*.png` + vision notes õ `complete_checklist` (FEEDBACK_CHECKLIST) with **existing** file paths.
+6. Never mark ìdoneî from reading source alone.
 
 FEEDBACK_CHECKLIST ids: `surface-online`, `repro-in-product`, `screenshots-before`, `screenshots-after`, `vision-reviewed`, `asks-resolved`, `no-fantasy`.
 
 ## Verify = Reality Check (non-feedback)
 
-Default **NEEDS WORK** until evidence exists. For **build** / **ui**: notes ‚â•3 chars per id; `no-fantasy` ban.
+Default **NEEDS WORK** until evidence exists. For **build** / **ui**: notes ?3 chars per id; `no-fantasy` ban.
 
 ## Playbooks
 
@@ -77,13 +77,13 @@ Default **NEEDS WORK** until evidence exists. For **build** / **ui**: notes ‚â•3
 
 | Runbook | Phase order |
 | --- | --- |
-| feature | clarify ‚Üí implement ‚Üí verify |
-| incident | reproduce ‚Üí fix ‚Üí verify ‚Üí remember postmortem |
-| enterprise-change | scope/risk ‚Üí implement ‚Üí security checklist ‚Üí verify |
-| **feedback** | ingest ‚Üí reproduce in product ‚Üí fix confirmed ‚Üí re-verify ‚Üí remember |
+| feature | clarify õ implement õ verify |
+| incident | reproduce õ fix õ verify õ remember postmortem |
+| enterprise-change | scope/risk õ implement õ security checklist õ verify |
+| **feedback** | ingest õ reproduce in product õ fix confirmed õ re-verify õ remember |
 
 ## Express / Resume
 
-**Express** only when Brain is rich **and** recommendation path is in map docs. Then: short blueprint ‚Üí `propose_waves` with seedPath ‚Üí implement ‚Üí `complete_checklist` ‚Üí verify ‚Üí remember.
+**Express** only when Brain is rich **and** recommendation path is in map docs. Then: short blueprint õ `propose_waves` with seedPath õ implement õ `complete_checklist` õ verify õ remember.
 
-`get_board` ‚Üí health + gate + history + feedbackItems. Prefer `LAST_DELIVER.md` for team-visible last outcome.
+`get_board` õ health + gate + history + feedbackItems. Prefer `LAST_DELIVER.md` for team-visible last outcome.

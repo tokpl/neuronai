@@ -22,11 +22,12 @@ const richPrefs = {
 };
 
 describe('detectPlaybook', () => {
-  it('detects ui / docs / polish / maintain', () => {
+  it('detects ui / docs / polish / maintain (no mobile playbook)', () => {
     expect(detectPlaybook('Polish the landing page hero')).toBe('ui');
     expect(detectPlaybook('Write a README tutorial')).toBe('docs');
     expect(detectPlaybook('Simplify this diff')).toBe('polish');
     expect(detectPlaybook('Upgrade vulnerable dependencies')).toBe('maintain');
+    expect(detectPlaybook('Fix Flutter feed on device via adb')).toBe('ui');
     expect(detectPlaybook('Add rate limiting')).toBe('build');
   });
 });

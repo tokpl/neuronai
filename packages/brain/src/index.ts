@@ -177,9 +177,20 @@ export {
   checklistComplete,
   missingChecklistIds,
   missingEvidenceNotes,
+  missingEvidenceFiles,
   playbookRequiresEvidenceNotes,
+  playbookRequiresEvidenceFiles,
+  resolveDeliverChecklist,
+  normalizePlaybook,
+  FEEDBACK_CHECKLIST,
+  parseFeedbackItems,
+  feedbackHasConfirmed,
+  feedbackHasOpenAsks,
+  extractEvidencePathsFromNotes,
+  defaultEvidenceDir,
   type PlaybookChecklistItem,
 } from './workflow/playbooks.js';
+export type { FeedbackItem, FeedbackItemStatus } from './models.js';
 export {
   proposeDeliverWaves,
   type ProposeWavesInput,

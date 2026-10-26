@@ -7,6 +7,26 @@
 - The scanner reads the design state of [Easel](docs/easel.md) (`.easel/`: approved direction, motion plan, screens, journeys, library items, open items) into project memories and a *Design system (Easel)* section of `project-report.md`, so `neuron_context` answers design questions in every chat
 - Never reads `.easel/auth` or `.easel/artifacts`; no change for projects without `.easel/`
 
+## 0.2.10
+
+Feedback triage + device/browser evidence, thin-brain / Agency Deliver hardenings.
+
+### Feedback runbook (stack-agnostic)
+
+- `propose_waves` runbook **`feedback`**: Ingest → Reproduce in product → Fix confirmed → Re-verify → Remember
+- Parses numbered lists (`1.` / `12b)`) into `signals.feedbackItems`
+- Evidence PNGs under `.neuron/workflow/evidence/fb-N/` — Flutter/adb, Next/browser, or PHP UI
+- `complete_checklist` / board reject missing evidence files; Fix blocked without `confirmed` or while `needs_info` lacks `userAnswer` (ask the user first)
+- No separate mobile playbook — legacy `mobile` aliases to the feedback checklist
+
+### Also (from 0.2.9 → 0.2.10 Deliver)
+
+- Reality-check notes on build/ui; Orientation Map in `neuron_context` (deep / how-does-X)
+- Thin runbooks: feature | incident | enterprise-change | feedback
+- Thin Brain hard-gate only on empty knowledge; EPERM-safer brain writes
+
+After upgrading: `npm i -g neuronai@0.2.10`, then **reload Cursor MCP**.
+
 ## 0.2.9
 
 Neuron Deliver + 9-tool MCP product surface (Brain-gated plan → build → verify → remember).

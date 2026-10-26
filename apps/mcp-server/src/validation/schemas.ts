@@ -85,8 +85,8 @@ export const workflowSchema = {
     'complete_checklist',
   ]),
   seedPath: z.string().optional(),
-  playbook: z.enum(['build', 'ui', 'docs', 'polish', 'maintain']).optional(),
-  runbook: z.enum(['feature', 'incident', 'enterprise-change']).optional(),
+  playbook: z.enum(['build', 'ui', 'docs', 'polish', 'maintain', 'mobile']).optional(),
+  runbook: z.enum(['feature', 'incident', 'enterprise-change', 'feedback']).optional(),
   checklistDone: z.array(z.string()).optional(),
   checklistNotes: z.record(z.string()).optional(),
   board: z
@@ -104,7 +104,7 @@ export const workflowSchema = {
         ])
         .optional(),
       status: z.enum(['active', 'blocked', 'completed']).optional(),
-      playbook: z.enum(['build', 'ui', 'docs', 'polish', 'maintain']).optional(),
+      playbook: z.enum(['build', 'ui', 'docs', 'polish', 'maintain', 'mobile']).optional(),
       waves: z
         .array(
           z.object({
@@ -136,7 +136,34 @@ export const workflowSchema = {
           clarifyQuestionCount: z.number().optional(),
           proposeWavesUsed: z.boolean().optional(),
           proposeQuality: z.enum(['code', 'map', 'generic']).optional(),
-          runbook: z.enum(['feature', 'incident', 'enterprise-change']).optional(),
+          runbook: z.enum(['feature', 'incident', 'enterprise-change', 'feedback']).optional(),
+          playbookHint: z
+            .enum(['build', 'ui', 'docs', 'polish', 'maintain', 'mobile'])
+            .optional(),
+          feedbackItems: z
+            .array(
+              z.object({
+                id: z.string(),
+                text: z.string(),
+                status: z.enum([
+                  'pending_triage',
+                  'reproducing',
+                  'confirmed',
+                  'cannot_repro',
+                  'by_design',
+                  'needs_info',
+                  'fixed',
+                  'verified',
+                ]),
+                evidenceBefore: z.array(z.string()).optional(),
+                evidenceAfter: z.array(z.string()).optional(),
+                verdictNote: z.string().optional(),
+                askPrompt: z.string().optional(),
+                userAnswer: z.string().optional(),
+                surface: z.enum(['flutter', 'web', 'php', 'unknown']).optional(),
+              }),
+            )
+            .optional(),
           rememberedAt: z.string().optional(),
           completedAt: z.string().optional(),
         })
@@ -148,6 +175,8 @@ export const workflowSchema = {
           typecheck: z.string().optional(),
           format: z.string().optional(),
           build: z.string().optional(),
+          mobileVerify: z.string().optional(),
+          mobileScreenpack: z.string().optional(),
         })
         .optional(),
     })

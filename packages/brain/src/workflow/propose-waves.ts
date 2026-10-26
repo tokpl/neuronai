@@ -39,7 +39,9 @@ export function proposeDeliverWaves(
   quality: ProposeQuality;
   runbook: DeliverRunbook;
 } {
-  const playbook = input.playbook ?? 'build';
+  // Legacy "mobile" playbook → ui; proof is runbook feedback, not a playbook
+  const playbook =
+    input.playbook === 'mobile' ? 'ui' : (input.playbook ?? 'build');
   const code = brain.getCode();
   const hasCodeGraph = Boolean(code?.files?.length || code?.symbols?.length || code?.edges?.length);
 
@@ -235,6 +237,7 @@ export function proposeDeliverWaves(
   }
 
   const runbook = detectRunbook(input.goal, input.runbook);
+  // Feedback / incident / enterprise always reshape; feature keeps docs/polish/maintain waves.
   const shaped =
     runbook === 'feature' && playbook !== 'build' && playbook !== 'ui'
       ? waves

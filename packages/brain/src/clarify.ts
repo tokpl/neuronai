@@ -68,7 +68,7 @@ const MULTI_FILE_HINT =
   /\b(end[- ]to[- ]end|plan and build|migration|refactor|oauth|auth|payment|billing|multi[- ]file|deliver)\b/i;
 
 const PLAYBOOK_UI =
-  /\b(ui|ux|css|tailwind|layout|landing|pricing page|button|component style|visual|design system)\b/i;
+  /\b(ui|ux|css|tailwind|layout|landing|pricing page|button|component style|visual|design system|flutter|dart)\b/i;
 const PLAYBOOK_DOCS =
   /\b(docs?|readme|tutorial|how[- ]to|diátaxis|diataxis|changelog|adr)\b/i;
 const PLAYBOOK_POLISH =
@@ -109,6 +109,7 @@ function hasWorkflowPrefs(prefs: BrainPrefs | null | undefined): boolean {
 
 /** Infer deliver playbook from task text (Brain can override via clarify). */
 export function detectPlaybook(task: string): DeliverPlaybook {
+  // Numbered feedback lists → ui playbook + feedback runbook (detectRunbook), not a mobile playbook
   if (PLAYBOOK_UI.test(task)) return 'ui';
   if (PLAYBOOK_DOCS.test(task)) return 'docs';
   if (PLAYBOOK_POLISH.test(task)) return 'polish';

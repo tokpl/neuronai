@@ -1,5 +1,11 @@
 import type { WorkflowBoard } from '../models.js';
-import { missingChecklistIds, missingEvidenceNotes } from './playbooks.js';
+import { feedbackHasConfirmed, feedbackHasOpenAsks } from './evidence.js';
+import {
+  missingChecklistIds,
+  missingEvidenceFiles,
+  missingEvidenceNotes,
+  playbookRequiresEvidenceFiles,
+} from './playbooks.js';
 
 export class WorkflowBoardError extends Error {
   readonly code: string;
@@ -14,6 +20,10 @@ export class WorkflowBoardError extends Error {
 export interface AssertBoardOptions {
   /** True when `.neuron/workflow/gate.json` still has unanswered clarify. */
   gateActive?: boolean;
+  /** Project root for resolving evidence file paths (mobile playbook). */
+  projectRoot?: string;
+  /** Override evidence directory. */
+  evidenceDir?: string;
 }
 
 /** Topological-ish order: waves with unmet dependsOn come after dependencies. */
@@ -117,12 +127,50 @@ export function assertBoardTransition(
     }
   }
 
-  const missingChecks = missingChecklistIds(next.playbook, next.signals?.checklistDone);
+  // Feedback runbook: Fix blocked without confirmed items, or while user asks are open
+  if (next.signals?.runbook === 'feedback') {
+    const fixWave = waves.find((w) => /fix\s*confirmed|^fix$/i.test(w.title));
+    const fixing =
+      fixWave && (fixWave.status === 'in_progress' || fixWave.status === 'done');
+    if (fixing && (next.signals.feedbackItems?.length ?? 0) > 0) {
+      if (feedbackHasOpenAsks(next.signals.feedbackItems)) {
+        throw new WorkflowBoardError(
+          'FEEDBACK_ASK_USER',
+          'Fix wave blocked — feedbackItems with needs_info still lack userAnswer. Ask the user (AskQuestion), store userAnswer on the item, then continue.',
+        );
+      }
+      if (!feedbackHasConfirmed(next.signals.feedbackItems)) {
+        throw new WorkflowBoardError(
+          'FEEDBACK_NO_CONFIRMED',
+          'Fix wave blocked — reproduce in the running product (browser or app), capture evidence, set status confirmed — or needs_info + ask the user.',
+        );
+      }
+    }
+  }
+
+  const runbook = next.signals?.runbook;
+  const missingChecks = missingChecklistIds(
+    next.playbook,
+    next.signals?.checklistDone,
+    runbook,
+  );
   const missingNotes = missingEvidenceNotes(
     next.playbook,
     next.signals?.checklistDone,
     next.signals?.checklistNotes,
+    runbook,
   );
+  const missingFiles =
+    playbookRequiresEvidenceFiles(next.playbook, runbook) && options.projectRoot
+      ? missingEvidenceFiles({
+          requireScreenshotNotes: true,
+          notes: next.signals?.checklistNotes,
+          feedbackItems: next.signals?.feedbackItems,
+          projectRoot: options.projectRoot,
+          evidenceDir: options.evidenceDir,
+        })
+      : [];
+
   if (next.signals?.checklistOk && missingChecks.length > 0) {
     throw new WorkflowBoardError(
       'CHECKLIST_EVIDENCE',
@@ -132,7 +180,13 @@ export function assertBoardTransition(
   if (next.signals?.checklistOk && missingNotes.length > 0) {
     throw new WorkflowBoardError(
       'CHECKLIST_NOTES',
-      `checklistOk requires checklistNotes proof for build/ui items; missing notes: ${missingNotes.join(', ')}`,
+      `checklistOk requires checklistNotes proof; missing notes: ${missingNotes.join(', ')}`,
+    );
+  }
+  if (next.signals?.checklistOk && missingFiles.length > 0) {
+    throw new WorkflowBoardError(
+      'CHECKLIST_EVIDENCE_FILES',
+      `checklistOk requires existing evidence screenshots under .neuron/workflow/evidence/; missing: ${missingFiles.join(', ')}`,
     );
   }
   if (next.signals?.verifyOk) {
@@ -152,6 +206,12 @@ export function assertBoardTransition(
       throw new WorkflowBoardError(
         'CHECKLIST_NOTES',
         `verifyOk blocked — checklistNotes incomplete: ${missingNotes.join(', ')}`,
+      );
+    }
+    if (missingFiles.length > 0) {
+      throw new WorkflowBoardError(
+        'CHECKLIST_EVIDENCE_FILES',
+        `verifyOk blocked — evidence files missing: ${missingFiles.join(', ')}`,
       );
     }
   }

@@ -34,7 +34,12 @@ export async function writeWorkflowBoard(
   };
   if (!options.skipValidate) {
     const gateActive = await gateBlocksExecute(brain);
-    next = assertBoardTransition(next, previous, { gateActive });
+    next = assertBoardTransition(next, previous, {
+      gateActive,
+      projectRoot: brain.paths.projectRoot,
+      evidenceDir:
+        brain.prefs?.workflow?.mobileEvidenceDir ?? brain.paths.workflowEvidence,
+    });
   }
   await writeFile(brain.paths.workflowBoard, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
 

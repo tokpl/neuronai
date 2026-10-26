@@ -163,8 +163,38 @@ export interface ProjectHealth {
   notes: string[];
 }
 
-/** Playbook mode inside /neuron-deliver (not separate Absolute skills). */
-export type DeliverPlaybook = 'build' | 'ui' | 'docs' | 'polish' | 'maintain';
+/**
+ * Playbook mode inside /neuron-deliver (not separate Absolute skills).
+ * Visual/device proof for bug lists lives on runbook `feedback`, not a playbook.
+ * Legacy boards may still say playbook "mobile" — treat as ui + feedback.
+ */
+export type DeliverPlaybook = 'build' | 'ui' | 'docs' | 'polish' | 'maintain' | 'mobile';
+
+/** Feedback triage item on the deliver board (runbook feedback). */
+export type FeedbackItemStatus =
+  | 'pending_triage'
+  | 'reproducing'
+  | 'confirmed'
+  | 'cannot_repro'
+  | 'by_design'
+  | 'needs_info'
+  | 'fixed'
+  | 'verified';
+
+export interface FeedbackItem {
+  id: string;
+  text: string;
+  status: FeedbackItemStatus;
+  evidenceBefore?: string[];
+  evidenceAfter?: string[];
+  verdictNote?: string;
+  /** What the agent asked the user when status is needs_info. */
+  askPrompt?: string;
+  /** User clarification — required before fixing that item. */
+  userAnswer?: string;
+  /** flutter | web | php | unknown — how evidence was / will be captured. */
+  surface?: 'flutter' | 'web' | 'php' | 'unknown';
+}
 
 /** Workflow prefs used by prime / deliver / verify (Brain-owned, not Absolute config). */
 export interface WorkflowPrefs {
@@ -181,7 +211,15 @@ export interface WorkflowPrefs {
     typecheck?: string;
     format?: string;
     build?: string;
+    /** Device smoke / DEEP e2e (Flutter etc.). */
+    mobileVerify?: string;
+    /** Screenpack / adb capture harness. */
+    mobileScreenpack?: string;
   };
+  /** Preferred adb serial (physical phone or emulator). */
+  deviceId?: string;
+  /** Override evidence root; default `.neuron/workflow/evidence`. */
+  mobileEvidenceDir?: string;
   packageManager?: string;
   defaultBranch?: string;
   primedAt?: string;
@@ -238,7 +276,11 @@ export interface DeliverSignals {
   /** propose_waves quality: code graph vs map vs generic template. */
   proposeQuality?: 'code' | 'map' | 'generic';
   /** Thin runbook scenario applied when proposing waves. */
-  runbook?: 'feature' | 'incident' | 'enterprise-change';
+  runbook?: 'feature' | 'incident' | 'enterprise-change' | 'feedback';
+  /** Soft hint that mobile playbook should pair with this board. */
+  playbookHint?: DeliverPlaybook;
+  /** Parsed feedback list for runbook feedback. */
+  feedbackItems?: FeedbackItem[];
   rememberedAt?: string;
   completedAt?: string;
 }
@@ -305,6 +347,8 @@ export interface BrainPaths {
   workflowBoard: string;
   workflowGate: string;
   workflowHistory: string;
+  /** Device/screenshot evidence for mobile + feedback verify. */
+  workflowEvidence: string;
   memoryDir: string;
   brainDir: string;
   dna: string;

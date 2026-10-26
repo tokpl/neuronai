@@ -1,17 +1,23 @@
 import {
   boardHealth,
   checklistComplete,
+  detectPlaybook,
   detectRunbook,
   emptyBoard,
+  feedbackHasOpenAsks,
   isDeliverRunbook,
   missingChecklistIds,
+  missingEvidenceFiles,
   missingEvidenceNotes,
-  playbookChecklist,
+  normalizePlaybook,
+  parseFeedbackItems,
+  playbookRequiresEvidenceFiles,
   playbookRequiresEvidenceNotes,
   proposeDeliverWaves,
   readDeliverGate,
   readDeliverHistory,
   readWorkflowBoard,
+  resolveDeliverChecklist,
   writeWorkflowBoard,
   type DeliverPlaybook,
   type DeliverRunbook,
@@ -47,6 +53,9 @@ export async function handleWorkflow(
         board,
         path: brain.paths.workflowBoard,
         scripts: brain.prefs?.workflow?.scripts ?? null,
+        deviceId: brain.prefs?.workflow?.deviceId ?? null,
+        evidenceDir:
+          brain.prefs?.workflow?.mobileEvidenceDir ?? brain.paths.workflowEvidence,
         health: boardHealth(board),
         gate,
         history,
@@ -68,8 +77,13 @@ export async function handleWorkflow(
     if (args.action === 'propose_waves') {
       const existing =
         (await readWorkflowBoard(brain)) ?? emptyBoard(args.board?.goal ?? args.seedPath ?? 'untitled');
-      const playbook = (args.playbook ?? args.board?.playbook ?? existing.playbook ?? 'build') as DeliverPlaybook;
       const goal = args.board?.goal ?? existing.goal;
+      const detectedPlaybook = detectPlaybook(goal);
+      const rawPlaybook = (args.playbook ??
+        args.board?.playbook ??
+        existing.playbook ??
+        detectedPlaybook) as DeliverPlaybook;
+      const playbook = normalizePlaybook(rawPlaybook);
       const runbook = detectRunbook(
         goal,
         isDeliverRunbook(args.runbook) ? args.runbook : undefined,
@@ -80,6 +94,14 @@ export async function handleWorkflow(
         runbook,
         seedPath: args.seedPath,
       });
+
+      const feedbackItems =
+        runbook === 'feedback'
+          ? existing.signals?.feedbackItems?.length
+            ? existing.signals.feedbackItems
+            : parseFeedbackItems(goal)
+          : existing.signals?.feedbackItems;
+
       const next: WorkflowBoard = {
         ...existing,
         goal,
@@ -93,6 +115,7 @@ export async function handleWorkflow(
           proposeWavesUsed: true,
           proposeQuality: proposed.quality,
           runbook: proposed.runbook,
+          feedbackItems,
           express: existing.signals?.express,
         },
       };
@@ -108,6 +131,7 @@ export async function handleWorkflow(
           quality: proposed.quality,
           runbook: proposed.runbook,
           waveCount: proposed.waves.length,
+          feedbackItemCount: feedbackItems?.length ?? 0,
         },
       });
     }
@@ -117,34 +141,79 @@ export async function handleWorkflow(
       if (!existing) {
         return failResult(new Error('No deliver board — set_board or propose_waves first'));
       }
-      const playbook = (args.playbook ?? existing.playbook ?? 'build') as DeliverPlaybook;
+      const playbook = normalizePlaybook(
+        (args.playbook ?? existing.playbook ?? 'build') as DeliverPlaybook,
+      );
+      const runbook = existing.signals?.runbook;
       const checklistDone = args.checklistDone ?? existing.signals?.checklistDone ?? [];
       const checklistNotes = {
         ...existing.signals?.checklistNotes,
         ...args.checklistNotes,
       };
-      const missing = missingChecklistIds(playbook, checklistDone);
+      const evidenceDir =
+        brain.prefs?.workflow?.mobileEvidenceDir ?? brain.paths.workflowEvidence;
+      const required = resolveDeliverChecklist(playbook, runbook);
+
+      if (runbook === 'feedback' && feedbackHasOpenAsks(existing.signals?.feedbackItems)) {
+        return okResult({
+          ok: false,
+          checklistOk: false,
+          openAsks: existing.signals?.feedbackItems?.filter(
+            (i) => i.status === 'needs_info' && !i.userAnswer?.trim(),
+          ),
+          instruction:
+            'Feedback still has needs_info without userAnswer. AskQuestion the user, set_board with userAnswer on those items, then retry complete_checklist.',
+        });
+      }
+
+      const missing = missingChecklistIds(playbook, checklistDone, runbook);
       if (missing.length) {
         return okResult({
           ok: false,
           checklistOk: false,
           missing,
-          required: playbookChecklist(playbook),
+          required,
           instruction:
-            'Pass every playbook checklist id in checklistDone with notes proving the check — then retry complete_checklist.',
+            'Pass every checklist id in checklistDone with notes proving the check — then retry complete_checklist.',
         });
       }
-      const missingNotes = missingEvidenceNotes(playbook, checklistDone, checklistNotes);
+      const missingNotes = missingEvidenceNotes(
+        playbook,
+        checklistDone,
+        checklistNotes,
+        runbook,
+      );
       if (missingNotes.length) {
         return okResult({
           ok: false,
           checklistOk: false,
           missingNotes,
-          requiresEvidenceNotes: playbookRequiresEvidenceNotes(playbook),
-          required: playbookChecklist(playbook),
+          requiresEvidenceNotes: playbookRequiresEvidenceNotes(playbook, runbook),
+          required,
           instruction:
-            'Reality-check: build/ui require checklistNotes[id] (≥3 chars) for every checklist id — script output, path, or screenshot — then retry complete_checklist. Default status is NEEDS WORK until notes exist.',
+            'Reality-check: checklistNotes[id] (≥3 chars) required — for feedback also existing screenshot paths under .neuron/workflow/evidence/.',
         });
+      }
+      if (playbookRequiresEvidenceFiles(playbook, runbook)) {
+        const missingFiles = missingEvidenceFiles({
+          requireScreenshotNotes: true,
+          notes: checklistNotes,
+          feedbackItems: existing.signals?.feedbackItems,
+          projectRoot: brain.paths.projectRoot,
+          evidenceDir,
+        });
+        if (missingFiles.length) {
+          return okResult({
+            ok: false,
+            checklistOk: false,
+            missingFiles,
+            requiresEvidenceFiles: true,
+            evidenceDir,
+            required,
+            instruction:
+              'Feedback reality-check: notes must point at existing PNGs under .neuron/workflow/evidence/ (browser shot, adb, or PHP UI). Capture then retry.',
+          });
+        }
       }
       const next: WorkflowBoard = {
         ...existing,
@@ -159,7 +228,12 @@ export async function handleWorkflow(
       const path = await writeWorkflowBoard(brain, next, { previous: existing });
       return okResult({
         ok: true,
-        checklistOk: checklistComplete(playbook, checklistDone, checklistNotes),
+        checklistOk: checklistComplete(playbook, checklistDone, checklistNotes, {
+          projectRoot: brain.paths.projectRoot,
+          evidenceDir,
+          feedbackItems: existing.signals?.feedbackItems,
+          runbook,
+        }),
         board: await readWorkflowBoard(brain),
         path,
         health: boardHealth(await readWorkflowBoard(brain)),

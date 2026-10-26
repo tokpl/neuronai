@@ -28,6 +28,7 @@ Never install Absolute. Never use `.absolute-work/`.
 CONTEXT → CLARIFY (gate.json) → BLUEPRINT → propose_waves → EXECUTE → complete_checklist → VERIFY → neuron_after_task → LAST_DELIVER.md
 ```
 
+Board lives under `.neuron/workflow/` (`neuron_workflow`). Waves carry `brainRefs`.  
 Playbooks: build | ui | docs | polish | maintain.  
 **(There is no separate “mobile” playbook.)** Device/browser proof for bug lists = runbook **`feedback`**.
 
@@ -83,5 +84,6 @@ Default **NEEDS WORK** until evidence exists. For **build** / **ui**: notes ≥3
 
 ## Express / Resume
 
-Express only when Brain is rich + recommendation path known.  
-`get_board` → health + gate + history + feedbackItems. Prefer `LAST_DELIVER.md`.
+**Express** only when Brain is rich **and** recommendation path is in map docs. Then: short blueprint → `propose_waves` with seedPath → implement → `complete_checklist` → verify → remember.
+
+`get_board` → health + gate + history + feedbackItems. Prefer `LAST_DELIVER.md` for team-visible last outcome.
